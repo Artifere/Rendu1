@@ -1,0 +1,21 @@
+Classes :
+
+Litéraux :  Literal
+	unsigned int var(void)
+	bool pos(void)
+	Literal(int x)
+	Literal(unsigned int x, bool val)
+	operator <
+	
+	
+Clauses  : Clause
+(2 vectors pour les variables connues :
+		_date[i] contient la date d'insertion de _lit[i])
+	void setVar(Literal l, unsigned int date)
+	(ou void setVar(unsigned int x, bool val))
+	void freeVar(unsigned int x)
+	void restore(unsigned int event)
+	bool freeEmpty(void) (truc restant)
+	Literal chooseFree(void)
+	
+
