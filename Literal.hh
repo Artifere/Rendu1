@@ -2,6 +2,7 @@
 #define LITERAL_HH
 
 
+
 class Literal {
   protected:
     unsigned int _var;
@@ -12,16 +13,26 @@ class Literal {
     inline Literal(const Literal& lit) : _var(lit._var), _pos(lit._pos) { };
     
     
-    inline unsigned int var(void) const {
+    inline unsigned int var(void) const
+    {
       return _var;
     };
-    inline bool pos(void) const {
+    
+    inline bool pos(void) const
+    {
       return _pos;
     };
     
-    inline bool operator <(const Literal& lit) const {
+    
+    inline void invert()
+    {
+      _pos = !_pos;
+    };
+    
+    inline bool operator<(const Literal& lit) const
+    {
       return _var < lit._var || (_var == lit._var && !_pos && lit._pos);
-    }
+    };
 };
 
 
