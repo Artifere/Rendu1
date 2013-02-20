@@ -12,6 +12,7 @@ Clauses  : Clause
 (2 vectors pour les variables connues :
 		_date[i] contient la date d'insertion de _discarded[i]
 	==> à terme _discarded[i] : sommes cummulées des id des var)
+        Clause(const vector<Literal>& )
 	void setLitFalse(Literal l, unsigned int date)
 	(ou void setVar(unsigned int x, bool val))
 	void freeVar(unsigned int x)

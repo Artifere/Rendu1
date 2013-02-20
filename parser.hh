@@ -7,12 +7,14 @@
 #include "Literal.hh"
 #include "Clause.hh"
 
+#include <istream>
 
 
-std::vector<Literal> parser_clause();
+void skip_comment();
 
+void parser_header(istream& input, unsigned int& nbr_var, unsigned int& nbr_clauses);
 
-std::vector<Clause>  parser_sat();
+void parser_list_lit(istream& input, std::vector<Literal>& res);
 
 
 
