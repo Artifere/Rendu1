@@ -4,9 +4,9 @@
 Class Clause
 {
   public:
-    void setLitFalse(const Literal& l);
-    void setLitTrue(const Literal& l);
-    void freeVar(const unsigned int varId);
-    bool freeEmpty (void) const;
-    Literal chooseFree(void) const;
-}
+    virtual void setLitFalse(const Literal& l);
+    virtual void setLitTrue(const Literal& l);
+    virtual void freeVar(const unsigned int varId);
+    virtual bool freeEmpty (void) const;
+    virtual Literal chooseFree(void) const;
+};
