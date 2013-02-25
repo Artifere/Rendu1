@@ -12,9 +12,9 @@
 
 void skip_comment();
 
-void parser_header(istream& input, unsigned int& nbr_var, unsigned int& nbr_clauses);
+void parser_header(const istream& input, unsigned int& nbr_var, unsigned int& nbr_clauses);
 
-void parser_list_lit(istream& input, std::vector<Literal>& res);
+void parser_list_lit(const istream& input, std::vector<Literal>& res);
 
 
 

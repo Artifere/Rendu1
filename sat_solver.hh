@@ -21,7 +21,7 @@ class SatProblem {
     stack<pair<bool,Literal> > _stack_callback;
     
   public:
-    SatProblem(unsigned int nbr_var, unsigned int nbr_clauses, const istream& input);
+    SatProblem(/*unsigned int nbr_var, unsigned int nbr_clauses, */const istream& input); //Me semble que ça doit être ça...
     ~SatProblem();
     
     inline const vector<etat_var>& get_assign() const { return _etats_var; }
