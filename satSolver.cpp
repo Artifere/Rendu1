@@ -31,8 +31,8 @@ int main() {
 
 
 vector<etat_var> SatProblem::_etats_var;
-    vector<pair<set<Clause*>,set<Clause*>> _variables;
-    stack<pair<bool,Literal>> _stack_callback;
+    vector<pair<set<Clause*>,set<Clause*> > > _variables;
+    stack<pair<bool,Literal> > _stack_callback;
     
 
 SatProblem::SatProblem(const istream& input) {

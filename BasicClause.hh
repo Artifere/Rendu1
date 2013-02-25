@@ -1,9 +1,14 @@
+#ifndef BASICCLAUSE_HH
+#define BASICCLAUSE_HH
+
+
+
 #include "Clause.hh"
 #include <stack>
 #include <set>
 
 
-Class BasicClause:public Clause
+class BasicClause:public Clause
 { 
 
 
@@ -13,5 +18,8 @@ Class BasicClause:public Clause
   protected:
     bool _satisfied;
     stack<Literal> _falseLit;
-    set<LITERAL> _free;
+    set<Literal> _free;
 };
+
+
+#endif //BASICCLAUSE defined
