@@ -1,4 +1,4 @@
-SRC= satSolver.cpp parser.cpp BasicClause.cpp
+SRC= BasicClause.cpp parser.cpp satSolver.cpp
 OBJ= ${SRC:.cpp=.o}
 CXX	 = g++
 LFLAGS   = -lm
