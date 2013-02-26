@@ -6,10 +6,10 @@
 // A bouger en non virtuelle
 void BasicClause::setVar(const Literal &l)
 {
-  if (_free.find(Literal &l) != _free.end())
+  if (_free.find(l) != _free.end())
     setLitTrue(l);
   else
-    setLifFalse(l);
+    setLitFalse(l);
  }
 
 
@@ -18,7 +18,7 @@ void BasicClause::setLitFalse(const Literal& l)
   Literal invL = l;
   invL.invert();
 
-  _free.remove(invL);
+  _free.erase(invL);
   _assigned.push(invL);
 }
 
@@ -26,7 +26,7 @@ void BasicClause::setLitFalse(const Literal& l)
 
 void BasicClause::setLitTrue(const Literal& l)
 {
-  _free.remove(l);
+  _free.erase(l);
   _assigned.push(l);
 
   _satisfied = true;
@@ -45,26 +45,26 @@ void BasicClause::freeVar(const unsigned int varId)
 
 
 
-size_t BasicClause::freeSize(void)
+size_t BasicClause::freeSize(void) const
 {
   return _free.size();
 }
 
 
-size_t BasicClause::assignedSize(void)
+size_t BasicClause::assignedSize(void) const
 {
   return _assigned.size();
 }
 
 
-Literal BasicClause::chooseFree(void)
+Literal BasicClause::chooseFree(void) const
 {
   if (_free.empty())
     exit(1); //Modifier...
   return *_free.begin();
 }
 
-bool BasicClause::satisfied(void)
+bool BasicClause::satisfied(void) const
 {
   return _satisfied;
 }

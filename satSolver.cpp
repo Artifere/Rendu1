@@ -7,14 +7,14 @@
 
 
 #include "Literal.hh"
-#include "sat_solver.hh"
+#include "satSolver.hh"
 
 #include "Clause.hh"
 #include "BasicClause.hh"
 
 #include "parser.hh"
 
-
+using namespace std;
 typedef BasicClause UsedClause;
 
 
@@ -39,7 +39,7 @@ vector<etat_var> SatProblem::_etats_var;
 */
 
 
-SatProblem::SatProblem(const istream& input)
+SatProblem::SatProblem(std::istream& input)
 {
   unsigned int nbr_var, nbr_clauses;
   
@@ -106,7 +106,7 @@ SatProblem::SatProblem(const istream& input)
       Clause * nclause = new UsedClause(list);
       for(unsigned int u = 0; u < list.size(); u++)
       {
-        unsigned int var = lis[u].var();
+        unsigned int var = list[u].var();
         if(list[u].pos()) {
           _variables[var].first.insert(nclause);
         } else {
@@ -132,7 +132,7 @@ SatProblem::~SatProblem()
   typedef std::set<Clause*>::iterator iter;
   // on doit désalouer toutes les clauses (allouées dans SatProblem())
   // (le reste se détruit tout seul)
-  std::set<Clause*> deleted();
+  std::set<Clause*> deleted;
   for(unsigned int u = 0; u < _variables.size(); u++)
   {
     for(iter it = _variables[u].first.begin(); it != _variables[u].first.end(); it++)

@@ -5,6 +5,10 @@
 
 #include "Literal.hh"
 
+#include <vector>
+
+#include <cstddef>
+using namespace std;
 
 class Clause
 {
