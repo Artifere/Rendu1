@@ -2,7 +2,7 @@ SRC= BasicClause.cpp parser.cpp satSolver.cpp
 OBJ= ${SRC:.cpp=.o}
 CXX	 = g++
 LFLAGS   = -lm
-CXXFLAGS = -O2 -s
+CXXFLAGS = -O2 -s -Wall -Wextra
 
 exe: $(OBJ) $(HDR) 
 	${CXX} $(CXXFLAGS) -o $@ $(OBJ) $(LFLAGS)  $(LIB)
