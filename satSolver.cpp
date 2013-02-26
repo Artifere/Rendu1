@@ -136,9 +136,8 @@ SatProblem::~SatProblem()
   {
     for(iter it = _variables[u].first.begin(); it != _variables[u].first.end(); it++)
     {
-      iter f = deleted.find(*it);
-      if(f != deleted.end()) {
-        delete *f;
+      if(deleted.find(*it) == deleted.end()) {
+        delete *it;
         deleted.insert(*it);
       }
     }
