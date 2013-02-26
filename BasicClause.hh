@@ -27,8 +27,8 @@ class BasicClause:public Clause
 
   protected:
     bool _satisfied;
-    stack<Literal> _assigned;
-    set<Literal> _free;
+    std::stack<Literal> _assigned;
+    std::set<Literal> _free;
 };
 
 

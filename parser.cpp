@@ -2,6 +2,8 @@
 #include <string>
 
 
+using namespace std;
+
 void skip_comment(istream& input)
 {
   // skip comments
