@@ -4,14 +4,9 @@
 #include <vector>
 #include <set>
 #include <stack>
-#include <istream>
-
-#include "Literal.hh"
+#include <utility>
 #include "Clause.hh"
-#include "BasicClause.hh"
-
-
-
+using namespace std;
 
 typedef
 enum etat_var {
@@ -21,17 +16,24 @@ enum etat_var {
 
 class SatProblem {
   protected:
-    std::vector<etat_var> _etats_var;
-    std::vector< std::pair<std::set<Clause*>, std::set<Clause*> > > _variables;
-    std::stack<std::pair<bool,Literal> > _stack_callback;
+    vector<etat_var> _etats_var;
+    vector<pair<set<Clause*>, set<Clause*> > > _variables;
+    stack<pair<bool,Literal> > _stack_callback;
     
   public:
-    SatProblem(std::istream& input);
+    //SatProblem(unsigned int nbr_var, unsigned int nbr_clauses, const std::istream& input); //Me semble que ça doit être ça...
+    SatProblem(istream& input);
     ~SatProblem();
     
-    inline const std::vector<etat_var>& get_assign() const { return _etats_var; }
+    inline const vector<etat_var>& get_assign() const
+    {
+      return _etats_var;
+    }
     bool satisfiability();
 };
+
+    
+    
 
 
 

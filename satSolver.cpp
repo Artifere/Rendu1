@@ -14,14 +14,13 @@
 
 #include "parser.hh"
 
-using namespace std;
 typedef BasicClause UsedClause;
 
 
-/*int main() {
+int main() {
   cout << "hello world !" << endl;
   return 0;
-}*/
+}
 
 
 

@@ -2,6 +2,14 @@
 #include <cstdlib>
 
 
+BasicClause::BasicClause(const std::vector<Literal>& list)
+{
+  _satisfied = false;
+  for (int i = 0; i < list.size(); ++i)
+    _free.insert(list[i]);
+}
+
+
 
 // A bouger en non virtuelle
 void BasicClause::setVar(const Literal &l)
