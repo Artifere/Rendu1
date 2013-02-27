@@ -8,7 +8,7 @@
 #include <set>
 
 
-class BasicClause:public Clause
+class BasicClause : public Clause
 { 
   // apparamment tout doit être réécrit ici pour l'héritage avec polymorphisme
   public:
