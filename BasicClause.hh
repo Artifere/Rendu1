@@ -23,6 +23,7 @@ class BasicClause : public Clause
     virtual Literal chooseFree(void) const;
     virtual bool satisfied(void) const;
 
+    virtual ~BasicClause();
 
 
   protected:

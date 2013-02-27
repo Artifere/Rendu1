@@ -5,7 +5,7 @@
 BasicClause::BasicClause(const std::vector<Literal>& list)
 {
   _satisfied = false;
-  for (int i = 0; i < list.size(); ++i)
+  for (size_t i = 0; i < list.size(); ++i)
     _free.insert(list[i]);
 }
 
@@ -77,3 +77,8 @@ bool BasicClause::satisfied(void) const
   return _satisfied;
 }
 
+
+
+BasicClause::~BasicClause()
+{
+}

@@ -55,7 +55,7 @@ SatProblem::SatProblem(std::istream& input)
     parser_list_lit(input, list);
     
     // vérifie que les variables sont valides (d'indice entre 0 et nbr_var-1)
-    bool var_valides = true;
+    //bool varValides = true; //Inutile ????
     for(unsigned int u = 0; u < list.size(); u++)
     {
       unsigned int var = list[u].var();
