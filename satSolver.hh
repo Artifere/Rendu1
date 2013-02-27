@@ -20,7 +20,6 @@ class SatProblem {
     std::stack<std::pair<bool,Literal> > _stack_callback;
     
   public:
-    //SatProblem(unsigned int nbr_var, unsigned int nbr_clauses, const std::istream& input); //Me semble que ça doit être ça...
     SatProblem(std::istream& input);
     ~SatProblem();
     
