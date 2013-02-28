@@ -11,12 +11,16 @@ int main() {
 
 
 
+
+
 //Renvoie un couple : le premier élément indique si le problème est satisfiable.
 //Le cas échéant, le deuxième élément du couple contient une assignation valide.
-std::pair<bool, std::vector<bool> > solve(SatProblem problem)
+std::pair<bool, std::vector<bool> > solve(SatProblem &problem)
 {
   bool isSatisfiable = false;
   std::vector<bool> assignation;
+
+
 
 
 

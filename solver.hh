@@ -10,7 +10,7 @@
 
 //Renvoie un couple : le premier élément indique si le problème est satisfiable.
 //Le cas échéant, le deuxième élément du couple contient une assignation valide.
-std::pair<bool, std::vector<bool> > solve(SatProblem problem);
+std::pair<bool, std::vector<bool> > solve(SatProblem& problem);
 
 
 #endif // SOLVER_HH included
