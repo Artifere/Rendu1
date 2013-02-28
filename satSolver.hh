@@ -6,7 +6,7 @@
 #include <stack>
 #include <utility>
 #include "Clause.hh"
-
+#include <istream>
 typedef
 enum etat_var {
   TRUE, FALSE, FREE

@@ -4,7 +4,7 @@
 #include <map>
 #include <utility>
 #include <string>
-
+#include <istream>
 
 #include "Literal.hh"
 #include "satSolver.hh"
@@ -17,10 +17,7 @@
 typedef BasicClause UsedClause;
 
 
-int main() {
-  std::cout << "hello world !" << std::endl;
-  return 0;
-}
+
 
 
 
