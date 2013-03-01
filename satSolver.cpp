@@ -77,7 +77,6 @@ SatProblem::SatProblem(std::istream& input)
         parserListLit(input, list);
 
         // vérifie que les variables sont valides (d'indice entre 0 et nbrVar-1)
-        //bool varValides = true; //Inutile ????
         for(unsigned int u = 0; u < list.size(); u++)
         {
             unsigned int var = list[u].var();
@@ -279,7 +278,8 @@ bool SatProblem::satisfiability()
         }
         _varStates[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
         
-        /*std::cout << "Assignation : " << newAssign.var() << " à " << newAssign.pos() << std::endl;
+        /*
+        std::cout << "Assignation : " << newAssign.var() << " à " << newAssign.pos() << std::endl;
         std::cout << "    etat courant : ";
         for(unsigned l = 0; l < n; l++)
             std::cout << (_varStates[l] == TRUE ? "TRUE" : (_varStates[l] == FALSE ? "FALSE" : "FREE")) << ", ";
@@ -295,27 +295,37 @@ bool SatProblem::satisfiability()
         bool is_error = false;
         for(it = cTrue.begin(); it != cTrue.end(); it++)
         {
-            (*it)->setLitTrue(newAssign);
+            if(newAssign.pos())
+                (*it)->setLitTrue(newAssign);
+            else
+                (*it)->setLitFalse(newAssign);
             if( (!(*it)->satisfied()) && (*it)->freeSize()==1 )
             {
+                //std::cout << "devinne une variable (cTrue) : " << (*it)->chooseFree().var() << " (" << (*it)->chooseFree().pos() << ")" << std::endl;
                 deductions.push( (*it)->chooseFree() );
             }
-            else {
+            else
+            {
                 // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
                 // on fait donc la propagation de la variable en entier
                 // ceci pour simplifier la propagation en arrière : on libère la variable de toutes les clauses,
                 // et non pas de toutes celles qu'on a parcouru avant d'arriver à la contradiction
                 if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
                 {
+                    //std::cout << "anticipe un callback (cTrue)" << std::endl;
                     is_error = true;
                 }
             }
         }
         for(it = cFalse.begin(); it != cFalse.end(); it++)
         {
-            (*it)->setLitFalse(newAssign);
+            if(newAssign.pos())
+                (*it)->setLitFalse(newAssign);
+            else
+                (*it)->setLitTrue(newAssign);
             if( (!(*it)->satisfied()) && (*it)->freeSize()==1 )
             {
+                //std::cout << "devinne une variable (cFalse) : " << (*it)->chooseFree().var() << " (" << (*it)->chooseFree().pos() << ")" << std::endl;
                 deductions.push( (*it)->chooseFree() );
             }
             else {
@@ -325,6 +335,7 @@ bool SatProblem::satisfiability()
                 // et non pas de toutes celles qu'on a parcouru avant d'arriver à la contradiction
                 if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
                 {
+                    //std::cout << "anticipe un callback (cFalse)" << std::endl;
                     is_error = true;
                 }
             }
