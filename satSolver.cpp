@@ -222,7 +222,6 @@ bool SatProblem::satisfiability()
                 /** Pourquoi toutes ? Seulement celles contradictoires jusqu'à la première qui va... **/
                 /** parce qu'elles sont basées sur une supposition erronnées,
                  et qu'on ne sait pas si elles seront encore vraies sans cette supposition.
-                 
                  deductions représente les assignations pas encore faites (celles en attente) :
                  c'est juste celles-la qu'onsupprime, car on ne peut plus se reposer dessus  **/
                 while(! deductions.empty())
@@ -237,7 +236,7 @@ bool SatProblem::satisfiability()
                       (*it)->freeVar(varID);
                     for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); it++)
                       (*it)->freeVar(varID);
-                    // si c'était une assignation libre, on sort en ajoutant le choix opposé comme supposition
+                    // si c'était une assignation libre, on sort en ajoutant le choix opposé comme déduction
                     if(_stackCallback.top().first)
                     {
                         deductions.push( Literal(varID, !(_varStates[varID]==TRUE)) );
@@ -252,15 +251,16 @@ bool SatProblem::satisfiability()
                 if(_stackCallback.empty())
                     return false;
             }
-            // sinon : la déduction correspond à l'état courant d'une variable :
-            // on ignore la déduction
+            // sinon : la déduction correspond à l'état courant d'une variable : on l'ignore la déduction
             else
             {
                 deductions.pop();
             }
         }
 
-        // on assigne soit une nouvelle variable (si pas de déduction), soit le contraire de la dernière déduction
+        // plusieurs choix :
+        // soit une déduction, et on la fait (elle est valide : c'est ce dont on vient de s'assurer)
+        // soit une nouvelle variable (si pas de déduction)
         // soit pas de déduction et toutes les variables sont déjà assignée : problème SATISFIABLE
         if(! deductions.empty())
         {
@@ -306,7 +306,7 @@ bool SatProblem::satisfiability()
             else if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
                 // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
                 // on fait donc la propagation de la variable en entier
-                // ceci pour simplifier la propagation en arrière : on libère la variable de toutes les clauses,
+                // ceci pour simplifier la propagation en arrière : on libère la variable de toutes les clauses où elle apparaît,
                 // et non pas de toutes celles qu'on a parcouru avant d'arriver à la contradiction
                 is_error = true;
         }
@@ -314,8 +314,7 @@ bool SatProblem::satisfiability()
         // si une erreur : on fait le backtraking
         if(is_error)
         {
-            // on déduit le contraire de newAssign pour profiter du code de backtracking déjà écrit du début de la fonction
-            // on déduit le contraire de newAssign pour profiter du code de backtracking déjà écrit du début de la clause
+            // on déduit le contraire de newAssign pour profiter du code de backtracking déjà écrit du début de la boucle
             newAssign.invert();
             deductions.push( newAssign );
         }
