@@ -23,21 +23,27 @@ void BasicClause::setVar(const Literal &l)
 
 void BasicClause::setLitFalse(const Literal& l)
 {
-    Literal invL = l;
-    invL.invert();
+    if(! _satisfied)
+    {
+        Literal invL = l;
+        invL.invert();
 
-    _free.erase(invL);
-    _assigned.push(invL);
+        _free.erase(invL);
+        _assigned.push(invL);
+    }
 }
 
 
 
 void BasicClause::setLitTrue(const Literal& l)
 {
-    _free.erase(l);
-    _assigned.push(l);
+    if(! _satisfied)
+    {
+        _free.erase(l);
+        _assigned.push(l);
 
-    _satisfied = true;
+        _satisfied = true;
+    }
 }
 
 

@@ -33,6 +33,8 @@ int main()
             std::cout << "v ";
             if (assign[k] == FALSE)
                 std::cout << "-";
+            if (assign[k] == FREE)
+                std::cout << "?";
             std::cout << k+1 << std::endl;
         }
     }
@@ -219,6 +221,7 @@ bool SatProblem::satisfiability()
             // déduction contradictoire : on fait un callback
             if( (_varStates[deductions.top().var()]==TRUE) != deductions.top().pos() )
             {
+                std::cout << "Callback needed" << std::endl;
                 // clear all deductions
                 /** Pourquoi toutes ? Seulement celles contradictoires jusqu'à la première qui va... **/
                 /** parce qu'elles sont basées sur une supposition erronnées,
@@ -232,24 +235,14 @@ bool SatProblem::satisfiability()
                     // annule l'assignation de la variable
                     unsigned int varID = _stackCallback.top().second;
                     std::set<Clause*>::iterator it;
-                    //Oh que c'est moche :p
-                    for(it = _variables[varID].first.begin(); it != _variables[varID].second.end(); it++)
-                    {
-                        // on parcourt les litéraux vrais et faux en même temps (éventuellement changeable)
-                        if(it == _variables[varID].first.end())
-                        {
-                            it = _variables[varID].second.begin();
-                            //On vérifie qu'il y a au moins une clause avec non(varID)
-                            if (it == _variables[varID].second.end())
-                                break;
-                        }
-                        // annule l'assignation
-                        (*it)->freeVar(varID);
-                    }
+                    for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); it++)
+                      (*it)->freeVar(varID);
+                    for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); it++)
+                      (*it)->freeVar(varID);
                     // si c'était une assignation libre, on sort en ajoutant le choix opposé comme déduction
                     if(_stackCallback.top().first)
                     {
-                        deductions.push( Literal(varID, ! _varStates[varID]) );
+                        deductions.push(Literal(varID, !(_varStates[varID]==TRUE)));
                         _varStates[varID] = FREE;
                         _stackCallback.pop();
                         break;
@@ -297,7 +290,7 @@ bool SatProblem::satisfiability()
         bool is_error = false;
         bool lit_true = newAssign.pos(); // retient si on explore les clauses dans lesquelles le literal est vrai ou faux (/!\ : différent du fait que le litéral soit x ou !x : ce n'est pas si on est entrain de parcourir cTrue ou cFalse, mais bien si la clause qu'on explore passe à vrai, ou si on ne fait que supprimmer un litéral de la clause)
 
-        for(it = cTrue.begin(); it != cTrue.end(); it++)
+        for(it = cTrue.begin(); it != cFalse.end(); it++)
         {
             // passe des clauses cTrue à cFalse
             if( it == cTrue.end() )
