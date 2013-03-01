@@ -28,7 +28,7 @@ int main()
     const std::vector<etat_var>& assign = problem.get_assign();
     for(size_t k = 0; k < assign.size(); k++)
     {
-      std::cout << k << "  =>  " << (assign[k] == TRUE ? "TRUE" : (assign[k]==FALSE) ? "FALSE" : "FREE") << std::endl;
+      std::cout << k+1 << "  =>  " << (assign[k] == TRUE ? "TRUE" : (assign[k]==FALSE) ? "FALSE" : "FREE") << std::endl;
     }
   } else {
     std::cout << "s UNSATISFIABLE" << std::endl;
@@ -112,11 +112,6 @@ SatProblem::SatProblem(std::istream& input)
     // dans ce cas, associe la clause à toutes les variables concernées
     if(!trivial)
     {
-      // on décrémente de 1 tous les indices des variables
-      for(unsigned int u = 0; u < list.size(); u++) {
-        list[u] = Literal(list[u].var()-1, list[u].pos());
-      }
-      
       // on passe par des pointeurs pour garder la structure d'objet :
       // UsedClause hérite de Clause, donc UsedClause* passe pour Clause*
       // alors que UsedClause ne passe pas pour Clause

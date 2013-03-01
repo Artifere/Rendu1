@@ -29,7 +29,7 @@ void parser_list_lit(std::istream& input, std::vector<Literal>& res) {
   int n;
   skip_comment(input);
   while( (input >> n) && n ) {
-    res.push_back( Literal((n < 0) ? (-n) : n, (n > 0)) );
+    res.push_back( Literal(((n < 0) ? (-n-1) : n-1), (n > 0)) );
   }
 }
 /*
