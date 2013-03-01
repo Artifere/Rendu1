@@ -218,25 +218,26 @@ bool SatProblem::satisfiability()
             // déduction contradictoire : on fait un callback
             if( (_varStates[deductions.top().var()]==TRUE) != deductions.top().pos() )
             {
-                //std::cout << "Callback needed" << std::endl;
                 // clear all deductions
                 /** Pourquoi toutes ? Seulement celles contradictoires jusqu'à la première qui va... **/
                 /** parce qu'elles sont basées sur une supposition erronnées,
                  et qu'on ne sait pas si elles seront encore vraies sans cette supposition.
-                 C'est juste les assignations pas encore faites qu'on supprime... **/
+                 
+                 deductions représente les assignations pas encore faites (celles en attente) :
+                 c'est juste celles-la qu'onsupprime, car on ne peut plus se reposer dessus  **/
                 while(! deductions.empty())
                     deductions.pop();
-                // on revient à la dernière déduction faite
+                // on revient à la dernière supposition faite
                 while( (! _stackCallback.empty()) )
                 {
-                    // annule l'assignation de la variable
+                    // annule l'assignation de la dernière variable assignée
                     unsigned int varID = _stackCallback.top().second;
                     std::set<Clause*>::iterator it;
                     for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); it++)
                       (*it)->freeVar(varID);
                     for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); it++)
                       (*it)->freeVar(varID);
-                    // si c'était une assignation libre, on sort en ajoutant le choix opposé comme déduction
+                    // si c'était une assignation libre, on sort en ajoutant le choix opposé comme supposition
                     if(_stackCallback.top().first)
                     {
                         deductions.push( Literal(varID, !(_varStates[varID]==TRUE)) );
@@ -267,24 +268,15 @@ bool SatProblem::satisfiability()
             deductions.pop();
             _stackCallback.push( std::pair<bool,unsigned int>(false, newAssign.var()) );
         }
-        else if(_stackCallback.size() >= n)
-        {
-            return true;
-        }
-        else
+        else if(_stackCallback.size() < n)
         {
             newAssign = chooseUnasignedVar();
             _stackCallback.push( std::pair<bool,unsigned int>(true, newAssign.var()) );
         }
-        _varStates[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
+        else
+            return true;
         
-        /*
-        std::cout << "Assignation : " << newAssign.var() << " à " << newAssign.pos() << std::endl;
-        std::cout << "    etat courant : ";
-        for(unsigned l = 0; l < n; l++)
-            std::cout << (_varStates[l] == TRUE ? "TRUE" : (_varStates[l] == FALSE ? "FALSE" : "FREE")) << ", ";
-        std::cout << std::endl;
-        */
+        _varStates[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
 
 
         // propagation la nouvelle valeur
@@ -293,52 +285,30 @@ bool SatProblem::satisfiability()
         std::set<Clause*>::iterator it;
 
         bool is_error = false;
-        for(it = cTrue.begin(); it != cTrue.end(); it++)
+        bool valInClause = newAssign.pos();
+        for(it = cTrue.begin(); it != cFalse.end(); it++)
         {
-            if(newAssign.pos())
+            if(it == cTrue.end())
+            {
+                it = cFalse.begin();
+                if(it == cFalse.end())
+                    break;
+                valInClause = !valInClause;
+            }
+        
+            if(valInClause)
                 (*it)->setLitTrue(newAssign);
             else
                 (*it)->setLitFalse(newAssign);
+
             if( (!(*it)->satisfied()) && (*it)->freeSize()==1 )
-            {
-                //std::cout << "devinne une variable (cTrue) : " << (*it)->chooseFree().var() << " (" << (*it)->chooseFree().pos() << ")" << std::endl;
                 deductions.push( (*it)->chooseFree() );
-            }
-            else
-            {
+            else if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
                 // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
                 // on fait donc la propagation de la variable en entier
                 // ceci pour simplifier la propagation en arrière : on libère la variable de toutes les clauses,
                 // et non pas de toutes celles qu'on a parcouru avant d'arriver à la contradiction
-                if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
-                {
-                    //std::cout << "anticipe un callback (cTrue)" << std::endl;
-                    is_error = true;
-                }
-            }
-        }
-        for(it = cFalse.begin(); it != cFalse.end(); it++)
-        {
-            if(newAssign.pos())
-                (*it)->setLitFalse(newAssign);
-            else
-                (*it)->setLitTrue(newAssign);
-            if( (!(*it)->satisfied()) && (*it)->freeSize()==1 )
-            {
-                //std::cout << "devinne une variable (cFalse) : " << (*it)->chooseFree().var() << " (" << (*it)->chooseFree().pos() << ")" << std::endl;
-                deductions.push( (*it)->chooseFree() );
-            }
-            else {
-                // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
-                // on fait donc la propagation de la variable en entier
-                // ceci pour simplifier la propagation en arrière : on libère la variable de toutes les clauses,
-                // et non pas de toutes celles qu'on a parcouru avant d'arriver à la contradiction
-                if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
-                {
-                    //std::cout << "anticipe un callback (cFalse)" << std::endl;
-                    is_error = true;
-                }
-            }
+                is_error = true;
         }
 
         // si une erreur : on fait le backtraking
