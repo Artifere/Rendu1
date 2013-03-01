@@ -19,6 +19,22 @@ typedef BasicClause UsedClause;
 
 
 
+int main()
+{
+  SatProblem problem(std::cin);
+  bool is_sat = problem.satisfiability();
+  if(is_sat) {
+    std::cout << "s SATISFIABLE" << std::endl;
+    const std::vector<etat_var>& assign = problem.get_assign();
+    for(size_t k = 0; k < assign.size(); k++)
+    {
+      std::cout << k << "  =>  " << (assign[k] == TRUE ? "TRUE" : (assign[k]==FALSE) ? "FALSE" : "FREE") << std::endl;
+    }
+  } else {
+    std::cout << "s UNSATISFIABLE" << std::endl;
+  }
+}
+
 
 
 

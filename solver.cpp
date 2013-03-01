@@ -3,12 +3,12 @@
 #include <utility>
 #include <vector>
 #include <iostream>
-
+/*
 int main() {
   std::cout << "hello world !" << std::endl;
   return 0;
 }
-
+*/
 
 
 //Renvoie un couple : le premier élément indique si le problème est satisfiable.
