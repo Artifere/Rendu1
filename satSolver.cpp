@@ -210,8 +210,6 @@ bool SatProblem::satisfiability()
 
     while(_stackCallback.size() < n || !deductions.empty())
     {
-
-
         // calcule la nouvelle valeur à assigner
         Literal newAssign(0,true);
 
@@ -336,6 +334,7 @@ bool SatProblem::satisfiability()
         if(is_error)
         {
             // on déduit le contraire de newAssign pour profiter du code de backtracking déjà écrit du début de la fonction
+            // on déduit le contraire de newAssign pour profiter du code de backtracking déjà écrit du début de la clause
             newAssign.invert();
             deductions.push( newAssign );
         }

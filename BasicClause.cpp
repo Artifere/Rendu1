@@ -50,10 +50,11 @@ void BasicClause::setLitTrue(const Literal& l)
 
 void BasicClause::freeVar(const unsigned int varId)
 {
-    if (!_satisfied || _assigned.top().var() == varId)
+    if (!_assigned.empty() && _assigned.top().var() == varId)
     {
         _free.insert(_assigned.top());
         _assigned.pop();
+        _satisfied = false;
     }
 }
 

@@ -20,9 +20,9 @@ protected:
     std::vector<varState> _varStates;
     std::vector<std::pair<std::set<Clause*>, std::set<Clause*> > > _variables;
     //std::stack<std::pair<bool,Literal> > _stackCallback;
-    std::stack<std::pair<bool,unsigned int> > _stackCallback; //Je pense que c'est mieux. le bool c'est pour dire si on peut changer la valeur de la variable ou si c'était un choix nécessaire
-    //l'autre paramètre c'est le numéro de la variable
 
+    //True si on peut changer la valeur, false si c'était un choix contraint
+    std::stack<std::pair<bool,unsigned int> > _stackCallback; 
     Literal chooseUnasignedVar() const;
 
 public:
