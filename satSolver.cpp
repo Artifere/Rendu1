@@ -211,10 +211,13 @@ bool SatProblem::satisfiability()
     {
         // calcule la nouvelle valeur à assigner
         Literal newAssign(0,true);
-
+        //debug
+        std::cout << "lol\n";
         // on évite les déductions sur une variable déjà assignée
         while( (!deductions.empty()) && _varStates[deductions.top().var()]!=FREE )
         {
+            //debug
+            std::cout << "lal\n";
             // déduction contradictoire : on fait un callback
             if( (_varStates[deductions.top().var()]==TRUE) != deductions.top().pos() )
             {
