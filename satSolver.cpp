@@ -215,12 +215,15 @@ bool SatProblem::satisfiability()
             // déduction contradictoire : on fait un callback
             if( (_varStates[deductions.top().var()]==TRUE) != deductions.top().pos() )
             {
-                // clear all déductions
+                // clear all deductions
                 /** Pourquoi toutes ? Seulement celles contradictoires jusqu'à la première qui va... **/
+                /** parce qu'elles sont basées sur une supposition erronnées,
+                 et qu'on ne sait pas si elles seront encore vraies sans cette supposition.
+                 C'est juste les assignations pas encore faites qu'on supprime... **/
                 while(! deductions.empty())
                     deductions.pop();
                 // on revient à la dernière déduction faite
-                while( (! _stackCallback.empty()) && (!_stackCallback.top().first) )
+                while( (! _stackCallback.empty()) )
                 {
                     // annule l'assignation de la variable
                     unsigned int varID = _stackCallback.top().second;
@@ -238,14 +241,21 @@ bool SatProblem::satisfiability()
                         }
                         // annule l'assignation
                         (*it)->freeVar(varID);
-                        _varStates[varID] = FREE;
                     }
+                    // si c'était une assignation libre, on sort en ajoutant le choix opposé comme déduction
+                    if(_stackCallback.top().first)
+                    {
+                        deductions.push( Literal(varID, ! _varStates[varID]) );
+                        _varStates[varID] = FREE;
+                        _stackCallback.pop();
+                        break;
+                    }
+                    _varStates[varID] = FREE;
+                    _stackCallback.pop();
                 }
                 // si pas de déduction faite : problème INSATISFIABLE
                 if(_stackCallback.empty())
                     return false;
-                else
-                    break;
             }
             // sinon : la déduction correspond à l'état courant d'une variable :
             // on ignore la déduction
@@ -260,9 +270,7 @@ bool SatProblem::satisfiability()
         if(! deductions.empty())
         {
             newAssign = deductions.top();
-            newAssign.invert();
             deductions.pop();
-            _varStates[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
             _stackCallback.push( std::pair<bool,unsigned int>(false, newAssign.var()) );
         }
         else if(_stackCallback.size() >= n)
@@ -272,9 +280,9 @@ bool SatProblem::satisfiability()
         else
         {
             newAssign = chooseUnasignedVar();
-            _varStates[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
             _stackCallback.push( std::pair<bool,unsigned int>(true, newAssign.var()) );
         }
+        _varStates[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
 
 
         // propagation la nouvelle valeur
