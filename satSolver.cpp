@@ -112,6 +112,11 @@ SatProblem::SatProblem(std::istream& input)
     // dans ce cas, associe la clause à toutes les variables concernées
     if(!trivial)
     {
+      // on décrémente de 1 tous les indices des variables
+      for(unsigned int u = 0; u < list.size(); u++) {
+        list[u] = Literal(list[u].var()-1, list[u].pos());
+      }
+      
       // on passe par des pointeurs pour garder la structure d'objet :
       // UsedClause hérite de Clause, donc UsedClause* passe pour Clause*
       // alors que UsedClause ne passe pas pour Clause
