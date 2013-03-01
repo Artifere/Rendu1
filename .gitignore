@@ -15,6 +15,5 @@
 
 #Others
 *.swp
-exe
+release
 debug
-a.out
