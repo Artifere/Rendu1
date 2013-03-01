@@ -29,7 +29,11 @@ int main()
         const std::vector<varState>& assign = problem.getAssign();
         for(size_t k = 0; k < assign.size(); k++)
         {
-            std::cout << k+1 << "  =>  " << (assign[k] == TRUE ? "TRUE" : (assign[k]==FALSE) ? "FALSE" : "FREE") << std::endl;
+            //std::cout << k+1 << "  =>  " << (assign[k] == TRUE ? "TRUE" : (assign[k]==FALSE) ? "FALSE" : "FREE") << std::endl;
+            std::cout << "v ";
+            if (assign[k] == FALSE)
+                std::cout << "-";
+            std::cout << k+1 << std::endl;
         }
     }
     else
