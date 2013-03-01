@@ -21,6 +21,8 @@ class SatProblem {
     std::stack<std::pair<bool,unsigned int> > _stack_callback; //Je pense que c'est mieux. le bool c'est pour dire si on peut changer la valeur de la variable ou si c'était un choix nécessaire
                                                                //l'autre paramètre c'est le numéro de la variable
     
+    unsigned int chooseUnasignedVar() const;
+    
   public:
     SatProblem(std::istream& input);
     ~SatProblem();

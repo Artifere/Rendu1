@@ -133,14 +133,16 @@ SatProblem::~SatProblem()
   {
     for(iter it = _variables[u].first.begin(); it != _variables[u].first.end(); it++)
     {
-      if(deleted.find(*it) == deleted.end()) {
+      if(deleted.find(*it) == deleted.end())
+      {
         delete *it;
         deleted.insert(*it);
       }
     }
     for(iter it = _variables[u].second.begin(); it != _variables[u].second.end(); it++)
     {
-      if(deleted.find(*it) == deleted.end()) {
+      if(deleted.find(*it) == deleted.end())
+      {
         delete *it;
         deleted.insert(*it);
       }
@@ -150,5 +152,140 @@ SatProblem::~SatProblem()
 
 
 
+
+Literal satProblem::chooseUnasignedVar() const
+{
+  unsigned int k = 0;
+  while(k < _etats_var.size() && _etats_var[k] != FREE)
+    k++;
+  return Literal(k,true);
+}
+
+
+
+
+bool satProblem::satisfiability()
+{
+  const size_t n = _etats_var.size();
+  
+  // remet à 0 l'état du solver
+  _stack_callback.clear();
+  _stack_callback.reserve(n);
+  
+  size_t k = 0;
+  std::stack<Literal> deductions();
+
+  while(_stack_callback.size() < n && deductions.empty()) {
+    
+    
+    // calcule la nouvelle valeur à assigner
+    Literal newAssign;
+    
+    // on évite les déductions sur une variable déjà assignée
+    while( (!deduction.empty()) && _variables[deduction.back().var()]!=FREE )
+    {
+      // déduction contradictoire : on fait un callback
+      if( (_variables[deductions.back().pos()==TRUE) != deduction.back().pos() )
+      {
+        deduction.clear();
+        std::set<Clause*>::iterator it;
+        // on revient à la dernière déduction faite
+        while( (! _stack_callback.empty()) && (!_stack_callback.back().first) )
+        {
+          // annule l'assignation de la variable
+          unsigned int varID = _stack_callback.back().var();
+          for(it = _variables[varID].first.begin; it != _variables[varID].second.end(); it++)
+          {
+            // on parcourt les litérauxvrais et faux en même temps (éventuellement changeable)
+            if(it == _variables[varID].first.end())
+              it = _variables[varID].second.begin();
+            // annule l'assignation
+            (*it)->freeVar(varID);
+            _etats_var[varID] = FREE;
+          }
+        }
+        // si pas de déduction faite : problème INSATISFIABLE
+        if(_stack_callback.empty())
+          return false;
+        else
+          break;
+      }
+      // sinon : la déduction correspond à l'état courant d'une variable :
+      // on ignore la déduction
+      else
+      {
+        deduction.pop();
+      }
+    }
+    
+    // on assigne soit une nouvelle variable (si pas de déduction), soit le contraire de la dernière déduction
+    // soit pas de déduction et toutes les variables sont déjà assignée : problème SATISFIABLE
+    if(! deductions.empty())
+    {
+      newAssign = deduction.back();
+      newAssign.invert();
+      deduction.pop();
+      _stack_callback.push( std::pair<bool,Literal>(false, newAssign) );
+    }
+    else if(_stack_callback.size() >= n)
+    {
+      return true;
+    }
+    else
+    {
+      newAssign = chooseUnasignedVar();
+      _stack_callback.push( std::pair<bool,Literal>(true, newAssign) );
+    }
+    
+    
+    // propagation la nouvelle valeur
+    std::set<Clause*>& cTrue = _variables[newAssign.var()].first;
+    std::set<Clause*>& cFalse = _variables[newAssign.var()].second;
+    std::set<Clause*>::iterator it;
+    
+    _etats_var[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
+    
+    bool is_error = false;
+    bool lit_true = newAssign.pos(); // retient si on explore les clauses dans lesquelles le literal est vrai ou faux (/!\ : différent du fait que le litéral soit x ou !x : ce n'est pas si on est entrain de parcourir cTrue ou cFalse, mais bien si la clause qu'on explore passe à vrai, ou si on ne fait que supprimmer un litéral de la clause)
+    for(it = cTrue.begin(); it != cFalse.end(); it++)
+    {
+      // passe des clauses cTrue à cFalse
+      if( it == cTrue.end() ) {
+        it = cFalse.begin();
+        lit_true = ! lit_true;
+      }
+      
+      // assigne la variable dans la clause
+      if(lit_true)
+        (*it)->setLitTrue(newAssign);
+      else
+        (*it)->setLitFalse(newAssign);
+      
+      // on déduit une nouvelle valeur
+      if( (!(*it)->satisfied()) && (*it)->freeSize()==1 )
+      {
+        deductions.push( (*it)->chooseFree() );
+      } else
+      // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
+      // on fait donc la propagation de la variable en entier
+      // ceci pour simplifier la propagation en arrière : on libère la variable de toutes les clauses,
+      // et non pas de toutes celles qu'on a parcouru avant d'arriver à la contradiction
+      if( (!(*it)->satisfied()) && (*it)->freeSize==0) )
+      {
+        is_error = true;
+      }
+    }
+    
+    // si une erreur : on fait le backtraking
+    if(is_error)
+    {
+      // on déduit le contraire de newAssign pour profiter du code de backtracking déjà écrit du début de la clause
+      newAssign.invert();
+      deductions.push( newAssign );
+    }
+  }
+  
+  return true;
+}
 
 
