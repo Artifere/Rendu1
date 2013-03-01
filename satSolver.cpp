@@ -208,7 +208,7 @@ bool SatProblem::satisfiability()
 
     std::stack<Literal> deductions;
 
-    while(_stackCallback.size() < n && deductions.empty())
+    while(_stackCallback.size() < n || !deductions.empty())
     {
 
 
@@ -221,7 +221,7 @@ bool SatProblem::satisfiability()
             // déduction contradictoire : on fait un callback
             if( (_varStates[deductions.top().var()]==TRUE) != deductions.top().pos() )
             {
-                std::cout << "Callback needed" << std::endl;
+                //std::cout << "Callback needed" << std::endl;
                 // clear all deductions
                 /** Pourquoi toutes ? Seulement celles contradictoires jusqu'à la première qui va... **/
                 /** parce qu'elles sont basées sur une supposition erronnées,
@@ -242,7 +242,7 @@ bool SatProblem::satisfiability()
                     // si c'était une assignation libre, on sort en ajoutant le choix opposé comme déduction
                     if(_stackCallback.top().first)
                     {
-                        deductions.push(Literal(varID, !(_varStates[varID]==TRUE)));
+                        deductions.push( Literal(varID, !(_varStates[varID]==TRUE)) );
                         _varStates[varID] = FREE;
                         _stackCallback.pop();
                         break;
@@ -280,6 +280,13 @@ bool SatProblem::satisfiability()
             _stackCallback.push( std::pair<bool,unsigned int>(true, newAssign.var()) );
         }
         _varStates[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
+        
+        /*std::cout << "Assignation : " << newAssign.var() << " à " << newAssign.pos() << std::endl;
+        std::cout << "    etat courant : ";
+        for(unsigned l = 0; l < n; l++)
+            std::cout << (_varStates[l] == TRUE ? "TRUE" : (_varStates[l] == FALSE ? "FALSE" : "FREE")) << ", ";
+        std::cout << std::endl;
+        */
 
 
         // propagation la nouvelle valeur
@@ -288,32 +295,14 @@ bool SatProblem::satisfiability()
         std::set<Clause*>::iterator it;
 
         bool is_error = false;
-        bool lit_true = newAssign.pos(); // retient si on explore les clauses dans lesquelles le literal est vrai ou faux (/!\ : différent du fait que le litéral soit x ou !x : ce n'est pas si on est entrain de parcourir cTrue ou cFalse, mais bien si la clause qu'on explore passe à vrai, ou si on ne fait que supprimmer un litéral de la clause)
-
-        for(it = cTrue.begin(); it != cFalse.end(); it++)
+        for(it = cTrue.begin(); it != cTrue.end(); it++)
         {
-            // passe des clauses cTrue à cFalse
-            if( it == cTrue.end() )
-            {
-                it = cFalse.begin();
-                //On teste si cFalse est vide
-                if (it == cFalse.end())
-                    break;
-                lit_true = ! lit_true;
-            }
-
-            // assigne la variable dans la clause
-            if(lit_true)
-                (*it)->setLitTrue(newAssign);
-            else
-                (*it)->setLitFalse(newAssign);
-
-            // on déduit une nouvelle valeur
+            (*it)->setLitTrue(newAssign);
             if( (!(*it)->satisfied()) && (*it)->freeSize()==1 )
             {
                 deductions.push( (*it)->chooseFree() );
             }
-            else
+            else {
                 // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
                 // on fait donc la propagation de la variable en entier
                 // ceci pour simplifier la propagation en arrière : on libère la variable de toutes les clauses,
@@ -322,12 +311,31 @@ bool SatProblem::satisfiability()
                 {
                     is_error = true;
                 }
+            }
+        }
+        for(it = cFalse.begin(); it != cFalse.end(); it++)
+        {
+            (*it)->setLitFalse(newAssign);
+            if( (!(*it)->satisfied()) && (*it)->freeSize()==1 )
+            {
+                deductions.push( (*it)->chooseFree() );
+            }
+            else {
+                // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
+                // on fait donc la propagation de la variable en entier
+                // ceci pour simplifier la propagation en arrière : on libère la variable de toutes les clauses,
+                // et non pas de toutes celles qu'on a parcouru avant d'arriver à la contradiction
+                if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
+                {
+                    is_error = true;
+                }
+            }
         }
 
         // si une erreur : on fait le backtraking
         if(is_error)
         {
-            // on déduit le contraire de newAssign pour profiter du code de backtracking déjà écrit du début de la clause
+            // on déduit le contraire de newAssign pour profiter du code de backtracking déjà écrit du début de la fonction
             newAssign.invert();
             deductions.push( newAssign );
         }
