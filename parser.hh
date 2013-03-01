@@ -10,11 +10,11 @@
 #include <istream>
 
 
-void skip_comment(std::istream& input);
+void skipComment(std::istream& input);
 
-void parser_header(std::istream& input, unsigned int& nbr_var, unsigned int& nbr_clauses);
+void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrClauses);
 
-void parser_list_lit(std::istream& input, std::vector<Literal>& res);
+void parserListLit(std::istream& input, std::vector<Literal>& ans);
 
 
 

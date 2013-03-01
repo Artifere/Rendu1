@@ -3,7 +3,7 @@
 
 
 
-void skip_comment(std::istream& input)
+void skipComment(std::istream& input)
 {
   // skip comments
   std::string read;
@@ -12,24 +12,24 @@ void skip_comment(std::istream& input)
 }
 
 
-void parser_header(std::istream& input, unsigned int& nbr_var, unsigned int& nbr_clauses)
+void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrClauses)
 {
   std::string read;
   char c;
-  skip_comment(input);
-  if( !(std::cin >> c >> read >> nbr_var >> nbr_clauses) || (c != 'p') || (read != "cnf")) {
+  skipComment(input);
+  if( !(std::cin >> c >> read >> nbrVar >> nbrClauses) || (c != 'p') || (read != "cnf")) {
     std::cout << "c Arg, entrée invalide " << std::endl;
-    nbr_var = 0;
-    nbr_clauses = 0;
+    nbrVar = 0;
+    nbrClauses = 0;
   }
 }
 
 
-void parser_list_lit(std::istream& input, std::vector<Literal>& res) {
+void parserListLit(std::istream& input, std::vector<Literal>& ans) {
   int n;
-  skip_comment(input);
+  skipComment(input);
   while( (input >> n) && n ) {
-    res.push_back( Literal(((n < 0) ? (-n-1) : n-1), (n > 0)) );
+    ans.push_back( Literal(((n < 0) ? (-n-1) : n-1), (n > 0)) );
   }
 }
 /*
@@ -38,8 +38,8 @@ std::vector<Clause>  parser_sat() {
   int nbVar, nbClauses;
   char c;
   std::string read;
-  std::vector<Clause> res;
-  
+  std::vector<Clause> ans;
+
 
   // read the header
   if( !(cin >> c >> read >> nbVars >> nbClauses) || (c != p) || (read != "cnf")) {
@@ -50,11 +50,11 @@ std::vector<Clause>  parser_sat() {
       while((std::cin >> std::ws) && (cin.peek()=='c'))
         getline(std::cin, read);
       // read one clause
-      res.push_back( Clause(parser_clause()) );
+      ans.push_back( Clause(parser_clause()) );
     }
   }
-  
-  return res;
+
+  return ans;
 }
 */
 
