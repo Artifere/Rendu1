@@ -5,35 +5,35 @@
 
 void skipComment(std::istream& input)
 {
-  // skip comments
-  std::string read;
-  while((input >> std::ws) && (std::cin.peek()=='c'))
-    std::getline(input, read);
+    // skip comments
+    std::string read;
+    while((input >> std::ws) && (std::cin.peek()=='c'))
+        std::getline(input, read);
 }
 
 
 void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrClauses)
 {
-  std::string read;
-  char c;
-  skipComment(input);
-  if( !(std::cin >> c >> read >> nbrVar >> nbrClauses) || (c != 'p') || (read != "cnf"))
-  {
-    std::cout << "c Arg, entrée invalide " << std::endl;
-    nbrVar = 0;
-    nbrClauses = 0;
-  }
+    std::string read;
+    char c;
+    skipComment(input);
+    if( !(std::cin >> c >> read >> nbrVar >> nbrClauses) || (c != 'p') || (read != "cnf"))
+    {
+        std::cout << "c Arg, entrée invalide " << std::endl;
+        nbrVar = 0;
+        nbrClauses = 0;
+    }
 }
 
 
 void parserListLit(std::istream& input, std::vector<Literal>& ans)
 {
-  int n;
-  skipComment(input);
-  while( (input >> n) && n )
-  {
-    ans.push_back( Literal(((n < 0) ? (-n-1) : n-1), (n > 0)) );
-  }
+    int n;
+    skipComment(input);
+    while( (input >> n) && n )
+    {
+        ans.push_back( Literal(((n < 0) ? (-n-1) : n-1), (n > 0)) );
+    }
 }
 /*
 
