@@ -72,10 +72,10 @@ SatProblem::SatProblem(std::istream& input)
     for(unsigned int u = 0; u < list.size(); u++)
     {
       unsigned int var = list[u].var();
-      if(var < 1 || var > nbr_var)
+      if(var >= nbr_var)
       {
         std::cout <<"c Erreur de syntaxe dans l'entrée: "
-                  <<"variable d'indice " << var << " invalide "
+                  <<"variable d'indice " << var+1 << " invalide "
                   <<"(l'indice doit être compris entre 1 et " << nbr_var << ")."
                   <<std::endl;
         // le programme continu en ignorant la variable
