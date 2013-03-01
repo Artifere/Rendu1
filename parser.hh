@@ -3,10 +3,8 @@
 
 #include <iostream>
 #include <vector>
-
 #include "Literal.hh"
 #include "Clause.hh"
-
 #include <istream>
 
 

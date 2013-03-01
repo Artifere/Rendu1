@@ -17,7 +17,8 @@ void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrCl
   std::string read;
   char c;
   skipComment(input);
-  if( !(std::cin >> c >> read >> nbrVar >> nbrClauses) || (c != 'p') || (read != "cnf")) {
+  if( !(std::cin >> c >> read >> nbrVar >> nbrClauses) || (c != 'p') || (read != "cnf"))
+  {
     std::cout << "c Arg, entrée invalide " << std::endl;
     nbrVar = 0;
     nbrClauses = 0;
@@ -25,10 +26,12 @@ void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrCl
 }
 
 
-void parserListLit(std::istream& input, std::vector<Literal>& ans) {
+void parserListLit(std::istream& input, std::vector<Literal>& ans)
+{
   int n;
   skipComment(input);
-  while( (input >> n) && n ) {
+  while( (input >> n) && n )
+  {
     ans.push_back( Literal(((n < 0) ? (-n-1) : n-1), (n > 0)) );
   }
 }

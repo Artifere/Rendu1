@@ -18,7 +18,7 @@ void BasicClause::setVar(const Literal &l)
     setLitTrue(l);
   else
     setLitFalse(l);
- }
+}
 
 
 void BasicClause::setLitFalse(const Literal& l)
@@ -48,7 +48,7 @@ void BasicClause::freeVar(const unsigned int varId)
   {
     _free.insert(_assigned.top());
     _assigned.pop();
-   }
+  }
 }
 
 
