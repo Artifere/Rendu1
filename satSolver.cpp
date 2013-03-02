@@ -23,10 +23,13 @@ int main()
 {
     SatProblem problem(std::cin);
     bool is_sat = problem.satisfiability();
-    if(is_sat)
+    //Pour le bench
+    /*if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
         const std::vector<varState>& assign = problem.getAssign();
+
+        
         for(size_t k = 0; k < assign.size(); k++)
         {
             //std::cout << k+1 << "  =>  " << (assign[k] == TRUE ? "TRUE" : (assign[k]==FALSE) ? "FALSE" : "FREE") << std::endl;
@@ -37,11 +40,12 @@ int main()
                 std::cout << "?";
             std::cout << k+1 << std::endl;
         }
+        
     }
     else
     {
         std::cout << "s UNSATISFIABLE" << std::endl;
-    }
+    }*/
 }
 
 
