@@ -154,6 +154,8 @@ SatProblem::SatProblem(std::istream& input)
  * et est détruit à la fin (donc tout est automatiquement déaslloué quand on quitte le main)
  * Ça reste plus propre de tout désallouer à la main je trouve
  */
+
+/** Ok mais pourquoi maintenir une liste des trucs supprimés ? Surtout que tu ajoutes que des trucs désalloués, non ? Au cas où la clause serait en double genre "1 -1" ? **/
 SatProblem::~SatProblem()
 {
     typedef std::set<Clause*>::iterator iter;
@@ -211,26 +213,17 @@ bool SatProblem::satisfiability()
     {
         // calcule la nouvelle valeur à assigner
         Literal newAssign(0,true);
-        //debug
-        std::cout << "lol\n";
         // on évite les déductions sur une variable déjà assignée
-        while( (!deductions.empty()) && _varStates[deductions.top().var()]!=FREE )
+        while(!deductions.empty() && _varStates[deductions.top().var()]!=FREE)
         {
-            //debug
-            std::cout << "lal\n";
             // déduction contradictoire : on fait un callback
-            if( (_varStates[deductions.top().var()]==TRUE) != deductions.top().pos() )
+            if((_varStates[deductions.top().var()]==TRUE) != deductions.top().pos())
             {
-                // clear all deductions
-                /** Pourquoi toutes ? Seulement celles contradictoires jusqu'à la première qui va... **/
-                /** parce qu'elles sont basées sur une supposition erronnées,
-                 et qu'on ne sait pas si elles seront encore vraies sans cette supposition.
-                 deductions représente les assignations pas encore faites (celles en attente) :
-                 c'est juste celles-la qu'onsupprime, car on ne peut plus se reposer dessus  **/
+                bool newChoice = false;
                 while(! deductions.empty())
                     deductions.pop();
                 // on revient à la dernière supposition faite
-                while( (! _stackCallback.empty()) )
+                while(!_stackCallback.empty())
                 {
                     // annule l'assignation de la dernière variable assignée
                     unsigned int varID = _stackCallback.top().second;
@@ -245,27 +238,26 @@ bool SatProblem::satisfiability()
                         deductions.push( Literal(varID, !(_varStates[varID]==TRUE)) );
                         _varStates[varID] = FREE;
                         _stackCallback.pop();
+                        newChoice = true;
                         break;
                     }
                     _varStates[varID] = FREE;
                     _stackCallback.pop();
                 }
                 // si pas de déduction faite : problème INSATISFIABLE
-                if(_stackCallback.empty())
+                if(_stackCallback.empty() && !newChoice)
                     return false;
             }
             // sinon : la déduction correspond à l'état courant d'une variable : on l'ignore la déduction
             else
-            {
                 deductions.pop();
-            }
         }
 
         // plusieurs choix :
         // soit une déduction, et on la fait (elle est valide : c'est ce dont on vient de s'assurer)
         // soit une nouvelle variable (si pas de déduction)
         // soit pas de déduction et toutes les variables sont déjà assignée : problème SATISFIABLE
-        if(! deductions.empty())
+        if(!deductions.empty())
         {
             newAssign = deductions.top();
             deductions.pop();

@@ -17,3 +17,4 @@
 *.swp
 release
 debug
+testsSatisfiable/*.out
