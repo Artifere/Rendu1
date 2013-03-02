@@ -25,7 +25,7 @@ void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrCl
     }
     
     //Pour la vérification
-    std::cout << nbrVar << " " << nbrClauses << std::endl;
+    //std::cout << nbrVar << " " << nbrClauses << std::endl;
 }
 
 
@@ -37,10 +37,10 @@ void parserListLit(std::istream& input, std::vector<Literal>& ans)
     {
         ans.push_back( Literal(((n < 0) ? (-n-1) : n-1), (n > 0)) );
         //Pour la vérification
-        std::cout << n << " ";
+        //std::cout << n << " ";
     }
     //Pour la vérification
-    std::cout << "0\n";
+    //std::cout << "0\n";
 }
 /*
 
