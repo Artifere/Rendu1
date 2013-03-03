@@ -24,7 +24,7 @@ int main()
     SatProblem problem(std::cin);
     bool is_sat = problem.satisfiability();
     //Pour le bench
-    /*if(is_sat)
+    if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
         const std::vector<varState>& assign = problem.getAssign();
@@ -45,7 +45,7 @@ int main()
     else
     {
         std::cout << "s UNSATISFIABLE" << std::endl;
-    }*/
+    }
 }
 
 
@@ -97,6 +97,15 @@ SatProblem::SatProblem(std::istream& input)
             }
         }
 
+        //Si la clause est de taille 1, on a une assignation =)
+        if (list.size() == 1)
+        {
+            if (list[0].pos())
+                _varStates[list[0].var()] = TRUE;
+            else
+                _varStates[list[0].var()] = FALSE;
+           continue;
+        }
         // supprime de list les doublons, et repère si trivialement vraie
         bool trivial = false; // ssi clause trivialement vraie
         for(unsigned int u = 0; u < list.size() && !trivial; u++)
@@ -211,9 +220,40 @@ bool SatProblem::satisfiability()
     for(size_t k = 0; k < n; k++)
         _varStates[k] = FREE;
 
-    std::stack<Literal> deductions;
+    //On calcule le nombre de variables à deviner
+    unsigned int nbrVarToFind = n;
+    for (unsigned int var = 0; var < n; var++)
+        if (_varStates[var] != FREE)
+            nbrVarToFind--;
 
-    while(_stackCallback.size() < n || !deductions.empty())
+    std::stack<Literal> deductions;
+    
+    /* INUTILE
+    //On commence par éliminer toutes les clauses à une seule variable
+    for (unsigned int var = 0; var < n; var++)
+    {
+        if (!_variables[var].first.empty())
+        {
+            if ((*_variables[var].first.begin())->freeSize() == 1)
+            {
+                _varStates[var] = TRUE;
+                _variables[var].first.erase(_variables[var].first.begin());
+             }
+        }
+        
+        if (!_variables[var].second.empty())
+        {
+            if (_variables[var].second.begin()->size() == 1)
+            {
+                if (_varStates[var] != FREE) //TRUE
+                    return false;
+                _varStates[var] = FALSE;
+                _variables[var].second.erase(_variables[var].second.begin());
+             }
+        }
+    }*/
+
+    while(_stackCallback.size() < nbrVarToFind || !deductions.empty())
     {
         // calcule la nouvelle valeur à assigner
         Literal newAssign(0,true);
@@ -283,7 +323,7 @@ bool SatProblem::satisfiability()
         std::set<Clause*>& cFalse = _variables[newAssign.var()].second;
         std::set<Clause*>::iterator it;
 
-        bool is_error = false;
+        bool is_error = (_varStates[newAssign.var()] == TRUE) != newAssign.pos();
         bool valInClause = newAssign.pos();
         for(it = cTrue.begin(); it != cFalse.end(); it++)
         {
