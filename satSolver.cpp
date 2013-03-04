@@ -24,7 +24,7 @@ int main()
     SatProblem problem(std::cin);
     bool is_sat = problem.satisfiability();
     //Pour le bench
-    if(is_sat)
+    /*if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
         const std::vector<varState>& assign = problem.getAssign();
@@ -45,7 +45,7 @@ int main()
     else
     {
         std::cout << "s UNSATISFIABLE" << std::endl;
-    }
+    }*/
 }
 
 
@@ -190,11 +190,13 @@ SatProblem::~SatProblem()
 
 
 
-Literal SatProblem::chooseUnasignedVar() const
+Literal SatProblem::chooseUnasignedVar()
 {
-    unsigned int k = 0;
-    while(k < _varStates.size() && _varStates[k] != FREE)
-        k++;
+    unsigned int k = *_unassignedVarList.begin();
+    _unassignedVarList.erase(_unassignedVarList.begin());
+    //while(k < _varStates.size() && _varStates[k] != FREE)
+      //  k++;
+    
     return Literal(k,true);
 }
 
@@ -209,7 +211,10 @@ bool SatProblem::satisfiability()
     while(! _stackCallback.empty() )
         _stackCallback.pop();
     for(size_t k = 0; k < n; k++)
+    {
+        _unassignedVarList.insert(k);
         _varStates[k] = FREE;
+    }
 
     std::stack<Literal> deductions;
 
@@ -231,6 +236,7 @@ bool SatProblem::satisfiability()
                 {
                     // annule l'assignation de la dernière variable assignée
                     unsigned int varID = _stackCallback.top().second;
+                    _unassignedVarList.insert(varID);
                     std::set<Clause*>::iterator it;
                     for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); it++)
                       (*it)->freeVar(varID);
@@ -265,6 +271,7 @@ bool SatProblem::satisfiability()
         {
             newAssign = deductions.top();
             deductions.pop();
+            _unassignedVarList.erase(newAssign.var());
             _stackCallback.push( std::pair<bool,unsigned int>(false, newAssign.var()) );
         }
         else if(_stackCallback.size() < n)
