@@ -30,6 +30,7 @@ protected:
 public:
     SatProblem(std::istream& input);
     ~SatProblem();
+    bool deduceFromSizeOne();
 
     inline const std::vector<varState>& getAssign() const
     {
