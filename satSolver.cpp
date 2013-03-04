@@ -24,7 +24,7 @@ int main()
     SatProblem problem(std::cin);
     bool is_sat = problem.satisfiability();
     //Pour le bench
-    /*if(is_sat)
+    if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
         const std::vector<varState>& assign = problem.getAssign();
@@ -45,23 +45,12 @@ int main()
     else
     {
         std::cout << "s UNSATISFIABLE" << std::endl;
-    }*/
+    }
 }
 
 
 
 
-
-
-
-/* Je ne comprends pas du tout ce que tu fais ici........ */
-/* c'était pour avoir le type des attributs sous les yeux pendant que je code
-   (j'ai oublié de le mettre en commentaire, dsl...
-
-   vector<varState> SatProblem::_varStates;
-   vector<pair<set<Clause*>,set<Clause*> > > _variables;
-   stack<pair<bool,Literal> > _stackCallback;
- */
 
 
 SatProblem::SatProblem(std::istream& input)
@@ -160,6 +149,7 @@ SatProblem::SatProblem(std::istream& input)
  */
 
 /** Ok mais pourquoi maintenir une liste des trucs supprimés ? Surtout que tu ajoutes que des trucs désalloués, non ? Au cas où la clause serait en double genre "1 -1" ? **/
+/** si je ne le faisais pas, chaque clause serait désallouées autant de fois qu'elle a de variables (c-à-d à chaque fois que je la verait depuis une variable) **/
 SatProblem::~SatProblem()
 {
     typedef std::set<Clause*>::iterator iter;
@@ -192,10 +182,10 @@ SatProblem::~SatProblem()
 
 Literal SatProblem::chooseUnasignedVar()
 {
-    unsigned int k = *_unassignedVarList.begin();
-    _unassignedVarList.erase(*_unassignedVarList.begin());
-    //while(k < _varStates.size() && _varStates[k] != FREE)
-    //  k++;
+    unsigned int k = 0;// *_unassignedVarList.begin();
+    //_unassignedVarList.erase(*_unassignedVarList.begin());
+    while(k < _varStates.size() && _varStates[k] != FREE)
+      k++;
 
     return Literal(k,true);
 }
@@ -302,6 +292,160 @@ bool SatProblem::deduceFromSizeOne()
 
 
 
+
+/* version un peu plus propre de la fonction, qui devenait bordélique
+
+ deductions : ensemble de valeurs à propager. d'intersection vide avec celles déjà assignées, et aucune contradictions entre les déductions
+ on a pas besoin de deducedState en réalité : chaque deduction à sa valeur déjà écrite dans _varStates
+ 
+ le gros changement depuis la fonction précédente, c'est qu'on fait le callback à la fin de la bocle plutôt qu'au début (parce que c'est là qu'on à dedécté une contradiction : on ne fait que réutiliser la variable is_error pour savoir si on doit faire le callback ou non)
+ 
+ 
+ tant qu'on a pas assigné toutes les variables
+   si deductions = vide
+     choisir un literal libre et une valeur booléenne 
+   sinon choisir une déduction
+   
+   propager la nouvelle valeur :
+   pour chaque clause dont on peut tirer un litéral :
+     si litéral libre (test d'après deductStates)
+       ajouter le littéral dans deductStates
+     sinon, si contredit une valeur de deductState
+       contradiction
+     sinon (déductions déjà faite précédemment)
+       ne rien faire
+   
+   si contradiction :
+   faire le callback :
+     vider deductions (et remettre à FREE les valeurs des variables déduites dans _varStates)
+     faire
+       si plus de choix (_stackCallback = vide)
+         renvoyer faux (UNSAT)
+       sinon :
+         on concidère la variale du haut de _stackCallback :
+         si cette variable est un choix libre
+           ajouter son contraire à deductions
+         la liberer
+     tant que deductions n'est pas vide
+ fin tant que
+ renvoyer vrai (SAT)
+*/
+
+bool SatProblem::satisfiability()
+{
+    const size_t n = _varStates.size();
+    
+    // pas de remise à zéro : on laisse la fonction dans l'état ou on la trouve
+    // (permet de faire des optimisations en dehors de la fonction, et de trouver des assignations de variables hors de satisfiability())
+    std::stack<Literal> deductions;
+    
+    while(_stackCallback.size() < n || !deductions.empty())
+    {
+ 
+        // calculer la nouvelle valeur
+        Literal newAssign(-1, true);
+        if(deductions.empty())
+        {
+            newAssign = chooseUnasignedVar();
+            _stackCallback.push( std::pair<bool, unsigned int>(true, newAssign.var()) );
+            _varStates[newAssign.var()] = newAssign.pos()?TRUE:FALSE;
+        }
+        else
+        {
+            newAssign = deductions.top();
+            _stackCallback.push( std::pair<bool, unsigned int>(false, newAssign.var()) );
+            deductions.pop();
+        }
+
+        // propager la nouvelle valeur
+        bool is_error = false;
+        bool valInClause = newAssign.pos();
+        std::set<Clause*>& cTrue = _variables[newAssign.var()].first;
+        std::set<Clause*>& cFalse = _variables[newAssign.var()].second;
+        std::set<Clause*>::iterator it;
+        for(it = cTrue.begin(); it != cFalse.end(); it++)
+        {
+            // propagation "moche" à travers les clauses contenant x et !x en une seule boucle
+            if(it == cTrue.end())
+            {
+                it = cFalse.begin();
+                if(it == cFalse.end())
+                    break;
+                valInClause = !valInClause;
+            }
+
+            if(valInClause)
+                (*it)->setLitTrue(newAssign);
+            else
+                (*it)->setLitFalse(newAssign);
+            
+            // si on a déjà repéré une erreur ou que la clause est satifaite :
+            // pas besion de chercher d'assignation dans la clause
+            if(is_error || (*it)->satisfied())
+                continue;
+            // sinon on déduit de la clause une nouvelle assignation
+            if((*it)->freeSize()==1)
+            {
+                Literal l = (*it)->chooseFree();
+                // si la déduction concerne une nouvelle variable, on l'ajoute
+                if(_varStates[l.var()] == FREE)
+                {
+                    deductions.push(l);
+                    _varStates[l.var()] = l.pos() ? TRUE:FALSE;
+                }
+                // sinon, si déduction déjà faite, on ne fait rien
+                // et si déduction contraire déjà faite, contradiction
+                else if(l.pos() != (_varStates[l.var()] == TRUE))
+                    is_error = true;
+            }
+            // sinon si clause contradictoire (clause vide) :
+            else if((*it)->freeSize()==0)
+                is_error = true;
+        }
+        
+        
+        // on fait le callback si besoin
+        if(is_error)
+        {
+            // vide les déductions pas encore propagées dans les clauses
+            while(!deductions.empty())
+            {
+                _varStates[deductions.top().var()] = FREE;
+                deductions.pop();
+            }
+            // on revient au dernier choix libre fait
+            do {
+                // si pas de choix libre fait, on renvoie faux (UNSAT)
+                if(_stackCallback.empty())
+                    return false;
+                // sinon, on libère la variable du haut de _stackCallback
+                unsigned varID = _stackCallback.top().second;
+                std::set<Clause*>::iterator it;
+                for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); it++)
+                    (*it)->freeVar(varID);
+                for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); it++)
+                    (*it)->freeVar(varID);
+                // si c'était une assignation libre, on ajoute son contraire comme déduction.
+                // dans tous les cas, on la supprime du haut de _stackCallback
+                if(_stackCallback.top().first)
+                {
+                    bool newVal = !(_varStates[varID]==TRUE);
+                    deductions.push( Literal(varID, newVal) );
+                    _varStates[varID] = newVal ? TRUE:FALSE;
+                }
+                else
+                {
+                    _varStates[varID] = FREE;
+                }
+                _stackCallback.pop();
+            } while(deductions.empty());
+        }
+    }
+    return true;
+}
+
+
+#if FALSE // backup
 bool SatProblem::satisfiability()
 {
     const size_t n = _varStates.size();
@@ -340,7 +484,7 @@ bool SatProblem::satisfiability()
             {
                 while(! deductions.empty())
                 {
-                    if (_varStates[deductions.top().var()] == FREE)
+                    //if (_varStates[deductions.top().var()] == FREE)
                         _deducedState[deductions.top().var()] = FREE;
                     deductions.pop();
                 }
@@ -358,11 +502,9 @@ bool SatProblem::satisfiability()
                     // si c'était une assignation libre, on sort en ajoutant le choix opposé comme déduction
                     if(_stackCallback.top().first)
                     {
-                        if (_varStates[varID] == TRUE)
-                            _deducedState[varID] = FALSE;
-                        else
-                            _deducedState[varID] = TRUE;
-                        deductions.push( Literal(varID, !(_varStates[varID]==TRUE)) );
+                        bool newVal = !(_varStates[varID]==TRUE);
+                        deductions.push( Literal(varID, newVal) );
+                        _deducedState[varID] = newVal ? TRUE : FALSE;
                     }
                     else
                         _deducedState[varID] = FREE;
@@ -403,7 +545,7 @@ bool SatProblem::satisfiability()
         else
             return true;
 
-        _varStates[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
+        _varStates[newAssign.var()] = _deducedState[newAssign.var()];//idem (newAssign.pos()) ? TRUE : FALSE;
 
 
         // propagation la nouvelle valeur
@@ -486,5 +628,5 @@ bool SatProblem::satisfiability()
 
     return true;
 }
-
+#endif
 
