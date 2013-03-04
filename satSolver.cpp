@@ -333,7 +333,7 @@ bool SatProblem::satisfiability()
         }
         std::cout << "--------------\n";*/
         // on évite les déductions sur une variable déjà assignée
-        while(!deductions.empty() && _varStates[deductions.top().var()]!=FREE)
+        if(!deductions.empty() && _varStates[deductions.top().var()]!=FREE)
         {
             // déduction contradictoire : on fait un callback
             if((_varStates[deductions.top().var()]==TRUE) != deductions.top().pos())
@@ -428,23 +428,26 @@ bool SatProblem::satisfiability()
             else
                 (*it)->setLitFalse(newAssign);
 
-            if( (!(*it)->satisfied()) && (*it)->freeSize()==1 )
+            if (!is_error)
             {
-                Literal l = (*it)->chooseFree();
-                if ((!l.pos() && _deducedState[l.var()] == TRUE) || (l.pos() && _deducedState[l.var()] == FALSE))
-                    is_error = true;
-                else
+                if( (!(*it)->satisfied()) && (*it)->freeSize()==1 )
                 {
-                    _deducedState[l.var()] = (l.pos() ? TRUE:FALSE);
-                    deductions.push(l);
+                    Literal l = (*it)->chooseFree();
+                    if ((!l.pos() && _deducedState[l.var()] == TRUE) || (l.pos() && _deducedState[l.var()] == FALSE))
+                        is_error = true;
+                    else if (_deducedState[l.var()] == FREE)
+                    {
+                        _deducedState[l.var()] = (l.pos() ? TRUE:FALSE);
+                        deductions.push(l);
+                    }
                 }
+                else if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
+                    // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
+                    // on fait donc la propagation de la variable en entier
+                    // ceci pour simplifier la propagation en arrière : on libère la variable de toutes les clauses où elle apparaît,
+                    // et non pas de toutes celles qu'on a parcouru avant d'arriver à la contradiction
+                    is_error = true;
             }
-            else if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
-                // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
-                // on fait donc la propagation de la variable en entier
-                // ceci pour simplifier la propagation en arrière : on libère la variable de toutes les clauses où elle apparaît,
-                // et non pas de toutes celles qu'on a parcouru avant d'arriver à la contradiction
-                is_error = true;
         }
 
         // si une erreur : on fait le backtraking
