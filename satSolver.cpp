@@ -345,18 +345,12 @@ bool SatProblem::deduceFromSizeOne()
  */
 bool SatProblem::satisfiability()
 {
-    const size_t n = _varStates.size();
-    
-    // pas de remise à zéro : on laisse la fonction dans l'état ou on la trouve
-    // (permet de faire des optimisations en dehors de la fonction, et de trouver des assignations de variables hors de satisfiability())
-    std::stack<Literal> deductions;
-    
-    while(_stackCallback.size() < n || !deductions.empty())
+    while(_stackCallback.size() < _varStates.size() || !_deductions.empty())
     {
     
         // calculer la nouvelle valeur
         Literal newAssign(-1, true);
-        if(deductions.empty())
+        if(_deductions.empty())
         {
             newAssign = chooseUnasignedVar();
             _stackCallback.push( std::pair<bool, unsigned int>(true, newAssign.var()) );
@@ -364,9 +358,9 @@ bool SatProblem::satisfiability()
         }
         else
         {
-            newAssign = deductions.top();
+            newAssign = _deductions.top();
             _stackCallback.push( std::pair<bool, unsigned int>(false, newAssign.var()) );
-            deductions.pop();
+            _deductions.pop();
         }
 
         // propager la nouvelle valeur
@@ -408,7 +402,7 @@ bool SatProblem::satisfiability()
                     // si la déduction concerne une nouvelle variable, on l'ajoute
                     if(_varStates[deduct.var()] == FREE)
                     {
-                        deductions.push(deduct);
+                        _deductions.push(deduct);
                         _varStates[deduct.var()] = deduct.pos() ? TRUE:FALSE;
                     }
                     // sinon, si déduction déjà faite, on ne fait rien
@@ -424,10 +418,10 @@ bool SatProblem::satisfiability()
         if(is_error)
         {
             // vide les déductions pas encore propagées dans les clauses
-            while(!deductions.empty())
+            while(!_deductions.empty())
             {
-                _varStates[deductions.top().var()] = FREE;
-                deductions.pop();
+                _varStates[_deductions.top().var()] = FREE;
+                _deductions.pop();
             }
             // on revient au dernier choix libre fait
             do {
@@ -446,7 +440,7 @@ bool SatProblem::satisfiability()
                 if(_stackCallback.top().first)
                 {
                     bool newVal = !(_varStates[varID]==TRUE);
-                    deductions.push( Literal(varID, newVal) );
+                    _deductions.push( Literal(varID, newVal) );
                     _varStates[varID] = newVal ? TRUE:FALSE;
                 }
                 else
@@ -454,7 +448,7 @@ bool SatProblem::satisfiability()
                     _varStates[varID] = FREE;
                 }
                 _stackCallback.pop();
-            } while(deductions.empty());
+            } while(_deductions.empty());
         }
     }
     return true;
