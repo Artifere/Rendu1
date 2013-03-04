@@ -341,7 +341,7 @@ bool SatProblem::satisfiability()
     
     while(_stackCallback.size() < n || !deductions.empty())
     {
- 
+    
         // calculer la nouvelle valeur
         Literal newAssign(-1, true);
         if(deductions.empty())
@@ -365,7 +365,7 @@ bool SatProblem::satisfiability()
         std::set<Clause*>::iterator it;
         for(it = cTrue.begin(); it != cFalse.end(); it++)
         {
-            // propagation "moche" à travers les clauses contenant x et !x en une seule boucle
+            // propagation "moche" (en une seule boucle) à travers les clauses contenant x et !x
             if(it == cTrue.end())
             {
                 it = cFalse.begin();
@@ -373,34 +373,38 @@ bool SatProblem::satisfiability()
                     break;
                 valInClause = !valInClause;
             }
-
+            
+            // on passe la clause à true : pas besoin de tester une déduction où une contradiction
             if(valInClause)
                 (*it)->setLitTrue(newAssign);
+            // on enlève une des variables de la clause : on peut alors avoir des nouvelles déductions ou des des contradictions
             else
-                (*it)->setLitFalse(newAssign);
-            
-            // si on a déjà repéré une erreur ou que la clause est satifaite :
-            // pas besion de chercher d'assignation dans la clause
-            if(is_error || (*it)->satisfied())
-                continue;
-            // sinon on déduit de la clause une nouvelle assignation
-            if((*it)->freeSize()==1)
             {
-                Literal l = (*it)->chooseFree();
-                // si la déduction concerne une nouvelle variable, on l'ajoute
-                if(_varStates[l.var()] == FREE)
-                {
-                    deductions.push(l);
-                    _varStates[l.var()] = l.pos() ? TRUE:FALSE;
-                }
-                // sinon, si déduction déjà faite, on ne fait rien
-                // et si déduction contraire déjà faite, contradiction
-                else if(l.pos() != (_varStates[l.var()] == TRUE))
+                (*it)->setLitFalse(newAssign);
+                
+                //if(is_error || (*it)->satisfied() || (*it)->freeSize() != 1)
+                //    is_error = is_error || (!(*it)->satisfied() && (*it)->freeSize()==0);
+                //else
+                // contradiction : taille passe à 0
+                if(is_error || (!(*it)->satisfied() && (*it)->freeSize() == 0))
                     is_error = true;
+                // sinon, si pas déduction, ne rien faire
+                // et si déduction : on teste si elle n'est pas contradictoire
+                else if( !(*it)->satisfied() && (*it)->freeSize() == 1)
+                {
+                    Literal deduct = (*it)->chooseFree();
+                    // si la déduction concerne une nouvelle variable, on l'ajoute
+                    if(_varStates[deduct.var()] == FREE)
+                    {
+                        deductions.push(deduct);
+                        _varStates[deduct.var()] = deduct.pos() ? TRUE:FALSE;
+                    }
+                    // sinon, si déduction déjà faite, on ne fait rien
+                    // et si déduction contraire déjà faite, contradiction
+                    else if(deduct.pos() != (_varStates[deduct.var()] == TRUE))
+                        is_error = true;
+                }
             }
-            // sinon si clause contradictoire (clause vide) :
-            else if((*it)->freeSize()==0)
-                is_error = true;
         }
         
         
