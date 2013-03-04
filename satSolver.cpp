@@ -207,6 +207,22 @@ bool SatProblem::deduceFromSizeOne()
 {
     unsigned int n = _varStates.size();
     std::stack<Literal> deductions;
+
+    for (unsigned int var = 0; var < n; var++)
+    {
+         for (std::set<Clause*>::iterator it = _variables[var].first.begin(); it != _variables[var].first.end(); ++it)
+            if ((*it)->freeSize() == 1)
+                deductions.push(Literal(var, true));
+    }
+
+     for (unsigned int var = 0; var < n; var++)
+    {
+         for (std::set<Clause*>::iterator it = _variables[var].second.begin(); it != _variables[var].second.end(); ++it)
+            if ((*it)->freeSize() == 1)
+                deductions.push(Literal(var, false));
+    }
+
+
     do
     {
         // on évite les déductions sur une variable déjà assignée
@@ -269,6 +285,7 @@ bool SatProblem::deduceFromSizeOne()
                 else if (_variables[var].first.size() == 0)
                     deductions.push(Literal(var, false));
             }
+
             if (deductions.empty())
                 break;
         }
@@ -297,10 +314,11 @@ bool SatProblem::satisfiability()
         _unassignedVarList.insert(k);
         _varStates[k] = FREE;
     }
-
-    deduceFromSizeOne();
-
+    
     std::stack<Literal> deductions;
+
+    //if(!deduceFromSizeOne())
+      //  return false;
 
     while(_stackCallback.size() < n || !deductions.empty())
     {
@@ -401,6 +419,30 @@ bool SatProblem::satisfiability()
             newAssign.invert();
             deductions.push( newAssign );
         }
+        /* Bugge je ne sais pas pourquoi
+        else
+        {
+            for (unsigned int var = 0; var < n; var++)
+            {
+                if (_varStates[var] == FREE)
+                {
+                    bool isTrue = true;
+                    for (std::set<Clause*>::iterator it = _variables[var].first.begin(); isTrue && it != _variables[var].first.end(); ++it)
+                        isTrue = (*it)->satisfied();
+                    if (isTrue)
+                        deductions.push(Literal(var, false));
+                    else
+                    {
+                        isTrue = true;
+                        for (std::set<Clause*>::iterator it = _variables[var].second.begin(); isTrue && it != _variables[var].second.end(); ++it)
+                            isTrue = (*it)->satisfied();
+                        if (isTrue)
+                            deductions.push(Literal(var, true));
+                    }
+                }
+            }
+        }*/
+
     }
 
     return true;
