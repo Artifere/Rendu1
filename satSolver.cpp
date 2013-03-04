@@ -331,6 +331,18 @@ bool SatProblem::deduceFromSizeOne()
  renvoyer vrai (SAT)
 */
 
+/*
+ Pour deduceFromSizeOne, je pense qu'on doit traiter séparément les deux types d'optimisations :
+
+ simpification des clauses ne contenant qu'une variable :
+   on peut faire un prétraîtement quand on crée le problème :
+   si une clause ne contient qu'une seule variable,
+     on assigne cette variable à la bonne valeur (et on n'ajoute même pas la clause)
+ 
+ si une variable n'apparaît que sous la forme x ou !x :
+   on assigne la variable à la bonne valeur (et on supprime les clauses correspondantes)
+   ce traitement est à faire avant l'appel à satisfiability()
+ */
 bool SatProblem::satisfiability()
 {
     const size_t n = _varStates.size();
