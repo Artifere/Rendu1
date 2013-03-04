@@ -30,8 +30,15 @@ protected:
     // d'intersection vide avec celles déjà assignées (dans _stackCallback), et aucune contradictions entre les déductions
     std::stack<Literal> _deductions; // note : on n'a pas besoin de stoquer la valeur déduite : elle est contenue dans _varStates
 
-    Literal chooseUnasignedVar();
-    
+    inline Literal chooseUnasignedVar() const
+    {
+        unsigned int k = 0;// *_unassignedVarList.begin();
+        //_unassignedVarList.erase(*_unassignedVarList.begin());
+        while(k < _varStates.size() && _varStates[k] != FREE)
+            k++;
+
+        return Literal(k,true);
+    }    
 
 public:
     SatProblem(std::istream& input);

@@ -24,7 +24,7 @@ int main()
     SatProblem problem(std::cin);
     bool is_sat = problem.satisfiability();
     //Pour le bench
-    if(is_sat)
+    /*if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
         const std::vector<varState>& assign = problem.getAssign();
@@ -45,7 +45,7 @@ int main()
     else
     {
         std::cout << "s UNSATISFIABLE" << std::endl;
-    }
+    }*/
 }
 
 
@@ -178,17 +178,6 @@ SatProblem::~SatProblem()
 }
 
 
-
-
-Literal SatProblem::chooseUnasignedVar()
-{
-    unsigned int k = 0;// *_unassignedVarList.begin();
-    //_unassignedVarList.erase(*_unassignedVarList.begin());
-    while(k < _varStates.size() && _varStates[k] != FREE)
-      k++;
-
-    return Literal(k,true);
-}
 
 
 
