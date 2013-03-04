@@ -29,7 +29,7 @@ int main()
         std::cout << "s SATISFIABLE" << std::endl;
         const std::vector<varState>& assign = problem.getAssign();
 
-        
+
         for(size_t k = 0; k < assign.size(); k++)
         {
             //std::cout << k+1 << "  =>  " << (assign[k] == TRUE ? "TRUE" : (assign[k]==FALSE) ? "FALSE" : "FREE") << std::endl;
@@ -40,7 +40,7 @@ int main()
                 std::cout << "?";
             std::cout << k+1 << std::endl;
         }
-        
+
     }
     else
     {
@@ -58,10 +58,10 @@ int main()
 /* c'était pour avoir le type des attributs sous les yeux pendant que je code
    (j'ai oublié de le mettre en commentaire, dsl...
 
-vector<varState> SatProblem::_varStates;
-    vector<pair<set<Clause*>,set<Clause*> > > _variables;
-    stack<pair<bool,Literal> > _stackCallback;
-*/
+   vector<varState> SatProblem::_varStates;
+   vector<pair<set<Clause*>,set<Clause*> > > _variables;
+   stack<pair<bool,Literal> > _stackCallback;
+ */
 
 
 SatProblem::SatProblem(std::istream& input)
@@ -87,9 +87,9 @@ SatProblem::SatProblem(std::istream& input)
             if(var >= nbrVar)
             {
                 std::cout <<"c Erreur de syntaxe dans l'entrée: "
-                          <<"variable d'indice " << var+1 << " invalide "
-                          <<"(l'indice doit être compris entre 1 et " << nbrVar << ")."
-                          <<std::endl;
+                    <<"variable d'indice " << var+1 << " invalide "
+                    <<"(l'indice doit être compris entre 1 et " << nbrVar << ")."
+                    <<std::endl;
                 // le programme continu en ignorant la variable
                 std::cout <<"c La variable est ignorée." << std::endl;
                 list[u--] = list[list.size()-1];
@@ -195,8 +195,8 @@ Literal SatProblem::chooseUnasignedVar()
     unsigned int k = *_unassignedVarList.begin();
     _unassignedVarList.erase(*_unassignedVarList.begin());
     //while(k < _varStates.size() && _varStates[k] != FREE)
-      //  k++;
-    
+    //  k++;
+
     return Literal(k,true);
 }
 
@@ -210,14 +210,14 @@ bool SatProblem::deduceFromSizeOne()
 
     for (unsigned int var = 0; var < n; var++)
     {
-         for (std::set<Clause*>::iterator it = _variables[var].first.begin(); it != _variables[var].first.end(); ++it)
+        for (std::set<Clause*>::iterator it = _variables[var].first.begin(); it != _variables[var].first.end(); ++it)
             if ((*it)->freeSize() == 1)
                 deductions.push(Literal(var, true));
     }
 
-     for (unsigned int var = 0; var < n; var++)
+    for (unsigned int var = 0; var < n; var++)
     {
-         for (std::set<Clause*>::iterator it = _variables[var].second.begin(); it != _variables[var].second.end(); ++it)
+        for (std::set<Clause*>::iterator it = _variables[var].second.begin(); it != _variables[var].second.end(); ++it)
             if ((*it)->freeSize() == 1)
                 deductions.push(Literal(var, false));
     }
@@ -292,7 +292,7 @@ bool SatProblem::deduceFromSizeOne()
 
 
 
-        
+
 
     } while (!deductions.empty());
 
@@ -306,6 +306,7 @@ bool SatProblem::satisfiability()
 {
     const size_t n = _varStates.size();
 
+    _deducedState.resize(n, FREE);
     // remet à 0 l'état du solver
     while(! _stackCallback.empty() )
         _stackCallback.pop();
@@ -314,11 +315,11 @@ bool SatProblem::satisfiability()
         _unassignedVarList.insert(k);
         _varStates[k] = FREE;
     }
-    
+
     std::stack<Literal> deductions;
 
     //if(!deduceFromSizeOne())
-      //  return false;
+    //  return false;
 
     while(_stackCallback.size() < n || !deductions.empty())
     {
@@ -331,7 +332,11 @@ bool SatProblem::satisfiability()
             if((_varStates[deductions.top().var()]==TRUE) != deductions.top().pos())
             {
                 while(! deductions.empty())
+                {
+                    if (_varStates[deductions.top().var()] == FREE)
+                        _deducedState[deductions.top().var()] = FREE;
                     deductions.pop();
+                }
                 // on revient à la dernière supposition faite
                 while(!_stackCallback.empty() && deductions.empty())
                 {
@@ -340,12 +345,21 @@ bool SatProblem::satisfiability()
                     _unassignedVarList.insert(varID);
                     std::set<Clause*>::iterator it;
                     for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); it++)
-                      (*it)->freeVar(varID);
+                        (*it)->freeVar(varID);
                     for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); it++)
-                      (*it)->freeVar(varID);
+                        (*it)->freeVar(varID);
                     // si c'était une assignation libre, on sort en ajoutant le choix opposé comme déduction
                     if(_stackCallback.top().first)
+                    {
+                        if (_varStates[varID] == TRUE)
+                            _deducedState[varID] = FALSE;
+                        else
+                            _deducedState[varID] = TRUE;
                         deductions.push( Literal(varID, !(_varStates[varID]==TRUE)) );
+                    }
+                    else
+                        _deducedState[varID] = FREE;
+
                     _varStates[varID] = FREE;
                     _stackCallback.pop();
                 }
@@ -355,7 +369,10 @@ bool SatProblem::satisfiability()
             }
             // sinon : la déduction correspond à l'état courant d'une variable : on l'ignore la déduction
             else
+            {
+                //_deducedState[deductions.top().var()] = FREE;
                 deductions.pop();
+            }
         }
 
         // plusieurs choix :
@@ -365,6 +382,7 @@ bool SatProblem::satisfiability()
         if(!deductions.empty())
         {
             newAssign = deductions.top();
+            //_deducedState[newAssign.var()] = (newAssign.;
             deductions.pop();
             _unassignedVarList.erase(newAssign.var());
             _stackCallback.push( std::pair<bool,unsigned int>(false, newAssign.var()) );
@@ -373,10 +391,11 @@ bool SatProblem::satisfiability()
         {
             newAssign = chooseUnasignedVar();
             _stackCallback.push( std::pair<bool,unsigned int>(true, newAssign.var()) );
+            _deducedState[newAssign.var()] = (newAssign.pos() ? TRUE:FALSE);
         }
         else
             return true;
-        
+
         _varStates[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
 
 
@@ -396,14 +415,20 @@ bool SatProblem::satisfiability()
                     break;
                 valInClause = !valInClause;
             }
-        
+
             if(valInClause)
                 (*it)->setLitTrue(newAssign);
             else
                 (*it)->setLitFalse(newAssign);
 
             if( (!(*it)->satisfied()) && (*it)->freeSize()==1 )
-                deductions.push( (*it)->chooseFree() );
+            {
+                Literal l = (*it)->chooseFree();
+                if ((!l.pos() && _deducedState[l.var()] == TRUE) || (l.pos() && _deducedState[l.var()] == FALSE))
+                    is_error = true;
+                else
+                    deductions.push(l);
+            }
             else if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
                 // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
                 // on fait donc la propagation de la variable en entier
@@ -418,30 +443,31 @@ bool SatProblem::satisfiability()
             // on déduit le contraire de newAssign pour profiter du code de backtracking déjà écrit du début de la boucle
             newAssign.invert();
             deductions.push( newAssign );
+            //_deducedState[newAssign.var()] = (newAssign.pos() ? TRUE : FALSE);
         }
         /* Bugge je ne sais pas pourquoi
-        else
-        {
-            for (unsigned int var = 0; var < n; var++)
-            {
-                if (_varStates[var] == FREE)
-                {
-                    bool isTrue = true;
-                    for (std::set<Clause*>::iterator it = _variables[var].first.begin(); isTrue && it != _variables[var].first.end(); ++it)
-                        isTrue = (*it)->satisfied();
-                    if (isTrue)
-                        deductions.push(Literal(var, false));
-                    else
-                    {
-                        isTrue = true;
-                        for (std::set<Clause*>::iterator it = _variables[var].second.begin(); isTrue && it != _variables[var].second.end(); ++it)
-                            isTrue = (*it)->satisfied();
-                        if (isTrue)
-                            deductions.push(Literal(var, true));
-                    }
-                }
-            }
-        }*/
+           else
+           {
+           for (unsigned int var = 0; var < n; var++)
+           {
+           if (_varStates[var] == FREE)
+           {
+           bool isTrue = true;
+           for (std::set<Clause*>::iterator it = _variables[var].first.begin(); isTrue && it != _variables[var].first.end(); ++it)
+           isTrue = (*it)->satisfied();
+           if (isTrue)
+           deductions.push(Literal(var, false));
+           else
+           {
+           isTrue = true;
+           for (std::set<Clause*>::iterator it = _variables[var].second.begin(); isTrue && it != _variables[var].second.end(); ++it)
+           isTrue = (*it)->satisfied();
+           if (isTrue)
+           deductions.push(Literal(var, true));
+           }
+           }
+           }
+           }*/
 
     }
 

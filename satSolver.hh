@@ -20,12 +20,13 @@ protected:
     std::vector<varState> _varStates;
     std::set<unsigned int> _unassignedVarList;
     std::vector<std::pair<std::set<Clause*>, std::set<Clause*> > > _variables;
+    std::vector<varState> _deducedState;
     //std::stack<std::pair<bool,Literal> > _stackCallback;
 
     //True si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,unsigned int> > _stackCallback; 
     Literal chooseUnasignedVar();
-
+    
 
 public:
     SatProblem(std::istream& input);
