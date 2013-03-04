@@ -24,7 +24,7 @@ int main()
     SatProblem problem(std::cin);
     bool is_sat = problem.satisfiability();
     //Pour le bench
-    if(is_sat)
+    /*if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
         const std::vector<varState>& assign = problem.getAssign();
@@ -45,7 +45,7 @@ int main()
     else
     {
         std::cout << "s UNSATISFIABLE" << std::endl;
-    }
+    }*/
 }
 
 
@@ -325,6 +325,13 @@ bool SatProblem::satisfiability()
     {
         // calcule la nouvelle valeur à assigner
         Literal newAssign(0,true);
+        /*std::stack<Literal> tmp = deductions;
+        while (!tmp.empty())
+        {
+            std::cout << tmp.top().var() << (tmp.top().pos()? "true":"false") << std::endl;
+            tmp.pop();
+        }
+        std::cout << "--------------\n";*/
         // on évite les déductions sur une variable déjà assignée
         while(!deductions.empty() && _varStates[deductions.top().var()]!=FREE)
         {
@@ -427,7 +434,10 @@ bool SatProblem::satisfiability()
                 if ((!l.pos() && _deducedState[l.var()] == TRUE) || (l.pos() && _deducedState[l.var()] == FALSE))
                     is_error = true;
                 else
+                {
+                    _deducedState[l.var()] = (l.pos() ? TRUE:FALSE);
                     deductions.push(l);
+                }
             }
             else if( (!(*it)->satisfied()) && ((*it)->freeSize()==0) )
                 // on arrive à une contadiction : on prend note, et le cas est géré à la sortie de la boucle
