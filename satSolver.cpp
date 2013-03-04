@@ -312,11 +312,10 @@ bool SatProblem::satisfiability()
             // déduction contradictoire : on fait un callback
             if((_varStates[deductions.top().var()]==TRUE) != deductions.top().pos())
             {
-                bool newChoice = false;
                 while(! deductions.empty())
                     deductions.pop();
                 // on revient à la dernière supposition faite
-                while(!_stackCallback.empty())
+                while(!_stackCallback.empty() && deductions.empty())
                 {
                     // annule l'assignation de la dernière variable assignée
                     unsigned int varID = _stackCallback.top().second;
@@ -328,18 +327,12 @@ bool SatProblem::satisfiability()
                       (*it)->freeVar(varID);
                     // si c'était une assignation libre, on sort en ajoutant le choix opposé comme déduction
                     if(_stackCallback.top().first)
-                    {
                         deductions.push( Literal(varID, !(_varStates[varID]==TRUE)) );
-                        _varStates[varID] = FREE;
-                        _stackCallback.pop();
-                        newChoice = true;
-                        break;
-                    }
                     _varStates[varID] = FREE;
                     _stackCallback.pop();
                 }
                 // si pas de déduction faite : problème INSATISFIABLE
-                if(_stackCallback.empty() && !newChoice)
+                if(_stackCallback.empty() && deductions.empty())
                     return false;
             }
             // sinon : la déduction correspond à l'état courant d'une variable : on l'ignore la déduction
