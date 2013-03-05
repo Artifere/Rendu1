@@ -25,7 +25,6 @@ int main()
     bool is_sat = problem.satisfiability();
     //Pour le bench
 #if RELEASE
-        std::cout << "lol" << std::endl;
     if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
