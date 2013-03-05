@@ -181,7 +181,7 @@ SatProblem::~SatProblem()
 
 
 
-
+/** CHECKER AVEC _unassignedVarList, _indexUnassignedList... **/
 bool SatProblem::deduceFromSizeOne()
 {
     unsigned int n = _varStates.size();
@@ -335,10 +335,16 @@ bool SatProblem::deduceFromSizeOne()
 bool SatProblem::satisfiability()
 {
     int nbrVar = _variables.size();
-    //Semble ralentir... _unassignedVarList.reserve(nbrVar);
+    _indexUnassignedList.resize(nbrVar);
+     _unassignedVarList.reserve(nbrVar);
     for (int var = 0; var < nbrVar; var++)
+    {
         if (_varStates[var] == FREE)
+        {
             _unassignedVarList.push_back(var);
+            _indexUnassignedList[var] = _unassignedVarList.end()-1;
+        }
+   }
     while(_stackCallback.size() < _varStates.size() || !_deductions.empty())
     {
     
@@ -439,11 +445,13 @@ bool SatProblem::satisfiability()
                     _deductions.push( Literal(varID, newVal) );
                     _unassignedVarList.push_back(varID);
                     _varStates[varID] = newVal ? TRUE:FALSE;
+                    _indexUnassignedList[varID] = _unassignedVarList.end()-1;
                 }
                 else
                 {
                     _unassignedVarList.push_back(varID);
                     _varStates[varID] = FREE;
+                    _indexUnassignedList[varID] = _unassignedVarList.end()-1;
                 }
                 _stackCallback.pop();
             } while(_deductions.empty());

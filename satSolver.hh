@@ -22,7 +22,7 @@ protected:
     std::vector<std::pair<std::set<Clause*>, std::set<Clause*> > > _variables;
     std::vector<varState> _deducedState;
     //std::stack<std::pair<bool,Literal> > _stackCallback;
-
+    std::vector<std::vector<unsigned int>::iterator> _indexUnassignedList;
     //True si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,unsigned int> > _stackCallback;
     
@@ -42,7 +42,13 @@ protected:
 
     inline void deleteUnassignedVar(unsigned int var)
     {
-        for (std::vector<unsigned int>::iterator it = _unassignedVarList.begin(); ; ++it)
+        unsigned int k = *(_unassignedVarList.end()-1);
+        _indexUnassignedList[k] = _indexUnassignedList[var];
+        
+        *_indexUnassignedList[var] = k;
+        _unassignedVarList.pop_back();
+
+        /*for (std::vector<unsigned int>::iterator it = _unassignedVarList.begin(); ; ++it)
         {
             if (*it == var)
             {
@@ -50,7 +56,7 @@ protected:
                 _unassignedVarList.pop_back();
                 break;
             }
-        }
+        }*/
     }
 
 public:
