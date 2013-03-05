@@ -57,16 +57,17 @@ SatProblem::SatProblem(std::istream& input)
 {
     unsigned int nbrVar, nbrClauses;
     
+        parserHeader(input, nbrVar, nbrClauses);
+
+    // initialise les variables
+    _varStates.resize(nbrVar, FREE);
+    _variables.resize(nbrVar);
+    
     _indexUnassignedList.resize(nbrVar);
     _unassignedVarList.reserve(nbrVar);
     for (unsigned int var = 0; var < nbrVar; var++)
        addUnassignedVar(var);
 
-    parserHeader(input, nbrVar, nbrClauses);
-
-    // initialise les variables
-    _varStates.resize(nbrVar, FREE);
-    _variables.resize(nbrVar);
 
     // parse chaque clause du fichier
     for(unsigned int k = 0; k < nbrClauses; k++)
