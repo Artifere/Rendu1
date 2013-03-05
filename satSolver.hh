@@ -76,7 +76,13 @@ public:
     }
     
     void addClause(std::vector<Literal>& lit);
-    
+    inline void propagationTrue(Literal lit, std::set<Clause*>& clauseSet)
+    {
+        for (std::set<Clause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
+            // on passe la clause à true : pas besoin de tester une déduction où une contradiction
+        (*it)->setLitTrue(lit);
+    }
+    bool propagationFalse(Literal lit, std::set<Clause*>& clauseSet); 
     bool satisfiability();
 };
 

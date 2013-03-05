@@ -24,7 +24,7 @@ int main()
     SatProblem problem(std::cin);
     bool is_sat = problem.satisfiability();
     //Pour le bench
-    if(is_sat)
+    /*if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
         const std::vector<varState>& assign = problem.getAssign();
@@ -45,7 +45,7 @@ int main()
     else
     {
         std::cout << "s UNSATISFIABLE" << std::endl;
-    }
+    }*/
 }
 
 
@@ -292,8 +292,50 @@ bool SatProblem::deduceFromSizeOne()
 }
 #endif
 
+#if false
+void SatProblem::propagationTrue(Literal lit, std::set<Clause*>& clauseSet)
+{
+    for (std::set<Clause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
+    {
+        // on passe la clause à true : pas besoin de tester une déduction où une contradiction
+        (*it)->setLitTrue(lit);
+    }
+}    
+#endif
+    
+bool SatProblem::propagationFalse(Literal lit, std::set<Clause*>& clauseSet)
+{
+    bool is_error = false;
+    for (std::set<Clause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
+    {
+            (*it)->setLitFalse(lit);
+
+            if(!is_error)
+            {
+                if (!(*it)->satisfied() && (*it)->freeSize() == 0)
+                    is_error = true;
+                // sinon, si pas déduction, ne rien faire
+                // et si déduction : on teste si elle n'est pas contradictoire
+                else if( !(*it)->satisfied() && (*it)->freeSize() == 1)
+                {
+                    Literal deduct = (*it)->chooseFree();
+                    // si la déduction concerne une nouvelle variable, on l'ajoute
+                    if(_varStates[deduct.var()] == FREE)
+                    {
+                        _deductions.push(deduct);
+                        _varStates[deduct.var()] = deduct.pos() ? TRUE:FALSE;
+                    }
+                    // sinon, si déduction déjà faite, on ne fait rien
+                    // et si déduction contraire déjà faite, contradiction
+                    else if(deduct.pos() != (_varStates[deduct.var()] == TRUE))
+                        is_error = true;
+                }
+            }
+    }
 
 
+    return is_error;
+}
 
 /* version un peu plus propre de la fonction, qui devenait bordélique
 
@@ -379,7 +421,7 @@ bool SatProblem::satisfiability()
         }
 
         // propager la nouvelle valeur
-        bool is_error = false;
+        /*bool is_error = false;
         bool valInClause = newAssign.pos();
         std::set<Clause*>& cTrue = _variables[newAssign.var()].first;
         std::set<Clause*>& cFalse = _variables[newAssign.var()].second;
@@ -426,6 +468,18 @@ bool SatProblem::satisfiability()
                         is_error = true;
                 }
             }
+        }*/
+        bool is_error = false;
+
+        if (newAssign.pos())
+        {
+            propagationTrue(newAssign, _variables[newAssign.var()].first);
+            is_error = propagationFalse(newAssign, _variables[newAssign.var()].second);
+        }
+        else
+        {
+            propagationTrue(newAssign, _variables[newAssign.var()].second);
+            is_error = propagationFalse(newAssign, _variables[newAssign.var()].first);
         }
         
         
@@ -475,6 +529,12 @@ bool SatProblem::satisfiability()
     }
     return true;
 }
+
+
+
+
+
+
 
 
 #if FALSE // backup
