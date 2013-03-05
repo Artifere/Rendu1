@@ -18,7 +18,7 @@ class SatProblem
 {
 protected:
     std::vector<varState> _varStates;
-    std::set<unsigned int> _unassignedVarList;
+    std::vector<unsigned int> _unassignedVarList;
     std::vector<std::pair<std::set<Clause*>, std::set<Clause*> > > _variables;
     std::vector<varState> _deducedState;
     //std::stack<std::pair<bool,Literal> > _stackCallback;
@@ -32,13 +32,26 @@ protected:
 
     inline Literal chooseUnasignedVar()
     {
-        unsigned int k = *_unassignedVarList.begin();
-        _unassignedVarList.erase(_unassignedVarList.begin());
+        unsigned int k = *(_unassignedVarList.end()-1);
+        _unassignedVarList.pop_back();
         /*while(k < _varStates.size() && _varStates[k] != FREE)
             k++;*/
 
         return Literal(k,true);
-    }    
+    }
+
+    inline void deleteUnassignedVar(unsigned int var)
+    {
+        for (std::vector<unsigned int>::iterator it = _unassignedVarList.begin(); ; ++it)
+        {
+            if (*it == var)
+            {
+                *it = *(_unassignedVarList.end()-1);
+                _unassignedVarList.pop_back();
+                break;
+            }
+        }
+    }
 
 public:
     SatProblem(std::istream& input);

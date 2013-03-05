@@ -223,7 +223,7 @@ bool SatProblem::deduceFromSizeOne()
         {
             Literal newAssign = deductions.top();
             deductions.pop();
-            _unassignedVarList.erase(newAssign.var());
+            deleteUnassignedVar(newAssign.var());
             _stackCallback.push( std::pair<bool,unsigned int>(false, newAssign.var()) );
             _varStates[newAssign.var()] = (newAssign.pos()) ? TRUE : FALSE;
 
@@ -335,9 +335,10 @@ bool SatProblem::deduceFromSizeOne()
 bool SatProblem::satisfiability()
 {
     int nbrVar = _variables.size();
+    //Semble ralentir... _unassignedVarList.reserve(nbrVar);
     for (int var = 0; var < nbrVar; var++)
         if (_varStates[var] == FREE)
-            _unassignedVarList.insert(_unassignedVarList.begin(), var);
+            _unassignedVarList.push_back(var);
     while(_stackCallback.size() < _varStates.size() || !_deductions.empty())
     {
     
@@ -352,7 +353,7 @@ bool SatProblem::satisfiability()
         else
         {
             newAssign = _deductions.top();
-            _unassignedVarList.erase(newAssign.var());
+            deleteUnassignedVar(newAssign.var());
             _stackCallback.push( std::pair<bool, unsigned int>(false, newAssign.var()) );
             _deductions.pop();
         }
@@ -436,11 +437,12 @@ bool SatProblem::satisfiability()
                 {
                     bool newVal = !(_varStates[varID]==TRUE);
                     _deductions.push( Literal(varID, newVal) );
+                    _unassignedVarList.push_back(varID);
                     _varStates[varID] = newVal ? TRUE:FALSE;
                 }
                 else
                 {
-                    _unassignedVarList.insert(varID);
+                    _unassignedVarList.push_back(varID);
                     _varStates[varID] = FREE;
                 }
                 _stackCallback.pop();
