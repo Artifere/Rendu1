@@ -158,7 +158,7 @@ SatProblem::~SatProblem()
     std::set<Clause*> deleted;
     for(unsigned int u = 0; u < _variables.size(); u++)
     {
-        for(iter it = _variables[u].first.begin(); it != _variables[u].first.end(); it++)
+        for(iter it = _variables[u].first.begin(); it != _variables[u].first.end(); ++it)
         {
             if(deleted.find(*it) == deleted.end())
             {
@@ -166,7 +166,7 @@ SatProblem::~SatProblem()
                 deleted.insert(*it);
             }
         }
-        for(iter it = _variables[u].second.begin(); it != _variables[u].second.end(); it++)
+        for(iter it = _variables[u].second.begin(); it != _variables[u].second.end(); ++it)
         {
             if(deleted.find(*it) == deleted.end())
             {
@@ -234,7 +234,7 @@ bool SatProblem::deduceFromSizeOne()
             std::set<Clause*>::iterator it;
 
             bool valInClause = newAssign.pos();
-            for(it = cTrue.begin(); it != cFalse.end(); it++)
+            for(it = cTrue.begin(); it != cFalse.end(); ++it)
             {
                 if(it == cTrue.end())
                 {
@@ -364,7 +364,7 @@ bool SatProblem::satisfiability()
         std::set<Clause*>& cTrue = _variables[newAssign.var()].first;
         std::set<Clause*>& cFalse = _variables[newAssign.var()].second;
         std::set<Clause*>::iterator it;
-        for(it = cTrue.begin(); it != cFalse.end(); it++)
+        for(it = cTrue.begin(); it != cFalse.end(); ++it)
         {
             // propagation "moche" (en une seule boucle) à travers les clauses contenant x et !x
             if(it == cTrue.end())
@@ -427,9 +427,9 @@ bool SatProblem::satisfiability()
                 // sinon, on libère la variable du haut de _stackCallback
                 unsigned varID = _stackCallback.top().second;
                 std::set<Clause*>::iterator it;
-                for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); it++)
+                for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); ++it)
                     (*it)->freeVar(varID);
-                for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); it++)
+                for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); ++it)
                     (*it)->freeVar(varID);
                 // si c'était une assignation libre, on ajoute son contraire comme déduction.
                 // dans tous les cas, on la supprime du haut de _stackCallback
@@ -503,9 +503,9 @@ bool SatProblem::satisfiability()
                     unsigned int varID = _stackCallback.top().second;
                     _unassignedVarList.insert(varID);
                     std::set<Clause*>::iterator it;
-                    for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); it++)
+                    for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); ++it)
                         (*it)->freeVar(varID);
-                    for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); it++)
+                    for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); ++it)
                         (*it)->freeVar(varID);
                     // si c'était une assignation libre, on sort en ajoutant le choix opposé comme déduction
                     if(_stackCallback.top().first)
@@ -563,7 +563,7 @@ bool SatProblem::satisfiability()
 
         bool is_error = false;
         bool valInClause = newAssign.pos();
-        for(it = cTrue.begin(); it != cFalse.end(); it++)
+        for(it = cTrue.begin(); it != cFalse.end(); ++it)
         {
             if(it == cTrue.end())
             {
