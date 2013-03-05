@@ -59,8 +59,8 @@ protected:
 
     inline void addUnassignedVar(unsigned int var)
     {
+        _indexUnassignedList[var] = _unassignedVarList.end();
         _unassignedVarList.push_back(var);
-        _indexUnassignedList[var] = _unassignedVarList.end()-1;
     }
 
 public:
