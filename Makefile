@@ -4,9 +4,9 @@ d_OBJ= ${SRC:.cpp=_d.o}
 b_OBJ= ${SRC:.cpp=_b.o}
 CXX	 = g++
 LFLAGS   = -lm
-CXXFLAGS = -O2 -s -Wall -Wextra
-CXXDEBUGFLAGS = -Wall -Wextra -O0 -g
-
+CXXFLAGS = -DRELEASE=1 -O2 -s -Wall -Wextra
+CXXDEBUGFLAGS = -DRELEASE=1 -Wall -Wextra -O0 -g
+CXXBENCHFLAGS = -DRELEASE=0 -O2 -s
 
 all : release
 
@@ -18,8 +18,8 @@ release: $(r_OBJ) $(HDR)
 debug: $(d_OBJ) $(HDR) 
 	${CXX} $(CXXDEBUGFLAGS) -o $@ $(d_OBJ) $(LFLAGS)  $(LIB)
 
-bench : $(b_OBJ) $(HDR) 
-	${CXX} $(CXXFLAGS) -o $@ $(b_OBJ) $(LFLAGS)  $(LIB);\
+bench  : $(b_OBJ) $(HDR)
+	${CXX} $(CXXBENCHFLAGS) -o $@ $(b_OBJ) $(LFLAGS) $(LIB);\
     cp bench testsSatisfiable/bench;\
     cp bench testsUnsatisfiable/bench
 
@@ -29,13 +29,13 @@ clean:
 	rm -f $(r_OBJ) $(d_OBJ) $(b_OBJ) $(DEP)
 
 destroy: clean
-	rm -f release debug
+	rm -f release debug bench
 
 %_r.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ -DRELEASE=1
+	$(CXX) $(CXXFLAGS) -DRELEASE=1 -c $< -o $@
 
 %_d.o: %.cpp
-	$(CXX) $(CXXDEBUGFLAGS) -c $< -o $@ -DRELEASE=1
+	$(CXX) $(CXXDEBUGFLAGS) -DRELEASE=1 -c $< -o $@
 
 %_b.o: %.cpp
-	$(CXX) $(CXXLAGS) -c $< -o $@
+	$(CXX) $(CXXBENCHFLAGS) -c $< -o $@

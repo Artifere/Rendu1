@@ -177,10 +177,12 @@ void SatProblem::addClause(std::vector<Literal>& list)
     // si clause triviallement fausse : on l'ignore, et on affiche un warning
     else if(list.size() == 0)
     {
+#if RELEASE
         std::cout <<"c Attention : clause trivialement fausse lue (clause vide). "
                   <<"Elle est ignorée, même si le problème avec cette clause est "
                   <<"instatisfiable (la résolution continuera sans la clause)."
                   <<std::endl;
+#endif
     }
 }
 

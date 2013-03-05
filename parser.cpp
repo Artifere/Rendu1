@@ -19,7 +19,9 @@ void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrCl
     skipComment(input);
     if( !(std::cin >> c >> read >> nbrVar >> nbrClauses) || (c != 'p') || (read != "cnf"))
     {
+#if RELEASE
         std::cout << "c Arg, entrée invalide " << std::endl;
+#endif
         nbrVar = 0;
         nbrClauses = 0;
     }
@@ -36,12 +38,14 @@ void parserListLit(std::istream& input, std::vector<Literal>& ans, const unsigne
         unsigned int abs_n = (n < 0) ? -n : n;
         if(abs_n > limitVarNumber)
         {
+#if RELEASE
             std::cout <<"c Erreur de syntaxe dans l'entrée: "
                       <<"variable d'indice "<<abs_n<<" invalide "
                       <<"(l'indice doit être compris entre 1 et "<<limitVarNumber<<")."
                       <<std::endl;
             // le programme continu en ignorant la variable
             std::cout <<"c La variable est ignorée." << std::endl;
+#endif
         }
         else
         {
