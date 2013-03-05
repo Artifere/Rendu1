@@ -24,7 +24,7 @@ int main()
     SatProblem problem(std::cin);
     bool is_sat = problem.satisfiability();
     //Pour le bench
-    /*if(is_sat)
+    if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
         const std::vector<varState>& assign = problem.getAssign();
@@ -45,7 +45,7 @@ int main()
     else
     {
         std::cout << "s UNSATISFIABLE" << std::endl;
-    }*/
+    }
 }
 
 
@@ -354,8 +354,9 @@ bool SatProblem::satisfiability()
     {
         if (_varStates[var] == FREE)
         {
-            _unassignedVarList.push_back(var);
-            _indexUnassignedList[var] = _unassignedVarList.end()-1;
+            //_unassignedVarList.push_back(var);
+            //_indexUnassignedList[var] = _unassignedVarList.end()-1;
+            addUnassignedVar(var);
         }
    }
     while(_stackCallback.size() < _varStates.size() || !_deductions.empty())
@@ -456,15 +457,17 @@ bool SatProblem::satisfiability()
                 {
                     bool newVal = !(_varStates[varID]==TRUE);
                     _deductions.push( Literal(varID, newVal) );
-                    _unassignedVarList.push_back(varID);
                     _varStates[varID] = newVal ? TRUE:FALSE;
-                    _indexUnassignedList[varID] = _unassignedVarList.end()-1;
+                    //_unassignedVarList.push_back(varID);
+                    //_indexUnassignedList[varID] = _unassignedVarList.end()-1;
+                    addUnassignedVar(varID);
                 }
                 else
                 {
-                    _unassignedVarList.push_back(varID);
                     _varStates[varID] = FREE;
-                    _indexUnassignedList[varID] = _unassignedVarList.end()-1;
+                    //_unassignedVarList.push_back(varID);
+                    //_indexUnassignedList[varID] = _unassignedVarList.end()-1;
+                    addUnassignedVar(varID);
                 }
                 _stackCallback.pop();
             } while(_deductions.empty());
