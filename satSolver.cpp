@@ -490,13 +490,13 @@ bool SatProblem::propagateVariable(const Literal& lit)
     bool is_error = false;
     
     std::vector<Clause*>::iterator it;
-    for (it = cTrue.begin(); it != cTrue.end(); it++)
+    for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit);
     
     // on sépare en deux pour faire encore quelques tests de moins si il y a une erreure
     // (comme je sais que tu t'inquiète de quelques tests ;)
-    for (it = cFalse.begin(); (!is_error) && (it != cFalse.end()); it++)
+    for (it = cFalse.begin(); (!is_error) && (it != cFalse.end()); ++it)
     {
         (*it)->setLitFalse(lit);
         // si clause contradictoire : on renvoie une erreur
@@ -522,7 +522,7 @@ bool SatProblem::propagateVariable(const Literal& lit)
     // si une erreur à eu lieu, on fini la propagation, mais sans essayer de trouver d'autres déductions
     if (is_error && (it != cFalse.end()))
     {
-        for (it++; it != cFalse.end(); it++)
+        for (++it; it != cFalse.end(); ++it)
             (*it)->setLitFalse(lit);
     }
     return is_error;
