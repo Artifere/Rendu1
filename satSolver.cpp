@@ -113,7 +113,7 @@ SatProblem::~SatProblem()
 
 
 
-
+#if FALSE
 Literal SatProblem::chooseUnasignedVar()
 {
     unsigned int k = 0;// *_unassignedVarList.begin();
@@ -123,7 +123,7 @@ Literal SatProblem::chooseUnasignedVar()
 
     return Literal(k,true);
 }
-
+#endif
 
 
 void SatProblem::addClause(std::vector<Literal>& list)
