@@ -27,13 +27,26 @@ void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrCl
 }
 
 
-void parserListLit(std::istream& input, std::vector<Literal>& ans)
+void parserListLit(std::istream& input, std::vector<Literal>& ans, const unsigned int& limitVarNumber)
 {
     int n;
     skipComment(input);
     while( (input >> n) && n )
     {
-        ans.push_back( Literal(((n < 0) ? (-n-1) : n-1), (n > 0)) );
+        unsigned int abs_n = (n < 0) ? -n : n;
+        if(abs_n > limitVarNumber)
+        {
+            std::cout <<"c Erreur de syntaxe dans l'entrée: "
+                      <<"variable d'indice "<<abs_n<<" invalide "
+                      <<"(l'indice doit être compris entre 1 et "<<limitVarNumber<<")."
+                      <<std::endl;
+            // le programme continu en ignorant la variable
+            std::cout <<"c La variable est ignorée." << std::endl;
+        }
+        else
+        {
+            ans.push_back( Literal(abs_n-1, (n > 0)) );
+        }
     }
 }
 /*

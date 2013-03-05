@@ -67,78 +67,12 @@ SatProblem::SatProblem(std::istream& input)
     for(unsigned int k = 0; k < nbrClauses; k++)
     {
         std::vector<Literal> list;
-        parserListLit(input, list);
-
-        // vérifie que les variables sont valides (d'indice entre 0 et nbrVar-1)
-        for(unsigned int u = 0; u < list.size(); u++)
-        {
-            unsigned int var = list[u].var();
-            if(var >= nbrVar)
-            {
-                std::cout <<"c Erreur de syntaxe dans l'entrée: "
-                    <<"variable d'indice " << var+1 << " invalide "
-                    <<"(l'indice doit être compris entre 1 et " << nbrVar << ")."
-                    <<std::endl;
-                // le programme continu en ignorant la variable
-                std::cout <<"c La variable est ignorée." << std::endl;
-                list[u--] = list[list.size()-1];
-                list.pop_back();
-            }
-        }
-
-        // supprime de list les doublons, et repère si trivialement vraie
-        bool trivial = false; // ssi clause trivialement vraie
-        for(unsigned int u = 0; u < list.size() && !trivial; u++)
-        {
-            // test si x=list[u] est présent sous forme x ou !x
-            unsigned int v = u+1;
-            while(v < list.size())
-            {
-                if(list[u].var() == list[v].var())
-                {
-                    if(list[u].pos() == list[v].pos())
-                    {
-                        list[v] = list[list.size()-1];
-                        list.pop_back();
-                    }
-                    else
-                    {
-                        trivial = true;
-                        break;
-                    }
-                }
-                else
-                {
-                    v++;
-                }
-            }
-        }
-        // ne crée la clause que si elle n'est pas trivialement vraie
-        // dans ce cas, associe la clause à toutes les variables concernées
-        if(!trivial)
-        {
-            // on passe par des pointeurs pour garder la structure d'objet :
-            // UsedClause hérite de Clause, donc UsedClause* passe pour Clause*
-            // alors que UsedClause ne passe pas pour Clause
-            Clause * nclause = new UsedClause(list);
-            for(unsigned int u = 0; u < list.size(); u++)
-            {
-                unsigned int var = list[u].var();
-                if(list[u].pos())
-                {
-                    _variables[var].first.insert(nclause);
-                }
-                else
-                {
-                    _variables[var].second.insert(nclause);
-                }
-            }
-        }
+        parserListLit(input, list, nbrVar);
+        addClause(list);
     }
-
+    
     // ajouter un test pour savoir si le fichier est vide ?
     // (pour repérer les erreurs dans le fichier, comme minisat)
-
 }
 
 
@@ -192,7 +126,56 @@ Literal SatProblem::chooseUnasignedVar()
 
 
 
+void SatProblem::addClause(std::vector<Literal>& list)
+{
+    // supprime de list les doublons, et repère si trivialement vraie
+    bool trivial = false; // ssi clause trivialement vraie
+    for(unsigned int u = 0; u < list.size() && !trivial; u++)
+    {
+        // test si x=list[u] est présent sous forme x ou !x
+        unsigned int v = u+1;
+        while(v < list.size() && !trivial)
+        {
+            if(list[u].var() != list[v].var())
+                v++;
+            else
+            {
+                if(list[u].pos() != list[v].pos())
+                    trivial = true;
+                else
+                {
+                    list[v] = list[list.size()-1];
+                    list.pop_back();
+                }
+            }
+        }
+    }
+    // ne crée la clause que si elle n'est pas trivialement vraie
+    // dans ce cas, associe la clause à toutes les variables concernées
+    if(!trivial)
+    {
+        // on passe par des pointeurs pour garder la structure d'objet :
+        // UsedClause hérite de Clause, donc UsedClause* passe pour Clause*
+        // alors que UsedClause ne passe pas pour Clause
+        
+        
+        Clause * nclause = new UsedClause(list);
+        for(unsigned int u = 0; u < list.size(); u++)
+        {
+            unsigned int var = list[u].var();
+            if(list[u].pos())
+                _variables[var].first.insert(nclause);
+            else
+                _variables[var].second.insert(nclause);
+        }
+    }
+}
 
+
+
+
+
+//#if TRUE
 bool SatProblem::deduceFromSizeOne()
 {
     unsigned int n = _varStates.size();
@@ -288,7 +271,7 @@ bool SatProblem::deduceFromSizeOne()
 
     return true;
 }
-
+//#endif
 
 
 
