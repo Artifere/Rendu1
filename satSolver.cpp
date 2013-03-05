@@ -305,7 +305,8 @@ bool SatProblem::satisfiability()
         }
 
         
-        bool is_error = false;
+        bool is_error = propagateVariable(newAssign);
+        /*
 
         if (newAssign.pos())
         {
@@ -317,6 +318,7 @@ bool SatProblem::satisfiability()
             propagationTrue(newAssign, _variables[newAssign.var()].second);
             is_error = propagationFalse(newAssign, _variables[newAssign.var()].first);
         }
+        */
         
         
         // on fait le callback si besoin
@@ -335,11 +337,14 @@ bool SatProblem::satisfiability()
                     return false;
                 // sinon, on libère la variable du haut de _stackCallback
                 unsigned varID = _stackCallback.top().second;
+                releaseVariable(varID);
+                /*
                 std::set<Clause*>::iterator it;
                 for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); ++it)
                     (*it)->freeVar(varID);
                 for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); ++it)
                     (*it)->freeVar(varID);
+                */
                 // si c'était une assignation libre, on ajoute son contraire comme déduction.
                 // dans tous les cas, on la supprime du haut de _stackCallback
                 if(_stackCallback.top().first)
@@ -461,5 +466,68 @@ bool SatProblem::deduceFromSizeOne()
     return true;
 }
 #endif
+
+
+
+
+
+
+
+bool SatProblem::propagateVariable(const Literal& lit)
+{
+    const std::set<Clause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
+    const std::set<Clause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
+    
+    bool is_error = false;
+    
+    std::set<Clause*>::iterator it;
+    for (it = cTrue.begin(); it != cTrue.end(); it++)
+        // on passe la clause à true : pas besoin de tester une déduction où une contradiction
+        (*it)->setLitTrue(lit);
+    
+    // on sépare en deux pour faire encore quelques tests de moins si il y a une erreure
+    // (comme je sais que tu t'inquiète de quelques tests ;)
+    for (it = cFalse.begin(); (!is_error) && (it != cFalse.end()); it++)
+    {
+        (*it)->setLitFalse(lit);
+        // si clause contradictoire : on renvoie une erreur
+        if (!(*it)->satisfied() && (*it)->freeSize() == 0)
+            is_error = true;
+        // sinon, si pas déduction, ne rien faire
+        // et si déduction : on teste si elle n'est pas contradictoire
+        else if( !(*it)->satisfied() && (*it)->freeSize() == 1)
+        {
+            Literal deduct = (*it)->chooseFree();
+            // si la déduction concerne une nouvelle variable, on l'ajoute
+            if(_varStates[deduct.var()] == FREE)
+            {
+                _deductions.push(deduct);
+                _varStates[deduct.var()] = deduct.pos() ? TRUE:FALSE;
+            }
+            // sinon, si déduction déjà faite, on ne fait rien
+            // et si déduction contraire déjà faite, contradiction
+            else if(deduct.pos() != (_varStates[deduct.var()] == TRUE))
+                is_error = true;
+        }
+    }
+    // si une erreur à eu lieu, on fini la propagation, mais sans essayer de trouver d'autres déductions
+    if (is_error && (it != cFalse.end()))
+    {
+        for (it++; it != cFalse.end(); it++)
+            (*it)->setLitFalse(lit);
+    }
+    return is_error;
+}
+
+
+void SatProblem::releaseVariable(const unsigned int varID)
+{
+    std::set<Clause*>::iterator it;
+    for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); ++it)
+        (*it)->freeVar(varID);
+    for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); ++it)
+        (*it)->freeVar(varID);
+}
+
 
 
