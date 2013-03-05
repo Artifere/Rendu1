@@ -59,7 +59,7 @@ SatProblem::SatProblem(std::istream& input)
     
     _indexUnassignedList.resize(nbrVar);
     _unassignedVarList.reserve(nbrVar);
-    for (int var = 0; var < nbrVar; var++)
+    for (unsigned int var = 0; var < nbrVar; var++)
        addUnassignedVar(var);
 
     parserHeader(input, nbrVar, nbrClauses);
@@ -280,8 +280,7 @@ bool SatProblem::propagationFalse(Literal lit, std::set<Clause*>& clauseSet)
  */
 bool SatProblem::satisfiability()
 {
-    int nbrVar = _variables.size();
-        while(_stackCallback.size() < _varStates.size() || !_deductions.empty())
+    while(_stackCallback.size() < _varStates.size() || !_deductions.empty())
     {
     
         // calculer la nouvelle valeur
