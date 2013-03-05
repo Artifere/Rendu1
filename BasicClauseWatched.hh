@@ -7,6 +7,11 @@
 #include <stack>
 #include <set>
 
+typedef enum varState
+{
+    TRUE, FALSE, FREE
+} varState;
+
 
 class BasicClause : public Clause
 {
@@ -27,6 +32,8 @@ public:
 
 
 protected:
+    unsigned int _v1, _v2;
+    varState _v1State, _v2State;
     bool _satisfied;
     std::stack<Literal> _assigned;
     std::set<Literal> _free;

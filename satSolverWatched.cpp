@@ -97,7 +97,11 @@ SatProblem::~SatProblem()
     typedef std::set<Clause*>::iterator iter;
     // on doit désalouer toutes les clauses (allouées dans SatProblem())
     // (le reste se détruit tout seul)
-    std::set<Clause*> deleted;
+    
+    for (std::set<Clause*>::iterator it = _clausesList.begin(); it != _clausesList.end(); ++it)
+        delete *it;
+    
+    /*std::set<Clause*> deleted;
     for(unsigned int u = 0; u < _variables.size(); u++)
     {
         for(iter it = _variables[u].first.begin(); it != _variables[u].first.end(); ++it)
@@ -116,7 +120,7 @@ SatProblem::~SatProblem()
                 deleted.insert(*it);
             }
         }
-    }
+    }*/
 }
 
 
@@ -152,7 +156,11 @@ void SatProblem::addClause(std::vector<Literal>& list)
         // on passe par des pointeurs pour garder la structure d'objet :
         // UsedClause hérite de Clause, donc UsedClause* passe pour Clause*
         // alors que UsedClause ne passe pas pour Clause
-        Clause * nclause = new UsedClause(list);
+		  Clause * nclause = new UsedClause(list);
+        if (_clausesList.find(nclause) != _clausesList.end())
+            return;
+        else
+            _clausesList.insert(nclause);
 
 
         // si une seule variable dans la clause : on déduit cette variable
@@ -160,9 +168,9 @@ void SatProblem::addClause(std::vector<Literal>& list)
         {
             Literal lit = *(list.begin());
             if (lit.pos())
-                _variables[lit.var()].first.insert(nclause);
+                _variables[lit.var()].first.push_back(nclause);
             else
-                _variables[lit.var()].second.insert(nclause);
+                _variables[lit.var()].second.push_back(nclause);
 
 
             // on ajoute la déduction que si on ne l'a pas déjà faite
@@ -178,14 +186,14 @@ void SatProblem::addClause(std::vector<Literal>& list)
         {
             std::vector<Literal>::iterator lit = list.begin();
             if (lit->pos())
-                _variables[lit->var()].first.insert(nclause);
+                _variables[lit->var()].first.push_back(nclause);
             else
-                _variables[lit->var()].second.insert(nclause);
+                _variables[lit->var()].second.push_back(nclause);
             ++lit;
             if (lit->pos())
-                _variables[lit->var()].first.insert(nclause);
+                _variables[lit->var()].first.push_back(nclause);
             else
-                _variables[lit->var()].second.insert(nclause);
+                _variables[lit->var()].second.push_back(nclause);
         }
     }
     // si clause triviallement fausse : on l'ignore, et on affiche un warning
@@ -367,12 +375,12 @@ bool SatProblem::satisfiability()
 
 bool SatProblem::propagateVariable(const Literal& lit)
 {
-    const std::set<Clause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
-    const std::set<Clause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
+    std::vector<Clause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
+    std::vector<Clause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
     
     bool is_error = false;
     
-    std::set<Clause*>::iterator it;
+    std::vector<Clause*>::iterator it;
     for (it = cTrue.begin(); it != cTrue.end(); it++)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit);
@@ -414,7 +422,7 @@ bool SatProblem::propagateVariable(const Literal& lit)
 
 void SatProblem::releaseVariable(const unsigned int varID)
 {
-    std::set<Clause*>::iterator it;
+    std::vector<Clause*>::iterator it;
     for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); ++it)
         (*it)->freeVar(varID);
     for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); ++it)

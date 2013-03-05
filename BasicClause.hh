@@ -8,12 +8,14 @@
 #include <set>
 
 
+
 class BasicClause : public Clause
 {
     // apparamment tout doit être réécrit ici pour l'héritage avec polymorphisme
 public:
+    BasicClause(){}
     BasicClause(const std::vector<Literal>& list);
-
+    
     virtual void setVar(const Literal &l);
     virtual void setLitFalse(const Literal& l);
     virtual void setLitTrue(const Literal& l);
@@ -24,7 +26,7 @@ public:
     virtual bool satisfied(void) const;
 
     virtual ~BasicClause();
-
+    
 
 protected:
     bool _satisfied;
