@@ -17,4 +17,6 @@
 *.swp
 release
 debug
-testsSatisfiable/*.out
+bench
+*/exe
+*/bench
