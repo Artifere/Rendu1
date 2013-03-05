@@ -193,7 +193,7 @@ void SatProblem::addClause(std::vector<Literal>& list)
 
 
 
-//#if TRUE
+#if false
 /** CHECKER AVEC _unassignedVarList, _indexUnassignedList... **/
 bool SatProblem::deduceFromSizeOne()
 {
@@ -290,7 +290,7 @@ bool SatProblem::deduceFromSizeOne()
 
     return true;
 }
-//#endif
+#endif
 
 
 
