@@ -114,7 +114,6 @@ SatProblem::~SatProblem()
 
 
 
-<<<<<<< HEAD
 Literal SatProblem::chooseUnasignedVar()
 {
     unsigned int k = 0;// *_unassignedVarList.begin();
@@ -332,7 +331,7 @@ bool SatProblem::satisfiability()
 {
     int nbrVar = _variables.size();
     _indexUnassignedList.resize(nbrVar);
-    _unassignedVarList.reserve(nbrVar);
+     _unassignedVarList.reserve(nbrVar);
     for (int var = 0; var < nbrVar; var++)
     {
         if (_varStates[var] == FREE)
@@ -340,7 +339,7 @@ bool SatProblem::satisfiability()
             _unassignedVarList.push_back(var);
             _indexUnassignedList[var] = _unassignedVarList.end()-1;
         }
-    }
+   }
     while(_stackCallback.size() < _varStates.size() || !_deductions.empty())
     {
     

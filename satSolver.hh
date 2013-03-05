@@ -22,7 +22,6 @@ protected:
     std::vector<std::pair<std::set<Clause*>, std::set<Clause*> > > _variables;
     //std::vector<varState> _deducedState;
     //std::stack<std::pair<bool,Literal> > _stackCallback;
-
     std::vector<std::vector<unsigned int>::iterator> _indexUnassignedList;
     //True si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,unsigned int> > _stackCallback;
@@ -31,13 +30,13 @@ protected:
     // d'intersection vide avec celles déjà assignées (dans _stackCallback), et aucune contradictions entre les déductions
     std::stack<Literal> _deductions; // note : on n'a pas besoin de stoquer la valeur déduite : elle est contenue dans _varStates
 
-
     inline Literal chooseUnasignedVar()
     {
         unsigned int k = *(_unassignedVarList.end()-1);
         _unassignedVarList.pop_back();
         /*while(k < _varStates.size() && _varStates[k] != FREE)
             k++;*/
+
         return Literal(k,true);
     }
 
