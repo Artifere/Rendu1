@@ -150,15 +150,25 @@ void SatProblem::addClause(std::vector<Literal>& list)
             }
         }
     }
-    // ne crée la clause que si elle n'est pas trivialement vraie
+    // ne crée la clause que si elle n'est ni trivialement vraie, ni trivialement fausse
     // dans ce cas, associe la clause à toutes les variables concernées
-    if(!trivial)
+    if(!trivial && list.size()!=0)
     {
+        // si une seule variable dans la clause : on déduit cette variable
+        if(list.size() == 1)
+        {
+            Literal& lit = *(list.begin());
+            // on ajoute la déduction que si on ne l'a pas déjà faite
+            // (si c'est une contradiction, on la détectera lors de la résolution de toutes façons)
+            if(_varStates[lit.var()] == FREE)
+            {
+                _deductions.push(lit);
+                _varStates[lit.var()] = lit.pos() ? TRUE : FALSE;
+            }
+        }
         // on passe par des pointeurs pour garder la structure d'objet :
         // UsedClause hérite de Clause, donc UsedClause* passe pour Clause*
         // alors que UsedClause ne passe pas pour Clause
-        
-        
         Clause * nclause = new UsedClause(list);
         for(unsigned int u = 0; u < list.size(); u++)
         {
@@ -168,6 +178,14 @@ void SatProblem::addClause(std::vector<Literal>& list)
             else
                 _variables[var].second.insert(nclause);
         }
+    }
+    // si clause triviallement fausse : on l'ignore, et on affiche un warning
+    else if(list.size() == 0)
+    {
+        std::cout <<"c Attention : clause trivialement fausse lue (clause vide). "
+                  <<"Elle est ignorée, même si le problème avec cette clause est "
+                  <<"instatisfiable (la résolution continuera sans la clause)."
+                  <<std::endl;
     }
 }
 
