@@ -11,10 +11,12 @@
 
 #include "Clause.hh"
 #include "BasicClause.hh"
+#include "ConstAssignClause.hh"
 
 #include "parser.hh"
 
-typedef BasicClause UsedClause;
+typedef ConstAssignClause UsedClause;
+//typedef BasicClause UsedClause;
 
 
 
