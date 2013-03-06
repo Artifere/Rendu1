@@ -6,21 +6,24 @@
 #include <stack>
 #include <utility>
 #include "Clause.hh"
+#include "ConstAssignClause.hh"
 #include <istream>
 
+typedef ConstAssignClause UsedClause;
+//typedef BasicClause UsedClause;
 
 class SatProblem
 {
 protected:
     std::vector<varState> _varStates;
     std::vector<unsigned int> _unassignedVarList;
-    std::vector<std::pair<std::vector<Clause*>, std::vector<Clause*> > > _variables;
+    std::vector<std::pair<std::vector<UsedClause*>, std::vector<UsedClause*> > > _variables;
     std::vector<std::vector<unsigned int>::iterator> _indexUnassignedList;
-    std::set<Clause*> _clausesList;
-    
+    std::set<UsedClause*> _clausesList;
+
     //True si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,unsigned int> > _stackCallback;
-    
+
     // ensemble de valeurs à propager (Literaux dont on connaît la valeur).
     // d'intersection vide avec celles déjà assignées (dans _stackCallback), et aucune contradictions entre les déductions
     std::stack<Literal> _deductions; // note : on n'a pas besoin de stoquer la valeur déduite : elle est contenue dans _varStates
@@ -39,7 +42,7 @@ protected:
     {
         unsigned int k = *(_unassignedVarList.end()-1);
         _indexUnassignedList[k] = _indexUnassignedList[var];
-        
+
         *_indexUnassignedList[var] = k;
         _unassignedVarList.pop_back();
 
@@ -71,15 +74,15 @@ public:
     {
         return _varStates;
     }
-    
+
     void addClause(std::vector<Literal>& lit);
-    inline void propagationTrue(Literal lit, std::set<Clause*>& clauseSet)
+    inline void propagationTrue(Literal lit, std::set<UsedClause*>& clauseSet)
     {
-        for (std::set<Clause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
+        for (std::set<UsedClause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
             // on passe la clause à true : pas besoin de tester une déduction où une contradiction
             (*it)->setLitTrue(lit);
     }
-    bool propagationFalse(Literal lit, std::set<Clause*>& clauseSet); 
+    bool propagationFalse(Literal lit, std::set<UsedClause*>& clauseSet);
     bool satisfiability();
 };
 

@@ -15,8 +15,7 @@
 
 #include "parser.hh"
 
-typedef ConstAssignClause UsedClause;
-//typedef BasicClause UsedClause;
+
 
 
 
@@ -60,13 +59,13 @@ int main()
 SatProblem::SatProblem(std::istream& input)
 {
     unsigned int nbrVar, nbrClauses;
-    
+
         parserHeader(input, nbrVar, nbrClauses);
 
     // initialise les variables
     _varStates.resize(nbrVar, FREE);
     _variables.resize(nbrVar);
-    
+
     _indexUnassignedList.resize(nbrVar);
     _unassignedVarList.reserve(nbrVar);
     for (unsigned int var = 0; var < nbrVar; var++)
@@ -80,7 +79,7 @@ SatProblem::SatProblem(std::istream& input)
         parserListLit(input, list, nbrVar);
         addClause(list);
     }
-    
+
     // ajouter un test pour savoir si le fichier est vide ?
     // (pour repérer les erreurs dans le fichier, comme minisat)
 }
@@ -96,14 +95,14 @@ SatProblem::SatProblem(std::istream& input)
 /** si je ne le faisais pas, chaque clause serait désallouées autant de fois qu'elle a de variables (c-à-d à chaque fois que je la verait depuis une variable) **/
 SatProblem::~SatProblem()
 {
-    typedef std::set<Clause*>::iterator iter;
+    typedef std::set<UsedClause*>::iterator iter;
     // on doit désalouer toutes les clauses (allouées dans SatProblem())
     // (le reste se détruit tout seul)
-    
-    for (std::set<Clause*>::iterator it = _clausesList.begin(); it != _clausesList.end(); ++it)
+
+    for (std::set<UsedClause*>::iterator it = _clausesList.begin(); it != _clausesList.end(); ++it)
         delete *it;
-    
-    /*std::set<Clause*> deleted;
+
+    /*std::set<UsedClause*> deleted;
     for(unsigned int u = 0; u < _variables.size(); u++)
     {
         for(iter it = _variables[u].first.begin(); it != _variables[u].first.end(); ++it)
@@ -158,7 +157,7 @@ void SatProblem::addClause(std::vector<Literal>& list)
         // on passe par des pointeurs pour garder la structure d'objet :
         // UsedClause hérite de Clause, donc UsedClause* passe pour Clause*
         // alors que UsedClause ne passe pas pour Clause
-        Clause * nclause = new UsedClause(list);
+        UsedClause * nclause = new UsedClause(list);
         if (_clausesList.find(nclause) != _clausesList.end())
             return;
         else
@@ -200,20 +199,20 @@ void SatProblem::addClause(std::vector<Literal>& list)
 
 
 #if false
-void SatProblem::propagationTrue(Literal lit, std::set<Clause*>& clauseSet)
+void SatProblem::propagationTrue(Literal lit, std::set<UsedClause*>& clauseSet)
 {
-    for (std::set<Clause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
+    for (std::set<UsedClause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
     {
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit);
     }
-}    
+}
 #endif
-    
-bool SatProblem::propagationFalse(Literal lit, std::set<Clause*>& clauseSet)
+
+bool SatProblem::propagationFalse(Literal lit, std::set<UsedClause*>& clauseSet)
 {
     bool is_error = false;
-    for (std::set<Clause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
+    for (std::set<UsedClause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
     {
             (*it)->setLitFalse(lit);
 
@@ -248,15 +247,15 @@ bool SatProblem::propagationFalse(Literal lit, std::set<Clause*>& clauseSet)
 
  deductions : ensemble de valeurs à propager. d'intersection vide avec celles déjà assignées, et aucune contradictions entre les déductions
  on a pas besoin de deducedState en réalité : chaque deduction à sa valeur déjà écrite dans _varStates
- 
+
  le gros changement depuis la fonction précédente, c'est qu'on fait le callback à la fin de la bocle plutôt qu'au début (parce que c'est là qu'on à dedécté une contradiction : on ne fait que réutiliser la variable is_error pour savoir si on doit faire le callback ou non)
- 
- 
+
+
  tant qu'on a pas assigné toutes les variables
    si deductions = vide
-     choisir un literal libre et une valeur booléenne 
+     choisir un literal libre et une valeur booléenne
    sinon choisir une déduction
-   
+
    propager la nouvelle valeur :
    pour chaque clause dont on peut tirer un litéral :
      si litéral libre (test d'après deductStates)
@@ -265,7 +264,7 @@ bool SatProblem::propagationFalse(Literal lit, std::set<Clause*>& clauseSet)
        contradiction
      sinon (déductions déjà faite précédemment)
        ne rien faire
-   
+
    si contradiction :
    faire le callback :
      vider deductions (et remettre à FREE les valeurs des variables déduites dans _varStates)
@@ -289,7 +288,7 @@ bool SatProblem::propagationFalse(Literal lit, std::set<Clause*>& clauseSet)
    on peut faire un prétraîtement quand on crée le problème :
    si une clause ne contient qu'une seule variable,
      on assigne cette variable à la bonne valeur (et on n'ajoute même pas la clause)
- 
+
  si une variable n'apparaît que sous la forme x ou !x :
    on assigne la variable à la bonne valeur (et on supprime les clauses correspondantes)
    ce traitement est à faire avant l'appel à satisfiability()
@@ -298,7 +297,7 @@ bool SatProblem::satisfiability()
 {
     while(_stackCallback.size() < _varStates.size() || !_deductions.empty())
     {
-    
+
         // calculer la nouvelle valeur
         Literal newAssign(-1, true);
         if(_deductions.empty())
@@ -315,7 +314,7 @@ bool SatProblem::satisfiability()
             _deductions.pop();
         }
 
-        
+
         bool is_error = propagateVariable(newAssign);
         /*
 
@@ -330,8 +329,8 @@ bool SatProblem::satisfiability()
             is_error = propagationFalse(newAssign, _variables[newAssign.var()].first);
         }
         */
-        
-        
+
+
         // on fait le callback si besoin
         if(is_error)
         {
@@ -350,7 +349,7 @@ bool SatProblem::satisfiability()
                 unsigned varID = _stackCallback.top().second;
                 releaseVariable(varID);
                 /*
-                std::set<Clause*>::iterator it;
+                std::set<UsedClause*>::iterator it;
                 for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); ++it)
                     (*it)->freeVar(varID);
                 for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); ++it)
@@ -383,16 +382,16 @@ bool SatProblem::satisfiability()
 
 bool SatProblem::propagateVariable(const Literal& lit)
 {
-    std::vector<Clause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
-    std::vector<Clause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
-    
+    std::vector<UsedClause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
+    std::vector<UsedClause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
+
     bool is_error = false;
-    
-    std::vector<Clause*>::iterator it;
+
+    std::vector<UsedClause*>::iterator it;
     for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit);
-    
+
     // on sépare en deux pour faire encore quelques tests de moins si il y a une erreure
     // (comme je sais que tu t'inquiète de quelques tests ;)
     for (it = cFalse.begin(); (!is_error) && (it != cFalse.end()); ++it)
@@ -435,9 +434,9 @@ void SatProblem::releaseVariable(const unsigned int varID)
 {
     bool is_true = _varStates[varID] == TRUE;
     const Literal lit = Literal(varID, is_true);
-    std::vector<Clause*>& cTrue  = is_true ? _variables[varID].first : _variables[varID].second;
-    std::vector<Clause*>& cFalse = is_true ? _variables[varID].second : _variables[varID].first;
-    std::vector<Clause*>::iterator it;
+    std::vector<UsedClause*>& cTrue  = is_true ? _variables[varID].first : _variables[varID].second;
+    std::vector<UsedClause*>& cFalse = is_true ? _variables[varID].second : _variables[varID].first;
+    std::vector<UsedClause*>::iterator it;
     for(it = cTrue.begin(); it != cTrue.end(); ++it)
         (*it)->freeLitTrue(lit);
         //(*it)->freeVar(varID);
