@@ -1,4 +1,4 @@
-SRC= BasicClause.cpp parser.cpp satSolver.cpp
+SRC= BasicClause.cpp ConstAssignClause.cpp parser.cpp satSolver.cpp
 r_OBJ= ${SRC:.cpp=_r.o}
 d_OBJ= ${SRC:.cpp=_d.o}
 b_OBJ= ${SRC:.cpp=_b.o}
