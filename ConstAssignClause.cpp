@@ -55,7 +55,7 @@ void ConstAssignClause::freeLitFalse(const Literal& l)
 {
     if(!_satisfied)
     {
-        _currentHash -= hashOfLit(l);
+        _currentHash -= hashOfInvertLit(l);
         _numOfFree++;
     }
 }
