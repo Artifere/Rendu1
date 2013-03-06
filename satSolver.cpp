@@ -428,11 +428,17 @@ bool SatProblem::propagateVariable(const Literal& lit)
 
 void SatProblem::releaseVariable(const unsigned int varID)
 {
+    bool is_true = _varStates[varID] == TRUE;
+    const Literal lit = Literal(varID, is_true);
+    std::vector<Clause*>& cTrue  = is_true ? _variables[varID].first : _variables[varID].second;
+    std::vector<Clause*>& cFalse = is_true ? _variables[varID].second : _variables[varID].first;
     std::vector<Clause*>::iterator it;
-    for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); ++it)
-        (*it)->freeVar(varID);
-    for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); ++it)
-        (*it)->freeVar(varID);
+    for(it = cTrue.begin(); it != cTrue.end(); ++it)
+        (*it)->freeLitTrue(lit);
+        //(*it)->freeVar(varID);
+    for(it = cFalse.begin(); it != cFalse.end(); ++it)
+        (*it)->freeLitFalse(lit);
+        //(*it)->freeVar(varID);
 }
 
 
