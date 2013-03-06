@@ -418,6 +418,9 @@ bool SatProblem::propagateVariable(const Literal& lit)
                 is_error = true;
         }
     }
+
+    for (; it != cFalse.end(); ++it)
+        (*it)->setLitFalse(lit);
     // si une erreur à eu lieu, on fini la propagation, mais sans essayer de trouver d'autres déductions
     if (is_error && (it != cFalse.end()))
     {
