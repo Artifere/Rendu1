@@ -57,6 +57,16 @@ void BasicClause::freeVar(const unsigned int varId)
         _satisfied = false;
     }
 }
+void BasicClause::freeLitTrue(const Literal &l)
+{
+    freeVar(l.var());
+}
+void BasicClause::freeLitFalse(const Literal &l)
+{
+    freeVar(l.var());
+}
+
+
 
 
 

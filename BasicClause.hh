@@ -19,7 +19,11 @@ public:
     virtual void setVar(const Literal &l);
     virtual void setLitFalse(const Literal& l);
     virtual void setLitTrue(const Literal& l);
+
     virtual void freeVar(const unsigned int varId);
+    virtual void freeLitFalse(const Literal &l);
+    virtual void freeLitTrue(const Literal &l);
+    
     virtual size_t freeSize (void) const;
     virtual size_t assignedSize(void) const;
     virtual Literal chooseFree(void) const;
