@@ -68,7 +68,6 @@ protected:
 public:
     SatProblem(std::istream& input);
     ~SatProblem();
-    bool deduceFromSizeOne();
 
     bool propagateVariable(const Literal& lit);
     void releaseVariable(const unsigned int varID);
