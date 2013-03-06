@@ -8,11 +8,6 @@
 #include "Clause.hh"
 #include <istream>
 
-typedef enum varState
-{
-    TRUE, FALSE, FREE
-} varState;
-
 
 class SatProblem
 {

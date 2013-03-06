@@ -7,6 +7,14 @@
 #include <vector>
 #include <cstddef>
 
+
+typedef enum varState
+{
+    TRUE, FALSE, FREE
+} varState;
+
+
+
 class Clause
 {
 public:
