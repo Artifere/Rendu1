@@ -7,14 +7,14 @@
 #include <istream>
 
 #include "Literal.hh"
-#include "satSolver.hh"
+#include "satSolverWatched.hh"
 
 #include "Clause.hh"
-#include "BasicClause.hh"
+#include "BasicClauseWatched.hh"
 
 #include "parser.hh"
 
-typedef BasicClause UsedClause;
+typedef BasicClauseWatched UsedClause;
 
 
 
@@ -168,9 +168,9 @@ void SatProblem::addClause(std::vector<Literal>& list)
         {
             Literal lit = *(list.begin());
             if (lit.pos())
-                _variables[lit.var()].first.push_back(nclause);
+                _variables[lit.var()].first.insert(nclause);
             else
-                _variables[lit.var()].second.push_back(nclause);
+                _variables[lit.var()].second.insert(nclause);
 
 
             // on ajoute la déduction que si on ne l'a pas déjà faite
@@ -186,18 +186,18 @@ void SatProblem::addClause(std::vector<Literal>& list)
         {
             std::vector<Literal>::iterator lit = list.begin();
             if (lit->pos())
-                _variables[lit->var()].first.push_back(nclause);
+                _variables[lit->var()].first.insert(nclause);
             else
-                _variables[lit->var()].second.push_back(nclause);
+                _variables[lit->var()].second.insert(nclause);
             ++lit;
             if (lit->pos())
-                _variables[lit->var()].first.push_back(nclause);
+                _variables[lit->var()].first.insert(nclause);
             else
-                _variables[lit->var()].second.push_back(nclause);
+                _variables[lit->var()].second.insert(nclause);
         }
     }
     // si clause triviallement fausse : on l'ignore, et on affiche un warning
-    else if (list.size == 0)
+    else if (list.size() == 0)
     {
 #if RELEASE
         std::cout <<"c Attention : clause trivialement fausse lue (clause vide). "
@@ -375,12 +375,12 @@ bool SatProblem::satisfiability()
 
 bool SatProblem::propagateVariable(const Literal& lit)
 {
-    std::vector<Clause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
-    std::vector<Clause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
+    std::set<Clause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
+    std::set<Clause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
     
     bool is_error = false;
     
-    std::vector<Clause*>::iterator it;
+    std::set<Clause*>::iterator it;
     for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit);
@@ -422,7 +422,7 @@ bool SatProblem::propagateVariable(const Literal& lit)
 
 void SatProblem::releaseVariable(const unsigned int varID)
 {
-    std::vector<Clause*>::iterator it;
+    std::set<Clause*>::iterator it;
     for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); ++it)
         (*it)->freeVar(varID);
     for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); ++it)

@@ -1,8 +1,8 @@
-#include "BasicClause.hh"
+#include "BasicClauseWatched.hh"
 #include <cstdlib>
 
 
-BasicClause::BasicClause(const std::vector<Literal>& list)
+BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list)
 {
     _satisfied = false;
     for (size_t i = 0; i < list.size(); ++i)
@@ -12,7 +12,7 @@ BasicClause::BasicClause(const std::vector<Literal>& list)
 
 
 // A bouger en non virtuelle
-void BasicClause::setVar(const Literal &l)
+void BasicClauseWatched::setVar(const Literal &l)
 {
     if (_free.find(l) != _free.end())
         setLitTrue(l);
@@ -21,7 +21,7 @@ void BasicClause::setVar(const Literal &l)
 }
 
 
-void BasicClause::setLitFalse(const Literal& l)
+void BasicClauseWatched::setLitFalse(const Literal& l)
 {
     if(! _satisfied)
     {
@@ -35,7 +35,7 @@ void BasicClause::setLitFalse(const Literal& l)
 
 
 
-void BasicClause::setLitTrue(const Literal& l)
+void BasicClauseWatched::setLitTrue(const Literal& l)
 {
     if(! _satisfied)
     {
@@ -48,7 +48,7 @@ void BasicClause::setLitTrue(const Literal& l)
 
 
 
-void BasicClause::freeVar(const unsigned int varId)
+void BasicClauseWatched::freeVar(const unsigned int varId)
 {
     if (!_assigned.empty() && _assigned.top().var() == varId)
     {
@@ -57,35 +57,42 @@ void BasicClause::freeVar(const unsigned int varId)
         _satisfied = false;
     }
 }
+void BasicClauseWatched::freeLitTrue(const Literal &l)
+{
+    freeVar(l.var());
+}
+void BasicClauseWatched::freeLitFalse(const Literal &l)
+{
+    freeVar(l.var());
+}
 
 
-
-size_t BasicClause::freeSize(void) const
+size_t BasicClauseWatched::freeSize(void) const
 {
     return _free.size();
 }
 
 
-size_t BasicClause::assignedSize(void) const
+size_t BasicClauseWatched::assignedSize(void) const
 {
     return _assigned.size();
 }
 
 
-Literal BasicClause::chooseFree(void) const
+Literal BasicClauseWatched::chooseFree(void) const
 {
     if (_free.empty())
         exit(1); //Modifier...
     return *_free.begin();
 }
 
-bool BasicClause::satisfied(void) const
+bool BasicClauseWatched::satisfied(void) const
 {
     return _satisfied;
 }
 
 
 
-BasicClause::~BasicClause()
+BasicClauseWatched::~BasicClauseWatched()
 {
 }
