@@ -12,13 +12,13 @@ BasicClause::BasicClause(const std::vector<Literal>& list)
 
 
 // A bouger en non virtuelle
-void BasicClause::setVar(const Literal &l)
+/*void BasicClause::setVar(const Literal &l)
 {
     if (_free.find(l) != _free.end())
         setLitTrue(l);
     else
         setLitFalse(l);
-}
+}*/
 
 
 void BasicClause::setLitFalse(const Literal& l)

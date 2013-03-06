@@ -16,7 +16,7 @@ public:
     BasicClause(){}
     BasicClause(const std::vector<Literal>& list);
     
-    virtual void setVar(const Literal &l);
+    //virtual void setVar(const Literal &l);
     virtual void setLitFalse(const Literal& l);
     virtual void setLitTrue(const Literal& l);
 

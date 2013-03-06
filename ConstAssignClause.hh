@@ -14,11 +14,11 @@ class ConstAssignClause : public Clause
 public:
     ConstAssignClause(const std::vector<Literal>& list);
     
-    virtual void setVar(const Literal &l);
+    //virtual void setVar(const Literal &l);
     virtual void setLitFalse(const Literal& l);
     virtual void setLitTrue(const Literal& l);
 
-    virtual void freeVar(const unsigned int varId);
+    //virtual void freeVar(const unsigned int varId);
     virtual void freeLitFalse(const Literal &l);
     virtual void freeLitTrue(const Literal &l);
     
@@ -35,8 +35,8 @@ protected:
     inline unsigned int hashOfInvertLit(const Literal& l) const { return 2*l.var() + (l.pos() ? 0 : 1); };
     inline Literal LitOfHash(const unsigned int& i) const { return Literal(i/2, (i % 2 != 0)); };
 
-    std::set<Literal> _initLit;
-    unsigned int _initHash;
+    //std::set<Literal> _initLit;
+    //unsigned int _initHash;
     unsigned int _currentHash;
     unsigned int _satisfied;
     unsigned int _numOfFree;
