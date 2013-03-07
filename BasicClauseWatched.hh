@@ -3,6 +3,9 @@
 
 #include <vector>
 #include "Literal.hh"
+#include <set>
+#include <stack>
+#include "satSolverWatched.hh"
 
 #ifndef INLINED_CLAUSE
   #include "Clause.hh"

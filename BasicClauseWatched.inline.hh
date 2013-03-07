@@ -3,6 +3,7 @@
    il ne doit pas être utilié seul.
  */
 #include "BasicClauseWatched.hh"
+#include "satSolverWatched.hh"
 #ifndef BASICCLAUSE_INLINE_HH
 #define BASICCLAUSE_INLINE_HH
 
