@@ -26,7 +26,7 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
         std::vector<Literal>::iterator it;
         for (it = _literals.begin(); it != _literals.end(); ++it)
         {
-            if ((it->pos() && sp._varStates[it->var()] != FALSE) || (!it->pos() && sp._varStates[it->var()] != TRUE))
+            if ((it->pos() && sp._varStates[it->var()] != FALSE) || ((!it->pos()) && sp._varStates[it->var()] != TRUE))
                 break;
         }
 
@@ -81,9 +81,15 @@ inline void BasicClauseWatched::freeLitTrue(const Literal &l, SatProblem& sp)
 
 inline size_t BasicClauseWatched::freeSize(SatProblem& sp) const
 {
-    bool b1 = sp._varStates[_watched1.var()] == FREE;
-    bool b2 = sp._varStates[_watched2.var()] == FREE;
-    return (b1 && b2) ? 2 : (b1 || b2 ? 1 : 0);
+    varState s1 = sp._varStates[_watched1.var()],
+             s2 = sp._varStates[_watched2.var()];
+    if(s1 == TRUE || s2 == TRUE)
+        return 0;
+    if(s1 == FALSE && s2 == FALSE)
+        return 0;
+    if(s1 == FALSE || s2 == FALSE)
+        return 1;
+    return 2;
 }
 inline Literal BasicClauseWatched::chooseFree(SatProblem& sp) const
 {
