@@ -113,11 +113,10 @@ SatProblem::SatProblem(std::istream& input)
 /** si je ne le faisais pas, chaque clause serait désallouées autant de fois qu'elle a de variables (c-à-d à chaque fois que je la verait depuis une variable) **/
 SatProblem::~SatProblem()
 {
-    typedef std::set<StockedClause*>::iterator iter;
     // on doit désalouer toutes les clauses (allouées dans SatProblem())
     // (le reste se détruit tout seul)
 
-    for (std::set<StockedClause*>::iterator it = _clausesList.begin(); it != _clausesList.end(); ++it)
+    for (std::set<StockedClause*>::const_iterator it = _clausesList.begin(); it != _clausesList.end(); ++it)
         delete *it;
 
     /*std::set<StockedClause*> deleted;
@@ -320,12 +319,12 @@ bool SatProblem::satisfiability()
 
 bool SatProblem::propagateVariable(const Literal& lit)
 {
-    std::set<StockedClause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
-    std::set<StockedClause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
+    const std::set<StockedClause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
+    const std::set<StockedClause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
 
     bool is_error = false;
 
-    std::set<StockedClause*>::iterator it;
+    std::set<StockedClause*>::const_iterator it;
     
     //for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction

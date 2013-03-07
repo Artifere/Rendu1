@@ -54,7 +54,6 @@ public:
     ~SatProblem();
 
     bool propagateVariable(const Literal& lit);
-    void releaseVariable(const unsigned int varID);
 
     inline const std::vector<varState>& getAssign() const { return _varStates; }
 

@@ -36,15 +36,6 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
 
 inline void BasicClauseWatched::setLitTrue(const Literal& l, SatProblem& sp)
 {
-    /*
-    if(! _satisfied)
-    {
-        _free.erase(l);
-        _assigned.push(l);
-
-        _satisfied = true;
-    }
-    */
 }
 
 
