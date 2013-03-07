@@ -33,9 +33,9 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
         if (it != _literals.end())
         {
             if (l.pos())
-                sp._variables[l.var()].first.erase(this);
-            else
                 sp._variables[l.var()].second.erase(this);
+            else
+                sp._variables[l.var()].first.erase(this);
 
             if (_watched1.var() == l.var())
                 _watched1 = *it;
