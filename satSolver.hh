@@ -40,6 +40,9 @@ protected:
     Literal chooseUnasignedVar();
     void deleteUnassignedVar(unsigned int var);
     void addUnassignedVar(unsigned int var);
+    
+    
+
 
 public:
     SatProblem(std::istream& input);
