@@ -60,9 +60,9 @@ inline size_t BasicClauseWatched::freeSize(SatProblem& sp)
 
 inline Literal BasicClauseWatched::chooseFree(SatProblem& sp) const
 {
-    if(sp._varStates[_literals[0].var()] == FREE)
-        return _literals[0];
-    return _literals[1];
+    if(sp._varStates[_literals[1].var()] == FREE)
+        return _literals[1];
+    return _literals[0];
 }
 
 inline bool BasicClauseWatched::satisfied(SatProblem& sp) const
