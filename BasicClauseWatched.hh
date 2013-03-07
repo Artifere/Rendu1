@@ -38,9 +38,9 @@ public:
     VIRTUAL void setLitTrue(const Literal& l, SatProblem& sp);
     
    
-    VIRTUAL size_t freeSize (SatProblem& sp);
-    VIRTUAL Literal chooseFree(SatProblem& sp) const;
-    VIRTUAL bool satisfied(SatProblem& sp) const;
+    VIRTUAL unsigned int freeSize (const SatProblem& sp) const;
+    VIRTUAL Literal chooseFree(const SatProblem& sp) const;
+    VIRTUAL bool satisfied(const SatProblem& sp) const;
     
     VIRTUAL ~BasicClauseWatched();
 

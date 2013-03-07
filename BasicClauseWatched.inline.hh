@@ -49,23 +49,23 @@ inline void BasicClauseWatched::setLitTrue(const Literal& l, SatProblem& sp)
 
 
 
-inline size_t BasicClauseWatched::freeSize(SatProblem& sp)
+inline unsigned int BasicClauseWatched::freeSize(const SatProblem& sp) const
 {
     unsigned int nb = 0;
-    for (std::vector<Literal>::iterator it = _literals.begin(); it != _literals.end(); ++it)
+    for (std::vector<Literal>::const_iterator it = _literals.begin(); it != _literals.end(); ++it)
         if (sp._varStates[it->var()] == FREE)
             nb++;
     return nb;
 }
 
-inline Literal BasicClauseWatched::chooseFree(SatProblem& sp) const
+inline Literal BasicClauseWatched::chooseFree(const SatProblem& sp) const
 {
     if(sp._varStates[_literals[0].var()] == FREE)
         return _literals[0];
     return _literals[1];
 }
 
-inline bool BasicClauseWatched::satisfied(SatProblem& sp) const
+inline bool BasicClauseWatched::satisfied(const SatProblem& sp) const
 {
     std::vector<Literal>::const_iterator it = _literals.begin();
     while (it != _literals.end() && !hasSameValue(sp._varStates[it->var()], it->pos()))
