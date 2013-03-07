@@ -22,7 +22,20 @@
 
 int main()
 {
+/*
+#ifdef INLINED_CLAUSE
+    std::cout << "c option INLINED_CLAUSE enabled" << std::endl;
+#else
+    std::cout << "c option INLINED_CLAUSE not enabled" << std::endl;
+#endif
+#ifdef RELEASE
+    std::cout << "c option RELEASE enabled (" << RELEASE << ")" << std::endl;
+#else
+    std::cout << "c option RELEASE not enabled" << std::endl;
+#endif
+*/
     SatProblem problem(std::cin);
+
     bool is_sat = problem.satisfiability();
     //Pour le bench
 #if RELEASE
@@ -101,14 +114,14 @@ SatProblem::SatProblem(std::istream& input)
 /** si je ne le faisais pas, chaque clause serait désallouées autant de fois qu'elle a de variables (c-à-d à chaque fois que je la verait depuis une variable) **/
 SatProblem::~SatProblem()
 {
-    typedef std::set<UsedClause*>::iterator iter;
+    typedef std::set<StockedClause*>::iterator iter;
     // on doit désalouer toutes les clauses (allouées dans SatProblem())
     // (le reste se détruit tout seul)
 
-    for (std::set<UsedClause*>::iterator it = _clausesList.begin(); it != _clausesList.end(); ++it)
+    for (std::set<StockedClause*>::iterator it = _clausesList.begin(); it != _clausesList.end(); ++it)
         delete *it;
 
-    /*std::set<UsedClause*> deleted;
+    /*std::set<StockedClause*> deleted;
     for(unsigned int u = 0; u < _variables.size(); u++)
     {
         for(iter it = _variables[u].first.begin(); it != _variables[u].first.end(); ++it)
@@ -161,9 +174,9 @@ void SatProblem::addClause(std::vector<Literal>& list)
     if(!trivial && list.size()!=0)
     {
         // on passe par des pointeurs pour garder la structure d'objet :
-        // UsedClause hérite de Clause, donc UsedClause* passe pour Clause*
-        // alors que UsedClause ne passe pas pour Clause
-        UsedClause * nclause = new UsedClause(list);
+        // UsedClause hérite de StockedClause, donc UsedClause* passe pour StockedClause*
+        // alors que UsedClause ne passe pas pour StockedClause à priori
+        StockedClause * nclause = new ConstAssignClause(list);
         if (_clausesList.find(nclause) != _clausesList.end())
             return;
         else
@@ -202,51 +215,6 @@ void SatProblem::addClause(std::vector<Literal>& list)
     }
 }
 
-
-
-#if false
-void SatProblem::propagationTrue(Literal lit, std::set<UsedClause*>& clauseSet)
-{
-    for (std::set<UsedClause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
-    {
-        // on passe la clause à true : pas besoin de tester une déduction où une contradiction
-        (*it)->setLitTrue(lit);
-    }
-}
-bool SatProblem::propagationFalse(Literal lit, std::set<UsedClause*>& clauseSet)
-{
-    bool is_error = false;
-    for (std::set<UsedClause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
-    {
-            (*it)->setLitFalse(lit);
-
-            if(!is_error)
-            {
-                if (!(*it)->satisfied() && (*it)->freeSize() == 0)
-                    is_error = true;
-                // sinon, si pas déduction, ne rien faire
-                // et si déduction : on teste si elle n'est pas contradictoire
-                else if( !(*it)->satisfied() && (*it)->freeSize() == 1)
-                {
-                    Literal deduct = (*it)->chooseFree();
-                    // si la déduction concerne une nouvelle variable, on l'ajoute
-                    if(_varStates[deduct.var()] == FREE)
-                    {
-                        _deductions.push(deduct);
-                        _varStates[deduct.var()] = deduct.pos() ? TRUE:FALSE;
-                    }
-                    // sinon, si déduction déjà faite, on ne fait rien
-                    // et si déduction contraire déjà faite, contradiction
-                    else if(deduct.pos() != (_varStates[deduct.var()] == TRUE))
-                        is_error = true;
-                }
-            }
-    }
-
-
-    return is_error;
-}
-#endif
 
 
 /* version un peu plus propre de la fonction, qui devenait bordélique
@@ -354,12 +322,12 @@ bool SatProblem::satisfiability()
 
 bool SatProblem::propagateVariable(const Literal& lit)
 {
-    std::vector<UsedClause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
-    std::vector<UsedClause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
+    std::vector<StockedClause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
+    std::vector<StockedClause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
 
     bool is_error = false;
 
-    std::vector<UsedClause*>::iterator it;
+    std::vector<StockedClause*>::iterator it;
     for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit);
@@ -400,9 +368,9 @@ void SatProblem::releaseVariable(const unsigned int varID)
 {
     bool is_true = _varStates[varID] == TRUE;
     const Literal lit = Literal(varID, is_true);
-    std::vector<UsedClause*>& cTrue  = is_true ? _variables[varID].first : _variables[varID].second;
-    std::vector<UsedClause*>& cFalse = is_true ? _variables[varID].second : _variables[varID].first;
-    std::vector<UsedClause*>::iterator it;
+    std::vector<StockedClause*>& cTrue  = is_true ? _variables[varID].first : _variables[varID].second;
+    std::vector<StockedClause*>& cFalse = is_true ? _variables[varID].second : _variables[varID].first;
+    std::vector<StockedClause*>::iterator it;
     for(it = cTrue.begin(); it != cTrue.end(); ++it)
         (*it)->freeLitTrue(lit);
         //(*it)->freeVar(varID);

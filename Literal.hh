@@ -2,6 +2,13 @@
 #define LITERAL_HH
 
 
+typedef enum varState
+{
+    TRUE, FALSE, FREE
+} varState;
+
+
+
 
 class Literal
 {

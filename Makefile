@@ -1,12 +1,12 @@
-SRC= BasicClause.cpp ConstAssignClause.cpp parser.cpp satSolver.cpp
+SRC= parser.cpp satSolver.cpp
 r_OBJ= ${SRC:.cpp=_r.o}
 d_OBJ= ${SRC:.cpp=_d.o}
 b_OBJ= ${SRC:.cpp=_b.o}
 CXX	 = g++
 LFLAGS   = -lm
-CXXFLAGS = -DRELEASE=1 -O2 -s -Wall -Wextra
+CXXFLAGS = -DINLINED_CLAUSE -DRELEASE=1 -O2 -s -Wall -Wextra
 CXXDEBUGFLAGS = -DRELEASE=1 -Wall -Wextra -O0 -g
-CXXBENCHFLAGS = -DRELEASE=0 -O2 -s
+CXXBENCHFLAGS = -DINLINED_CLAUSE -O2 -s
 
 all : release
 
@@ -32,10 +32,10 @@ destroy: clean
 	rm -f release debug bench
 
 %_r.o: %.cpp
-	$(CXX) $(CXXFLAGS) -DRELEASE=1 -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 %_d.o: %.cpp
-	$(CXX) $(CXXDEBUGFLAGS) -DRELEASE=1 -c $< -o $@
+	$(CXX) $(CXXDEBUGFLAGS) -c $< -o $@
 
 %_b.o: %.cpp
 	$(CXX) $(CXXBENCHFLAGS) -c $< -o $@

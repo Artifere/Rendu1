@@ -8,13 +8,6 @@
 #include <cstddef>
 
 
-typedef enum varState
-{
-    TRUE, FALSE, FREE
-} varState;
-
-
-
 class Clause
 {
 public:
@@ -28,7 +21,6 @@ public:
     virtual void freeLitTrue(const Literal &l)=0;
 
     virtual size_t freeSize (void) const=0;
-    virtual size_t assignedSize(void) const=0;
     virtual Literal chooseFree(void) const=0;
     virtual bool satisfied(void) const=0;
 

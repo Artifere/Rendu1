@@ -5,22 +5,29 @@
 #include <set>
 #include <stack>
 #include <utility>
-#include "Clause.hh"
 #include "BasicClause.hh"
 #include "ConstAssignClause.hh"
 #include <istream>
 
+
 //typedef ConstAssignClause UsedClause;
-typedef BasicClause UsedClause;
+//typedef BasicClause UsedClause;
+
+#ifdef INLINED_CLAUSE
+typedef ConstAssignClause StockedClause;
+#else
+typedef Clause StockedClause;
+#endif
+
 
 class SatProblem
 {
 protected:
     std::vector<varState> _varStates;
     std::vector<unsigned int> _unassignedVarList;
-    std::vector<std::pair<std::vector<UsedClause*>, std::vector<UsedClause*> > > _variables;
+    std::vector<std::pair<std::vector<StockedClause*>, std::vector<StockedClause*> > > _variables;
     std::vector<std::vector<unsigned int>::iterator> _indexUnassignedList;
-    std::set<UsedClause*> _clausesList;
+    std::set<StockedClause*> _clausesList;
 
     //True si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,unsigned int> > _stackCallback;
@@ -75,15 +82,6 @@ public:
 
     void addClause(std::vector<Literal>& lit);
     bool satisfiability();
-    /*
-    inline void propagationTrue(Literal lit, std::set<UsedClause*>& clauseSet)
-    {
-        for (std::set<UsedClause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
-            // on passe la clause à true : pas besoin de tester une déduction où une contradiction
-            (*it)->setLitTrue(lit);
-    }
-    bool propagationFalse(Literal lit, std::set<UsedClause*>& clauseSet);
-    */
 };
 
 

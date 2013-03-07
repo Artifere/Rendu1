@@ -1,36 +1,47 @@
 #ifndef BASICCLAUSE_HH
 #define BASICCLAUSE_HH
 
-
-
-#include "Clause.hh"
-#include <stack>
+#include <vector>
+#include "Literal.hh"
 #include <set>
+#include <stack>
+#include <cstdlib> // pour exit()
 
+#ifndef INLINED_CLAUSE
+  #include "Clause.hh"
+  #ifndef VIRTUAL
+    #define VIRTUAL virtual
+  #endif
+  #ifndef HERITED_CLAUSE
+    #define HERITED_CLAUSE  : public Clause
+  #endif
+#else
+  #ifndef VIRTUAL
+    #define VIRTUAL 
+  #endif
+  #ifndef HERITED_CLAUSE
+    #define HERITED_CLAUSE 
+  #endif
+#endif
 
-
-class BasicClause : public Clause
+class BasicClause HERITED_CLAUSE
 {
-    // apparamment tout doit être réécrit ici pour l'héritage avec polymorphisme
 public:
-    BasicClause(){}
     BasicClause(const std::vector<Literal>& list);
     
     //virtual void setVar(const Literal &l);
-    virtual void setLitFalse(const Literal& l);
-    virtual void setLitTrue(const Literal& l);
+    VIRTUAL void setLitFalse(const Literal& l);
+    VIRTUAL void setLitTrue(const Literal& l);
 
     //virtual void freeVar(const unsigned int varId);
-    virtual void freeLitFalse(const Literal &l);
-    virtual void freeLitTrue(const Literal &l);
+    VIRTUAL void freeLitFalse(const Literal &l);
+    VIRTUAL void freeLitTrue(const Literal &l);
     
-    virtual size_t freeSize (void) const;
-    virtual size_t assignedSize(void) const;
-    virtual Literal chooseFree(void) const;
-    virtual bool satisfied(void) const;
+    VIRTUAL size_t freeSize (void) const;
+    VIRTUAL Literal chooseFree(void) const;
+    VIRTUAL bool satisfied(void) const;
 
-    virtual ~BasicClause();
-    
+    VIRTUAL ~BasicClause();
 
 protected:
     bool _satisfied;
@@ -38,5 +49,8 @@ protected:
     std::set<Literal> _free;
 };
 
+
+// corps des fonctions de la classe (toutes inlines)
+#include "BasicClause.inline.hh"
 
 #endif //BASICCLAUSE_HH
