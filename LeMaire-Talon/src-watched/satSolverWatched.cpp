@@ -180,14 +180,15 @@ void SatProblem::addClause(std::vector<Literal>& list)
                 _varStates[lit.var()] = lit.pos() ? TRUE : FALSE;
             }
         }
-        for(unsigned int u = 0; u < 2; u++)
-        {
-            unsigned int var = list[u].var();
-            if(list[u].pos())
-                _variables[var].first.insert(nclause);
-            else
-                _variables[var].second.insert(nclause);
-        }
+        else
+            for(unsigned int u = 0; u < 2; u++)
+            {
+                unsigned int var = list[u].var();
+                if(list[u].pos())
+                    _variables[var].first.insert(nclause);
+                else
+                    _variables[var].second.insert(nclause);
+            }
     }
     // si clause triviallement fausse : on l'ignore, et on affiche un warning
     else if(list.size() == 0)
