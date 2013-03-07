@@ -2,7 +2,7 @@
    il est prévu pour être inclu à la fin de BasicClause.hh
    il ne doit pas être utilié seul.
  */
-#include "BasicClause.hh"
+#include "BasicClauseWatched.hh"
 #ifndef BASICCLAUSE_INLINE_HH
 #define BASICCLAUSE_INLINE_HH
 
