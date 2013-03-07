@@ -327,10 +327,11 @@ bool SatProblem::propagateVariable(const Literal& lit)
     bool is_error = false;
 
     std::set<StockedClause*>::iterator it;
+    
     for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit, *this);
-
+    
     // on sépare en deux pour faire encore quelques tests de moins si il y a une erreure
     // (comme je sais que tu t'inquiète de quelques tests ;)
     for (it = cFalse.begin(); (!is_error) && (it != cFalse.end()); ++it)

@@ -26,6 +26,7 @@ protected:
     bool _pos;
 
 public:
+    inline Literal() : _var(-1), _pos(true) { };
     inline Literal(unsigned int var, bool pos) : _var(var), _pos(pos) { };
     inline Literal(const Literal& lit) : _var(lit._var), _pos(lit._pos) { };
 

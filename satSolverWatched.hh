@@ -5,8 +5,11 @@
 #include <set>
 #include <stack>
 #include <utility>
-#include "BasicClauseWatched.hh"
+
 #include <istream>
+
+class Clause;
+class BasicClauseWatched;
 
 
 typedef BasicClauseWatched UsedClause;
@@ -44,6 +47,8 @@ protected:
 
 
 public:
+    friend class BasicClauseWatched;
+    
     SatProblem(std::istream& input);
     ~SatProblem();
 
@@ -92,6 +97,7 @@ inline void SatProblem::addUnassignedVar(unsigned int var)
     _unassignedVarList.push_back(var);
 }
 
+#include "BasicClauseWatched.hh"
 
 
 #endif//SAT_SOLVER_HH
