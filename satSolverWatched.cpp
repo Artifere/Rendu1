@@ -7,7 +7,7 @@
 #include <istream>
 
 #include "Literal.hh"
-#include "satSolver.hh"
+#include "satSolverWatched.hh"
 
 #include "Clause.hh"
 #include "BasicClauseWatched.hh"
@@ -367,9 +367,9 @@ void SatProblem::releaseVariable(const unsigned int varID)
 {
     bool is_true = _varStates[varID] == TRUE;
     const Literal lit = Literal(varID, is_true);
-    std::vector<StockedClause*>& cTrue  = is_true ? _variables[varID].first : _variables[varID].second;
-    std::vector<StockedClause*>& cFalse = is_true ? _variables[varID].second : _variables[varID].first;
-    std::vector<StockedClause*>::iterator it;
+    std::set<StockedClause*>& cTrue  = is_true ? _variables[varID].first : _variables[varID].second;
+    std::set<StockedClause*>& cFalse = is_true ? _variables[varID].second : _variables[varID].first;
+    std::set<StockedClause*>::iterator it;
     for(it = cTrue.begin(); it != cTrue.end(); ++it)
         (*it)->freeLitTrue(lit);
         //(*it)->freeVar(varID);
