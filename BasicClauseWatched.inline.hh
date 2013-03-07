@@ -79,9 +79,15 @@ inline Literal BasicClauseWatched::chooseFree(void) const
     return *_free.begin();
 }
 
-inline bool BasicClauseWatched::satisfied(void) const
+inline bool satisfied(SatProblem& sp) const;
 {
-    return _satisfied;
+    std::vector<Literal>::iterator it = _literals.begin();
+    while (it != _literals.end() && !hasSameValue(_watched1.pos(), sp._varStates[_watched1.var()]))
+    {
+        ++it;
+    }
+
+    return (it != _literals.end());
 }
 
 
