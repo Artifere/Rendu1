@@ -24,12 +24,13 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
     }
     if (it != _literals.end())
     {
-        sp._toRemove.push(std::make_pair(l, this));
+        sp._toRemoveL.push(l);
+        sp._toChangeC.push(this);
         if (_literals[0].var() == l.var())
             std::swap(_literals[0], *it);
         else
             std::swap(_literals[1], *it);
-        sp._toInsert.push(std::make_pair(*it, this));
+        sp._toInsertL.push(*it);
     }
 }
 
@@ -45,8 +46,9 @@ inline void BasicClauseWatched::setLitTrue(const Literal& l, SatProblem& sp)
             break;
 
     }
-    sp._toRemove.push(std::make_pair(_literals[0], this));
-    sp._toInsert.push(std::make_pair(l, this));
+    sp._toRemoveL.push(_literals[0]);
+    sp._toChangeC.push(this);
+    sp._toInsertL.push(l);
     std::swap(_literals[0], *it);
 
 }

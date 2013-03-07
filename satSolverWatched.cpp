@@ -362,20 +362,30 @@ bool SatProblem::propagateVariable(const Literal& lit)
 
     for (it = cTrue.begin(); it != cTrue.end(); ++it)
         (*it)->setLitTrue(lit, *this);
-    while (!_toRemove.empty())
+    
+    
+    while (!_toRemoveL.empty())
     {
-        if (!_toRemove.top().first.pos())
-            _variables[_toRemove.top().first.var()].first.erase(_toRemove.top().second);
-        else
-            _variables[_toRemove.top().first.var()].second.erase(_toRemove.top().second);
-        _toRemove.pop();
+        Literal curL;
+        StockedClause *curC;
 
+        curL = _toRemoveL.top();
+        curC = _toChangeC.top();
 
-        if (_toInsert.top().first.pos())
-            _variables[_toInsert.top().first.var()].first.insert(_toInsert.top().second);
+        if (!curL.pos())
+            _variables[curL.var()].first.erase(curC);
         else
-            _variables[_toInsert.top().first.var()].second.insert(_toInsert.top().second);
-        _toInsert.pop();
+            _variables[curL.var()].second.erase(curC);
+
+        curL = _toInsertL.top();
+        if (curL.pos())
+            _variables[curL.var()].first.insert(curC);
+        else
+            _variables[curL.var()].second.insert(curC);
+
+        _toChangeC.pop();
+        _toInsertL.pop();
+        _toRemoveL.pop();
 
     }
     return is_error;

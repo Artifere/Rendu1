@@ -4,7 +4,6 @@
 #include <vector>
 #include <set>
 #include <stack>
-#include <utility>
 
 #include <istream>
 
@@ -42,8 +41,9 @@ protected:
     void deleteUnassignedVar(unsigned int var);
     void addUnassignedVar(unsigned int var);
 
-    std::stack<std::pair<Literal, StockedClause*> > _toRemove;
-    std::stack<std::pair<Literal, StockedClause*> > _toInsert;
+    std::stack<Literal> _toRemoveL;
+    std::stack<Literal> _toInsertL;
+    std::stack<StockedClause*> _toChangeC;
 
 
 
