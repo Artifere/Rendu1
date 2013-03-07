@@ -25,7 +25,7 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
     std::vector<Literal>::iterator it;
     for (it = _literals.begin()+2; it != _literals.end(); ++it)
     {
-        if (it->var() != l.var() && ((it->pos() && sp._varStates[it->var()] != FALSE) || ((!it->pos()) && sp._varStates[it->var()] != TRUE)))
+        if (((it->pos() && sp._varStates[it->var()] != FALSE) || ((!it->pos()) && sp._varStates[it->var()] != TRUE)))
             break;
     }
     if (it != _literals.end())

@@ -46,7 +46,6 @@ public:
 
 
 protected:
-    Literal _watched1, _watched2;
     std::vector<Literal> _literals;
 
     
