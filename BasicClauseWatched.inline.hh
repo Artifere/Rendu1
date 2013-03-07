@@ -10,13 +10,8 @@
 
 
 
-inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list)
+inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list) : _literals(list)
 {
-    _literals.reserve(list.size());
-    for (size_t i = 0; i < list.size(); ++i)
-        _literals.push_back(list[i]);
-    _watched1 = _literals[0];
-    _watched2 = _literals[1];
 }
 
 
