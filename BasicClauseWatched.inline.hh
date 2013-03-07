@@ -19,11 +19,20 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
 {
     if(! _satisfied)
     {
-        Literal invL = l;
-        invL.invert();
+        std::vector<Literal>::iterator it;
+        for (it = _literals.begin(); it != _literals.end(); ++it)
+        {
+            if ((it->pos() && sp._varStates[it->var()] != FALSE) || (!it->pos() && sp._varStates[it->var()] != TRUE))
+                break;
+        }
 
-        _free.erase(invL);
-        _assigned.push(invL);
+        if (it != _literals.end())
+        {
+            if (_watched1.var() == l.var())
+                _watched1 = *it;
+            else
+                _watched2 = *it;
+        }
     }
 }
 
