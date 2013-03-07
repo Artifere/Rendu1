@@ -37,12 +37,8 @@ public:
     VIRTUAL void setLitFalse(Literal& l, SatProblem& sp);
     VIRTUAL void setLitTrue(const Literal& l, SatProblem& sp);
     
-    //VIRTUAL void freeVar(const unsigned int varId);
-    VIRTUAL void freeLitFalse(const Literal &l, SatProblem& sp);
-    VIRTUAL void freeLitTrue(const Literal &l, SatProblem& sp);
-    
+   
     VIRTUAL size_t freeSize (SatProblem& sp);
-    //VIRTUAL size_t assignedSize(void) const;
     VIRTUAL Literal chooseFree(SatProblem& sp) const;
     VIRTUAL bool satisfied(SatProblem& sp) const;
     
