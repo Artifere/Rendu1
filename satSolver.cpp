@@ -38,7 +38,7 @@ int main()
 
     bool is_sat = problem.satisfiability();
     //Pour le bench
-#if RELEASE
+#ifdef RELEASE
     if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
