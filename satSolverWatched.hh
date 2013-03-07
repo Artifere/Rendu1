@@ -31,8 +31,7 @@ protected:
     std::vector<std::pair<std::set<StockedClause*>, std::set<StockedClause*> > > _variables;
     std::vector<std::vector<unsigned int>::iterator> _indexUnassignedList;
     std::set<StockedClause*> _clausesList;
-
-    //True si on peut changer la valeur, false si c'était un choix contraint
+        //True si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,unsigned int> > _stackCallback;
 
     // ensemble de valeurs à propager (Literaux dont on connaît la valeur).
@@ -43,6 +42,8 @@ protected:
     void deleteUnassignedVar(unsigned int var);
     void addUnassignedVar(unsigned int var);
 
+    std::stack<std::pair<Literal, StockedClause*> > _toRemove;
+    std::stack<std::pair<Literal, StockedClause*> > _toInsert;
 
 
 
@@ -52,7 +53,7 @@ public:
     SatProblem(std::istream& input);
     ~SatProblem();
 
-    bool propagateVariable(const Literal& lit);
+    bool propagateVariable(Literal& lit);
     void releaseVariable(const unsigned int varID);
 
     inline const std::vector<varState>& getAssign() const { return _varStates; }
