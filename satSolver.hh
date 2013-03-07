@@ -70,12 +70,11 @@ public:
     bool propagateVariable(const Literal& lit);
     void releaseVariable(const unsigned int varID);
 
-    inline const std::vector<varState>& getAssign() const
-    {
-        return _varStates;
-    }
+    inline const std::vector<varState>& getAssign() const { return _varStates; }
 
     void addClause(std::vector<Literal>& lit);
+    bool satisfiability();
+    /*
     inline void propagationTrue(Literal lit, std::set<UsedClause*>& clauseSet)
     {
         for (std::set<UsedClause*>::iterator it = clauseSet.begin(); it != clauseSet.end(); ++it)
@@ -83,7 +82,7 @@ public:
             (*it)->setLitTrue(lit);
     }
     bool propagationFalse(Literal lit, std::set<UsedClause*>& clauseSet);
-    bool satisfiability();
+    */
 };
 
 

@@ -207,8 +207,6 @@ void SatProblem::propagationTrue(Literal lit, std::set<UsedClause*>& clauseSet)
         (*it)->setLitTrue(lit);
     }
 }
-#endif
-
 bool SatProblem::propagationFalse(Literal lit, std::set<UsedClause*>& clauseSet)
 {
     bool is_error = false;
@@ -242,6 +240,8 @@ bool SatProblem::propagationFalse(Literal lit, std::set<UsedClause*>& clauseSet)
 
     return is_error;
 }
+#endif
+
 
 /* version un peu plus propre de la fonction, qui devenait bordélique
 
@@ -281,18 +281,6 @@ bool SatProblem::propagationFalse(Literal lit, std::set<UsedClause*>& clauseSet)
  renvoyer vrai (SAT)
 */
 
-/*
- Pour deduceFromSizeOne, je pense qu'on doit traiter séparément les deux types d'optimisations :
-
- simpification des clauses ne contenant qu'une variable :
-   on peut faire un prétraîtement quand on crée le problème :
-   si une clause ne contient qu'une seule variable,
-     on assigne cette variable à la bonne valeur (et on n'ajoute même pas la clause)
-
- si une variable n'apparaît que sous la forme x ou !x :
-   on assigne la variable à la bonne valeur (et on supprime les clauses correspondantes)
-   ce traitement est à faire avant l'appel à satisfiability()
- */
 bool SatProblem::satisfiability()
 {
     while(_stackCallback.size() < _varStates.size() || !_deductions.empty())
@@ -313,23 +301,7 @@ bool SatProblem::satisfiability()
             _stackCallback.push( std::pair<bool, unsigned int>(false, newAssign.var()) );
             _deductions.pop();
         }
-
-
         bool is_error = propagateVariable(newAssign);
-        /*
-
-        if (newAssign.pos())
-        {
-            propagationTrue(newAssign, _variables[newAssign.var()].first);
-            is_error = propagationFalse(newAssign, _variables[newAssign.var()].second);
-        }
-        else
-        {
-            propagationTrue(newAssign, _variables[newAssign.var()].second);
-            is_error = propagationFalse(newAssign, _variables[newAssign.var()].first);
-        }
-        */
-
 
         // on fait le callback si besoin
         if(is_error)
@@ -348,13 +320,7 @@ bool SatProblem::satisfiability()
                 // sinon, on libère la variable du haut de _stackCallback
                 unsigned varID = _stackCallback.top().second;
                 releaseVariable(varID);
-                /*
-                std::set<UsedClause*>::iterator it;
-                for(it = _variables[varID].first.begin(); it != _variables[varID].first.end(); ++it)
-                    (*it)->freeVar(varID);
-                for(it = _variables[varID].second.begin(); it != _variables[varID].second.end(); ++it)
-                    (*it)->freeVar(varID);
-                */
+
                 // si c'était une assignation libre, on ajoute son contraire comme déduction.
                 // dans tous les cas, on la supprime du haut de _stackCallback
                 if(_stackCallback.top().first)
@@ -417,15 +383,9 @@ bool SatProblem::propagateVariable(const Literal& lit)
                 is_error = true;
         }
     }
-
+    // on finit la propagation (si une erreur à eu lieu) mais sans essayer de trouver d'autres déductions
     for (; it != cFalse.end(); ++it)
         (*it)->setLitFalse(lit);
-    // si une erreur à eu lieu, on fini la propagation, mais sans essayer de trouver d'autres déductions
-    if (is_error && (it != cFalse.end()))
-    {
-        for (++it; it != cFalse.end(); ++it)
-            (*it)->setLitFalse(lit);
-    }
     return is_error;
 }
 
