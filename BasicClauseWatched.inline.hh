@@ -51,9 +51,9 @@ inline unsigned int BasicClauseWatched::freeSize(const SatProblem& sp) const
 
 inline Literal BasicClauseWatched::chooseFree(const SatProblem& sp) const
 {
-    if(sp._varStates[_literals[1].var()] == FREE)
-        return _literals[1];
-    return _literals[0];
+    for(std::vector<Literal>::const_iterator it = _literals.begin(); it != _literals.end(); ++it)
+		if(sp._varStates[it->var()] == FREE)
+			return *it;
 }
 
 inline bool BasicClauseWatched::satisfied(const SatProblem& sp) const
