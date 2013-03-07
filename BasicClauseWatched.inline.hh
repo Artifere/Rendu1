@@ -14,7 +14,6 @@ inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list) 
 {
 }
 
-
 inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
 {
     std::vector<Literal>::iterator it;
