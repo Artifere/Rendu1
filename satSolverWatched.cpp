@@ -292,7 +292,6 @@ bool SatProblem::satisfiability()
                     return false;
                 // sinon, on libère la variable du haut de _stackCallback
                 unsigned varID = _stackCallback.top().second;
-                //releaseVariable(varID);
 
                 // si c'était une assignation libre, on ajoute son contraire comme déduction.
                 // dans tous les cas, on la supprime du haut de _stackCallback

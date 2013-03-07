@@ -34,26 +34,13 @@ inline void BasicClauseWatched::setLitFalse(Literal& l, SatProblem& sp)
         if (it != _literals.end())
         {
           l.invert();
-                sp._toRemove.push(std::make_pair(l, this));
+          sp._toRemove.push(std::make_pair(l, this));
 
             if (_watched1.var() == l.var())
                 _watched1 = *it;
             else
                 _watched2 = *it;
-                sp._toInsert.push(std::make_pair(*it, this));
-                /*if (l.pos())
-                sp._variables[l.var()].second.erase(this);
-            else
-                sp._variables[l.var()].first.erase(this);
-
-            if (_watched1.var() == l.var())
-                _watched1 = *it;
-            else
-                _watched2 = *it;
-            if (it->pos())
-                sp._variables[it->var()].first.insert(this);
-            else
-                sp._variables[it->var()].second.insert(this);*/
+            sp._toInsert.push(std::make_pair(*it, this));
         }
     }
 }
