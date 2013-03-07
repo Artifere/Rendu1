@@ -14,7 +14,7 @@ inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list)
 }
 
 
-inline void BasicClauseWatched::setLitFalse(const Literal& l)
+inline void setLitFalse(const Literal& l, SatProblem& sp)
 {
     if(! _satisfied)
     {
@@ -25,7 +25,8 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l)
         _assigned.push(invL);
     }
 }
-inline void BasicClauseWatched::setLitTrue(const Literal& l)
+
+inline void setLitTrue(const Literal& l, SatProblem& sp)
 {
     if(! _satisfied)
     {
@@ -37,7 +38,7 @@ inline void BasicClauseWatched::setLitTrue(const Literal& l)
 }
 
 
-inline void BasicClauseWatched::freeLitTrue(const Literal &l)
+inline void freeLitFalse(const Literal &l, SatProblem& sp)
 {
     if (!_assigned.empty() && _assigned.top().var() == l.var())
     {
@@ -46,7 +47,7 @@ inline void BasicClauseWatched::freeLitTrue(const Literal &l)
         _satisfied = false;
     }
 }
-inline void BasicClauseWatched::freeLitFalse(const Literal &l)
+inline void freeLitTrue(const Literal &l, SatProblem& sp);
 {
     if (!_assigned.empty() && _assigned.top().var() == l.var())
     {
