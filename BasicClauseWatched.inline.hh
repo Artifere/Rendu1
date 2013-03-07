@@ -36,32 +36,47 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
 
 inline void BasicClauseWatched::setLitTrue(const Literal& l, SatProblem& sp)
 {
+    if (hasSameValue( sp._varStates[_literals[0].var()],_literals[0].pos()) || hasSameValue(sp._varStates[_literals[1].var()],_literals[1].pos()))
+        return;
+    std::vector<Literal>::iterator it;
+    for (it = _literals.begin(); it != _literals.end(); ++it)
+    {
+        if (it->var() == l.var())
+            break;
+
+    }
+    sp._toRemove.push(std::make_pair(_literals[0], this));
+    sp._toInsert.push(std::make_pair(l, this));
+    std::swap(_literals[0], *it);
+
 }
 
 
 
 inline unsigned int BasicClauseWatched::freeSize(const SatProblem& sp) const
 {
-    unsigned int nb = 0;
-    for (std::vector<Literal>::const_iterator it = _literals.begin(); it != _literals.end(); ++it)
+    /*for (std::vector<Literal>::const_iterator it = _literals.begin(); it != _literals.end(); ++it)
         if (sp._varStates[it->var()] == FREE)
-            nb++;
-    return nb;
+            nb++;*/
+    bool b0 = hasOppositeValue(sp._varStates[_literals[0].var()], _literals[0].pos()),
+         b1 = hasOppositeValue(sp._varStates[_literals[1].var()], _literals[1].pos());
+
+    return (b0 || b1) ? (b0 && b1 ? 0 : 1) : 2;
 }
 
 inline Literal BasicClauseWatched::chooseFree(const SatProblem& sp) const
 {
-    for(std::vector<Literal>::const_iterator it = _literals.begin(); it != _literals.end(); ++it)
-		if(sp._varStates[it->var()] == FREE)
-			return *it;
+    if (sp._varStates[_literals[0].var()] == FREE)
+        return _literals[0];
+    else
+        return _literals[1];
 }
 
 inline bool BasicClauseWatched::satisfied(const SatProblem& sp) const
 {
-    std::vector<Literal>::const_iterator it = _literals.begin();
-    while (it != _literals.end() && !hasSameValue(sp._varStates[it->var()], it->pos()))
-        ++it;
-    return (it != _literals.end());
+    return hasSameValue(sp._varStates[_literals[0].var()], _literals[0].pos()) || hasSameValue(sp._varStates[_literals[1].var()], _literals[1].pos());
+
+
 }
 
 
