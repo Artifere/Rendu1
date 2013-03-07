@@ -79,7 +79,13 @@ SatProblem::SatProblem(std::istream& input)
         parserListLit(input, list, nbrVar);
         addClause(list);
     }
-
+    
+    /*
+    for(unsigned int var = 0; var < nbrVar; var++)
+    {
+        std::cout << "c  variable " << (var+1) << " : " << _variables[var].first.size() << ", " << _variables[var].second.size() << std::endl;
+    }
+    */
     // ajouter un test pour savoir si le fichier est vide ?
     // (pour repérer les erreurs dans le fichier, comme minisat)
 }
@@ -175,7 +181,7 @@ void SatProblem::addClause(std::vector<Literal>& list)
                 _varStates[lit.var()] = lit.pos() ? TRUE : FALSE;
             }
         }
-                for(unsigned int u = 0; u < list.size(); u++)
+        for(unsigned int u = 0; u < list.size(); u++)
         {
             unsigned int var = list[u].var();
             if(list[u].pos())

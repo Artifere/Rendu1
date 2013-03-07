@@ -6,11 +6,12 @@
 #include <stack>
 #include <utility>
 #include "Clause.hh"
+#include "BasicClause.hh"
 #include "ConstAssignClause.hh"
 #include <istream>
 
-typedef ConstAssignClause UsedClause;
-//typedef BasicClause UsedClause;
+//typedef ConstAssignClause UsedClause;
+typedef BasicClause UsedClause;
 
 class SatProblem
 {

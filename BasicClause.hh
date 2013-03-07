@@ -20,7 +20,7 @@ public:
     virtual void setLitFalse(const Literal& l);
     virtual void setLitTrue(const Literal& l);
 
-    virtual void freeVar(const unsigned int varId);
+    //virtual void freeVar(const unsigned int varId);
     virtual void freeLitFalse(const Literal &l);
     virtual void freeLitTrue(const Literal &l);
     

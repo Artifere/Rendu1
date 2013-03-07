@@ -47,7 +47,7 @@ void BasicClause::setLitTrue(const Literal& l)
 }
 
 
-
+/*
 void BasicClause::freeVar(const unsigned int varId)
 {
     if (!_assigned.empty() && _assigned.top().var() == varId)
@@ -56,14 +56,24 @@ void BasicClause::freeVar(const unsigned int varId)
         _assigned.pop();
         _satisfied = false;
     }
-}
+}*/
 void BasicClause::freeLitTrue(const Literal &l)
 {
-    freeVar(l.var());
+    if (!_assigned.empty() && _assigned.top().var() == l.var())
+    {
+        _free.insert(_assigned.top());
+        _assigned.pop();
+        _satisfied = false;
+    }
 }
 void BasicClause::freeLitFalse(const Literal &l)
 {
-    freeVar(l.var());
+    if (!_assigned.empty() && _assigned.top().var() == l.var())
+    {
+        _free.insert(_assigned.top());
+        _assigned.pop();
+        _satisfied = false;
+    }
 }
 
 
