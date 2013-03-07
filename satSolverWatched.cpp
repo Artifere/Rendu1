@@ -193,7 +193,7 @@ void SatProblem::addClause(std::vector<Literal>& list)
                 _varStates[lit.var()] = lit.pos() ? TRUE : FALSE;
             }
         }
-        for(unsigned int u = 0; u < list.size(); u++)
+        for(unsigned int u = 0; u < 2; u++)
         {
             unsigned int var = list[u].var();
             if(list[u].pos())
