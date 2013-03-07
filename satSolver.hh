@@ -36,40 +36,9 @@ protected:
     // d'intersection vide avec celles déjà assignées (dans _stackCallback), et aucune contradictions entre les déductions
     std::stack<Literal> _deductions; // note : on n'a pas besoin de stoquer la valeur déduite : elle est contenue dans _varStates
 
-    inline Literal chooseUnasignedVar()
-    {
-        unsigned int k = *(_unassignedVarList.end()-1);
-        _unassignedVarList.pop_back();
-        /*while(k < _varStates.size() && _varStates[k] != FREE)
-            k++;*/
-
-        return Literal(k,true);
-    }
-
-    inline void deleteUnassignedVar(unsigned int var)
-    {
-        unsigned int k = *(_unassignedVarList.end()-1);
-        _indexUnassignedList[k] = _indexUnassignedList[var];
-
-        *_indexUnassignedList[var] = k;
-        _unassignedVarList.pop_back();
-
-        /*for (std::vector<unsigned int>::iterator it = _unassignedVarList.begin(); ; ++it)
-        {
-            if (*it == var)
-            {
-                *it = *(_unassignedVarList.end()-1);
-                _unassignedVarList.pop_back();
-                break;
-            }
-        }*/
-    }
-
-    inline void addUnassignedVar(unsigned int var)
-    {
-        _indexUnassignedList[var] = _unassignedVarList.end();
-        _unassignedVarList.push_back(var);
-    }
+    Literal chooseUnasignedVar();
+    void deleteUnassignedVar(unsigned int var);
+    void addUnassignedVar(unsigned int var);
 
 public:
     SatProblem(std::istream& input);
@@ -86,6 +55,39 @@ public:
 
 
 
+
+
+inline Literal SatProblem::chooseUnasignedVar()
+{
+    unsigned int k = *(_unassignedVarList.end()-1);
+    _unassignedVarList.pop_back();
+    /*while(k < _varStates.size() && _varStates[k] != FREE)
+        k++;*/
+    return Literal(k,true);
+}
+
+inline void SatProblem::deleteUnassignedVar(unsigned int var)
+{
+    unsigned int k = *(_unassignedVarList.end()-1);
+    _indexUnassignedList[k] = _indexUnassignedList[var];
+     *_indexUnassignedList[var] = k;
+    _unassignedVarList.pop_back();
+    /*for (std::vector<unsigned int>::iterator it = _unassignedVarList.begin(); ; ++it)
+    {
+        if (*it == var)
+        {
+            *it = *(_unassignedVarList.end()-1);
+            _unassignedVarList.pop_back();
+            break;
+        }
+    }*/
+}
+
+inline void SatProblem::addUnassignedVar(unsigned int var)
+{
+    _indexUnassignedList[var] = _unassignedVarList.end();
+    _unassignedVarList.push_back(var);
+}
 
 
 
