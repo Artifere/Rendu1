@@ -4,8 +4,8 @@
  */
 #include "BasicClauseWatched.hh"
 #include "satSolverWatched.hh"
-#ifndef BASICCLAUSE_INLINE_HH
-#define BASICCLAUSE_INLINE_HH
+#ifndef BASICCLAUSEWATCHED_INLINE_HH
+#define BASICCLAUSEWATCHED_INLINE_HH
 
 inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list)
 {
@@ -15,7 +15,7 @@ inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list)
 }
 
 
-inline void setLitFalse(const Literal& l, SatProblem& sp)
+inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
 {
     if(! _satisfied)
     {
@@ -27,7 +27,7 @@ inline void setLitFalse(const Literal& l, SatProblem& sp)
     }
 }
 
-inline void setLitTrue(const Literal& l, SatProblem& sp)
+inline void BasicClauseWatched::setLitTrue(const Literal& l, SatProblem& sp)
 {
     if(! _satisfied)
     {
@@ -39,7 +39,7 @@ inline void setLitTrue(const Literal& l, SatProblem& sp)
 }
 
 
-inline void freeLitFalse(const Literal &l, SatProblem& sp)
+inline void BasicClauseWatched::freeLitFalse(const Literal &l, SatProblem& sp)
 {
     if (!_assigned.empty() && _assigned.top().var() == l.var())
     {
@@ -48,7 +48,7 @@ inline void freeLitFalse(const Literal &l, SatProblem& sp)
         _satisfied = false;
     }
 }
-inline void freeLitTrue(const Literal &l, SatProblem& sp);
+inline void BasicClauseWatched::freeLitTrue(const Literal &l, SatProblem& sp)
 {
     if (!_assigned.empty() && _assigned.top().var() == l.var())
     {
@@ -81,4 +81,4 @@ inline BasicClauseWatched::~BasicClauseWatched()
 {
 }
 
-#endif//BASICCLAUSE_INLINE_HH
+#endif//BASICCLAUSEWATCHED_INLINE_HH

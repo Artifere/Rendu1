@@ -24,6 +24,8 @@
   #endif
 #endif
 
+class SatProblem;
+
 class BasicClauseWatched HERITED_CLAUSE
 {
     friend class SatProblem;
