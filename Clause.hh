@@ -1,11 +1,8 @@
 #ifndef CLAUSE_HH
 #define CLAUSE_HH
 
-
-
 #include "Literal.hh"
 #include <vector>
-#include <cstddef>
 
 
 class Clause
@@ -23,7 +20,6 @@ public:
     virtual size_t freeSize (void) const=0;
     virtual Literal chooseFree(void) const=0;
     virtual bool satisfied(void) const=0;
-
 
     virtual ~Clause() {}
 };

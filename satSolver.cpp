@@ -176,7 +176,7 @@ void SatProblem::addClause(std::vector<Literal>& list)
         // on passe par des pointeurs pour garder la structure d'objet :
         // UsedClause hérite de StockedClause, donc UsedClause* passe pour StockedClause*
         // alors que UsedClause ne passe pas pour StockedClause à priori
-        StockedClause * nclause = new ConstAssignClause(list);
+        StockedClause * nclause = new UsedClause(list);
         if (_clausesList.find(nclause) != _clausesList.end())
             return;
         else

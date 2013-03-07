@@ -23,15 +23,14 @@
 
 class ConstAssignClause HERITED_CLAUSE
 {
-    // apparamment tout doit être réécrit ici pour l'héritage avec polymorphisme
 public:
     ConstAssignClause(const std::vector<Literal>& list);
     
-    //virtual void setVar(const Literal &l);
+    //VIRTUAL void setVar(const Literal &l);
     VIRTUAL void setLitFalse(const Literal& l);
     VIRTUAL void setLitTrue(const Literal& l);
 
-    //virtual void freeVar(const unsigned int varId);
+    //VIRTUAL void freeVar(const unsigned int varId);
     VIRTUAL void freeLitFalse(const Literal &l);
     VIRTUAL void freeLitTrue(const Literal &l);
     
@@ -49,7 +48,6 @@ protected:
     inline Literal LitOfHash(const unsigned int& i) const { return Literal(i>>1, (i &1)); };
 
     //std::set<Literal> _initLit;
-    //unsigned int _initHash;
     unsigned int _currentHash;
     unsigned int _satisfied;
     unsigned int _numOfFree;

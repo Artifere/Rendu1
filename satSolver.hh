@@ -10,14 +10,15 @@
 #include <istream>
 
 
-//typedef ConstAssignClause UsedClause;
+typedef ConstAssignClause UsedClause;
 //typedef BasicClause UsedClause;
 
 #ifdef INLINED_CLAUSE
-typedef ConstAssignClause StockedClause;
+typedef UsedClause StockedClause;
 #else
 typedef Clause StockedClause;
 #endif
+
 
 
 class SatProblem
@@ -88,7 +89,6 @@ inline void SatProblem::addUnassignedVar(unsigned int var)
     _indexUnassignedList[var] = _unassignedVarList.end();
     _unassignedVarList.push_back(var);
 }
-
 
 
 
