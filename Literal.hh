@@ -9,6 +9,15 @@ typedef enum varState
 
 
 
+static inline bool hasSameValue(const varState& vs, const bool& b) {
+    return (vs == TRUE && b) || (vs == FALSE && !b);
+}
+static inline bool hasOppositeValue(const varState& vs, const bool& b) {
+    return (vs == TRUE && !b) || (vs == FALSE && b);
+}
+
+
+
 
 class Literal
 {
