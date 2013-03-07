@@ -22,26 +22,21 @@ inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list)
 
 inline void BasicClauseWatched::setLitFalse(Literal& l, SatProblem& sp)
 {
-    if(! satisfied(sp))
+    std::vector<Literal>::iterator it;
+    for (it = _literals.begin(); it != _literals.end(); ++it)
     {
-        std::vector<Literal>::iterator it;
-        for (it = _literals.begin(); it != _literals.end(); ++it)
-        {
-            if (it->var() != _watched1.var() && it -> var() != _watched2.var() && ((it->pos() && sp._varStates[it->var()] != FALSE) || ((!it->pos()) && sp._varStates[it->var()] != TRUE)))
-                break;
-        }
-
-        if (it != _literals.end())
-        {
-          l.invert();
-          sp._toRemove.push(std::make_pair(l, this));
-
-            if (_watched1.var() == l.var())
-                _watched1 = *it;
-            else
-                _watched2 = *it;
-            sp._toInsert.push(std::make_pair(*it, this));
-        }
+        if (it->var() != l.var() && ((it->pos() && sp._varStates[it->var()] != FALSE) || ((!it->pos()) && sp._varStates[it->var()] != TRUE)))
+            break;
+    }
+    if (it != _literals.end())
+    {
+        l.invert();
+        sp._toRemove.push(std::make_pair(l, this));
+        if (_watched1.var() == l.var())
+            _watched1 = *it;
+        else
+            _watched2 = *it;
+        sp._toInsert.push(std::make_pair(*it, this));
     }
 }
 
@@ -63,51 +58,25 @@ inline void BasicClauseWatched::setLitTrue(const Literal& l, SatProblem& sp)
 
 inline size_t BasicClauseWatched::freeSize(SatProblem& sp)
 {
-
     unsigned int nb = 0;
     for (std::vector<Literal>::iterator it = _literals.begin(); it != _literals.end(); ++it)
-    {
-        if (hasSameValue(sp._varStates[it->var()], it->pos()))
-        {
-            //std::cout << "ARGLOL" << std::endl;
-
-            return 2;
-        }
-        else if (sp._varStates[it->var()] == FREE)
+        if (sp._varStates[it->var()] == FREE)
             nb++;
-    }
     return nb;
 }
 
 inline Literal BasicClauseWatched::chooseFree(SatProblem& sp) const
 {
-    /*for(std::vector<Literal>::const_iterator it = _literals.begin(); it != _literals.end(); ++it)
-        if(hasSameValue(sp._varStates[it->var()], it->pos()))
-            std::cout << "babouoom" << std::endl;
-        else if(sp._varStates[it->var()] == FREE)
-            return *it;
-    */
-    
     if(sp._varStates[_watched1.var()] == FREE)
         return _watched1;
-    else if(sp._varStates[_watched2.var()] == FREE)
-        return _watched2;
-    else
-    
-    {
-        std::cout << "erreur : déduction fausse ... " << std::endl;
-        return Literal();
-    }
+    return _watched2;
 }
 
 inline bool BasicClauseWatched::satisfied(SatProblem& sp) const
 {
     std::vector<Literal>::const_iterator it = _literals.begin();
     while (it != _literals.end() && !hasSameValue(sp._varStates[it->var()], it->pos()))
-    {
         ++it;
-    }
-
     return (it != _literals.end());
 }
 
