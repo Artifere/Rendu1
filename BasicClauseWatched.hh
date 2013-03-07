@@ -51,6 +51,12 @@ public:
 
 protected:
     unsigned int _watched1, _watched2;
+    std::vector<Literal> _literals;
+
+    
+    
+    
+    
     bool _satisfied;
     std::stack<Literal> _assigned;
     std::set<Literal> _free;
