@@ -1,43 +1,54 @@
-#ifndef BASICCLAUSE_HH
-#define BASICCLAUSE_HH
+#ifndef BASICCLAUSEWATCHED_HH
+#define BASICCLAUSEWATCHED_HH
 
+#include <vector>
+#include "Literal.hh"
 
+#ifndef INLINED_CLAUSE
+  #include "Clause.hh"
+  #ifndef VIRTUAL
+    #define VIRTUAL virtual
+  #endif
+  #ifndef HERITED_CLAUSE
+    #define HERITED_CLAUSE  : public Clause
+  #endif
+#else
+  #ifndef VIRTUAL
+    #define VIRTUAL 
+  #endif
+  #ifndef HERITED_CLAUSE
+    #define HERITED_CLAUSE 
+  #endif
+#endif
 
-#include "Clause.hh"
-#include <stack>
-#include <set>
-
-
-
-class BasicClauseWatched : public Clause
+class BasicClauseWatched HERITED_CLAUSE
 {
-    // apparamment tout doit être réécrit ici pour l'héritage avec polymorphisme
 public:
     BasicClauseWatched(const std::vector<Literal>& list);
-
-    virtual void setVar(const Literal &l);
-    virtual void setLitFalse(const Literal& l);
-    virtual void setLitTrue(const Literal& l);
     
-    virtual void freeVar(const unsigned int varId);
-    void freeLitTrue(const Literal &l);
-    void freeLitFalse(const Literal &l);
-    
-    virtual size_t freeSize (void) const;
-    virtual size_t assignedSize(void) const;
-    virtual Literal chooseFree(void) const;
-    virtual bool satisfied(void) const;
+    //VIRTUAL void setVar(const Literal &l);
+    VIRTUAL void setLitFalse(const Literal& l);
+    VIRTUAL void setLitTrue(const Literal& l);
 
-    virtual ~BasicClauseWatched();
+    //VIRTUAL void freeVar(const unsigned int varId);
+    VIRTUAL void freeLitFalse(const Literal &l);
+    VIRTUAL void freeLitTrue(const Literal &l);
+    
+    VIRTUAL size_t freeSize (void) const;
+    VIRTUAL size_t assignedSize(void) const;
+    VIRTUAL Literal chooseFree(void) const;
+    VIRTUAL bool satisfied(void) const;
+
+    VIRTUAL ~BasicClauseWatched();
 
 
 protected:
-    unsigned int _v1, _v2;
-    varState _v1State, _v2State;
-    bool _satisfied;
-    std::stack<Literal> _assigned;
-    std::set<Literal> _free;
+    unsigned int _watched1, _watched2;
+    
 };
 
 
-#endif //BASICCLAUSE_HH
+// corps des fonctions de la classe (toutes inlines)
+#include "BasicClauseWatched.inline.hh"
+
+#endif //BASICCLAUSEWATCHED_HH
