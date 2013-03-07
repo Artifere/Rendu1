@@ -359,7 +359,6 @@ bool SatProblem::propagateVariable(const Literal& lit)
     // on finit la propagation (si une erreur à eu lieu) mais sans essayer de trouver d'autres déductions
     for (; it != cFalse.end(); ++it)
         (*it)->setLitFalse(lit, *this);
-    return is_error;
 
     while (!_toRemove.empty())
     {
@@ -377,6 +376,7 @@ bool SatProblem::propagateVariable(const Literal& lit)
         _toInsert.pop();
 
     }
+    return is_error;
 }
 
 
