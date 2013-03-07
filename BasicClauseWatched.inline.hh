@@ -7,6 +7,8 @@
 #ifndef BASICCLAUSEWATCHED_INLINE_HH
 #define BASICCLAUSEWATCHED_INLINE_HH
 
+
+
 inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list)
 {
     _satisfied = false;
@@ -36,6 +38,7 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
     }
 }
 
+/*
 inline void BasicClauseWatched::setLitTrue(const Literal& l, SatProblem& sp)
 {
     if(! _satisfied)
@@ -66,17 +69,20 @@ inline void BasicClauseWatched::freeLitTrue(const Literal &l, SatProblem& sp)
         _satisfied = false;
     }
 }
+*/
 
-
-inline size_t BasicClauseWatched::freeSize(void) const
+inline size_t BasicClauseWatched::freeSize(SatProblem& sp) const
 {
-    return _free.size();
+    bool f1 = sp._varStates[_literals[0].var()] == FREE;
+    bool f2 = sp._varStates[_literals[1].var()] == FREE;
+    return (b1 && b2) ? 2 : (b1 || b2 ? 1 : 0);
 }
-inline Literal BasicClauseWatched::chooseFree(void) const
+inline Literal BasicClauseWatched::chooseFree(SatProblem& sp) const
 {
-    if (_free.empty())
-        exit(1); //Modifier...
-    return *_free.begin();
+    if(sp._varStates[_literals[0].var()] == FREE)
+        return _literals[0];
+    else
+        return _literals[1];
 }
 
 inline bool satisfied(SatProblem& sp) const;
