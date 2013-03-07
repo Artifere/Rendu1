@@ -11,21 +11,16 @@
 
 
 inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list)
+  : _literals(list), _watched1(list[0]), _watched2(list[1])
 {
-    _literals.reserve(list.size());
-    for (size_t i = 0; i < list.size(); ++i)
-        _literals.push_back(list[i]);
-    _watched1 = _literals[0];
-    _watched2 = _literals[1];
 }
-
 
 inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
 {
     std::vector<Literal>::iterator it;
     for (it = _literals.begin()+2; it != _literals.end(); ++it)
     {
-        if (it->var() != l.var() && ((it->pos() && sp._varStates[it->var()] != FALSE) || ((!it->pos()) && sp._varStates[it->var()] != TRUE)))
+        if (it->var() != _watched1.var() && it->var() != _watched2.var() && ((it->pos() && sp._varStates[it->var()] != FALSE) || ((!it->pos()) && sp._varStates[it->var()] != TRUE)))
             break;
     }
     if (it != _literals.end())
