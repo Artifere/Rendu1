@@ -20,7 +20,7 @@ inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list)
 }
 
 
-inline void BasicClauseWatched::setLitFalse(Literal& l, SatProblem& sp)
+inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
 {
     std::vector<Literal>::iterator it;
     for (it = _literals.begin(); it != _literals.end(); ++it)
@@ -30,7 +30,6 @@ inline void BasicClauseWatched::setLitFalse(Literal& l, SatProblem& sp)
     }
     if (it != _literals.end())
     {
-        l.invert();
         sp._toRemove.push(std::make_pair(l, this));
         if (_watched1.var() == l.var())
             _watched1 = *it;

@@ -53,7 +53,7 @@ public:
     SatProblem(std::istream& input);
     ~SatProblem();
 
-    bool propagateVariable(Literal& lit);
+    bool propagateVariable(const Literal& lit);
     void releaseVariable(const unsigned int varID);
 
     inline const std::vector<varState>& getAssign() const { return _varStates; }

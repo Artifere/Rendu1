@@ -34,7 +34,7 @@ public:
     BasicClauseWatched(const std::vector<Literal>& list);
     
     //VIRTUAL void setVar(const Literal &l);
-    VIRTUAL void setLitFalse(Literal& l, SatProblem& sp);
+    VIRTUAL void setLitFalse(const Literal& l, SatProblem& sp);
     VIRTUAL void setLitTrue(const Literal& l, SatProblem& sp);
     
    

@@ -318,7 +318,7 @@ bool SatProblem::satisfiability()
 
 
 
-bool SatProblem::propagateVariable(Literal& lit)
+bool SatProblem::propagateVariable(const Literal& lit)
 {
     std::set<StockedClause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
     std::set<StockedClause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
@@ -363,20 +363,19 @@ bool SatProblem::propagateVariable(Literal& lit)
 
     while (!_toRemove.empty())
     {
-        if (_toRemove.top().first.pos())
+        if (!_toRemove.top().first.pos())
             _variables[_toRemove.top().first.var()].first.erase(_toRemove.top().second);
         else
             _variables[_toRemove.top().first.var()].second.erase(_toRemove.top().second);
         _toRemove.pop();
-    }
 
-    while (!_toInsert.empty())
-    {
+
         if (_toInsert.top().first.pos())
             _variables[_toInsert.top().first.var()].first.insert(_toInsert.top().second);
         else
             _variables[_toInsert.top().first.var()].second.insert(_toInsert.top().second);
         _toInsert.pop();
+
     }
 }
 
