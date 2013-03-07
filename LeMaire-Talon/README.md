@@ -15,40 +15,41 @@ exécution :
 
 notes à propos du code :
 
-Nous avons surtout cherché à optimiser cette partie du code, et à la rendre le plus fonctionnelle possible.
+Nous avons surtout cherché à optimiser cette partie du code (sans watched literals), et à la rendre le plus fonctionnelle possible.
 
 
-Le code utilise une pile des assignations de littéral couplés avec un booléen indiquant si cette assignation était libre ou contrainte
+Le code utilise une pile des assignations de litéral couplés avec un booléen indiquant si cette assignation était libre ou contrainte.
 Il utilise en plus une pile des déductions faites mais pas encore propagées.
 Il fonctionne de la manière suivante :
- tant qu'on a pas assigné toutes les variables
-   si déductions = vide
-     choisir un literal libre et une valeur booléenne
-   sinon choisir une déduction
+	tant qu'on a pas assigné toutes les variables
+		si déductions = vide
+			choisir un literal libre et une valeur booléenne
+		sinon choisir une déduction
 
-   propager la nouvelle valeur dans les clauses où la variable apparaît.
-   pour chaque clause dont on peut alors déduire un littéral :
-     si ce littéral est libre (pas encore assigné)
-       ajouter le littéral aux déductions
-     sinon, si il contredit une valeur déjà assignée ou déduite
-       contradiction
-     sinon (déductions déjà faite précédemment)
-       ne rien faire
+		propager la nouvelle valeur dans les clauses où la variable apparaît.
+		pour chaque clause dont on peut alors déduire un littéral :
+			si ce littéral est libre (pas encore assigné)
+				ajouter le littéral aux déductions
+			sinon, si il contredit une valeur déjà assignée ou déduite
+				contradiction
+			sinon (déductions déjà faite précédemment)
+				ne rien faire
 
-   si contradiction :
-   faire le callback :
-     vider deductions
-     faire
-       si plus de choix (pile des assignations vide)
-         renvoyer faux (UNSAT)
-       sinon :
-         on concidère la variale du haut de _stackCallback :
-         si cette variable est un choix libre
-           ajouter son contraire à deductions
-         la liberer dans toutes les clauses où elle apparaît
-     tant que deductions n'est pas vide
- fin tant que
- renvoyer vrai (SAT)
+		si contradiction :
+		faire le callback :
+			vider deductions
+			faire
+				si plus de choix (pile des assignations vide)
+					renvoyer faux (UNSAT)
+				sinon :
+					on concidère la variale du haut de _stackCallback :
+					si cette variable est un choix libre
+						ajouter son contraire à deductions
+					la liberer dans toutes les clauses où elle apparaît
+			tant que deductions n'est pas vide
+		fin faire callback
+	fin tant que
+	renvoyer vrai (SAT)
 
 
 Il a été fait de telle manière que différentes implémentations des Clauses sont utilisables.
