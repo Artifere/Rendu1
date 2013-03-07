@@ -102,11 +102,19 @@ inline size_t BasicClauseWatched::freeSize(SatProblem& sp) const
 }
 inline Literal BasicClauseWatched::chooseFree(SatProblem& sp) const
 {
+    for(std::vector<Literal>::const_iterator it = _literals.begin(); it != _literals.end(); ++it)
+        if(sp._varStates[it->var()] == TRUE)
+            std::cout << "babouoom" << std::endl;
+        else if(sp._varStates[it->var()] == FREE)
+            return *it;
+    
+    /*
     if(sp._varStates[_watched1.var()] == FREE)
         return _watched1;
     else if(sp._varStates[_watched2.var()] == FREE)
         return _watched2;
     else
+    */
     {
         std::cout << "erreur : déduction fausse ... " << std::endl;
         return Literal();
