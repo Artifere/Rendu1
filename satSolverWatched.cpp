@@ -337,13 +337,13 @@ bool SatProblem::propagateVariable(const Literal& lit)
     {
         (*it)->setLitFalse(lit, *this);
         // si clause contradictoire : on renvoie une erreur
-        if (!(*it)->satisfied() && (*it)->freeSize() == 0)
+        if (!(*it)->satisfied(*this) && (*it)->freeSize(*this) == 0)
             is_error = true;
         // sinon, si pas déduction, ne rien faire
         // et si déduction : on teste si elle n'est pas contradictoire
-        else if( !(*it)->satisfied() && (*it)->freeSize() == 1)
+        else if( !(*it)->satisfied(*this) && (*it)->freeSize(*this) == 1)
         {
-            Literal deduct = (*it)->chooseFree();
+            Literal deduct = (*it)->chooseFree(*this);
             // si la déduction concerne une nouvelle variable, on l'ajoute
             if(_varStates[deduct.var()] == FREE)
             {

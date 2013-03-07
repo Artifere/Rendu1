@@ -41,11 +41,11 @@ public:
     VIRTUAL void freeLitFalse(const Literal &l, SatProblem& sp);
     VIRTUAL void freeLitTrue(const Literal &l, SatProblem& sp);
     
-    VIRTUAL size_t freeSize (void) const;
-    VIRTUAL size_t assignedSize(void) const;
-    VIRTUAL Literal chooseFree(void) const;
-    VIRTUAL bool satisfied(void) const;
-
+    VIRTUAL size_t freeSize (SatProblem& sp) const;
+    //VIRTUAL size_t assignedSize(void) const;
+    VIRTUAL Literal chooseFree(SatProblem& sp) const;
+    VIRTUAL bool satisfied(SatProblem& sp) const;
+    
     VIRTUAL ~BasicClauseWatched();
 
 
