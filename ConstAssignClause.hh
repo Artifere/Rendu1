@@ -31,9 +31,9 @@ public:
 
 
 protected:
-    inline unsigned int hashOfLit(const Literal& l) const { return 2*l.var() + (l.pos() ? 1 : 0); };
-    inline unsigned int hashOfInvertLit(const Literal& l) const { return 2*l.var() + (l.pos() ? 0 : 1); };
-    inline Literal LitOfHash(const unsigned int& i) const { return Literal(i/2, (i % 2 != 0)); };
+    inline unsigned int hashOfLit(const Literal& l) const { return (l.var()<<1) + (l.pos() ? 1 : 0); };
+    inline unsigned int hashOfInvertLit(const Literal& l) const { return (l.var()<<1) + (l.pos() ? 0 : 1); };
+    inline Literal LitOfHash(const unsigned int& i) const { return Literal(i>>1, (i &1)); };
 
     //std::set<Literal> _initLit;
     //unsigned int _initHash;
