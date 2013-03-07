@@ -327,9 +327,9 @@ bool SatProblem::propagateVariable(const Literal& lit)
 
     std::set<StockedClause*>::iterator it;
     
-    for (it = cTrue.begin(); it != cTrue.end(); ++it)
+    //for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
-        (*it)->setLitTrue(lit, *this);
+    //    (*it)->setLitTrue(lit, *this);
     
     // on sépare en deux pour faire encore quelques tests de moins si il y a une erreure
     // (comme je sais que tu t'inquiète de quelques tests ;)
@@ -337,11 +337,12 @@ bool SatProblem::propagateVariable(const Literal& lit)
     {
         (*it)->setLitFalse(lit, *this);
         // si clause contradictoire : on renvoie une erreur
-        if (!(*it)->satisfied(*this) && (*it)->freeSize(*this) == 0)
+        bool notsat = !(*it)->satisfied(*this);
+        if (notsat && (*it)->freeSize(*this) == 0)
             is_error = true;
         // sinon, si pas déduction, ne rien faire
         // et si déduction : on teste si elle n'est pas contradictoire
-        else if( !(*it)->satisfied(*this) && (*it)->freeSize(*this) == 1)
+        else if (notsat && (*it)->freeSize(*this) == 1)
         {
             Literal deduct = (*it)->chooseFree(*this);
             // si la déduction concerne une nouvelle variable, on l'ajoute
