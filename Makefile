@@ -1,4 +1,4 @@
-SRC= parser.cpp satSolver.cpp
+SRC= parser.cpp satSolverWatched.cpp
 r_OBJ= ${SRC:.cpp=_r.o}
 d_OBJ= ${SRC:.cpp=_d.o}
 b_OBJ= ${SRC:.cpp=_b.o}

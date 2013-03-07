@@ -10,8 +10,7 @@
 #include "satSolver.hh"
 
 #include "Clause.hh"
-#include "BasicClause.hh"
-#include "ConstAssignClause.hh"
+#include "BasicClauseWatched.hh"
 
 #include "parser.hh"
 
@@ -73,7 +72,7 @@ SatProblem::SatProblem(std::istream& input)
 {
     unsigned int nbrVar, nbrClauses;
 
-        parserHeader(input, nbrVar, nbrClauses);
+    parserHeader(input, nbrVar, nbrClauses);
 
     // initialise les variables
     _varStates.resize(nbrVar, FREE);
@@ -92,7 +91,7 @@ SatProblem::SatProblem(std::istream& input)
         parserListLit(input, list, nbrVar);
         addClause(list);
     }
-    
+
     /*
     for(unsigned int var = 0; var < nbrVar; var++)
     {
@@ -198,9 +197,9 @@ void SatProblem::addClause(std::vector<Literal>& list)
         {
             unsigned int var = list[u].var();
             if(list[u].pos())
-                _variables[var].first.push_back(nclause);
+                _variables[var].first.insert(nclause);
             else
-                _variables[var].second.push_back(nclause);
+                _variables[var].second.insert(nclause);
         }
     }
     // si clause triviallement fausse : on l'ignore, et on affiche un warning
@@ -322,12 +321,12 @@ bool SatProblem::satisfiability()
 
 bool SatProblem::propagateVariable(const Literal& lit)
 {
-    std::vector<StockedClause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
-    std::vector<StockedClause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
+    std::set<StockedClause*>& cTrue  = lit.pos() ? _variables[lit.var()].first : _variables[lit.var()].second;
+    std::set<StockedClause*>& cFalse = lit.pos() ? _variables[lit.var()].second : _variables[lit.var()].first;
 
     bool is_error = false;
 
-    std::vector<StockedClause*>::iterator it;
+    std::set<StockedClause*>::iterator it;
     for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit);

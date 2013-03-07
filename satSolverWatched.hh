@@ -5,12 +5,11 @@
 #include <set>
 #include <stack>
 #include <utility>
-#include "BasicClause.hh"
-#include "ConstAssignClause.hh"
+#include "BasicClauseWatched.hh"
 #include <istream>
 
 
-typedef ConstAssignClause UsedClause;
+typedef BasicClauseWatched UsedClause;
 //typedef BasicClause UsedClause;
 
 #ifdef INLINED_CLAUSE
@@ -26,7 +25,7 @@ class SatProblem
 protected:
     std::vector<varState> _varStates;
     std::vector<unsigned int> _unassignedVarList;
-    std::vector<std::pair<std::vector<StockedClause*>, std::vector<StockedClause*> > > _variables;
+    std::vector<std::pair<std::set<StockedClause*>, std::set<StockedClause*> > > _variables;
     std::vector<std::vector<unsigned int>::iterator> _indexUnassignedList;
     std::set<StockedClause*> _clausesList;
 
@@ -40,8 +39,8 @@ protected:
     Literal chooseUnasignedVar();
     void deleteUnassignedVar(unsigned int var);
     void addUnassignedVar(unsigned int var);
-    
-    
+
+
 
 
 public:
