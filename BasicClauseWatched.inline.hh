@@ -23,7 +23,7 @@ inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list)
 inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
 {
     std::vector<Literal>::iterator it;
-    for (it = _literals.begin(); it != _literals.end(); ++it)
+    for (it = _literals.begin()+2; it != _literals.end(); ++it)
     {
         if (it->var() != l.var() && ((it->pos() && sp._varStates[it->var()] != FALSE) || ((!it->pos()) && sp._varStates[it->var()] != TRUE)))
             break;
@@ -31,10 +31,10 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
     if (it != _literals.end())
     {
         sp._toRemove.push(std::make_pair(l, this));
-        if (_watched1.var() == l.var())
-            _watched1 = *it;
+        if (_literals[0].var() == l.var())
+            std::swap(_literals[0], *it);
         else
-            _watched2 = *it;
+            std::swap(_literals[1], *it);
         sp._toInsert.push(std::make_pair(*it, this));
     }
 }
@@ -66,9 +66,9 @@ inline size_t BasicClauseWatched::freeSize(SatProblem& sp)
 
 inline Literal BasicClauseWatched::chooseFree(SatProblem& sp) const
 {
-    if(sp._varStates[_watched1.var()] == FREE)
-        return _watched1;
-    return _watched2;
+    if(sp._varStates[_literals[0].var()] == FREE)
+        return _literals[0];
+    return _literals[1];
 }
 
 inline bool BasicClauseWatched::satisfied(SatProblem& sp) const
