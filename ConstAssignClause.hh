@@ -26,11 +26,9 @@ class ConstAssignClause HERITED_CLAUSE
 public:
     ConstAssignClause(const std::vector<Literal>& list);
     
-    //VIRTUAL void setVar(const Literal &l);
     VIRTUAL void setLitFalse(const Literal& l);
     VIRTUAL void setLitTrue(const Literal& l);
 
-    //VIRTUAL void freeVar(const unsigned int varId);
     VIRTUAL void freeLitFalse(const Literal &l);
     VIRTUAL void freeLitTrue(const Literal &l);
     
@@ -47,7 +45,6 @@ protected:
     inline unsigned int hashOfInvertLit(const Literal& l) const { return (l.var()<<1) + (l.pos() ? 0 : 1); };
     inline Literal LitOfHash(const unsigned int& i) const { return Literal(i>>1, (i &1)); };
 
-    //std::set<Literal> _initLit;
     unsigned int _currentHash;
     unsigned int _satisfied;
     unsigned int _numOfFree;

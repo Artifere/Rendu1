@@ -9,11 +9,9 @@ class Clause
 {
 public:
     
-    //virtual void setVar(const Literal &l)=0;
     virtual void setLitFalse(const Literal& l)=0;
     virtual void setLitTrue(const Literal& l)=0;
 
-    //virtual void freeVar(const unsigned int varId)=0;
     virtual void freeLitFalse(const Literal &l)=0;
     virtual void freeLitTrue(const Literal &l)=0;
 

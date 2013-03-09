@@ -12,7 +12,6 @@ class BasicClauseWatched;
 
 
 typedef BasicClauseWatched UsedClause;
-//typedef BasicClause UsedClause;
 
 #ifdef INLINED_CLAUSE
 typedef UsedClause StockedClause;
@@ -30,7 +29,7 @@ protected:
     std::vector<std::pair<std::set<StockedClause*>, std::set<StockedClause*> > > _variables;
     std::vector<std::vector<unsigned int>::iterator> _indexUnassignedList;
     std::set<StockedClause*> _clausesList;
-        //True si on peut changer la valeur, false si c'était un choix contraint
+	 //True si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,unsigned int> > _stackCallback;
 
     // ensemble de valeurs à propager (Literaux dont on connaît la valeur).
@@ -41,6 +40,7 @@ protected:
     void deleteUnassignedVar(unsigned int var);
     void addUnassignedVar(unsigned int var);
 
+    //Les clauses de _toChangeC ne surveillent plus les litéraux associés de _toRemoveL et surveillent à la place ceux associés de _toInsertL
     std::stack<Literal> _toRemoveL;
     std::stack<Literal> _toInsertL;
     std::stack<StockedClause*> _toChangeC;
@@ -69,8 +69,6 @@ inline Literal SatProblem::chooseUnasignedVar()
 {
     unsigned int k = *(_unassignedVarList.end()-1);
     _unassignedVarList.pop_back();
-    /*while(k < _varStates.size() && _varStates[k] != FREE)
-        k++;*/
     return Literal(k,true);
 }
 
@@ -80,15 +78,6 @@ inline void SatProblem::deleteUnassignedVar(unsigned int var)
     _indexUnassignedList[k] = _indexUnassignedList[var];
      *_indexUnassignedList[var] = k;
     _unassignedVarList.pop_back();
-    /*for (std::vector<unsigned int>::iterator it = _unassignedVarList.begin(); ; ++it)
-    {
-        if (*it == var)
-        {
-            *it = *(_unassignedVarList.end()-1);
-            _unassignedVarList.pop_back();
-            break;
-        }
-    }*/
 }
 
 inline void SatProblem::addUnassignedVar(unsigned int var)

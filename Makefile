@@ -5,23 +5,23 @@ b_OBJ= ${SRC:.cpp=_b.o}
 CXX	 = g++
 LFLAGS   = -lm
 CXXFLAGS = -DINLINED_CLAUSE -DRELEASE -O2 -s -Wall -Wextra
-CXXDEBUGFLAGS = -DRELEASE=1 -Wall -Wextra -O0 -g
+CXXDEBUGFLAGS = -DINLINED_CLAUSE -DRELEASE -Wall -Wextra -O0 -g
 CXXBENCHFLAGS = -DINLINED_CLAUSE -O2 -s -Wall -Wextra
 
 all : release
 
 release: $(r_OBJ) $(HDR) 
 	${CXX} $(CXXFLAGS) -o $@ $(r_OBJ) $(LFLAGS)  $(LIB);\
-    cp release testsSatisfiable/exe;\
-    cp release testsUnsatisfiable/exe
+    cp release ../samples/testsSatisfiable/exe;\
+    cp release ../samples/testsUnsatisfiable/exe
 
 debug: $(d_OBJ) $(HDR) 
 	${CXX} $(CXXDEBUGFLAGS) -o $@ $(d_OBJ) $(LFLAGS)  $(LIB)
 
 bench  : $(b_OBJ) $(HDR)
 	${CXX} $(CXXBENCHFLAGS) -o $@ $(b_OBJ) $(LFLAGS) $(LIB);\
-    cp bench testsSatisfiable/bench;\
-    cp bench testsUnsatisfiable/bench
+    cp bench ../samples/testsSatisfiable/bench;\
+    cp bench ../samples/testsUnsatisfiable/bench
 
 
 

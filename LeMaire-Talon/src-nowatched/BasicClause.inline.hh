@@ -63,8 +63,6 @@ inline size_t BasicClause::freeSize(void) const
 }
 inline Literal BasicClause::chooseFree(void) const
 {
-    if (_free.empty())
-        exit(1); //Modifier...
     return *_free.begin();
 }
 

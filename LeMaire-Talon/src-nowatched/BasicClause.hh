@@ -5,7 +5,6 @@
 #include "Literal.hh"
 #include <set>
 #include <stack>
-#include <cstdlib> // pour exit()
 
 #ifndef INLINED_CLAUSE
   #include "Clause.hh"

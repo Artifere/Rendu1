@@ -33,11 +33,9 @@ public:
 
     BasicClauseWatched(const std::vector<Literal>& list);
     
-    //VIRTUAL void setVar(const Literal &l);
     VIRTUAL void setLitFalse(const Literal& l, SatProblem& sp);
     VIRTUAL void setLitTrue(const Literal& l, SatProblem& sp);
     
-   
     VIRTUAL unsigned int freeSize (const SatProblem& sp) const;
     VIRTUAL Literal chooseFree(const SatProblem& sp) const;
     VIRTUAL bool satisfied(const SatProblem& sp) const;
@@ -48,14 +46,6 @@ public:
 protected:
     std::vector<Literal> _literals;
 
-    
-    
-    
-    /*
-    bool _satisfied;
-    std::stack<Literal> _assigned;
-    std::set<Literal> _free;
-    */
 };
 
 

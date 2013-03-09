@@ -5,8 +5,8 @@ b_OBJ= ${SRC:.cpp=_b.o}
 CXX	 = g++
 LFLAGS   = -lm
 CXXFLAGS = -DINLINED_CLAUSE -DRELEASE -O2 -s -Wall -Wextra
-CXXDEBUGFLAGS = -Wall -Wextra -O0 -g
-CXXBENCHFLAGS = -DINLINED_CLAUSE -DRELEASE=1 -O2 -s -Wall -Wextra
+CXXDEBUGFLAGS = -DRELEASE -Wall -Wextra -O0 -g
+CXXBENCHFLAGS = -DINLINED_CLAUSE -O2 -s -Wall -Wextra
 
 all : release
 

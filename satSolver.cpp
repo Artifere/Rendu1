@@ -22,23 +22,19 @@
 
 int main()
 {
-/*
+/* Pour du débug
 #ifdef INLINED_CLAUSE
     std::cout << "c option INLINED_CLAUSE enabled" << std::endl;
 #else
     std::cout << "c option INLINED_CLAUSE not enabled" << std::endl;
 #endif
-#ifdef RELEASE
-    std::cout << "c option RELEASE enabled (" << RELEASE << ")" << std::endl;
-#else
-    std::cout << "c option RELEASE not enabled" << std::endl;
 #endif
 */
     SatProblem problem(std::cin);
 
     bool is_sat = problem.satisfiability();
     //Pour le bench
-#ifdef RELEASE
+	 #ifdef RELEASE
     if(is_sat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
@@ -47,7 +43,6 @@ int main()
 
         for(size_t k = 0; k < assign.size(); k++)
         {
-            //std::cout << k+1 << "  =>  " << (assign[k] == TRUE ? "TRUE" : (assign[k]==FALSE) ? "FALSE" : "FREE") << std::endl;
             std::cout << "v ";
             if (assign[k] == FALSE)
                 std::cout << "-";
@@ -61,7 +56,7 @@ int main()
     {
         std::cout << "s UNSATISFIABLE" << std::endl;
     }
-#endif
+	 #endif
 }
 
 
@@ -93,54 +88,22 @@ SatProblem::SatProblem(std::istream& input)
         addClause(list);
     }
     
-    /*
+	 /* Affiche l'état du problème en cours
     for(unsigned int var = 0; var < nbrVar; var++)
     {
-        std::cout << "c  variable " << (var+1) << " : " << _variables[var].first.size() << ", " << _variables[var].second.size() << std::endl;
+        std::cout << "c  la variable " << (var+1) << " apparaît  " << _variables[var].first.size() << " + " << _variables[var].second.size() << " fois." << std::endl;
     }
-    */
-    // ajouter un test pour savoir si le fichier est vide ?
-    // (pour repérer les erreurs dans le fichier, comme minisat)
+	 */
 }
 
 
 
-/* on pourait s'en passer parce que l'objet SatProblem vit tant que le main s'exécute,
- * et est détruit à la fin (donc tout est automatiquement déaslloué quand on quitte le main)
- * Ça reste plus propre de tout désallouer à la main je trouve
- */
-
-/** Ok mais pourquoi maintenir une liste des trucs supprimés ? Surtout que tu ajoutes que des trucs désalloués, non ? Au cas où la clause serait en double genre "1 -1" ? **/
-/** si je ne le faisais pas, chaque clause serait désallouées autant de fois qu'elle a de variables (c-à-d à chaque fois que je la verait depuis une variable) **/
 SatProblem::~SatProblem()
 {
-    typedef std::set<StockedClause*>::iterator iter;
     // on doit désalouer toutes les clauses (allouées dans SatProblem())
     // (le reste se détruit tout seul)
-
     for (std::set<StockedClause*>::iterator it = _clausesList.begin(); it != _clausesList.end(); ++it)
         delete *it;
-
-    /*std::set<StockedClause*> deleted;
-    for(unsigned int u = 0; u < _variables.size(); u++)
-    {
-        for(iter it = _variables[u].first.begin(); it != _variables[u].first.end(); ++it)
-        {
-            if(deleted.find(*it) == deleted.end())
-            {
-                delete *it;
-                deleted.insert(*it);
-            }
-        }
-        for(iter it = _variables[u].second.begin(); it != _variables[u].second.end(); ++it)
-        {
-            if(deleted.find(*it) == deleted.end())
-            {
-                delete *it;
-                deleted.insert(*it);
-            }
-        }
-    }*/
 }
 
 
@@ -151,7 +114,7 @@ void SatProblem::addClause(std::vector<Literal>& list)
     bool trivial = false; // ssi clause trivialement vraie
     for(unsigned int u = 0; u < list.size() && !trivial; u++)
     {
-        // test si x=list[u] est présent sous forme x ou !x
+        // teste si x=list[u] est présent sous forme x ou !x
         unsigned int v = u+1;
         while(v < list.size() && !trivial)
         {
@@ -216,45 +179,6 @@ void SatProblem::addClause(std::vector<Literal>& list)
 }
 
 
-
-/* version un peu plus propre de la fonction, qui devenait bordélique
-
- deductions : ensemble de valeurs à propager. d'intersection vide avec celles déjà assignées, et aucune contradictions entre les déductions
- on a pas besoin de deducedState en réalité : chaque deduction à sa valeur déjà écrite dans _varStates
-
- le gros changement depuis la fonction précédente, c'est qu'on fait le callback à la fin de la bocle plutôt qu'au début (parce que c'est là qu'on à dedécté une contradiction : on ne fait que réutiliser la variable is_error pour savoir si on doit faire le callback ou non)
-
-
- tant qu'on a pas assigné toutes les variables
-   si deductions = vide
-     choisir un literal libre et une valeur booléenne
-   sinon choisir une déduction
-
-   propager la nouvelle valeur :
-   pour chaque clause dont on peut tirer un litéral :
-     si litéral libre (test d'après deductStates)
-       ajouter le littéral dans deductStates
-     sinon, si contredit une valeur de deductState
-       contradiction
-     sinon (déductions déjà faite précédemment)
-       ne rien faire
-
-   si contradiction :
-   faire le callback :
-     vider deductions (et remettre à FREE les valeurs des variables déduites dans _varStates)
-     faire
-       si plus de choix (_stackCallback = vide)
-         renvoyer faux (UNSAT)
-       sinon :
-         on concidère la variale du haut de _stackCallback :
-         si cette variable est un choix libre
-           ajouter son contraire à deductions
-         la liberer
-     tant que deductions n'est pas vide
- fin tant que
- renvoyer vrai (SAT)
-*/
-
 bool SatProblem::satisfiability()
 {
     while(_stackCallback.size() < _varStates.size() || !_deductions.empty())
@@ -276,10 +200,18 @@ bool SatProblem::satisfiability()
             _deductions.pop();
         }
         bool is_error = propagateVariable(newAssign);
+        /* Affiche l'état du problème
+        std::cout << "Assignation d'une variable : " << newAssign.var()+1 << " à la valeur " << newAssign.pos() << std::endl;
+        */
+        
 
         // on fait le callback si besoin
         if(is_error)
         {
+            /* Affiche l'état du problème
+            std::cout << "c Contradiction trouvée. Retour en arrière." << std::endl;
+            */
+            
             // vide les déductions pas encore propagées dans les clauses
             while(!_deductions.empty())
             {
@@ -303,6 +235,9 @@ bool SatProblem::satisfiability()
                     _deductions.push( Literal(varID, newVal) );
                     _varStates[varID] = newVal ? TRUE:FALSE;
                     addUnassignedVar(varID);
+                    /* Affiche l'état du problème
+                    std::cout << "c Retour sur l'assignation de " << varID+1 << "  (nouvelle valeur : " << newVal << ")" << std::endl;
+                    #*/
                 }
                 else
                 {
@@ -333,7 +268,6 @@ bool SatProblem::propagateVariable(const Literal& lit)
         (*it)->setLitTrue(lit);
 
     // on sépare en deux pour faire encore quelques tests de moins si il y a une erreure
-    // (comme je sais que tu t'inquiète de quelques tests ;)
     for (it = cFalse.begin(); (!is_error) && (it != cFalse.end()); ++it)
     {
         (*it)->setLitFalse(lit);
@@ -357,7 +291,7 @@ bool SatProblem::propagateVariable(const Literal& lit)
                 is_error = true;
         }
     }
-    // on finit la propagation (si une erreur à eu lieu) mais sans essayer de trouver d'autres déductions
+    // on finit la propagation (si une erreur a eu lieu) mais sans essayer de trouver d'autres déductions
     for (; it != cFalse.end(); ++it)
         (*it)->setLitFalse(lit);
     return is_error;
@@ -373,10 +307,8 @@ void SatProblem::releaseVariable(const unsigned int varID)
     std::vector<StockedClause*>::iterator it;
     for(it = cTrue.begin(); it != cTrue.end(); ++it)
         (*it)->freeLitTrue(lit);
-        //(*it)->freeVar(varID);
     for(it = cFalse.begin(); it != cFalse.end(); ++it)
         (*it)->freeLitFalse(lit);
-        //(*it)->freeVar(varID);
 }
 
 

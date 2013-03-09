@@ -5,7 +5,6 @@
 #include "Literal.hh"
 #include <set>
 #include <stack>
-#include <cstdlib> // pour exit()
 
 #ifndef INLINED_CLAUSE
   #include "Clause.hh"
@@ -29,11 +28,9 @@ class BasicClause HERITED_CLAUSE
 public:
     BasicClause(const std::vector<Literal>& list);
     
-    //virtual void setVar(const Literal &l);
     VIRTUAL void setLitFalse(const Literal& l);
     VIRTUAL void setLitTrue(const Literal& l);
 
-    //virtual void freeVar(const unsigned int varId);
     VIRTUAL void freeLitFalse(const Literal &l);
     VIRTUAL void freeLitTrue(const Literal &l);
     

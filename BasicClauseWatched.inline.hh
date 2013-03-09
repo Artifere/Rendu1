@@ -24,32 +24,39 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
     }
     if (it != _literals.end())
     {
-        sp._toRemoveL.push(l);
-        sp._toChangeC.push(this);
-        if (_literals[0].var() == l.var())
-            std::swap(_literals[0], *it);
-        else
-            std::swap(_literals[1], *it);
         sp._toInsertL.push(*it);
+        sp._toChangeC.push(this);
+        
+        if (_literals[0].var() == l.var())
+        {
+            sp._toRemoveL.push(_literals[0]);
+            std::swap(_literals[0], *it);
+        }
+        else
+        {
+            sp._toRemoveL.push(_literals[1]);
+            std::swap(_literals[1], *it);
+        }
     }
 }
 
 
 inline void BasicClauseWatched::setLitTrue(const Literal& l, SatProblem& sp)
-{
-    if (hasSameValue( sp._varStates[_literals[0].var()],_literals[0].pos()) || hasSameValue(sp._varStates[_literals[1].var()],_literals[1].pos()))
-        return;
-    std::vector<Literal>::iterator it;
-    for (it = _literals.begin(); it != _literals.end(); ++it)
+{   
+    if (!satisfied(sp))
     {
-        if (it->var() == l.var())
-            break;
+        std::vector<Literal>::iterator it;
+        for (it = _literals.begin(); it != _literals.end(); ++it)
+        {
+            if (it->var() == l.var())
+                break;
 
+        }
+        sp._toRemoveL.push(_literals[0]);
+        sp._toChangeC.push(this);
+        sp._toInsertL.push(l);
+        std::swap(_literals[0], *it);
     }
-    sp._toRemoveL.push(_literals[0]);
-    sp._toChangeC.push(this);
-    sp._toInsertL.push(l);
-    std::swap(_literals[0], *it);
 
 }
 
@@ -57,9 +64,6 @@ inline void BasicClauseWatched::setLitTrue(const Literal& l, SatProblem& sp)
 
 inline unsigned int BasicClauseWatched::freeSize(const SatProblem& sp) const
 {
-    /*for (std::vector<Literal>::const_iterator it = _literals.begin(); it != _literals.end(); ++it)
-        if (sp._varStates[it->var()] == FREE)
-            nb++;*/
     bool b0 = hasOppositeValue(sp._varStates[_literals[0].var()], _literals[0].pos()),
          b1 = hasOppositeValue(sp._varStates[_literals[1].var()], _literals[1].pos());
 

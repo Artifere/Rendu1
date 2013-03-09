@@ -11,7 +11,6 @@
 
 
 typedef ConstAssignClause UsedClause;
-//typedef BasicClause UsedClause;
 
 #ifdef INLINED_CLAUSE
 typedef UsedClause StockedClause;
@@ -40,9 +39,6 @@ protected:
     Literal chooseUnasignedVar();
     void deleteUnassignedVar(unsigned int var);
     void addUnassignedVar(unsigned int var);
-    
-    
-
 
 public:
     SatProblem(std::istream& input);
@@ -65,8 +61,6 @@ inline Literal SatProblem::chooseUnasignedVar()
 {
     unsigned int k = *(_unassignedVarList.end()-1);
     _unassignedVarList.pop_back();
-    /*while(k < _varStates.size() && _varStates[k] != FREE)
-        k++;*/
     return Literal(k,true);
 }
 
@@ -76,15 +70,6 @@ inline void SatProblem::deleteUnassignedVar(unsigned int var)
     _indexUnassignedList[k] = _indexUnassignedList[var];
      *_indexUnassignedList[var] = k;
     _unassignedVarList.pop_back();
-    /*for (std::vector<unsigned int>::iterator it = _unassignedVarList.begin(); ; ++it)
-    {
-        if (*it == var)
-        {
-            *it = *(_unassignedVarList.end()-1);
-            _unassignedVarList.pop_back();
-            break;
-        }
-    }*/
 }
 
 inline void SatProblem::addUnassignedVar(unsigned int var)

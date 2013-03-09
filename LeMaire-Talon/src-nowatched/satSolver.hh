@@ -11,7 +11,6 @@
 
 
 typedef ConstAssignClause UsedClause;
-//typedef BasicClause UsedClause;
 
 #ifdef INLINED_CLAUSE
 typedef UsedClause StockedClause;
