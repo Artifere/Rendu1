@@ -1,17 +1,20 @@
 #include "Variable.hh"
 #include "Clause.hh"
 #include "BasicClause.hh"
+#if VERBOSE > 0
+#include <iostream>
+#endif
 
 bool Variable::propagateVariable(std::stack<Literal>& deductions)
 {
     bool is_true = _varState == TRUE;
     const Literal lit = Literal(this, is_true);
-    std::vector<StockedClause*>& cTrue  = is_true ? _litTrue : _litFalse;
-    std::vector<StockedClause*>& cFalse = is_true ? _litFalse : _litTrue;
+    std::set<StockedClause*> cTrue  = is_true ? _litTrue : _litFalse;
+    std::set<StockedClause*> cFalse = is_true ? _litFalse : _litTrue;
 
     bool is_error = false;
 
-    std::vector<StockedClause*>::iterator it;
+    std::set<StockedClause*>::const_iterator it;
     for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit);
@@ -29,6 +32,9 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
         else if( !(*it)->satisfied() && (*it)->freeSize() == 1)
         {
             Literal deduct = (*it)->chooseFree();
+            #if VERBOSE > 5
+            std::cout << "c Nouvelle déduction :  " << deduct.var()->varNumber << "." << deduct.pos() << std::endl;
+            #endif
             // si la déduction concerne une nouvelle variable, on l'ajoute
             if(deduct.var()->_varState == FREE)
             {
@@ -54,10 +60,10 @@ void Variable::releaseVariable()
 {
     bool is_true = _varState == TRUE;
     const Literal lit = Literal(this, is_true);
-    std::vector<StockedClause*>& cTrue  = is_true ? _litTrue : _litFalse;
-    std::vector<StockedClause*>& cFalse = is_true ? _litFalse : _litTrue;
+    std::set<StockedClause*>& cTrue  = is_true ? _litTrue : _litFalse;
+    std::set<StockedClause*>& cFalse = is_true ? _litFalse : _litTrue;
     
-    std::vector<StockedClause*>::iterator it;
+    std::set<StockedClause*>::iterator it;
     for(it = cTrue.begin(); it != cTrue.end(); ++it)
         (*it)->freeLitTrue(lit);
 

@@ -12,8 +12,10 @@
 inline BasicClause::BasicClause(const std::vector<Literal>& list)
 {
     _satisfied = false;
-    for (size_t i = 0; i < list.size(); ++i)
+    for (size_t i = 0; i < list.size(); ++i) {
         _free.insert(list[i]);
+        list[i].var()->linkToClause(list[i].pos(), (StockedClause*)this);
+    }
 }
 
 
@@ -64,8 +66,6 @@ inline size_t BasicClause::freeSize(void) const
 }
 inline Literal BasicClause::chooseFree(void) const
 {
-    if (_free.empty())
-        exit(1); //Modifier...
     return *_free.begin();
 }
 

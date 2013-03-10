@@ -3,7 +3,6 @@
 #define CONSTASSIGNCLAUSE_HH
 
 #include <vector>
-//#include <cstdint>
 
 class ConstAssignClause HERITED_CLAUSE
 {
@@ -17,7 +16,6 @@ public:
     VIRTUAL void freeLitTrue(const Literal &l);
     
     VIRTUAL size_t freeSize (void) const;
-    VIRTUAL size_t assignedSize(void) const;
     VIRTUAL Literal chooseFree(void) const;
     VIRTUAL bool satisfied(void) const;
 

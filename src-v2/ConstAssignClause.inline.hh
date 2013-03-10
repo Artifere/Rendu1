@@ -15,6 +15,7 @@ inline ConstAssignClause::ConstAssignClause(const std::vector<Literal>& list)
     {
         _currentHash += (long long)it->var();
         _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
+        it->var()->linkToClause(it->pos(), (StockedClause*)this);
     }
 }
 

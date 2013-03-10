@@ -76,6 +76,7 @@ SatProblem::SatProblem(std::istream& input)
     std::vector<std::pair<unsigned int, bool> >::const_iterator it;
     std::vector<std::pair<unsigned int, bool> > list;
     std::vector<Literal> listClause;
+    unsigned number = 3;
     for(unsigned int k = 0; k < nbrClauses; k++)
     {
         list.clear();
@@ -86,7 +87,7 @@ SatProblem::SatProblem(std::istream& input)
         {
             listClause.push_back(Literal(_variables[it->first-1], it->second));
         }
-        addClause(listClause);
+        addClause(listClause, number++);
     }
     
     // affiche le nombre de fois que chaque variable apparaît dans une clause
@@ -95,8 +96,8 @@ SatProblem::SatProblem(std::istream& input)
     std::vector<Variable*>::const_iterator it_debug;
     for (it_debug = _variables.begin(); it_debug != _variables.end(); ++it_debug)
     {
-        (*it_debug)->print_state();
-        std::cout<<"   ";
+        (*it_debug)->print_state(true);
+        std::cout<<", ";
     }
     std::cout<<std::endl;
     #endif
@@ -118,7 +119,7 @@ SatProblem::~SatProblem()
 
 
 
-void SatProblem::addClause(std::vector<Literal>& list)
+void SatProblem::addClause(std::vector<Literal>& list, unsigned int number)
 {
     // supprime de list les doublons, et repère si trivialement vraie
     bool trivial = false; // ssi clause trivialement vraie
@@ -174,7 +175,7 @@ void SatProblem::addClause(std::vector<Literal>& list)
             Literal& lit = *(list.begin());
             #if VERBOSE > 2
             print_debug();
-            std::cout<<"Clause à déduction immédiate ajoutée : "<<lit.var()->varNumber<<" (valeur "<<lit.pos()<<")"<<std::cout;
+            std::cout<<"Clause à déduction immédiate ajoutée : "<<lit.var()->varNumber<<" (valeur "<<lit.pos()<<")"<<std::endl;
             #endif
             // on ajoute la déduction que si on ne l'a pas déjà faite
             if(lit.var()->_varState == FREE)
@@ -200,9 +201,7 @@ void SatProblem::addClause(std::vector<Literal>& list)
             // UsedClause hérite de StockedClause, donc UsedClause* passe pour StockedClause*
             // alors que UsedClause ne passe pas pour StockedClause à priori
             // (et on perd l'interet de la surcharge avec la conversion de UsedClause vers StockedClause)
-            StockedClause * nclause = new UsedClause(list);
-            for(unsigned int u = 0; u < list.size(); u++)
-                list[u].var()->linkToClause(list[u].pos(), nclause);
+            StockedClause * nclause = new UsedClause(list, number);
             _clauses.push_back(nclause);
         }
     }
@@ -222,7 +221,8 @@ bool SatProblem::satisfiability()
             #if VERBOSE > 2
             print_debug();
             std::cout<<"Assignation : ";
-            newAssign.var()->print_state();
+            newAssign.var()->print_state(true);
+            std::cout << " à " << newAssign.pos();
             std::cout<<std::endl;
             #endif
             _stackBacktrack.push( std::pair<bool, Variable*>(true, newAssign.var()) );
@@ -234,13 +234,24 @@ bool SatProblem::satisfiability()
             #if VERBOSE > 2
             print_debug();
             std::cout<<"Assignation ";
-            newAssign.var()->print_state();
+            newAssign.var()->print_state(true);
             std::cout<<"  (choix contraint)"<<std::endl;
             #endif
             deleteUnassignedVar(newAssign.var());
             _stackBacktrack.push( std::pair<bool, Variable*>(false, newAssign.var()) );
             _deductions.pop();
         }
+        #if VERBOSE > 5
+        print_debug();
+        std::cout << "État des variables :   ";
+        std::vector<Variable*>::const_iterator it_debug;
+        for (it_debug = _variables.begin(); it_debug != _variables.end(); ++it_debug) {
+            (*it_debug)->print_state(false);
+            std::cout << " ";
+        }
+        std::cout<<std::endl;
+        #endif
+
         
         bool is_error = newAssign.var()->propagateVariable(_deductions);
 
@@ -257,7 +268,7 @@ bool SatProblem::satisfiability()
                 #if VERBOSE > 4
                 print_debug();
                 std::cout<<"suppression de la déduction ";
-                _deductions.top().var()->print_state();
+                _deductions.top().var()->print_state(true);
                 std::cout<<"  (valeur déduite : "<<_deductions.top().pos()<<")";
                 std::cout<<std::endl;
                 #endif
