@@ -10,8 +10,8 @@
 #include <iostream>
 #endif
 
-inline OneWatchedClause::OneWatchedClause(const std::vector<Literal>& list, unsigned int number)
-    : _number(number), _watched(list[0]), _literals(list)
+inline OneWatchedClause::OneWatchedClause(CONSTR_ARGS(list))
+    :INIT_FOR_VERBOSE()  _watched(list[0]), _literals(list)
 {
     std::vector<Literal>::iterator it;
     for (it = _literals.begin(); it != _literals.end(); it++) {

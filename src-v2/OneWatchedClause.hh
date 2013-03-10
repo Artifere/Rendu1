@@ -7,7 +7,7 @@
 class OneWatchedClause HERITED_CLAUSE
 {
 public:
-    OneWatchedClause(const std::vector<Literal>& list, unsigned int number);
+    OneWatchedClause(CONSTR_ARGS(list));
     
     VIRTUAL void setLitFalse(const Literal& l);
     VIRTUAL void setLitTrue(const Literal& l);
@@ -21,7 +21,9 @@ public:
 
     VIRTUAL ~OneWatchedClause();
 
-    unsigned int _number;
+    #if VERBOSE > 0
+    const unsigned _number;
+    #endif
 protected:
     // invariants : _watched vaut toujours l'opposé d'un Literal de _literals
     Literal _watched;

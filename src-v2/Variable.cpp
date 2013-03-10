@@ -1,6 +1,6 @@
 #include "Variable.hh"
 #include "Clause.hh"
-#include "BasicClause.hh"
+//#include "BasicClause.hh"
 #if VERBOSE > 0
 #include <iostream>
 #endif
@@ -14,7 +14,7 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
 
     bool is_error = false;
 
-    std::set<StockedClause*>::const_iterator it;
+    std::set<StockedClause*>::iterator it;
     for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit);

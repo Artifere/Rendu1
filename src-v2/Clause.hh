@@ -7,7 +7,7 @@
 class Clause
 {
 public:
-    
+
     virtual void setLitFalse(const Literal& l)=0;
     virtual void setLitTrue(const Literal& l)=0;
 
@@ -33,6 +33,13 @@ public:
 #endif
 
 
+#if VERBOSE > 0
+#define CONSTR_ARGS(list)  const std::vector<Literal>& list, unsigned int number
+#define INIT_FOR_VERBOSE()  _number(number),
+#else
+#define CONSTR_ARGS(list)  const std::vector<Literal>& list
+#define INIT_FOR_VERBOSE()  
+#endif
 
 
 #include "BasicClause.hh"

@@ -2,12 +2,10 @@
 #ifndef CONSTASSIGNCLAUSE_HH
 #define CONSTASSIGNCLAUSE_HH
 
-#include <vector>
-
 class ConstAssignClause HERITED_CLAUSE
 {
 public:
-    ConstAssignClause(const std::vector<Literal>& list);
+    ConstAssignClause(CONSTR_ARGS(list));
     
     VIRTUAL void setLitFalse(const Literal& l);
     VIRTUAL void setLitTrue(const Literal& l);
@@ -21,7 +19,9 @@ public:
 
     VIRTUAL ~ConstAssignClause();
 
-
+    #if VERBOSE > 0
+    const unsigned _number;
+    #endif
 protected:
     long long _currentHash; // sum of the adresses of the FREE Variables contained in the ConstAssignClause
     bool _currentHashVal; // xor of all the pos() of the free literals contained in the ConstAssignClause

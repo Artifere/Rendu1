@@ -7,8 +7,8 @@
 #define CONSTASSIGNCLAUSE_INLINE_HH
 
 
-inline ConstAssignClause::ConstAssignClause(const std::vector<Literal>& list)
-    : _currentHash((long long)NULL), _currentHashVal(false), _satisfied(NULL), _numOfFree(list.size())
+inline ConstAssignClause::ConstAssignClause(CONSTR_ARGS(list))
+    : INIT_FOR_VERBOSE()  _currentHash((long long)NULL), _currentHashVal(false), _satisfied(NULL), _numOfFree(list.size())
 {
     std::vector<Literal>::const_iterator it;
     for(it = list.begin(); it != list.end(); ++it)

@@ -2,14 +2,13 @@
 #ifndef BASICCLAUSE_HH
 #define BASICCLAUSE_HH
 
-#include <vector>
 #include <set>
 #include <stack>
 
 class BasicClause HERITED_CLAUSE
 {
 public:
-    BasicClause(const std::vector<Literal>& list);
+    BasicClause(CONSTR_ARGS(list));
     
     VIRTUAL void setLitFalse(const Literal& l);
     VIRTUAL void setLitTrue(const Literal& l);
@@ -23,6 +22,9 @@ public:
 
     VIRTUAL ~BasicClause();
 
+    #if VERBOSE > 0
+    const unsigned _number;
+    #endif
 protected:
     bool _satisfied;
     std::stack<Literal> _assigned;

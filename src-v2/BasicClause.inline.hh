@@ -9,13 +9,12 @@
 #include <cstdlib> // pour exit()
 
 
-inline BasicClause::BasicClause(const std::vector<Literal>& list)
+inline BasicClause::BasicClause(CONSTR_ARGS(list))
+    :  INIT_FOR_VERBOSE()  _satisfied(false), _free(list.begin(),list.end())
 {
-    _satisfied = false;
-    for (size_t i = 0; i < list.size(); ++i) {
-        _free.insert(list[i]);
-        list[i].var()->linkToClause(list[i].pos(), (StockedClause*)this);
-    }
+    std::vector<Literal>::const_iterator it;
+    for (it = list.begin(); it != list.end(); ++it)
+        it->var()->linkToClause(it->pos(), (StockedClause*)this);
 }
 
 
