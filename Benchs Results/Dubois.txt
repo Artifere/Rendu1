@@ -1,0 +1,5 @@
+* v1 sans watched literals :
+	43.6s
+	
+* v1 avec watched literals :
+	long (à faire)	

@@ -1,0 +1,73 @@
+v1 :
+real 18.595s
+user 15.440s
+sys 1.510s
+
+v1 avec _unassignedVarList :
+real 19.855
+user 16.673
+sys 1.530
+
+v1 avec deductions check :
+real 17.636
+user 14.267
+sys 1.763
+
+v1 avec callback à la fin :
+real 16.267
+user 13.013
+sys 1.617
+
+v1 avec trucs pour simplifications :
+real 17.849
+user 14.593
+sys 1.607
+
+v1 avec simplification et vector pour chooseUna... :
+real 16.074
+user 13.483
+sys 1.607
+
+idem avec ++it au lieu de it++ :
+user 13.513
+sys 1.567
+
+idem avec _indexblabla :
+user 13.313
+sys 1.580
+
+idem avec _indexblablabis :
+user 11.850
+sys 1.460
+
+idem avec code propagationTrue/False :
+user 11.300
+sys 1.460
+
+==============================================
+Avec les formules à 75 variables :
+
+minisat :
+user 1.910
+sys 2.000
+
+idem avec propagationTrue/False :
+user 20.600
+sys 1.710
+
+idem avec code plus propre :
+user 21.120
+sys 1.700
+
+idem avec vectors au lieu de set pour les _variables :
+user 17.400
+sys 1.75
+
+idem avec ConstantClause :
+user 6.1
+
+idem avec <</>>/&1
+user 5.85
+
+idem avec trucs inline :
+user 5.1

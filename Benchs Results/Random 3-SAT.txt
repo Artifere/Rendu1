@@ -1,0 +1,31 @@
+Satisfiable (UF20, 50, 75, 100) :
+	
+	* minisat (à vérifier) :
+		6.220s
+		
+	* v1 sans watched literals (vérifier ?) :
+		43.6s
+		
+	* v1 avec watched literals :
+		148.2s
+	
+	* v2 sans (?) watched literals, unassigned avec set :
+		168s
+	
+
+
+Unsatisfiable (UUF 50, 75, 100) :
+
+	* minisat (à vérifier) :
+		3.3s		
+
+	* v1 sans watched literals :
+		109.1s
+	
+	* v1 avec watched literals :
+		416.5s
+	
+	* v2 sans (?) watched literals, unassigned avec set :
+		435s
+		
+		
