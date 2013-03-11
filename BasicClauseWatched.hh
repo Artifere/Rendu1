@@ -2,33 +2,11 @@
 #define BASICCLAUSEWATCHED_HH
 
 #include <vector>
-#include "Literal.hh"
 #include <set>
 #include <stack>
-#include "satSolverWatched.hh"
-
-#ifndef INLINED_CLAUSE
-  #include "Clause.hh"
-  #ifndef VIRTUAL
-    #define VIRTUAL virtual
-  #endif
-  #ifndef HERITED_CLAUSE
-    #define HERITED_CLAUSE  : public Clause
-  #endif
-#else
-  #ifndef VIRTUAL
-    #define VIRTUAL 
-  #endif
-  #ifndef HERITED_CLAUSE
-    #define HERITED_CLAUSE 
-  #endif
-#endif
-
-class SatProblem;
 
 class BasicClauseWatched HERITED_CLAUSE
 {
-    friend class SatProblem;
 public:
 
     BasicClauseWatched(const std::vector<Literal>& list);

@@ -1,37 +1,33 @@
 #ifndef LITERAL_HH
 #define LITERAL_HH
 
+#include "Variable.hh"
+#include <string>
 
-typedef enum varState
-{
-    TRUE, FALSE, FREE
-} varState;
-
-
-
+/*
 static inline bool hasSameValue(const varState& vs, const bool& b) {
     return (vs == TRUE && b) || (vs == FALSE && !b);
 }
 static inline bool hasOppositeValue(const varState& vs, const bool& b) {
     return (vs == TRUE && !b) || (vs == FALSE && b);
 }
-
+*/
 
 
 
 class Literal
 {
 protected:
-    unsigned int _var;
+    Variable * _var;
     bool _pos;
 
 public:
-    inline Literal() : _var(-1), _pos(true) { };
-    inline Literal(unsigned int var, bool pos) : _var(var), _pos(pos) { };
+    inline Literal() : _var(NULL), _pos(true) { };
+    inline Literal(Variable* var, bool pos) : _var(var), _pos(pos) { };
     inline Literal(const Literal& lit) : _var(lit._var), _pos(lit._pos) { };
 
 
-    inline unsigned int var(void) const
+    inline Variable* var(void) const
     {
         return _var;
     };
@@ -42,9 +38,9 @@ public:
     };
 
 
-    inline void invert()
+    inline Literal invert() const
     {
-        _pos = !_pos;
+        return Literal(_var, !_pos);
     };
 
     inline bool operator<(const Literal& lit) const

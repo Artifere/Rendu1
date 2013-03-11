@@ -6,11 +6,15 @@
 #ifndef BASICCLAUSE_INLINE_HH
 #define BASICCLAUSE_INLINE_HH
 
-inline BasicClause::BasicClause(const std::vector<Literal>& list)
+#include <cstdlib> // pour exit()
+
+
+inline BasicClause::BasicClause(CONSTR_ARGS(list))
+    :  INIT_FOR_VERBOSE()  _satisfied(false), _free(list.begin(),list.end())
 {
-    _satisfied = false;
-    for (size_t i = 0; i < list.size(); ++i)
-        _free.insert(list[i]);
+    std::vector<Literal>::const_iterator it;
+    for (it = list.begin(); it != list.end(); ++it)
+        it->var()->linkToClause(it->pos(), (StockedClause*)this);
 }
 
 
@@ -18,9 +22,7 @@ inline void BasicClause::setLitFalse(const Literal& l)
 {
     if(! _satisfied)
     {
-        Literal invL = l;
-        invL.invert();
-
+        Literal invL = l.invert();
         _free.erase(invL);
         _assigned.push(invL);
     }

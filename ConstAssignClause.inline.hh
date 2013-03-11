@@ -7,27 +7,31 @@
 #define CONSTASSIGNCLAUSE_INLINE_HH
 
 
-inline ConstAssignClause::ConstAssignClause(const std::vector<Literal>& list)
-    : _currentHash(0), _satisfied(0), _numOfFree(list.size())
+inline ConstAssignClause::ConstAssignClause(CONSTR_ARGS(list))
+    : INIT_FOR_VERBOSE()  _currentHash((long long)NULL), _currentHashVal(false), _satisfied(NULL), _numOfFree(list.size())
 {
-    for(unsigned int i = 0; i < list.size(); i++)
+    std::vector<Literal>::const_iterator it;
+    for(it = list.begin(); it != list.end(); ++it)
     {
-        _currentHash += hashOfLit(list[i]);
+        _currentHash += (long long)it->var();
+        _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
+        it->var()->linkToClause(it->pos(), (StockedClause*)this);
     }
 }
 
 
 inline void ConstAssignClause::setLitFalse(const Literal& l)
 {
-    if(!_satisfied)
+    if(_satisfied == NULL)
     {
-        _currentHash -= hashOfInvertLit(l);
+        _currentHash -= (long long)l.var();
+        _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen
         _numOfFree--;
     }
 }
 inline void ConstAssignClause::setLitTrue(const Literal& l)
 {
-    if(!_satisfied)
+    if(_satisfied == NULL)
         _satisfied = l.var();
 }
 
@@ -35,13 +39,14 @@ inline void ConstAssignClause::setLitTrue(const Literal& l)
 inline void ConstAssignClause::freeLitTrue(const Literal& l)
 {
     if(_satisfied == l.var())
-        _satisfied = 0;
+        _satisfied = NULL;
 }
 inline void ConstAssignClause::freeLitFalse(const Literal& l)
 {
-    if(!_satisfied)
+    if(_satisfied == NULL)
     {
-        _currentHash += hashOfInvertLit(l);
+        _currentHash += (long long)l.var();
+        _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen
         _numOfFree++;
     }
 }
@@ -49,17 +54,12 @@ inline void ConstAssignClause::freeLitFalse(const Literal& l)
 
 inline size_t ConstAssignClause::freeSize (void) const
 {
-    return _satisfied ? 0 : _numOfFree;
-}
-
-inline size_t ConstAssignClause::assignedSize(void) const
-{
-    return 0;
+    return _numOfFree;
 }
 
 inline Literal ConstAssignClause::chooseFree(void) const
 {
-    return LitOfHash(_currentHash);
+    return Literal((Variable*)_currentHash, _currentHashVal);
 }
 inline bool ConstAssignClause::satisfied(void) const
 {

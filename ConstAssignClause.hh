@@ -1,30 +1,11 @@
+#include "Clause.hh"
 #ifndef CONSTASSIGNCLAUSE_HH
 #define CONSTASSIGNCLAUSE_HH
-
-#include <vector>
-#include "Literal.hh"
-
-#ifndef INLINED_CLAUSE
-  #include "Clause.hh"
-  #ifndef VIRTUAL
-    #define VIRTUAL virtual
-  #endif
-  #ifndef HERITED_CLAUSE
-    #define HERITED_CLAUSE  : public Clause
-  #endif
-#else
-  #ifndef VIRTUAL
-    #define VIRTUAL 
-  #endif
-  #ifndef HERITED_CLAUSE
-    #define HERITED_CLAUSE 
-  #endif
-#endif
 
 class ConstAssignClause HERITED_CLAUSE
 {
 public:
-    ConstAssignClause(const std::vector<Literal>& list);
+    ConstAssignClause(CONSTR_ARGS(list));
     
     VIRTUAL void setLitFalse(const Literal& l);
     VIRTUAL void setLitTrue(const Literal& l);
@@ -33,21 +14,19 @@ public:
     VIRTUAL void freeLitTrue(const Literal &l);
     
     VIRTUAL size_t freeSize (void) const;
-    VIRTUAL size_t assignedSize(void) const;
     VIRTUAL Literal chooseFree(void) const;
     VIRTUAL bool satisfied(void) const;
 
     VIRTUAL ~ConstAssignClause();
 
-
+    #if VERBOSE > 0
+    const unsigned _number;
+    #endif
 protected:
-    inline unsigned int hashOfLit(const Literal& l) const { return (l.var()<<1) + (l.pos() ? 1 : 0); };
-    inline unsigned int hashOfInvertLit(const Literal& l) const { return (l.var()<<1) + (l.pos() ? 0 : 1); };
-    inline Literal LitOfHash(const unsigned int& i) const { return Literal(i>>1, (i &1)); };
-
-    unsigned int _currentHash;
-    unsigned int _satisfied;
-    unsigned int _numOfFree;
+    long long _currentHash; // sum of the adresses of the FREE Variables contained in the ConstAssignClause
+    bool _currentHashVal; // xor of all the pos() of the free literals contained in the ConstAssignClause
+    Variable* _satisfied; // the adresse of the first TRUE Literal of the ConstAssignClause
+    unsigned int _numOfFree; // number of FREE Variables contained in the ConstAssignClause
 };
 
 

@@ -29,7 +29,7 @@ void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrCl
 }
 
 
-void parserListLit(std::istream& input, std::vector<Literal>& ans, const unsigned int& limitVarNumber)
+void parserListLit(std::istream& input, std::vector<std::pair<unsigned int, bool> >& ans, const unsigned int& limitVarNumber)
 {
     int n;
     skipComment(input);
@@ -43,14 +43,39 @@ void parserListLit(std::istream& input, std::vector<Literal>& ans, const unsigne
                       <<"variable d'indice "<<abs_n<<" invalide "
                       <<"(l'indice doit être compris entre 1 et "<<limitVarNumber<<")."
                       <<std::endl;
-            // le programme continue en ignorant la variable
+            // le programme continu en ignorant la variable
             std::cout <<"c La variable est ignorée." << std::endl;
 #endif
         }
         else
         {
-            ans.push_back( Literal(abs_n-1, (n > 0)) );
+            ans.push_back(std::pair<unsigned int, bool>(abs_n, (n > 0)));
         }
     }
 }
+/*
+
+std::vector<Clause>  parser_sat() {
+  int nbVar, nbClauses;
+  char c;
+  std::string read;
+  std::vector<Clause> ans;
+
+
+  // read the header
+  if( !(cin >> c >> read >> nbVars >> nbClauses) || (c != p) || (read != "cnf")) {
+    std::cout << "c Arg, entrée invalide " << std::endl;
+  } else {
+    while(nbClauses--) {
+      // skip comments
+      while((std::cin >> std::ws) && (cin.peek()=='c'))
+        getline(std::cin, read);
+      // read one clause
+      ans.push_back( Clause(parser_clause()) );
+    }
+  }
+
+  return ans;
+}
+*/
 
