@@ -37,7 +37,8 @@ public:
 #define CONSTR_ARGS(list)  const std::vector<Literal>& list, unsigned int number
 #define INIT_FOR_VERBOSE()  _number(number),
 #else
-#define CONSTR_ARGS(list)  const std::vector<Literal>& list
+//Modif sinon compile pas ==> A voir
+#define CONSTR_ARGS(list)  const std::vector<Literal>& list, unsigned int number
 #define INIT_FOR_VERBOSE()  
 #endif
 

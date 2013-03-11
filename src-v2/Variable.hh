@@ -8,8 +8,8 @@
 
 // choisir quelle implémentation de clause servira
 //#define UsedClause OneWatchedClause
-//#define UsedClause ConstAssignClause
-#define UsedClause BasicClause
+#define UsedClause ConstAssignClause
+//#define UsedClause BasicClause
 //not implemented yet : #define UsedClause BasicClauseWatched
 
 
