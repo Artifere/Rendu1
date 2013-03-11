@@ -63,14 +63,26 @@ SatProblem::SatProblem(std::istream& input)
 {
     unsigned int nbrVar, nbrClauses;
     parserHeader(input, nbrVar, nbrClauses);
+	
+	//Rapide
+	_indexUnassignedList.resize(nbrVar);
+    _unassignedVarList.reserve(nbrVar);
 
     // initialise les variables
     for(unsigned k = 0; k < nbrVar; k++)
     {
         Variable* var = new Variable(k+1);
         _variables.push_back(var);
-        _unassignedVarPool.insert(var);
+		  
+		  //lent
+        //_unassignedVarPool.insert(var);
+		
+		//Rapide
+		addUnassignedVar(var);
     }
+	
+	
+       
     
     // parse chaque clause du fichier
     std::vector<std::pair<unsigned int, bool> >::const_iterator it;
@@ -211,6 +223,8 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned int number)
 
 bool SatProblem::satisfiability()
 {
+	for (unsigned int i = 0; i < _variables.size(); i++)
+		addUnassignedVar(_variables[i]);
     while(_stackBacktrack.size() < _variables.size() || !_deductions.empty())
     {
         // calculer la nouvelle valeur

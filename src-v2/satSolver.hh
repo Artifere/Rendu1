@@ -17,6 +17,10 @@ class SatProblem
 protected:
     std::vector<Variable*> _variables;
     std::vector<StockedClause*> _clauses;
+	 
+	 //Pour la version rapide
+	 std::vector<unsigned int> _unassignedVarList;
+	 std::vector<std::vector<unsigned int>::iterator> _indexUnassignedList;
     
     // true si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,Variable*> > _stackBacktrack;
@@ -56,7 +60,33 @@ const std::vector<std::pair<unsigned int,varState> > SatProblem::getAssign() con
 
 
 
+//Version rapide
 
+inline Literal SatProblem::chooseUnasignedVar()
+{
+    unsigned int k = *(_unassignedVarList.end()-1);
+    _unassignedVarList.pop_back();
+    return Literal(_variables[k],true);
+}
+
+inline void SatProblem::deleteUnassignedVar(Variable* var)
+{
+    unsigned int k = *(_unassignedVarList.end()-1);
+    _indexUnassignedList[k] = _indexUnassignedList[var->varNumber];
+     *_indexUnassignedList[var->varNumber] = k;
+    _unassignedVarList.pop_back();
+}
+
+inline void SatProblem::addUnassignedVar(Variable* var)
+{
+    _indexUnassignedList[var->varNumber] = _unassignedVarList.end();
+    _unassignedVarList.push_back(var->varNumber);
+}
+
+
+
+//Version lente
+/*
 inline void SatProblem::deleteUnassignedVar(Variable* var)
 {
     _unassignedVarPool.erase(var);
@@ -73,7 +103,7 @@ inline void SatProblem::addUnassignedVar(Variable* var)
 {
     _unassignedVarPool.insert(var);
 }
-
+*/
 
 
 #endif//SAT_SOLVER_HH
