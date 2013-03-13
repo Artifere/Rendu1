@@ -87,7 +87,7 @@ SatProblem::SatProblem(std::istream& input)
         list.clear();
         listClause.clear();
         parserListLit(input, list, nbrVar);
-        listClause.reserve(list.size());
+        //listClause.reserve(list.size());
         for(it = list.begin(); it != list.end(); ++it)
         {
             listClause.push_back(Literal(_variables[it->first-1], it->second));
@@ -124,7 +124,7 @@ SatProblem::~SatProblem()
 
 
 
-void SatProblem::addClause(std::vector<Literal>& list, unsigned int number)
+void SatProblem::addClause(std::vector<Literal>& list, unsigned number)
 {
     // supprime de list les doublons, et repère si trivialement vraie
     bool trivial = false; // ssi clause trivialement vraie
@@ -206,7 +206,11 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned int number)
             // UsedClause hérite de StockedClause, donc UsedClause* passe pour StockedClause*
             // alors que UsedClause ne passe pas pour StockedClause à priori
             // (et on perd l'interet de la surcharge avec la conversion de UsedClause vers StockedClause)
-            StockedClause * nclause = new UsedClause(list, number);
+            StockedClause * nclause = new UsedClause(list
+                #if VERBOSE > 1
+                , number
+                #endif
+            );
             _clauses.push_back(nclause);
         }
     }

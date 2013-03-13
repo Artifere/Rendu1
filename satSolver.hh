@@ -39,7 +39,7 @@ public:
 
     const std::vector<std::pair<unsigned int,varState> > getAssign() const;
 
-    void addClause(std::vector<Literal>& lit, unsigned);
+    void addClause(std::vector<Literal>& list, unsigned);
     bool satisfiability();
 };
 

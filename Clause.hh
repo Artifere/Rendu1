@@ -35,12 +35,12 @@ public:
 #endif
 
 
-#if VERBOSE > 0
+#if VERBOSE > 1
 #define CONSTR_ARGS(list)  const std::vector<Literal>& list, unsigned int number
 #define INIT_FOR_VERBOSE()  _number(number),
 #else
 //Modif sinon compile pas ==> A voir
-#define CONSTR_ARGS(list)  const std::vector<Literal>& list, unsigned int number
+#define CONSTR_ARGS(list)  const std::vector<Literal>& list
 #define INIT_FOR_VERBOSE()  
 #endif
 

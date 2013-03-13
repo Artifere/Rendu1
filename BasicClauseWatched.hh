@@ -21,7 +21,7 @@ public:
 
     VIRTUAL ~BasicClauseWatched();
 
-    #if VERBOSE > 0
+    #if VERBOSE > 1
     const unsigned _number;
     #endif
 protected:
