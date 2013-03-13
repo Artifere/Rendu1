@@ -3,6 +3,7 @@
 #include "Variable.hh"
 #include "Literal.hh"
 #include "Clause.hh"
+#include "UnassignedBucket.hh"
 
 #include "parser.hh"
 
@@ -64,24 +65,15 @@ SatProblem::SatProblem(std::istream& input)
     unsigned int nbrVar, nbrClauses;
     parserHeader(input, nbrVar, nbrClauses);
 	
-	//Rapide
-	_indexUnassignedList.resize(nbrVar);
-    _unassignedVarList.reserve(nbrVar);
-
     // initialise les variables
     for(unsigned k = 0; k < nbrVar; k++)
     {
         Variable* var = new Variable(k+1);
         _variables.push_back(var);
-		  
-		  //lent
-        //_unassignedVarPool.insert(var);
-		
-		//Rapide
-		addUnassignedVar(var);
+
     }
-	
-	
+    	
+    _unassignedVar = new UnassignedBucket(_variables);	
        
     
     // parse chaque clause du fichier
@@ -223,15 +215,13 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned int number)
 
 bool SatProblem::satisfiability()
 {
-	for (unsigned int i = 0; i < _variables.size(); i++)
-		addUnassignedVar(_variables[i]);
     while(_stackBacktrack.size() < _variables.size() || !_deductions.empty())
     {
         // calculer la nouvelle valeur
         Literal newAssign;
         if(_deductions.empty())
         {
-            newAssign = chooseUnasignedVar();
+            newAssign = _unassignedVar->chooseUnassigned();
             #if VERBOSE > 2
             print_debug();
             std::cout<<"Assignation : ";
@@ -251,7 +241,7 @@ bool SatProblem::satisfiability()
             newAssign.var()->print_state(true);
             std::cout<<"  (choix contraint)"<<std::endl;
             #endif
-            deleteUnassignedVar(newAssign.var());
+            _unassignedVar->deleteUnassigned(newAssign.var());
             _stackBacktrack.push( std::pair<bool, Variable*>(false, newAssign.var()) );
             _deductions.pop();
         }
@@ -308,12 +298,12 @@ bool SatProblem::satisfiability()
                     bool newVal = !(var->_varState == TRUE);
                     _deductions.push( Literal(var, newVal) );
                     var->_varState = newVal ? TRUE:FALSE;
-                    addUnassignedVar(var);
+                    _unassignedVar->addUnassigned(var);
                 }
                 else
                 {
                     var->_varState = FREE;
-                    addUnassignedVar(var);
+                    _unassignedVar->addUnassigned(var);
                 }
                 _stackBacktrack.pop();
             } while(_deductions.empty());

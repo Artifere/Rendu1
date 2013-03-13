@@ -8,7 +8,7 @@
 #include "Clause.hh"
 #include "Literal.hh"
 #include <istream>
-
+#include "UnassignedBucket.hh"
 
 
 
@@ -18,9 +18,6 @@ protected:
     std::vector<Variable*> _variables;
     std::vector<StockedClause*> _clauses;
 	 
-	 //Pour la version rapide
-	 std::vector<unsigned int> _unassignedVarList;
-	 std::vector<std::vector<unsigned int>::iterator> _indexUnassignedList;
     
     // true si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,Variable*> > _stackBacktrack;
@@ -31,9 +28,10 @@ protected:
     // d'intersection vide avec celles déjà assignées (dans _stackCallback), et aucune contradictions entre les déductions
     std::stack<Literal> _deductions; // note : on n'a pas besoin de stoquer la valeur déduite : elle est contenue dans _varStates
 
-    Literal chooseUnasignedVar();
-    void deleteUnassignedVar(Variable* var);
-    void addUnassignedVar(Variable* var);
+
+
+    //Pour choisir/mettre à jour la liste des variables non assignées
+    UnassignedBucket *_unassignedVar;
 
 public:
     SatProblem(std::istream& input);
@@ -58,30 +56,6 @@ const std::vector<std::pair<unsigned int,varState> > SatProblem::getAssign() con
 }
         
 
-
-
-//Version rapide
-
-inline Literal SatProblem::chooseUnasignedVar()
-{
-    unsigned int k = *(_unassignedVarList.end()-1);
-    _unassignedVarList.pop_back();
-    return Literal(_variables[k],true);
-}
-
-inline void SatProblem::deleteUnassignedVar(Variable* var)
-{
-    unsigned int k = *(_unassignedVarList.end()-1);
-    _indexUnassignedList[k] = _indexUnassignedList[var->varNumber];
-     *_indexUnassignedList[var->varNumber] = k;
-    _unassignedVarList.pop_back();
-}
-
-inline void SatProblem::addUnassignedVar(Variable* var)
-{
-    _indexUnassignedList[var->varNumber] = _unassignedVarList.end();
-    _unassignedVarList.push_back(var->varNumber);
-}
 
 
 
