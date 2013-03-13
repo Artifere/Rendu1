@@ -8,6 +8,8 @@ class Clause
 {
 public:
 
+    // return true iff the literal l is no longer watched by the clause
+    // (so the link between the clause and the variable l.var() should be removed)
     virtual bool setLitFalse(const Literal& l)=0;
     virtual void setLitTrue(const Literal& l)=0;
 

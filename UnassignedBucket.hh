@@ -39,7 +39,8 @@ inline UnassignedBucket::UnassignedBucket(std::vector<Variable*> &varList)
     _unassignedList.reserve(nbrVar);
     _unassignedIndex.resize(nbrVar);
 
-    for (std::vector<Variable*>::const_iterator it = varList.begin(); it != varList.end(); ++it)
+    std::vector<Variable*>::const_iterator it;
+    for (it = varList.begin(); it != varList.end(); ++it)
         addUnassigned(*it);
 
     srand(17);
@@ -74,7 +75,6 @@ inline Literal UnassignedBucket::chooseRAND(void)
     unsigned int retId = _unassignedList.size()-1;
     Variable* ret = _unassignedList[retId];
     deleteUnassigned(ret);
-
     return Literal(ret, rand()%2);
 }
 

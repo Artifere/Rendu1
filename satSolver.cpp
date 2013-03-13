@@ -64,17 +64,18 @@ SatProblem::SatProblem(std::istream& input)
 {
     unsigned int nbrVar, nbrClauses;
     parserHeader(input, nbrVar, nbrClauses);
+    
+    // optionnel. rend l'initialisation un peu plus rapide
+    _variables.reserve(nbrVar);
+    _clauses.reserve(nbrClauses);
 	
     // initialise les variables
     for(unsigned k = 0; k < nbrVar; k++)
     {
         Variable* var = new Variable(k+1);
         _variables.push_back(var);
-
     }
-    	
-    _unassignedVar = new UnassignedBucket(_variables);	
-       
+    _unassignedVar = new UnassignedBucket(_variables);
     
     // parse chaque clause du fichier
     std::vector<std::pair<unsigned int, bool> >::const_iterator it;
@@ -215,6 +216,8 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned int number)
 
 bool SatProblem::satisfiability()
 {
+//    if (_stackBacktrack.size() >= _variables.size() && _deductions.empty())
+//        return true;
     while(_stackBacktrack.size() < _variables.size() || !_deductions.empty())
     {
         // calculer la nouvelle valeur
@@ -293,18 +296,15 @@ bool SatProblem::satisfiability()
                 var->releaseVariable();
                 // si c'était une assignation libre, on ajoute son contraire comme déduction.
                 // dans tous les cas, on la supprime du haut de _stackCallback
-                if(_stackBacktrack.top().first)
+                if(!_stackBacktrack.top().first)
+                    var->_varState = FREE;
+                else
                 {
                     bool newVal = !(var->_varState == TRUE);
                     _deductions.push( Literal(var, newVal) );
                     var->_varState = newVal ? TRUE:FALSE;
-                    _unassignedVar->addUnassigned(var);
                 }
-                else
-                {
-                    var->_varState = FREE;
-                    _unassignedVar->addUnassigned(var);
-                }
+                _unassignedVar->addUnassigned(var);
                 _stackBacktrack.pop();
             } while(_deductions.empty());
             #if VERBOSE > 4
@@ -314,6 +314,7 @@ bool SatProblem::satisfiability()
         }
     }
     return true;
+//    return this->satisfiability();
 }
 
 

@@ -29,6 +29,8 @@ inline BasicClauseWatched::BasicClauseWatched(CONSTR_ARGS(list))
     #endif
 }
 
+
+
 inline bool BasicClauseWatched::setLitFalse(const Literal& l)
 {
     #if VERBOSE >= 10

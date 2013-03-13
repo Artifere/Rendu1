@@ -67,15 +67,15 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
 
 void Variable::releaseVariable()
 {
-    bool is_true = _varState == TRUE;
-    const Literal lit = Literal(this, is_true);
-    std::vector<StockedClause*>& cTrue  = is_true ? _litTrue : _litFalse;
-    std::vector<StockedClause*>& cFalse = is_true ? _litFalse : _litTrue;
-    
+    const bool isTrue = _varState == TRUE;
+    const Literal lit = Literal(this, isTrue);
     std::vector<StockedClause*>::const_iterator it;
+
+    std::vector<StockedClause*>& cTrue  = isTrue ? _litTrue : _litFalse;
     for(it = cTrue.begin(); it != cTrue.end(); ++it)
         (*it)->freeLitTrue(lit);
 
+    std::vector<StockedClause*>& cFalse = isTrue ? _litFalse : _litTrue;
     for(it = cFalse.begin(); it != cFalse.end(); ++it)
         (*it)->freeLitFalse(lit);
 }
