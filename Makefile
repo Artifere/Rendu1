@@ -20,7 +20,8 @@ debug: $(d_OBJ) $(HDR)
 
 bench  : $(b_OBJ) $(HDR)
 	${CXX} $(CXXBENCHFLAGS) -o $@ $(b_OBJ) $(LFLAGS) $(LIB);\
-
+    cp bench testsSatisfiable/;\
+    cp bench testsUnsatisfiable/;\
 
 
 clean: 

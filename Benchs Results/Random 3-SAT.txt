@@ -9,9 +9,17 @@ Satisfiable (UF20, 50, 75, 100) :
 	* v1 avec watched literals :
 		148.2s
 	
-	* v2 sans (?) watched literals, unassigned avec set :
-		168s
+	* v2 sans watched literals, choose basic :
+		46.2s
+		
+	* v2 sans watched literals, choose RAND :
+		43.8s
+		
+	* v2 avec watched literals, choose basic :
+		31.8s
 	
+	* v2 avec watched literals, choose RAND :
+		31.8s
 
 
 Unsatisfiable (UUF 50, 75, 100) :
@@ -25,7 +33,14 @@ Unsatisfiable (UUF 50, 75, 100) :
 	* v1 avec watched literals :
 		416.5s
 	
-	* v2 sans (?) watched literals, unassigned avec set :
-		435s
+	* v2 sans watched literals, choose basic :
+		
+		
+	* v2 sans watched literals, choose RAND :
+		
+		
+	* v2 avec watched literals, choose basic :
+	
+	* v2 avec watched literals, choose RAND :
 		
 		

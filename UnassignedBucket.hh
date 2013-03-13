@@ -1,6 +1,6 @@
 #ifndef UNASSIGNED_BUCKET_HH
 #define UNASSIGNED_BUCKET_HH
-
+/** A FAIRE : std::swap... **/
 
 #include "Variable.hh"
 #include <vector>
