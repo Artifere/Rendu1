@@ -46,7 +46,7 @@ public:
 #include "BasicClause.hh"
 #include "ConstAssignClause.hh"
 #include "OneWatchedClause.hh"
-//#include "BasicClauseWatched.hh"
+#include "BasicClauseWatched.hh"
 
 
 #endif //CLAUSE_HH

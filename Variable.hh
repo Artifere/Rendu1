@@ -10,7 +10,7 @@
 //#define UsedClause OneWatchedClause
 #define UsedClause ConstAssignClause
 //#define UsedClause BasicClause
-//not implemented yet : #define UsedClause BasicClauseWatched
+//#define UsedClause BasicClauseWatched
 
 
 typedef

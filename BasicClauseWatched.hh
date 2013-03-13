@@ -1,28 +1,33 @@
+#include "Clause.hh"
 #ifndef BASICCLAUSEWATCHED_HH
 #define BASICCLAUSEWATCHED_HH
 
 #include <vector>
-#include <set>
-#include <stack>
 
 class BasicClauseWatched HERITED_CLAUSE
 {
 public:
+    BasicClauseWatched(CONSTR_ARGS(list));
+    
+    VIRTUAL void setLitFalse(const Literal& l);
+    VIRTUAL void setLitTrue(const Literal& l);
 
-    BasicClauseWatched(const std::vector<Literal>& list);
+    VIRTUAL void freeLitFalse(const Literal &l);
+    VIRTUAL void freeLitTrue(const Literal &l);
     
-    VIRTUAL void setLitFalse(const Literal& l, SatProblem& sp);
-    VIRTUAL void setLitTrue(const Literal& l, SatProblem& sp);
-    
-    VIRTUAL unsigned int freeSize (const SatProblem& sp) const;
-    VIRTUAL Literal chooseFree(const SatProblem& sp) const;
-    VIRTUAL bool satisfied(const SatProblem& sp) const;
-    
+    VIRTUAL size_t freeSize (void) const;
+    VIRTUAL Literal chooseFree(void) const;
+    VIRTUAL bool satisfied(void) const;
+
     VIRTUAL ~BasicClauseWatched();
 
-
+    #if VERBOSE > 0
+    const unsigned _number;
+    #endif
 protected:
-    std::vector<Literal> _literals;
+    // les deux premers éléments du tableau sont surveillés
+    // si on trouve un litéral vrai, on le surveille dans _literals[0]
+    std::vector<Literal> _lits;
 
 };
 

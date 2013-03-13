@@ -3,86 +3,116 @@
    il ne doit pas être utilié seul.
  */
 #include "BasicClauseWatched.hh"
-#include "satSolverWatched.hh"
-#include <utility>
 #ifndef BASICCLAUSEWATCHED_INLINE_HH
 #define BASICCLAUSEWATCHED_INLINE_HH
 
+#if VERBOSE > 0
+#include <iostream>
+#endif
 
-
-inline BasicClauseWatched::BasicClauseWatched(const std::vector<Literal>& list) : _literals(list)
+static inline bool isLitTrue(const Literal& lit)
 {
+    const varState v = lit.var()->_varState;
+    return (v == TRUE && lit.pos()) || (v == FALSE && !lit.pos());
 }
 
-inline void BasicClauseWatched::setLitFalse(const Literal& l, SatProblem& sp)
+
+
+inline BasicClauseWatched::BasicClauseWatched(CONSTR_ARGS(list))
+    : INIT_FOR_VERBOSE() _lits(list)
 {
-    std::vector<Literal>::iterator it;
-    for (it = _literals.begin()+2; it != _literals.end(); ++it)
+    list[0].var()->linkToClause(list[0].pos(), (StockedClause*)this);
+    list[1].var()->linkToClause(list[1].pos(), (StockedClause*)this);
+    #if VERBOSE > 5
+    std::cout << "Watched Lit (" << _number << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
+              << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
+    #endif
+}
+
+inline void BasicClauseWatched::setLitFalse(const Literal& l)
+{
+    #if VERBOSE >= 10
+    std::cout << "setLitFalse " << _number << " : " << l.var()->varNumber << "." << l.pos()
+              << " (watched " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
+              << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << ")"<< std::endl;
+    #endif
+    // échange _lts[0] et _lits[1] pour que l soit le watched 0
+    if (l.var() == _lits[1].var())
+        std::swap(_lits[0], _lits[1]);
+    if(isLitTrue(_lits[1]))
+        return;
+    // si l'un des litéraux est vrai, posFree pointe sur ce litéral
+    // sinon il pointe sur un litéral FREE (ou sur end() s'il n'y en a pas)
+    std::vector<Literal>::iterator it, posFree = _lits.end();
+    for (it = _lits.begin()+2; it != _lits.end(); ++it)
     {
-        if (((it->pos() && sp._varStates[it->var()] != FALSE) || ((!it->pos()) && sp._varStates[it->var()] != TRUE)))
+        const varState v = it->var()->_varState;
+        if (v == FREE)
+            posFree = it;
+        else if (it->pos() == (v == TRUE))
+        {
+            posFree = it;
             break;
+        }
     }
-    if (it != _literals.end())
+    // posFree devient le nouveau litéral surveillé
+    // (on a donc encore :  si l'un des litéraux de la clause est vrai, alors _lits[0] est vrai)
+    if (posFree != _lits.end())
     {
-        sp._toInsertL.push(*it);
-        sp._toChangeC.push(this);
-        
-        if (_literals[0].var() == l.var())
-        {
-            sp._toRemoveL.push(_literals[0]);
-            std::swap(_literals[0], *it);
-        }
-        else
-        {
-            sp._toRemoveL.push(_literals[1]);
-            std::swap(_literals[1], *it);
-        }
+        _lits[0].var()->unlinkToClause(_lits[0].pos(), (StockedClause*)this);
+        posFree->var()->linkToClause(posFree->pos(), (StockedClause*)this);
+        std::swap(_lits[0], *posFree);
+        #if VERBOSE > 5
+            std::cout << "new watched : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
+                      << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
+        #endif
     }
 }
 
 
-inline void BasicClauseWatched::setLitTrue(const Literal& l, SatProblem& sp)
-{   
-    if (!satisfied(sp))
-    {
-        std::vector<Literal>::iterator it;
-        for (it = _literals.begin(); it != _literals.end(); ++it)
-        {
-            if (it->var() == l.var())
-                break;
+inline void BasicClauseWatched::setLitTrue(const Literal& l)
+{
+    if (_lits[1].var() == l.var())
+        std::swap(_lits[1], _lits[0]);
+}
 
-        }
-        sp._toRemoveL.push(_literals[0]);
-        sp._toChangeC.push(this);
-        sp._toInsertL.push(l);
-        std::swap(_literals[0], *it);
-    }
 
+inline void BasicClauseWatched::freeLitTrue(const Literal& l)
+{
+}
+
+
+inline void BasicClauseWatched::freeLitFalse(const Literal& l)
+{
 }
 
 
 
-inline unsigned int BasicClauseWatched::freeSize(const SatProblem& sp) const
+inline size_t BasicClauseWatched::freeSize() const
 {
-    bool b0 = hasOppositeValue(sp._varStates[_literals[0].var()], _literals[0].pos()),
-         b1 = hasOppositeValue(sp._varStates[_literals[1].var()], _literals[1].pos());
-
-    return (b0 || b1) ? (b0 && b1 ? 0 : 1) : 2;
-}
-
-inline Literal BasicClauseWatched::chooseFree(const SatProblem& sp) const
-{
-    if (sp._varStates[_literals[0].var()] == FREE)
-        return _literals[0];
+    const varState v0 = _lits[0].var()->_varState,
+                   v1 = _lits[1].var()->_varState;
+    if (v0 == FREE && v1 == FREE)
+        return 2;
+    else if (v0 == FREE || v1 == FREE)
+        return 1;
     else
-        return _literals[1];
+        return 0;
 }
 
-inline bool BasicClauseWatched::satisfied(const SatProblem& sp) const
+inline Literal BasicClauseWatched::chooseFree() const
 {
-    return hasSameValue(sp._varStates[_literals[0].var()], _literals[0].pos()) || hasSameValue(sp._varStates[_literals[1].var()], _literals[1].pos());
+    if (_lits[0].var()->_varState == FREE)
+        return _lits[0];
+    else
+        return _lits[1];
+}
 
-
+inline bool BasicClauseWatched::satisfied() const
+{
+    return isLitTrue(_lits[0]) || isLitTrue(_lits[1]);
+    //const varState v = _lits[0].var()->_varState;
+    //return (v == TRUE && _lits[0].pos()) || (v == FALSE && !_lits[0].pos());
 }
 
 
