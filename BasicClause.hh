@@ -10,7 +10,7 @@ class BasicClause HERITED_CLAUSE
 public:
     BasicClause(CONSTR_ARGS(list));
     
-    VIRTUAL void setLitFalse(const Literal& l);
+    VIRTUAL bool setLitFalse(const Literal& l);
     VIRTUAL void setLitTrue(const Literal& l);
 
     VIRTUAL void freeLitFalse(const Literal &l);

@@ -20,7 +20,7 @@ inline ConstAssignClause::ConstAssignClause(CONSTR_ARGS(list))
 }
 
 
-inline void ConstAssignClause::setLitFalse(const Literal& l)
+inline bool ConstAssignClause::setLitFalse(const Literal& l)
 {
     if(_satisfied == NULL)
     {
@@ -28,6 +28,7 @@ inline void ConstAssignClause::setLitFalse(const Literal& l)
         _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen
         _numOfFree--;
     }
+    return false;
 }
 inline void ConstAssignClause::setLitTrue(const Literal& l)
 {

@@ -18,7 +18,7 @@ inline BasicClause::BasicClause(CONSTR_ARGS(list))
 }
 
 
-inline void BasicClause::setLitFalse(const Literal& l)
+inline bool BasicClause::setLitFalse(const Literal& l)
 {
     if(! _satisfied)
     {
@@ -26,6 +26,7 @@ inline void BasicClause::setLitFalse(const Literal& l)
         _free.erase(invL);
         _assigned.push(invL);
     }
+    return false;
 }
 inline void BasicClause::setLitTrue(const Literal& l)
 {

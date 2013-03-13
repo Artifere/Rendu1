@@ -29,7 +29,7 @@ inline BasicClauseWatched::BasicClauseWatched(CONSTR_ARGS(list))
     #endif
 }
 
-inline void BasicClauseWatched::setLitFalse(const Literal& l)
+inline bool BasicClauseWatched::setLitFalse(const Literal& l)
 {
     #if VERBOSE >= 10
     std::cout << "setLitFalse " << _number << " : " << l.var()->varNumber << "." << l.pos()
@@ -40,7 +40,7 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l)
     if (l.var() == _lits[1].var())
         std::swap(_lits[0], _lits[1]);
     if(isLitTrue(_lits[1]))
-        return;
+        return false;
     // si l'un des litéraux est vrai, posFree pointe sur ce litéral
     // sinon il pointe sur un litéral FREE (ou sur end() s'il n'y en a pas)
     std::vector<Literal>::iterator it, posFree = _lits.end();
@@ -59,21 +59,21 @@ inline void BasicClauseWatched::setLitFalse(const Literal& l)
     // (on a donc encore :  si l'un des litéraux de la clause est vrai, alors _lits[0] est vrai)
     if (posFree != _lits.end())
     {
-        _lits[0].var()->unlinkToClause(_lits[0].pos(), (StockedClause*)this);
+        //_lits[0].var()->unlinkToClause(_lits[0].pos(), (StockedClause*)this);
         posFree->var()->linkToClause(posFree->pos(), (StockedClause*)this);
         std::swap(_lits[0], *posFree);
         #if VERBOSE > 5
             std::cout << "new watched : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
                       << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
         #endif
-    }
+        return true;
+    } else
+        return false;
 }
 
 
 inline void BasicClauseWatched::setLitTrue(const Literal& l)
 {
-    if (_lits[1].var() == l.var())
-        std::swap(_lits[1], _lits[0]);
 }
 
 

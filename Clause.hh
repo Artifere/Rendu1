@@ -8,7 +8,7 @@ class Clause
 {
 public:
 
-    virtual void setLitFalse(const Literal& l)=0;
+    virtual bool setLitFalse(const Literal& l)=0;
     virtual void setLitTrue(const Literal& l)=0;
 
     virtual void freeLitFalse(const Literal &l)=0;

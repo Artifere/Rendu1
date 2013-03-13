@@ -8,9 +8,9 @@
 
 // choisir quelle implémentation de clause servira
 //#define UsedClause OneWatchedClause
-#define UsedClause ConstAssignClause
+//#define UsedClause ConstAssignClause
 //#define UsedClause BasicClause
-//#define UsedClause BasicClauseWatched
+#define UsedClause BasicClauseWatched
 
 
 typedef
@@ -38,8 +38,8 @@ typedef Clause StockedClause;
 
 class Variable {
 protected:
-    std::set<StockedClause*> _litTrue;
-    std::set<StockedClause*> _litFalse;
+    std::vector<StockedClause*> _litTrue;
+    std::vector<StockedClause*> _litFalse;
 public:
     const unsigned int varNumber;
     varState _varState;
@@ -51,7 +51,6 @@ public:
     void setState(varState);
     
     void linkToClause(bool,StockedClause*);
-    void unlinkToClause(bool,StockedClause*);
     
     bool propagateVariable(std::stack<Literal>& deductions);
     void releaseVariable();
@@ -67,16 +66,9 @@ public:
 inline void Variable::linkToClause(bool val, StockedClause* c)
 {
     if (val)
-        _litTrue.insert(c);
+        _litTrue.push_back(c);
     else
-        _litFalse.insert(c);
-}
-inline void Variable::unlinkToClause(bool val, StockedClause* c)
-{
-    if (val)
-        _litTrue.erase(c);
-    else
-        _litFalse.erase(c);
+        _litFalse.push_back(c);
 }
 
 

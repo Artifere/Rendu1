@@ -25,7 +25,7 @@ inline OneWatchedClause::OneWatchedClause(CONSTR_ARGS(list))
 }
 
 
-inline void OneWatchedClause::setLitFalse(const Literal& l)
+inline bool OneWatchedClause::setLitFalse(const Literal& l)
 {
     #if VERBOSE >= 10
     std::cout << "setLitFalse " << _number << " : " << l.var()->varNumber << "." << l.pos() << " (watched " << _watched.var()->varNumber << "." << _watched.pos() <<")" << std::endl;
@@ -42,25 +42,28 @@ inline void OneWatchedClause::setLitFalse(const Literal& l)
         }
         if(it != _literals.end())
         {
-            _watched.var()->unlinkToClause(_watched.pos(), (StockedClause*)this);
+            //_watched.var()->unlinkToClause(_watched.pos(), (StockedClause*)this);
             _watched = it->invert();
             _watched.var()->linkToClause(_watched.pos(), (StockedClause*)this);
             #if VERBOSE >= 10
             std::cout << "Change Watched " << _number << " : " << _watched.var()->varNumber<< "." << _watched.pos() <<std::endl;
             #endif
+            return true;
         }
     }
     else
     {
-            _watched.var()->unlinkToClause(_watched.pos(), (StockedClause*)this);
+            //_watched.var()->unlinkToClause(_watched.pos(), (StockedClause*)this);
             _watched = l;
             _watched.var()->linkToClause(_watched.pos(), (StockedClause*)this);
             #if VERBOSE >= 10
             std::cout << "Change Watched (clause true) " << _number << " : " << _watched.var()->varNumber<< "." << _watched.pos() <<std::endl;
             #endif
+            return false;
     }
     // changement de watched litteral
     }
+    return false;
 }
 inline void OneWatchedClause::setLitTrue(const Literal& l)
 {
