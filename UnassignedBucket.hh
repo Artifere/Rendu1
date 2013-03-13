@@ -10,8 +10,8 @@
 class UnassignedBucket
 {
     public:
-        Literal chooseUnassigned();
-        Variable* chooseRAND();
+        Literal chooseUnassigned(void);
+        Literal chooseRAND(void);
         Variable* chooseMOMS();
         Variable* chooseDLIS();
         
@@ -41,6 +41,8 @@ inline UnassignedBucket::UnassignedBucket(std::vector<Variable*> &varList)
 
     for (std::vector<Variable*>::const_iterator it = varList.begin(); it != varList.end(); ++it)
         addUnassigned(*it);
+
+    srand(17);
 }
           
 
@@ -66,6 +68,15 @@ inline Literal UnassignedBucket::chooseUnassigned(void)
     return Literal(ret, true);
 }
 
+
+inline Literal UnassignedBucket::chooseRAND(void)
+{
+    unsigned int retId = _unassignedList.size()-1;
+    Variable* ret = _unassignedList[retId];
+    deleteUnassigned(ret);
+
+    return Literal(ret, rand()%2);
+}
 
 
 #endif
