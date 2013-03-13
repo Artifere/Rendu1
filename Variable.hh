@@ -7,10 +7,10 @@
 
 
 // choisir quelle implémentation de clause servira
-//#define UsedClause OneWatchedClause
-//#define UsedClause ConstAssignClause
+#define UsedClause ConstAssignClause
 //#define UsedClause BasicClause
-#define UsedClause BasicClauseWatched
+//#define UsedClause BasicClauseWatched
+//buggé : #define UsedClause OneWatchedClause
 
 
 typedef
