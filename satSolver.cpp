@@ -87,7 +87,7 @@ SatProblem::SatProblem(std::istream& input)
         list.clear();
         listClause.clear();
         parserListLit(input, list, nbrVar);
-        //listClause.reserve(list.size());
+        //listClause.reserve(list.size()); // optionnel. peut accélérer un peu (mis pas sur...)
         for(it = list.begin(); it != list.end(); ++it)
         {
             listClause.push_back(Literal(_variables[it->first-1], it->second));
