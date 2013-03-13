@@ -55,7 +55,7 @@ inline void UnassignedBucket::deleteUnassigned(Variable* var)
     const unsigned int toDel = var->varNumber-1;
     const unsigned int last = _unassignedList.back()->varNumber-1;
     _unassignedIndex[last] = _unassignedIndex[toDel];
-    *_unassignedIndex[toDel] = _unassignedList.back();
+    *_unassignedIndex[last] = _unassignedList.back();
     _unassignedList.pop_back();
 } 
 
