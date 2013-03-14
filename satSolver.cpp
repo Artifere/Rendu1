@@ -36,6 +36,7 @@
 
 int main()
 {
+    std::ios_base::sync_with_stdio(false);
     SatProblem problem(std::cin);
     bool is_sat = problem.satisfiability();
     #if VERBOSE > 0
@@ -79,7 +80,7 @@ SatProblem::SatProblem(std::istream& input)
     _unassignedVar = new UnassignedBucket(_variables);
     
     // parse chaque clause du fichier
-    unsigned number = 1;
+    unsigned number = 0;
     std::vector<Literal> listClause;
     for(unsigned int k = 0; k < nbrClauses; k++)
     {
@@ -125,21 +126,24 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned number)
     {
         // test si x=list[u] est présent sous forme x ou !x
         unsigned int v = u+1;
-        while(v < list.size() && !trivial)
+        while(v < list.size())
         {
             if(list[u].var() != list[v].var())
                 v++;
             else
             {
                 if(list[u].pos() != list[v].pos())
+                {
                     trivial = true;
+                    break;
+                }
                 else
                 {
                     #if VERBOSE > 3
                     print_debug();
                     std::cout << "Doublon repéré dans une clause (variable n°" << list[v].var()->varNumber << ")" << std::endl;
                     #endif
-                    list[v] = list[list.size()-1];
+                    list[v] = list.back();
                     list.pop_back();
                 }
             }
