@@ -206,11 +206,26 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned number)
             // UsedClause hérite de StockedClause, donc UsedClause* passe pour StockedClause*
             // alors que UsedClause ne passe pas pour StockedClause à priori
             // (et on perd l'interet de la surcharge avec la conversion de UsedClause vers StockedClause)
-            StockedClause * nclause = new UsedClause(list
+            StockedClause* nclause = new UsedClause(list
                 #if VERBOSE > 1
                 , number
                 #endif
             );
+            /*
+            StockedClause * nclause;
+            if(list.size() > 2)
+                nclause = new BasicClauseWatched(list
+                    #if VERBOSE > 1
+                    , number
+                    #endif
+                );
+             else
+                nclause = new ConstAssignClause(list
+                    #if VERBOSE > 1
+                    , number
+                    #endif
+                );
+            */
             _clauses.push_back(nclause);
         }
     }
@@ -237,12 +252,13 @@ bool SatProblem::satisfiability()
             std::cout << " à " << newAssign.pos();
             std::cout<<std::endl;
             #endif
-            _stackBacktrack.push( std::pair<bool, Variable*>(true, newAssign.var()) );
             newAssign.var()->_varState = newAssign.pos()?TRUE:FALSE;
+            _stackBacktrack.push( std::pair<bool, Variable*>(true, newAssign.var()) );
         }
         else
         {
             newAssign = _deductions.top();
+            _deductions.pop();
             #if VERBOSE > 1
             print_debug();
             std::cout<<"Assignation ";
@@ -251,7 +267,6 @@ bool SatProblem::satisfiability()
             #endif
             _unassignedVar->deleteUnassigned(newAssign.var());
             _stackBacktrack.push( std::pair<bool, Variable*>(false, newAssign.var()) );
-            _deductions.pop();
         }
         #if VERBOSE > 5
         print_debug();

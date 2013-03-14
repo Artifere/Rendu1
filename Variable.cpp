@@ -7,14 +7,14 @@
 
 bool Variable::propagateVariable(std::stack<Literal>& deductions)
 {
+    bool isError = false;
     const bool isTrue = _varState == TRUE;
     const Literal lit = Literal(this, isTrue);
+
     std::vector<StockedClause*>& cTrue  = isTrue ? _litTrue : _litFalse;
     std::vector<StockedClause*>& cFalse = isTrue ? _litFalse : _litTrue;
-
-    bool isError = false;
-
     std::vector<StockedClause*>::iterator it;
+
     for (it = cTrue.begin(); it != cTrue.end(); ++it)
         // on passe la clause à true : pas besoin de tester une déduction où une contradiction
         (*it)->setLitTrue(lit);
@@ -27,20 +27,25 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
         StockedClause* target = *it;
         if(target->setLitFalse(lit))
         {
-            *it = *cFalse.rbegin();
+            //if (it+1 != cFalse.end())
+            *it = cFalse.back();
             cFalse.pop_back();
         }
         else
             ++it;
         
-        if(!target->satisfied() && !isError)
+        if(!target->satisfied())
         {
             // si clause contradictoire : on renvoie une erreur
-            if (target->freeSize() == 0)
+            size_t fs = target->freeSize();
+            if (fs == 0)
+            {
                 isError = true;
+                break;
+            }
             // sinon, si pas déduction, ne rien faire
             // et si déduction : on teste si elle n'est pas contradictoire
-            else if(target->freeSize() == 1)
+            else if(fs == 1)
             {
                 Literal deduct = target->chooseFree();
                 #if VERBOSE > 5
@@ -55,9 +60,23 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
                 // sinon, si déduction déjà faite, on ne fait rien
                 // et si déduction contraire déjà faite, contradiction
                 else if(deduct.pos() != (deduct.var()->_varState == TRUE))
+                {
                     isError = true;
+                    break;
+                }
             }
         }
+    }
+    // on fini la propagation si il y a une erreur
+    while (it != cFalse.end())
+    {
+        if((*it)->setLitFalse(lit))
+        {
+            *it = cFalse.back();
+            cFalse.pop_back();
+        }
+        else
+            ++it;
     }
     return isError;
 }
@@ -69,13 +88,13 @@ void Variable::releaseVariable()
 {
     const bool isTrue = _varState == TRUE;
     const Literal lit = Literal(this, isTrue);
+    std::vector<StockedClause*>& cTrue  = isTrue ? _litTrue : _litFalse;
+    std::vector<StockedClause*>& cFalse = isTrue ? _litFalse : _litTrue;
     std::vector<StockedClause*>::const_iterator it;
 
-    std::vector<StockedClause*>& cTrue  = isTrue ? _litTrue : _litFalse;
     for(it = cTrue.begin(); it != cTrue.end(); ++it)
         (*it)->freeLitTrue(lit);
 
-    std::vector<StockedClause*>& cFalse = isTrue ? _litFalse : _litTrue;
     for(it = cFalse.begin(); it != cFalse.end(); ++it)
         (*it)->freeLitFalse(lit);
 }

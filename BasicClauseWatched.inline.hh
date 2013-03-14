@@ -92,14 +92,18 @@ inline void BasicClauseWatched::freeLitFalse(const Literal& l)
 
 inline size_t BasicClauseWatched::freeSize() const
 {
-    const varState v0 = _lits[0].var()->_varState,
-                   v1 = _lits[1].var()->_varState;
-    if (v0 == FREE && v1 == FREE)
+    return (_lits[0].var()->_varState == FREE)
+         + (_lits[1].var()->_varState == FREE);
+    /*
+    const bool b0 = _lits[0].var()->_varState == FREE,
+               b1 = _lits[1].var()->_varState == FREE;
+    if (b0 && b1)
         return 2;
-    else if (v0 == FREE || v1 == FREE)
+    else if (b0 || b1)
         return 1;
     else
         return 0;
+    */
 }
 
 inline Literal BasicClauseWatched::chooseFree() const

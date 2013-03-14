@@ -6,7 +6,7 @@ CXX	 = g++
 LFLAGS   = -lm
 CXXFLAGS = -DINLINED_CLAUSE -DVERBOSE=1 -Wall -Wextra -O2 -s -Wno-unused-parameter
 CXXDEBUGFLAGS = -DINLINED_CLAUSE -DVERBOSE=10 -Wall -Wextra -O0 -g -Wno-unused-parameter
-CXXBENCHFLAGS = -DINLINED_CLAUSE -DVERBOSE=0 -O2 -s -Wall -Wextra -Wno-unused-parameter
+CXXBENCHFLAGS = -DINLINED_CLAUSE -DVERBOSE=0 -Wall -Wextra -O2 -s -Wno-unused-parameter
 
 all : release
 
