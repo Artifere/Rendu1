@@ -23,7 +23,7 @@ inline SmartClause::SmartClause(CONSTR_ARGS(list))
 
 inline bool SmartClause::setLitFalse(const Literal& l)
 {
-    /*
+    /* possible optimisation, mais n'a pas l'air de marcher
     if (_satisfied)
         _notWatched.push_back(l.invert());
     else
@@ -50,12 +50,12 @@ inline bool SmartClause::setLitFalse(const Literal& l)
 }
 inline bool SmartClause::setLitTrue(const Literal& l)
 {
-    /*
-    if(_satisfied)
+    /* possible optimisation, mais n'a pas l'air de marcher
+    if(_satisfied != NULL)
         _notWatched.push_back(l);
     else
         _satisfied = l.var();
-    return _satisfied;
+    return (_satisfied != NULL);
     /*/
     if(_satisfied == NULL)
     {

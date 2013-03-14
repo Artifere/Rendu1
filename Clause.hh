@@ -49,5 +49,6 @@ public:
 #include "OneWatchedClause.hh"
 #include "BasicClauseWatched.hh"
 #include "SmartClause.hh"
+#include "SmartClauseWatched.hh"
 
 #endif //CLAUSE_HH
