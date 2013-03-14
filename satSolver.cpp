@@ -228,8 +228,9 @@ bool SatProblem::satisfiability()
         Literal newAssign;
         if(_deductions.empty())
         {
-            newAssign = _unassignedVar->chooseRAND();
-            #if VERBOSE > 2
+            //newAssign = _unassignedVar->chooseRAND();
+            newAssign = _unassignedVar->chooseUnassigned();
+            #if VERBOSE > 1
             print_debug();
             std::cout<<"Assignation : ";
             newAssign.var()->print_state(true);
@@ -242,7 +243,7 @@ bool SatProblem::satisfiability()
         else
         {
             newAssign = _deductions.top();
-            #if VERBOSE > 2
+            #if VERBOSE > 1
             print_debug();
             std::cout<<"Assignation ";
             newAssign.var()->print_state(true);
@@ -269,7 +270,7 @@ bool SatProblem::satisfiability()
         // on fait le callback si besoin
         if(is_error)
         {
-            #if VERBOSE > 2
+            #if VERBOSE > 1
             print_debug();
             std::cout<<"Backtrack"<<std::endl;
             #endif

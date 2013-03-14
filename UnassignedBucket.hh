@@ -72,7 +72,7 @@ inline Literal UnassignedBucket::chooseUnassigned(void)
 
 inline Literal UnassignedBucket::chooseRAND(void)
 {
-    unsigned int retId = _unassignedList.size()-1;
+    unsigned int retId = rand()%_unassignedList.size();
     Variable* ret = _unassignedList[retId];
     deleteUnassigned(ret);
     return Literal(ret, rand()%2);
