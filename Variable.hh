@@ -7,9 +7,9 @@
 
 
 // choisir quelle implémentation de clause servira
-#define UsedClause ConstAssignClause
+//#define UsedClause ConstAssignClause
 //#define UsedClause BasicClause
-//#define UsedClause BasicClauseWatched
+#define UsedClause BasicClauseWatched
 //buggé : #define UsedClause OneWatchedClause
 
 
@@ -30,9 +30,6 @@ typedef UsedClause StockedClause;
 #else
 typedef Clause StockedClause;
 #endif
-
-
-
 
 
 

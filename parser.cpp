@@ -19,63 +19,36 @@ void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrCl
     skipComment(input);
     if( !(std::cin >> c >> read >> nbrVar >> nbrClauses) || (c != 'p') || (read != "cnf"))
     {
-#ifdef RELEASE
+        #if VERBOSE > 0
         std::cout << "c Arg, entrée invalide " << std::endl;
-#endif
+        #endif
         nbrVar = 0;
         nbrClauses = 0;
     }
-    
 }
 
 
-void parserListLit(std::istream& input, std::vector<std::pair<unsigned int, bool> >& ans, const unsigned int& limitVarNumber)
+void parserListLit(std::istream& input, std::vector<Literal>& ans, const std::vector<Variable*>& addr)
 {
     int n;
     skipComment(input);
     while( (input >> n) && n )
     {
         unsigned int abs_n = (n < 0) ? -n : n;
-        if(abs_n > limitVarNumber)
+        if(abs_n > addr.size())
         {
-#ifdef RELEASE
+            #if VERBOSE > 0
             std::cout <<"c Erreur de syntaxe dans l'entrée: "
                       <<"variable d'indice "<<abs_n<<" invalide "
-                      <<"(l'indice doit être compris entre 1 et "<<limitVarNumber<<")."
+                      <<"(l'indice doit être compris entre 1 et "<<addr.size()<<")."
                       <<std::endl;
             // le programme continu en ignorant la variable
             std::cout <<"c La variable est ignorée." << std::endl;
-#endif
+            #endif
         }
         else
-        {
-            ans.push_back(std::pair<unsigned int, bool>(abs_n, (n > 0)));
-        }
+            ans.push_back(Literal(addr[abs_n-1], (n > 0)));
     }
 }
-/*
 
-std::vector<Clause>  parser_sat() {
-  int nbVar, nbClauses;
-  char c;
-  std::string read;
-  std::vector<Clause> ans;
-
-
-  // read the header
-  if( !(cin >> c >> read >> nbVars >> nbClauses) || (c != p) || (read != "cnf")) {
-    std::cout << "c Arg, entrée invalide " << std::endl;
-  } else {
-    while(nbClauses--) {
-      // skip comments
-      while((std::cin >> std::ws) && (cin.peek()=='c'))
-        getline(std::cin, read);
-      // read one clause
-      ans.push_back( Clause(parser_clause()) );
-    }
-  }
-
-  return ans;
-}
-*/
 

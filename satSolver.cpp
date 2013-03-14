@@ -70,28 +70,21 @@ SatProblem::SatProblem(std::istream& input)
     _clauses.reserve(nbrClauses);
 	
     // initialise les variables
-    for(unsigned k = 0; k < nbrVar; k++)
+    _variables.clear();
+    for(unsigned k = 1; k <= nbrVar; k++)
     {
-        Variable* var = new Variable(k+1);
+        Variable* var = new Variable(k);
         _variables.push_back(var);
     }
     _unassignedVar = new UnassignedBucket(_variables);
     
     // parse chaque clause du fichier
-    std::vector<std::pair<unsigned int, bool> >::const_iterator it;
-    std::vector<std::pair<unsigned int, bool> > list;
+    unsigned number = 1;
     std::vector<Literal> listClause;
-    unsigned number = 3;
     for(unsigned int k = 0; k < nbrClauses; k++)
     {
-        list.clear();
         listClause.clear();
-        parserListLit(input, list, nbrVar);
-        //listClause.reserve(list.size()); // optionnel. peut accélérer un peu (mis pas sur...)
-        for(it = list.begin(); it != list.end(); ++it)
-        {
-            listClause.push_back(Literal(_variables[it->first-1], it->second));
-        }
+        parserListLit(input, listClause, _variables);
         addClause(listClause, number++);
     }
     
