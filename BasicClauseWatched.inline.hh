@@ -74,8 +74,9 @@ inline bool BasicClauseWatched::setLitFalse(const Literal& l)
 }
 
 
-inline void BasicClauseWatched::setLitTrue(const Literal& l)
+inline bool BasicClauseWatched::setLitTrue(const Literal& l)
 {
+    return false;
 }
 
 

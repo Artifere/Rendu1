@@ -30,10 +30,11 @@ inline bool ConstAssignClause::setLitFalse(const Literal& l)
     }
     return false;
 }
-inline void ConstAssignClause::setLitTrue(const Literal& l)
+inline bool ConstAssignClause::setLitTrue(const Literal& l)
 {
     if(_satisfied == NULL)
         _satisfied = l.var();
+    return false;
 }
 
 

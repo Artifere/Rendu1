@@ -1,13 +1,14 @@
 #include "Clause.hh"
-#ifndef CONSTASSIGNCLAUSE_HH
-#define CONSTASSIGNCLAUSE_HH
+#ifndef SMARTCLAUSE_HH
+#define SMARTCLAUSE_HH
 
 #include <stdint.h> // pour intptr_t
+#include <stack>
 
-class ConstAssignClause HERITED_CLAUSE
+class SmartClause HERITED_CLAUSE
 {
 public:
-    ConstAssignClause(CONSTR_ARGS(list));
+    SmartClause(CONSTR_ARGS(list));
     
     VIRTUAL bool setLitFalse(const Literal& l);
     VIRTUAL bool setLitTrue(const Literal& l);
@@ -19,7 +20,7 @@ public:
     VIRTUAL Literal chooseFree(void) const;
     VIRTUAL bool satisfied(void) const;
 
-    VIRTUAL ~ConstAssignClause();
+    VIRTUAL ~SmartClause();
 
     #if VERBOSE > 1
     const unsigned _number;
@@ -29,10 +30,11 @@ protected:
     bool _currentHashVal; // xor of all the pos() of the free literals contained in the ConstAssignClause
     Variable* _satisfied; // the adresse of the first TRUE Literal of the ConstAssignClause
     unsigned int _numOfFree; // number of FREE Variables contained in the ConstAssignClause
+    std::vector<Literal> _notWatched;
 };
 
 
 // corps des fonctions de la classe (toutes inlines)
-#include "ConstAssignClause.inline.hh"
+#include "SmartClause.inline.hh"
 
-#endif //CONSTASSIGNCLAUSE_HH
+#endif //SMARTCLAUSE_HH

@@ -11,7 +11,7 @@ public:
     BasicClause(CONSTR_ARGS(list));
     
     VIRTUAL bool setLitFalse(const Literal& l);
-    VIRTUAL void setLitTrue(const Literal& l);
+    VIRTUAL bool setLitTrue(const Literal& l);
 
     VIRTUAL void freeLitFalse(const Literal &l);
     VIRTUAL void freeLitTrue(const Literal &l);

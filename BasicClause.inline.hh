@@ -28,7 +28,7 @@ inline bool BasicClause::setLitFalse(const Literal& l)
     }
     return false;
 }
-inline void BasicClause::setLitTrue(const Literal& l)
+inline bool BasicClause::setLitTrue(const Literal& l)
 {
     if(! _satisfied)
     {
@@ -37,6 +37,7 @@ inline void BasicClause::setLitTrue(const Literal& l)
 
         _satisfied = true;
     }
+    return false;
 }
 
 

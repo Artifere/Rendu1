@@ -8,8 +8,9 @@
 
 // choisir quelle implémentation de clause servira
 //#define UsedClause ConstAssignClause
-//#define UsedClause BasicClause
 #define UsedClause BasicClauseWatched
+//#define UsedClause BasicClause
+//#define UsedClause SmartClause
 //buggé : #define UsedClause OneWatchedClause
 
 
@@ -22,6 +23,8 @@ enum varState
 class Literal;
 
 class Clause;
+class UsedClause;
+
 class ConstAssignClause;
 class BasicClauseWatched;
 

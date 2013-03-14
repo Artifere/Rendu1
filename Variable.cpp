@@ -14,10 +14,19 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
     std::vector<StockedClause*>& cTrue  = isTrue ? _litTrue : _litFalse;
     std::vector<StockedClause*>& cFalse = isTrue ? _litFalse : _litTrue;
     std::vector<StockedClause*>::iterator it;
-
-    for (it = cTrue.begin(); it != cTrue.end(); ++it)
-        // on passe la clause à true : pas besoin de tester une déduction où une contradiction
-        (*it)->setLitTrue(lit);
+    
+    // propagation des litéraux true
+    it = cTrue.begin();
+    while (it != cTrue.end())
+    {
+        if((*it)->setLitTrue(lit))
+        {
+            *it = cTrue.back();
+            cTrue.pop_back();
+        }
+        else
+            ++it;
+    }
 
     // on sépare en deux pour faire encore quelques tests de moins si il y a une erreure
     // (comme je sais que tu t'inquiète de quelques tests ;)

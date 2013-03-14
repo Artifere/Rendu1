@@ -203,26 +203,27 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned number)
             // UsedClause hérite de StockedClause, donc UsedClause* passe pour StockedClause*
             // alors que UsedClause ne passe pas pour StockedClause à priori
             // (et on perd l'interet de la surcharge avec la conversion de UsedClause vers StockedClause)
+            #ifdef INLINED_CLAUSE
             StockedClause* nclause = new UsedClause(list
                 #if VERBOSE > 1
                 , number
                 #endif
             );
-            /*
+            #else
             StockedClause * nclause;
-            if(list.size() > 2)
-                nclause = new BasicClauseWatched(list
-                    #if VERBOSE > 1
-                    , number
-                    #endif
-                );
-             else
+            if(list.size() > 1)
                 nclause = new ConstAssignClause(list
                     #if VERBOSE > 1
                     , number
                     #endif
                 );
-            */
+             else
+                nclause = new BasicClauseWatched(list
+                    #if VERBOSE > 1
+                    , number
+                    #endif
+                );
+            #endif
             _clauses.push_back(nclause);
         }
     }

@@ -11,7 +11,7 @@ public:
     // return true iff the literal l is no longer watched by the clause
     // (so the link between the clause and the variable l.var() should be removed)
     virtual bool setLitFalse(const Literal& l)=0;
-    virtual void setLitTrue(const Literal& l)=0;
+    virtual bool setLitTrue(const Literal& l)=0;
 
     virtual void freeLitFalse(const Literal &l)=0;
     virtual void freeLitTrue(const Literal &l)=0;
@@ -48,6 +48,6 @@ public:
 #include "ConstAssignClause.hh"
 #include "OneWatchedClause.hh"
 #include "BasicClauseWatched.hh"
-
+#include "SmartClause.hh"
 
 #endif //CLAUSE_HH
