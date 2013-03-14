@@ -14,6 +14,12 @@ Satisfiable (UF20, 50, 75, 100) :
 		
 	* v2 sans watched literals, choose RAND :
 		79.6s
+	
+	* v2 sans watched literals, smartClause, choose basic :
+		39.5s
+		
+	* v2 sans watched literals, smartClause, choose RAND :
+		68.1s
 		
 	* v2 avec watched literals, choose basic :
 		31.8s
@@ -34,11 +40,16 @@ Unsatisfiable (UUF 50, 75, 100) :
 		416.5s
 	
 	* v2 sans watched literals, choose basic :
-		111.8s
-		
+		111.8s	
 		
 	* v2 sans watched literals, choose RAND :
 		216.8s
+		
+	* v2 sans watched literals, smartClause, choose basic :
+		102.5s
+		
+	* v2 sans watched literals, smartClause, choose RAND :
+		184.5s
 		
 	* v2 avec watched literals, choose basic :
 		77.6s
