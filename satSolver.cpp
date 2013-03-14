@@ -36,6 +36,7 @@
 
 int main()
 {
+    std::ios_base::sync_with_stdio(false);
     SatProblem problem(std::cin);
     bool is_sat = problem.satisfiability();
     #if VERBOSE > 0
@@ -70,28 +71,21 @@ SatProblem::SatProblem(std::istream& input)
     _clauses.reserve(nbrClauses);
 	
     // initialise les variables
-    for(unsigned k = 0; k < nbrVar; k++)
+    _variables.clear();
+    for(unsigned k = 1; k <= nbrVar; k++)
     {
-        Variable* var = new Variable(k+1);
+        Variable* var = new Variable(k);
         _variables.push_back(var);
     }
     _unassignedVar = new UnassignedBucket(_variables);
     
     // parse chaque clause du fichier
-    std::vector<std::pair<unsigned int, bool> >::const_iterator it;
-    std::vector<std::pair<unsigned int, bool> > list;
+    unsigned number = 0;
     std::vector<Literal> listClause;
-    unsigned number = 3;
     for(unsigned int k = 0; k < nbrClauses; k++)
     {
-        list.clear();
         listClause.clear();
-        parserListLit(input, list, nbrVar);
-        //listClause.reserve(list.size()); // optionnel. peut accélérer un peu (mis pas sur...)
-        for(it = list.begin(); it != list.end(); ++it)
-        {
-            listClause.push_back(Literal(_variables[it->first-1], it->second));
-        }
+        parserListLit(input, listClause, _variables);
         addClause(listClause, number++);
     }
     
@@ -132,21 +126,24 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned number)
     {
         // test si x=list[u] est présent sous forme x ou !x
         unsigned int v = u+1;
-        while(v < list.size() && !trivial)
+        while(v < list.size())
         {
             if(list[u].var() != list[v].var())
                 v++;
             else
             {
                 if(list[u].pos() != list[v].pos())
+                {
                     trivial = true;
+                    break;
+                }
                 else
                 {
                     #if VERBOSE > 3
                     print_debug();
                     std::cout << "Doublon repéré dans une clause (variable n°" << list[v].var()->varNumber << ")" << std::endl;
                     #endif
-                    list[v] = list[list.size()-1];
+                    list[v] = list.back();
                     list.pop_back();
                 }
             }
