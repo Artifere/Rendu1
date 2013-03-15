@@ -28,7 +28,7 @@ public:
 protected:
     intptr_t _currentHash; // sum of the adresses of the FREE Variables contained in the ConstAssignClause
     bool _currentHashVal; // xor of all the pos() of the free literals contained in the ConstAssignClause
-    Variable* _satisfied; // the adresse of the first TRUE Literal of the ConstAssignClause
+    bool _satisfied; // the adresse of the first TRUE Literal of the ConstAssignClause
     unsigned int _numOfFree; // number of FREE Variables contained in the ConstAssignClause
     std::vector<Literal> _notWatched;
 };

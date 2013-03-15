@@ -8,9 +8,9 @@
 
 
 inline SmartClause::SmartClause(CONSTR_ARGS(list))
-    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(NULL), _numOfFree(list.size())
+    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size())
 {
-    //_notWatched.reserve(list.size());
+    //_notWatched.reserve(6);
     std::vector<Literal>::const_iterator it;
     for(it = list.begin(); it != list.end(); ++it)
     {
@@ -23,51 +23,23 @@ inline SmartClause::SmartClause(CONSTR_ARGS(list))
 
 inline bool SmartClause::setLitFalse(const Literal& l)
 {
-    /* possible optimisation, mais n'a pas l'air de marcher
-    if (_satisfied)
+    if(_satisfied)
         _notWatched.push_back(l.invert());
     else
     {
         _currentHash -= (intptr_t)l.var();
-        _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen
+        _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen avec l.invert().pos()
         _numOfFree--;
     }
     return _satisfied;
-    /*/
-    if(_satisfied == NULL)
-    {
-        _currentHash -= (intptr_t)l.var();
-        _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen
-        _numOfFree--;
-        return false;
-    }
-    else
-    {
-        _notWatched.push_back(l.invert());
-        return true;
-    }
-    // */
 }
 inline bool SmartClause::setLitTrue(const Literal& l)
 {
-    /* possible optimisation, mais n'a pas l'air de marcher
-    if(_satisfied != NULL)
+    const bool res = _satisfied;
+    _satisfied = true;
+    if(res)
         _notWatched.push_back(l);
-    else
-        _satisfied = l.var();
-    return (_satisfied != NULL);
-    /*/
-    if(_satisfied == NULL)
-    {
-        _satisfied = l.var();
-        return false;
-    }
-    else
-    {
-        _notWatched.push_back(l);
-        return true;
-    }
-    // */
+    return res;
 }
 
 
@@ -75,7 +47,7 @@ inline void SmartClause::freeLitTrue(const Literal& l)
 {
     // pas de condition : comme on arrête de surveiller un litéral après que la clause soit vraie,
     // si on appelle freeLitTrue c'est forcement sur le premier litéral qui l'a mise à vrai
-    _satisfied = NULL;
+    _satisfied = false;
     std::vector<Literal>::const_iterator it;
     for(it = _notWatched.begin(); it != _notWatched.end(); ++it)
         it->var()->linkToClause(it->pos(), (StockedClause*)this);
@@ -86,7 +58,7 @@ inline void SmartClause::freeLitFalse(const Literal& l)
     // pas de condition : comme on arrête de surveiller un litéral après que la clause soit vraie,
     // si on appelle freeLitFalse, alors c'est que la clause n'est pas vraie
     _currentHash += (intptr_t)l.var();
-    _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen
+    _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen avec l.invert().pos()
     _numOfFree++;
 }
 
