@@ -22,7 +22,7 @@ protected:
     // true si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,Variable*> > _stackBacktrack;
     // set of all unassigned Variables (ie complementary set of _stackBacktrack)
-    std::set<Variable*> _unassignedVarPool;
+    //std::set<Variable*> _unassignedVarPool;
 
     // ensemble de valeurs à propager (Literaux dont on connaît la valeur).
     // d'intersection vide avec celles déjà assignées (dans _stackCallback), et aucune contradictions entre les déductions
@@ -34,7 +34,7 @@ protected:
     UnassignedBucket *_unassignedVar;
 
 public:
-    SatProblem(std::istream& input);
+    SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses);
     ~SatProblem();
 
     const std::vector<std::pair<unsigned int,varState> > getAssign() const;

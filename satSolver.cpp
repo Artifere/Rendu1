@@ -37,7 +37,12 @@
 int main()
 {
     std::ios_base::sync_with_stdio(false);
-    SatProblem problem(std::cin);
+    
+    unsigned int nbrVar, nbrClauses;
+    parserHeader(std::cin, nbrVar, nbrClauses);
+
+    SatProblem problem(std::cin, nbrVar, nbrClauses);
+
     bool is_sat = problem.satisfiability();
     #if VERBOSE > 0
     if(is_sat)
@@ -61,11 +66,8 @@ int main()
 
 
 
-SatProblem::SatProblem(std::istream& input)
-{
-    unsigned int nbrVar, nbrClauses;
-    parserHeader(input, nbrVar, nbrClauses);
-    
+SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses)
+{    
     // optionnel. rend l'initialisation un peu plus rapide
     _variables.reserve(nbrVar);
     _clauses.reserve(nbrClauses);
