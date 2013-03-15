@@ -67,19 +67,18 @@ int main()
 
 
 SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses)
+    : _variables(nbrVar), _unassignedVar(nbrVar)
 {    
     // optionnel. rend l'initialisation un peu plus rapide
-    _variables.reserve(nbrVar);
     _clauses.reserve(nbrClauses);
 	
     // initialise les variables
-    _variables.clear();
     for(unsigned k = 1; k <= nbrVar; k++)
     {
         Variable* var = new Variable(k);
-        _variables.push_back(var);
+        _variables[k-1] = var;
+        _unassignedVar.addUnassigned(var);
     }
-    _unassignedVar = new UnassignedBucket(_variables);
     
     // parse chaque clause du fichier
     unsigned number = 0;
@@ -243,8 +242,8 @@ bool SatProblem::satisfiability()
         Literal newAssign;
         if(_deductions.empty())
         {
-            //newAssign = _unassignedVar->chooseRAND();
-            newAssign = _unassignedVar->chooseUnassigned();
+            //newAssign = _unassignedVar.chooseRAND();
+            newAssign = _unassignedVar.chooseUnassigned();
             #if VERBOSE > 1
             print_debug();
             std::cout<<"Assignation : ";
@@ -265,7 +264,7 @@ bool SatProblem::satisfiability()
             newAssign.var()->print_state(true);
             std::cout<<"  (choix contraint)"<<std::endl;
             #endif
-            _unassignedVar->deleteUnassigned(newAssign.var());
+            _unassignedVar.deleteUnassigned(newAssign.var());
             _stackBacktrack.push( std::pair<bool, Variable*>(false, newAssign.var()) );
         }
         #if VERBOSE > 5
@@ -324,7 +323,7 @@ bool SatProblem::satisfiability()
                     _deductions.push( Literal(var, newVal) );
                     var->_varState = newVal ? TRUE:FALSE;
                 }
-                _unassignedVar->addUnassigned(var);
+                _unassignedVar.addUnassigned(var);
                 _stackBacktrack.pop();
             } while(_deductions.empty());
             #if VERBOSE > 4

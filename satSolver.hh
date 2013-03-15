@@ -31,7 +31,7 @@ protected:
 
 
     //Pour choisir/mettre à jour la liste des variables non assignées
-    UnassignedBucket *_unassignedVar;
+    UnassignedBucket _unassignedVar;
 
 public:
     SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses);

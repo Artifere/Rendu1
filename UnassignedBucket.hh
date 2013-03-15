@@ -22,7 +22,7 @@ class UnassignedBucket
 
 
 
-        UnassignedBucket(std::vector<Variable*>&);
+        UnassignedBucket(const unsigned int nbrVar);
 
     private:
         std::vector<Variable*> _unassignedList;
@@ -32,16 +32,12 @@ class UnassignedBucket
 
 
 
-inline UnassignedBucket::UnassignedBucket(std::vector<Variable*> &varList)
+inline UnassignedBucket::UnassignedBucket(const unsigned int nbrVar)//std::vector<Variable*> &varList)
 {
 //    std::cout << varList.size() << "looooooo" <<  std::endl;
-    const unsigned int nbrVar = varList.size();
+    //const unsigned int nbrVar = varList.size();
     _unassignedList.reserve(nbrVar);
     _unassignedIndex.resize(nbrVar);
-
-    std::vector<Variable*>::const_iterator it;
-    for (it = varList.begin(); it != varList.end(); ++it)
-        addUnassigned(*it);
 
     srand(17);
 }
