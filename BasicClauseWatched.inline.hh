@@ -38,44 +38,43 @@ inline bool BasicClauseWatched::setLitFalse(const Literal& l)
               << " (watched " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
               << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << ")"<< std::endl;
     #endif
-    // échange _lts[0] et _lits[1] pour que l soit le watched 0
-    if (l.var() == _lits[1].var())
-        std::swap(_lits[0], _lits[1]);
-    if(isLitTrue(_lits[1]))
+    if (isLitTrue(_lits[0]) )//|| isLitTrue(_lits[1])) // possible optimisation. ne semble pas gagner grand chose
         return false;
-    // si l'un des litéraux est vrai, posFree pointe sur ce litéral
+    // si l'un des litéraux est vrai, newWatched pointe sur ce litéral
     // sinon il pointe sur un litéral FREE (ou sur end() s'il n'y en a pas)
-    std::vector<Literal>::iterator it, posFree = _lits.end();
-    for (it = _lits.begin()+2; it != _lits.end(); ++it)
+    const std::vector<Literal>::iterator end = _lits.end();
+    std::vector<Literal>::iterator it, newWatched = end;
+    for (it = _lits.begin()+2; it != end; ++it)
     {
         const varState v = it->var()->_varState;
         if (v == FREE)
-            posFree = it;
-        else if (it->pos() == (v == TRUE))
+            newWatched = it;
+        else if(it->pos() == (v == TRUE))
         {
-            posFree = it;
+            newWatched = it;
             break;
         }
     }
-    // posFree devient le nouveau litéral surveillé
-    // (on a donc encore :  si l'un des litéraux de la clause est vrai, alors _lits[0] est vrai)
-    if (posFree != _lits.end())
+    if (newWatched != end)
     {
-        //_lits[0].var()->unlinkToClause(_lits[0].pos(), (StockedClause*)this);
-        posFree->var()->linkToClause(posFree->pos(), (StockedClause*)this);
-        std::swap(_lits[0], *posFree);
+        // *newWatched devient le nouveau litéral surveillé
+        newWatched->var()->linkToClause(newWatched->pos(), (StockedClause*)this);
+         // ne fait que deux affectations (au lieu de trois pour un swap)
+        _lits[l.var() == _lits[1].var()] = *newWatched; // utilise la conversion true->1, false->0
+        *newWatched = l.invert();
         #if VERBOSE > 5
             std::cout << "new watched : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
                       << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
         #endif
-        return true;
-    } else
-        return false;
+    }
+    return (newWatched != end);
 }
 
 
 inline bool BasicClauseWatched::setLitTrue(const Literal& l)
 {
+    //if (l.var() == _lits[0].var())//!isLitTrue(_lits[0]))
+    //    std::swap(_lits[0], _lits[1]);
     return false;
 }
 
@@ -93,33 +92,18 @@ inline void BasicClauseWatched::freeLitFalse(const Literal& l)
 
 inline size_t BasicClauseWatched::freeSize() const
 {
-    return (_lits[0].var()->_varState == FREE)
+    return (_lits[0].var()->_varState == FREE) // utilise la conversion true->1, false->0
          + (_lits[1].var()->_varState == FREE);
-    /*
-    const bool b0 = _lits[0].var()->_varState == FREE,
-               b1 = _lits[1].var()->_varState == FREE;
-    if (b0 && b1)
-        return 2;
-    else if (b0 || b1)
-        return 1;
-    else
-        return 0;
-    */
 }
 
 inline Literal BasicClauseWatched::chooseFree() const
 {
-    if (_lits[0].var()->_varState == FREE)
-        return _lits[0];
-    else
-        return _lits[1];
+    return _lits[_lits[1].var()->_varState == FREE]; // utilise la conversion true->1, false->0
 }
 
 inline bool BasicClauseWatched::satisfied() const
 {
     return isLitTrue(_lits[0]) || isLitTrue(_lits[1]);
-    //const varState v = _lits[0].var()->_varState;
-    //return (v == TRUE && _lits[0].pos()) || (v == FALSE && !_lits[0].pos());
 }
 
 

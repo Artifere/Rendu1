@@ -8,9 +8,9 @@
 
 // choisir quelle implémentation de clause servira
 //#define UsedClause ConstAssignClause
-//#define UsedClause BasicClauseWatched
+#define UsedClause BasicClauseWatched
 //#define UsedClause BasicClause
-#define UsedClause SmartClause
+//#define UsedClause SmartClause
 //#define UsedClause SmartClauseWatched
 //buggé : #define UsedClause OneWatchedClause
 
@@ -23,15 +23,12 @@ enum varState
 
 class Literal;
 
-class Clause;
-class UsedClause;
-
-class ConstAssignClause;
-class BasicClauseWatched;
 
 #ifdef INLINED_CLAUSE
+class UsedClause;
 typedef UsedClause StockedClause;
 #else
+class Clause;
 typedef Clause StockedClause;
 #endif
 

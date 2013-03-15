@@ -4,6 +4,7 @@
 #include "Literal.hh"
 
 
+#ifndef INLINED_CLAUSE
 class Clause
 {
 public:
@@ -22,7 +23,7 @@ public:
 
     virtual ~Clause() {}
 };
-
+#endif
 
 
 

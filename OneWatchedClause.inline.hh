@@ -65,8 +65,9 @@ inline bool OneWatchedClause::setLitFalse(const Literal& l)
     }
     return false;
 }
-inline void OneWatchedClause::setLitTrue(const Literal& l)
+inline bool OneWatchedClause::setLitTrue(const Literal& l)
 {
+    return false;
     //std::cout << "Toto " << _number << " : " << _watched.var()->varNumber << "." << _watched.pos() << " : " << l.var()->varNumber << "." << l.pos() << std::endl;
 }
 

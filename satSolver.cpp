@@ -211,14 +211,14 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned number)
             );
             #else
             StockedClause * nclause;
-            if(list.size() > 1)
-                nclause = new ConstAssignClause(list
+            if(list.size() > 8)
+                nclause = new BasicClauseWatched(list
                     #if VERBOSE > 1
                     , number
                     #endif
                 );
              else
-                nclause = new BasicClauseWatched(list
+                nclause = new SmartClause(list
                     #if VERBOSE > 1
                     , number
                     #endif
