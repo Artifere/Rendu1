@@ -8,7 +8,7 @@
 
 
 inline SmartClause::SmartClause(CONSTR_ARGS(list))
-    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size())
+    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size()), _notWatched(0)
 {
     //_notWatched.reserve(6);
     std::vector<Literal>::const_iterator it;
@@ -49,7 +49,7 @@ inline void SmartClause::freeLitTrue(const Literal& l)
     // si on appelle freeLitTrue c'est forcement sur le premier litéral qui l'a mise à vrai
     _satisfied = false;
     std::vector<Literal>::const_iterator it;
-    for(it = _notWatched.begin(); it != _notWatched.end(); ++it)
+    for(it = _notWatched.begin(); it != _notWatched.end(); it++)
         it->var()->linkToClause(it->pos(), (StockedClause*)this);
     _notWatched.clear();
 }

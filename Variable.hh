@@ -8,9 +8,9 @@
 
 // choisir quelle implémentation de clause servira
 //#define UsedClause ConstAssignClause
-#define UsedClause BasicClauseWatched
+//#define UsedClause BasicClauseWatched
 //#define UsedClause BasicClause
-//#define UsedClause SmartClause
+#define UsedClause SmartClause
 //#define UsedClause SmartClauseWatched
 //buggé : #define UsedClause OneWatchedClause
 
@@ -46,8 +46,7 @@ public:
     inline Variable(unsigned int varNum) : varNumber(varNum), _varState(FREE) { };
     
     
-    varState getState() const;
-    void setState(varState);
+    bool operator<(const Variable&) const;
     
     void linkToClause(bool,StockedClause*);
     
@@ -69,6 +68,18 @@ inline void Variable::linkToClause(bool val, StockedClause* c)
     else
         _litFalse.push_back(c);
 }
+
+
+inline bool Variable::operator<(const Variable& var) const
+{
+    return (_litTrue.size() < var._litTrue.size())
+        || (_litTrue.size() == var._litTrue.size() && (
+              _litFalse.size() < var._litFalse.size()
+          || (_litFalse.size() == var._litFalse.size() && (
+              varNumber < var.varNumber))
+        ));
+}
+
 
 
 

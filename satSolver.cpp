@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <cstdlib> // pour exit()
 #include <string>
 
@@ -66,21 +67,27 @@ int main()
 
 
 
+
+
+static inline bool varCompr(const Variable* v1, const Variable* v2)
+{
+    return *v1 < *v2;
+}
+
+
+
 SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses)
-    : _variables(nbrVar), _unassignedVar(nbrVar)
+    : _unassignedVar(nbrVar)
 {    
     // optionnel. rend l'initialisation un peu plus rapide
+    _variables.reserve(nbrVar);
     _clauses.reserve(nbrClauses);
 	
     // initialise les variables
     for(unsigned k = 1; k <= nbrVar; k++)
-    {
-        Variable* var = new Variable(k);
-        _variables[k-1] = var;
-        _unassignedVar.addUnassigned(var);
-    }
-    
-    // parse chaque clause du fichier
+        _variables.push_back(new Variable(k));
+
+    // parse chaque clause du fichier (et crée les liens entre variables et clauses)
     unsigned number = 0;
     std::vector<Literal> listClause;
     for(unsigned int k = 0; k < nbrClauses; k++)
@@ -89,6 +96,11 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
         parserListLit(input, listClause, _variables);
         addClause(listClause, number++);
     }
+    
+    // initialise _unassignedVar
+    std::sort(_variables.begin(), _variables.end(), varCompr); // tri les variables selon le nombre de fois qu'elles apparaissent dans une clause (heristique faite pour améliorer le choix de unassignedVar dans le cas non rand)
+    for(unsigned k = 0; k < _variables.size(); k++)
+        _unassignedVar.addUnassigned(_variables[k]);
     
     // affiche le nombre de fois que chaque variable apparaît dans une clause
     #if VERBOSE > 2
