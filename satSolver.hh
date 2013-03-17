@@ -21,15 +21,12 @@ protected:
     
     // true si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,Variable*> > _stackBacktrack;
-    // set of all unassigned Variables (ie complementary set of _stackBacktrack)
-    //std::set<Variable*> _unassignedVarPool;
 
     // ensemble de valeurs à propager (Literaux dont on connaît la valeur).
     // d'intersection vide avec celles déjà assignées (dans _stackCallback), et aucune contradictions entre les déductions
     std::stack<Literal> _deductions; // note : on n'a pas besoin de stoquer la valeur déduite : elle est contenue dans _varStates
 
-
-
+    // set of all unassigned Variables (ie complementary set of _stackBacktrack)
     //Pour choisir/mettre à jour la liste des variables non assignées
     UnassignedBucket _unassignedVar;
 

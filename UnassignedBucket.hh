@@ -62,7 +62,7 @@ inline Literal UnassignedBucket::chooseUnassigned(void)
 {
     Variable* ret = _unassignedList.back();
     _unassignedList.pop_back();
-    return Literal(ret, true);
+    return Literal(ret, ret->sizeLitTrue() > ret->sizeLitFalse());
 }
 
 

@@ -68,17 +68,23 @@ int main()
 
 
 
+static inline unsigned maxi(unsigned a, unsigned b)
+{
+    return a >= b ? a : b;
+}
+    
 
 static inline bool varCompr(const Variable* v1, const Variable* v2)
 {
-    return *v1 < *v2;
+    return maxi(v1->sizeLitTrue(), v1->sizeLitFalse()) < maxi(v2->sizeLitTrue(), v2->sizeLitFalse());
+    //return v1->sizeLitTrue() + v1->sizeLitFalse() < v2->sizeLitTrue() + v2->sizeLitFalse();
 }
 
 
 
 SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses)
     : _unassignedVar(nbrVar)
-{    
+{
     // optionnel. rend l'initialisation un peu plus rapide
     _variables.reserve(nbrVar);
     _clauses.reserve(nbrClauses);
@@ -108,8 +114,8 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     std::vector<Variable*>::const_iterator it_debug;
     for (it_debug = _variables.begin(); it_debug != _variables.end(); ++it_debug)
     {
-        (*it_debug)->print_state(true);
-        std::cout<<", ";
+        (*it_debug)->print_state();
+        std::cout << " (" << (*it_debug)->sizeLitTrue() << "x" << (*it_debug)->sizeLitFalse() << "),  ";
     }
     std::cout<<std::endl;
     #endif
@@ -259,7 +265,8 @@ bool SatProblem::satisfiability()
             #if VERBOSE > 1
             print_debug();
             std::cout<<"Assignation : ";
-            newAssign.var()->print_state(true);
+            newAssign.var()->print_state();
+            std::cout << " (" << newAssign.var()->sizeLitTrue() << "x" << newAssign.var()->sizeLitFalse() << ") ";
             std::cout << " à " << newAssign.pos();
             std::cout<<std::endl;
             #endif
@@ -273,7 +280,8 @@ bool SatProblem::satisfiability()
             #if VERBOSE > 1
             print_debug();
             std::cout<<"Assignation ";
-            newAssign.var()->print_state(true);
+            newAssign.var()->print_state();
+            std::cout << " (" << newAssign.var()->sizeLitTrue() << "x" << newAssign.var()->sizeLitFalse() << ") ";
             std::cout<<"  (choix contraint)"<<std::endl;
             #endif
             _unassignedVar.deleteUnassigned(newAssign.var());
@@ -284,7 +292,7 @@ bool SatProblem::satisfiability()
         std::cout << "État des variables :   ";
         std::vector<Variable*>::const_iterator it_debug;
         for (it_debug = _variables.begin(); it_debug != _variables.end(); ++it_debug) {
-            (*it_debug)->print_state(false);
+            (*it_debug)->print_state();
             std::cout << " ";
         }
         std::cout<<std::endl;
@@ -306,7 +314,8 @@ bool SatProblem::satisfiability()
                 #if VERBOSE > 4
                 print_debug();
                 std::cout<<"suppression de la déduction ";
-                _deductions.top().var()->print_state(true);
+                _deductions.top().var()->print_state();
+                std::cout << " (" << _deductions.top().var()->sizeLitTrue() << "x" << _deductions.top().var()->sizeLitFalse() << ")";
                 std::cout<<"  (valeur déduite : "<<_deductions.top().pos()<<")";
                 std::cout<<std::endl;
                 #endif

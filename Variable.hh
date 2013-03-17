@@ -45,8 +45,8 @@ public:
 
     inline Variable(unsigned int varNum) : varNumber(varNum), _varState(FREE) { };
     
-    
-    bool operator<(const Variable&) const;
+    inline unsigned sizeLitTrue() const { return _litTrue.size(); };
+    inline unsigned sizeLitFalse() const { return _litFalse.size(); };
     
     void linkToClause(bool,StockedClause*);
     
@@ -54,7 +54,7 @@ public:
     void releaseVariable();
     
     #if VERBOSE > 0
-    void print_state(bool complete) const;
+    void print_state() const;
     #endif
     
 };
@@ -70,22 +70,10 @@ inline void Variable::linkToClause(bool val, StockedClause* c)
 }
 
 
-inline bool Variable::operator<(const Variable& var) const
-{
-    return (_litTrue.size() < var._litTrue.size())
-        || (_litTrue.size() == var._litTrue.size() && (
-              _litFalse.size() < var._litFalse.size()
-          || (_litFalse.size() == var._litFalse.size() && (
-              varNumber < var.varNumber))
-        ));
-}
-
-
-
 
 #if VERBOSE > 0
 #include <iostream>
-inline void Variable::print_state(bool complete) const
+inline void Variable::print_state() const
 {
     if (_varState == FREE)
         std::cout << "?";
@@ -94,8 +82,6 @@ inline void Variable::print_state(bool complete) const
     else
         std::cout << " ";
     std::cout << varNumber;
-    if(complete)
-        std::cout << " (" << _litTrue.size() << "x" << _litFalse.size() << ")";
 }
 #endif
 
