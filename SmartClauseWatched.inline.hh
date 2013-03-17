@@ -19,7 +19,7 @@ static inline bool isLitTrue(const Literal& lit)
 */
 
 
-inline SmartClauseWatched::SmartClauseWatched(CONSTR_ARGS(list))
+inline SmartClauseWatched::SmartClauseWatched(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE() _lits(list), _watcheSecond(true)
 {
     list[0].var()->linkToClause(list[0].pos(), (StockedClause*)this);

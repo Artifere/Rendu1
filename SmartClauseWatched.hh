@@ -7,7 +7,7 @@
 class SmartClauseWatched HERITED_CLAUSE
 {
 public:
-    SmartClauseWatched(CONSTR_ARGS(list));
+    SmartClauseWatched(const CONSTR_ARGS(list));
     
     VIRTUAL bool setLitFalse(const Literal& l);
     VIRTUAL bool setLitTrue(const Literal& l);

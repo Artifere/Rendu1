@@ -18,7 +18,7 @@ static inline bool isLitTrue(const Literal& lit)
 
 
 
-inline BasicClauseWatched::BasicClauseWatched(CONSTR_ARGS(list))
+inline BasicClauseWatched::BasicClauseWatched(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE() _lits(list)
 {
     list[0].var()->linkToClause(list[0].pos(), (StockedClause*)this);

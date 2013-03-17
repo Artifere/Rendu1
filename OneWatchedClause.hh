@@ -7,7 +7,7 @@
 class OneWatchedClause HERITED_CLAUSE
 {
 public:
-    OneWatchedClause(CONSTR_ARGS(list));
+    OneWatchedClause(const CONSTR_ARGS(list));
     
     VIRTUAL bool setLitFalse(const Literal& l);
     VIRTUAL bool setLitTrue(const Literal& l);

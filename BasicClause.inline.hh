@@ -9,7 +9,7 @@
 #include <cstdlib> // pour exit()
 
 
-inline BasicClause::BasicClause(CONSTR_ARGS(list))
+inline BasicClause::BasicClause(const CONSTR_ARGS(list))
     :  INIT_FOR_VERBOSE()  _satisfied(false), _free(list.begin(),list.end())
 {
     std::vector<Literal>::const_iterator it;

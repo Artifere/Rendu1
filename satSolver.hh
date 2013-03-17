@@ -2,12 +2,12 @@
 #define SAT_SOLVER_HH
 
 #include <vector>
-#include <set>
 #include <stack>
 #include <utility>
+#include <istream>
+
 #include "Clause.hh"
 #include "Literal.hh"
-#include <istream>
 #include "UnassignedBucket.hh"
 
 
@@ -17,8 +17,7 @@ class SatProblem
 protected:
     std::vector<Variable*> _variables;
     std::vector<StockedClause*> _clauses;
-	 
-    
+	
     // true si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,Variable*> > _stackBacktrack;
 
@@ -36,7 +35,7 @@ public:
 
     const std::vector<std::pair<unsigned int,varState> > getAssign() const;
 
-    void addClause(std::vector<Literal>& list, unsigned);
+    void addClause(CONSTR_ARGS(list));
     bool satisfiability();
 };
 
@@ -44,37 +43,17 @@ public:
 
 
 
-const std::vector<std::pair<unsigned int,varState> > SatProblem::getAssign() const
+const std::vector<std::pair<unsigned, varState> > SatProblem::getAssign() const
 {
-    std::vector<std::pair<unsigned int,varState> > res(_variables.size());
+    typedef std::pair<unsigned, varState> return_type;
+    std::vector<return_type> res(_variables.size());
     for (unsigned k = 0; k < _variables.size(); k++)
-        res[k] = std::pair<unsigned int, varState>(_variables[k]->varNumber, _variables[k]->_varState);
+        res[k] = return_type(_variables[k]->varNumber, _variables[k]->_varState);
     return res;
 }
         
 
 
-
-
-//Version lente
-/*
-inline void SatProblem::deleteUnassignedVar(Variable* var)
-{
-    _unassignedVarPool.erase(var);
-}
-
-inline Literal SatProblem::chooseUnasignedVar()
-{
-    Variable* k = *(_unassignedVarPool.begin());
-    deleteUnassignedVar(k);
-    return Literal(k,true);
-}
-
-inline void SatProblem::addUnassignedVar(Variable* var)
-{
-    _unassignedVarPool.insert(var);
-}
-*/
 
 
 #endif//SAT_SOLVER_HH

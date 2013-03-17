@@ -8,7 +8,7 @@
 class BasicClause HERITED_CLAUSE
 {
 public:
-    BasicClause(CONSTR_ARGS(list));
+    BasicClause(const CONSTR_ARGS(list));
     
     VIRTUAL bool setLitFalse(const Literal& l);
     VIRTUAL bool setLitTrue(const Literal& l);

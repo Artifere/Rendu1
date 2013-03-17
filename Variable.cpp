@@ -46,7 +46,7 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
         if(!target->satisfied())
         {
             // si clause contradictoire : on renvoie une erreur
-            size_t fs = target->freeSize();
+            const size_t fs = target->freeSize();
             if (fs == 0)
             {
                 isError = true;
@@ -56,7 +56,7 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
             // et si déduction : on teste si elle n'est pas contradictoire
             else if(fs == 1)
             {
-                Literal deduct = target->chooseFree();
+                const Literal deduct = target->chooseFree();
                 #if VERBOSE > 5
                 std::cout << "c Nouvelle déduction :  " << deduct.var()->varNumber << "." << deduct.pos() << std::endl;
                 #endif
@@ -97,8 +97,8 @@ void Variable::releaseVariable()
 {
     const bool isTrue = _varState == TRUE;
     const Literal lit = Literal(this, isTrue);
-    std::vector<StockedClause*>& cTrue  = isTrue ? _litTrue : _litFalse;
-    std::vector<StockedClause*>& cFalse = isTrue ? _litFalse : _litTrue;
+    const std::vector<StockedClause*>& cTrue  = isTrue ? _litTrue : _litFalse;
+    const std::vector<StockedClause*>& cFalse = isTrue ? _litFalse : _litTrue;
     std::vector<StockedClause*>::const_iterator it;
 
     for(it = cTrue.begin(); it != cTrue.end(); ++it)

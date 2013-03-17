@@ -77,7 +77,6 @@ static inline bool varCompr(const Variable* v1, const Variable* v2)
 }
 
 
-
 SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses)
     : _unassignedVar(nbrVar)
 {
@@ -96,11 +95,12 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     {
         listClause.clear();
         parserListLit(input, listClause, _variables);
-        addClause(listClause, number++);
+        addClause(CALL_CONSTR(listClause));
+        number++;
     }
     
     // initialise _unassignedVar
-    // tri les variables (heristique faite pour améliorer le choix de unassignedVar dans le cas non rand)
+    // commence par trier les variables (heuristique faite pour améliorer le choix de unassignedVar dans le cas non rand)
     std::sort(_variables.begin(), _variables.end(), varCompr);
     std::vector<Variable*>::const_iterator it;
     for (it = _variables.begin(); it != _variables.end(); it++)
@@ -123,6 +123,8 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
 
 
 
+
+
 SatProblem::~SatProblem()
 {
     unsigned k;
@@ -134,21 +136,23 @@ SatProblem::~SatProblem()
 
 
 
-void SatProblem::addClause(std::vector<Literal>& list, unsigned number)
+
+
+void SatProblem::addClause(CONSTR_ARGS(list))
 {
     // supprime de list les doublons, et repère si trivialement vraie
     bool trivial = false; // ssi clause trivialement vraie
-    for(unsigned int u = 0; u < list.size() && !trivial; u++)
+    for (unsigned int u = 0; u < list.size() && !trivial; u++)
     {
         // test si x=list[u] est présent sous forme x ou !x
         unsigned int v = u+1;
-        while(v < list.size())
+        while (v < list.size())
         {
-            if(list[u].var() != list[v].var())
+            if (list[u].var() != list[v].var())
                 v++;
             else
             {
-                if(list[u].pos() != list[v].pos())
+                if (list[u].pos() != list[v].pos())
                 {
                     trivial = true;
                     break;
@@ -220,25 +224,13 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned number)
             // alors que UsedClause ne passe pas pour StockedClause à priori
             // (et on perd l'interet de la surcharge avec la conversion de UsedClause vers StockedClause)
             #ifdef INLINED_CLAUSE
-            StockedClause* nclause = new UsedClause(list
-                #if VERBOSE > 1
-                , number
-                #endif
-            );
+            StockedClause* nclause = new UsedClause(CALL_CONSTR(list));
             #else
             StockedClause * nclause;
             if(list.size() > 8)
-                nclause = new BasicClauseWatched(list
-                    #if VERBOSE > 1
-                    , number
-                    #endif
-                );
+                nclause = new BasicClauseWatched(CALL_CONSTR(list));
              else
-                nclause = new SmartClause(list
-                    #if VERBOSE > 1
-                    , number
-                    #endif
-                );
+                nclause = new SmartClause(CALL_CONSTR(list));
             #endif
             _clauses.push_back(nclause);
         }
@@ -247,11 +239,11 @@ void SatProblem::addClause(std::vector<Literal>& list, unsigned number)
 
 
 
+
+
 bool SatProblem::satisfiability()
 {
-//    if (_stackBacktrack.size() >= _variables.size() && _deductions.empty())
-//        return true;
-    while(_stackBacktrack.size() < _variables.size() || !_deductions.empty())
+    while(_stackBacktrack.size() < _variables.size())
     {
         // calculer la nouvelle valeur
         Literal newAssign;
@@ -263,11 +255,10 @@ bool SatProblem::satisfiability()
             print_debug();
             std::cout<<"Assignation : ";
             newAssign.var()->print_state();
-            std::cout << " (" << newAssign.var()->sizeLitTrue() << "x" << newAssign.var()->sizeLitFalse() << ") ";
-            std::cout << " à " << newAssign.pos();
-            std::cout<<std::endl;
+            std::cout << " (" << newAssign.var()->sizeLitTrue() << "x" << newAssign.var()->sizeLitFalse() << ") "
+                      << " à " << newAssign.pos() << std::endl;
             #endif
-            newAssign.var()->_varState = newAssign.pos()?TRUE:FALSE;
+            newAssign.var()->_varState = newAssign.pos() ? TRUE : FALSE;
             _stackBacktrack.push( std::pair<bool, Variable*>(true, newAssign.var()) );
         }
         else
@@ -294,27 +285,25 @@ bool SatProblem::satisfiability()
         }
         std::cout<<std::endl;
         #endif
-
         
-        bool is_error = newAssign.var()->propagateVariable(_deductions);
+        const bool isError = newAssign.var()->propagateVariable(_deductions);
 
         // on fait le callback si besoin
-        if(is_error)
+        if(isError)
         {
             #if VERBOSE > 1
             print_debug();
             std::cout<<"Backtrack"<<std::endl;
             #endif
             // vide les déductions pas encore propagées dans les clauses
-            while(!_deductions.empty())
+            while (!_deductions.empty())
             {
                 #if VERBOSE > 4
                 print_debug();
                 std::cout<<"suppression de la déduction ";
                 _deductions.top().var()->print_state();
-                std::cout << " (" << _deductions.top().var()->sizeLitTrue() << "x" << _deductions.top().var()->sizeLitFalse() << ")";
-                std::cout<<"  (valeur déduite : "<<_deductions.top().pos()<<")";
-                std::cout<<std::endl;
+                std::cout << " (" << _deductions.top().var()->sizeLitTrue() << "x" << _deductions.top().var()->sizeLitFalse() << ")"
+                          << "  (valeur déduite : " << _deductions.top().pos() << ")" << std::endl;
                 #endif
                 _deductions.top().var()->_varState = FREE;
                 _deductions.pop();
@@ -322,7 +311,7 @@ bool SatProblem::satisfiability()
             // on revient au dernier choix libre fait
             do {
                 // si pas de choix libre fait, on renvoie faux (UNSAT)
-                if(_stackBacktrack.empty())
+                if (_stackBacktrack.empty())
                     return false;
                 // sinon, on libère la variable du haut de _stackCallback
                 Variable * var = _stackBacktrack.top().second;
@@ -337,13 +326,13 @@ bool SatProblem::satisfiability()
                     var->_varState = FREE;
                 else
                 {
-                    bool newVal = !(var->_varState == TRUE);
+                    const bool newVal = !(var->_varState == TRUE);
                     _deductions.push( Literal(var, newVal) );
                     var->_varState = newVal ? TRUE:FALSE;
                 }
                 _unassignedVar.addUnassigned(var);
                 _stackBacktrack.pop();
-            } while(_deductions.empty());
+            } while (_deductions.empty());
             #if VERBOSE > 4
             print_debug();
             std::cout<<"Fin du backtrack."<<std::endl;
@@ -351,7 +340,6 @@ bool SatProblem::satisfiability()
         }
     }
     return true;
-//    return this->satisfiability();
 }
 
 

@@ -9,39 +9,38 @@
 
 class UnassignedBucket
 {
-    public:
-        Literal chooseUnassigned(void);
-        Literal chooseRAND(void);
-        Variable* chooseMOMS();
-        Variable* chooseDLIS();
-        
-        void addUnassigned(Variable *var);
-        void deleteUnassigned(Variable *var);
+public:
+    UnassignedBucket(const unsigned int nbrVar);
+
+    Literal chooseUnassigned(void);
+    Literal chooseRAND(void);
+    Literal chooseMOMS();
+    Literal chooseDLIS();
+    
+    void addUnassigned(Variable *var);
+    void deleteUnassigned(Variable *var);
+
+private:
+    
+    std::vector<Variable*> _unassignedList;
+    std::vector<std::vector<Variable*>::iterator > _unassignedIndex;
+    
+};
 
 
 
 
 
-        UnassignedBucket(const unsigned int nbrVar);
-
-    private:
-        std::vector<Variable*> _unassignedList;
-        std::vector<std::vector<Variable*>::iterator > _unassignedIndex;
-        
-        };
-
-
-
-inline UnassignedBucket::UnassignedBucket(const unsigned int nbrVar)//std::vector<Variable*> &varList)
+inline UnassignedBucket::UnassignedBucket(const unsigned int nbrVar)
+    : _unassignedList(), _unassignedIndex(nbrVar)
 {
-//    std::cout << varList.size() << "looooooo" <<  std::endl;
-    //const unsigned int nbrVar = varList.size();
     _unassignedList.reserve(nbrVar);
-    _unassignedIndex.resize(nbrVar);
-
     srand(17);
 }
           
+
+
+
 
 inline void UnassignedBucket::addUnassigned(Variable* var)
 {
@@ -58,13 +57,16 @@ inline void UnassignedBucket::deleteUnassigned(Variable* var)
     _unassignedList.pop_back();
 } 
 
+
+
+
+
 inline Literal UnassignedBucket::chooseUnassigned(void)
 {
     Variable* ret = _unassignedList.back();
     _unassignedList.pop_back();
     return Literal(ret, ret->sizeLitTrue() > ret->sizeLitFalse());
 }
-
 
 inline Literal UnassignedBucket::chooseRAND(void)
 {

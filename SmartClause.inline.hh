@@ -7,7 +7,7 @@
 #define SMARTCLAUSE_INLINE_HH
 
 
-inline SmartClause::SmartClause(CONSTR_ARGS(list))
+inline SmartClause::SmartClause(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size()), _notWatched(0)
 {
     //_notWatched.reserve(6);

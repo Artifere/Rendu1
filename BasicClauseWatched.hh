@@ -7,7 +7,7 @@
 class BasicClauseWatched HERITED_CLAUSE
 {
 public:
-    BasicClauseWatched(CONSTR_ARGS(list));
+    BasicClauseWatched(const CONSTR_ARGS(list));
     
     VIRTUAL bool setLitFalse(const Literal& l);
     VIRTUAL bool setLitTrue(const Literal& l);

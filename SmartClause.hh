@@ -8,7 +8,7 @@
 class SmartClause HERITED_CLAUSE
 {
 public:
-    SmartClause(CONSTR_ARGS(list));
+    SmartClause(const CONSTR_ARGS(list));
     
     VIRTUAL bool setLitFalse(const Literal& l);
     VIRTUAL bool setLitTrue(const Literal& l);

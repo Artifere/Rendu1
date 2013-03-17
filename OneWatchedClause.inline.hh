@@ -10,7 +10,7 @@
 #include <iostream>
 #endif
 
-inline OneWatchedClause::OneWatchedClause(CONSTR_ARGS(list))
+inline OneWatchedClause::OneWatchedClause(const CONSTR_ARGS(list))
     :INIT_FOR_VERBOSE()  _watched(list[0]), _literals(list)
 {
     std::vector<Literal>::iterator it;

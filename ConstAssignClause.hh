@@ -7,7 +7,7 @@
 class ConstAssignClause HERITED_CLAUSE
 {
 public:
-    ConstAssignClause(CONSTR_ARGS(list));
+    ConstAssignClause(const CONSTR_ARGS(list));
     
     VIRTUAL bool setLitFalse(const Literal& l);
     VIRTUAL bool setLitTrue(const Literal& l);
