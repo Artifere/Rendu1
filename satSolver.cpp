@@ -10,6 +10,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <utility>
 #include <cstdlib> // pour exit()
 #include <string>
 
@@ -68,15 +69,10 @@ int main()
 
 
 
-static inline unsigned maxi(unsigned a, unsigned b)
-{
-    return a >= b ? a : b;
-}
-    
 
 static inline bool varCompr(const Variable* v1, const Variable* v2)
 {
-    return maxi(v1->sizeLitTrue(), v1->sizeLitFalse()) < maxi(v2->sizeLitTrue(), v2->sizeLitFalse());
+    return std::max(v1->sizeLitTrue(), v1->sizeLitFalse()) < std::max(v2->sizeLitTrue(), v2->sizeLitFalse());
     //return v1->sizeLitTrue() + v1->sizeLitFalse() < v2->sizeLitTrue() + v2->sizeLitFalse();
 }
 
@@ -88,11 +84,11 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     // optionnel. rend l'initialisation un peu plus rapide
     _variables.reserve(nbrVar);
     _clauses.reserve(nbrClauses);
-	
+    
     // initialise les variables
     for(unsigned k = 1; k <= nbrVar; k++)
         _variables.push_back(new Variable(k));
-
+    
     // parse chaque clause du fichier (et crée les liens entre variables et clauses)
     unsigned number = 0;
     std::vector<Literal> listClause;
@@ -104,20 +100,21 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     }
     
     // initialise _unassignedVar
-    std::sort(_variables.begin(), _variables.end(), varCompr); // tri les variables selon le nombre de fois qu'elles apparaissent dans une clause (heristique faite pour améliorer le choix de unassignedVar dans le cas non rand)
-    for(unsigned k = 0; k < _variables.size(); k++)
-        _unassignedVar.addUnassigned(_variables[k]);
+    // tri les variables (heristique faite pour améliorer le choix de unassignedVar dans le cas non rand)
+    std::sort(_variables.begin(), _variables.end(), varCompr);
+    std::vector<Variable*>::const_iterator it;
+    for (it = _variables.begin(); it != _variables.end(); it++)
+        _unassignedVar.addUnassigned(*it);
     
     // affiche le nombre de fois que chaque variable apparaît dans une clause
     #if VERBOSE > 2
     std::cout << "c Etat des variables à la fin du parsage : ";
-    std::vector<Variable*>::const_iterator it_debug;
-    for (it_debug = _variables.begin(); it_debug != _variables.end(); ++it_debug)
+    for (it = _variables.begin(); it != _variables.end(); it++)
     {
-        (*it_debug)->print_state();
-        std::cout << " (" << (*it_debug)->sizeLitTrue() << "x" << (*it_debug)->sizeLitFalse() << "),  ";
+        (*it)->print_state();
+        std::cout << " (" << (*it)->sizeLitTrue() << "x" << (*it)->sizeLitFalse() << "),  ";
     }
-    std::cout<<std::endl;
+    std::cout << std::endl;
     #endif
     
     // ajouter un test pour savoir si le fichier est vide ?
