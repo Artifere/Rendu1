@@ -6,23 +6,23 @@
 #ifndef ONEWATCHEDCLAUSE_INLINE_HH
 #define ONEWATCHEDCLAUSE_INLINE_HH
 
-#if VERBOSE > 0
-#include <iostream>
-#endif
+
 
 inline OneWatchedClause::OneWatchedClause(const CONSTR_ARGS(list))
     :INIT_FOR_VERBOSE()  _watched(list[0]), _literals(list)
 {
     std::vector<Literal>::iterator it;
-    for (it = _literals.begin(); it != _literals.end(); it++) {
+    for (it = _literals.begin(); it != _literals.end(); it++)
+    {
         *it = it->invert();
-        it->var()->linkToClause(it->pos(), (StockedClause*)this);
+        it->var()->linkToClause(it->pos(), (Clause*)this);
     }
-    _watched.var()->linkToClause(_watched.pos(), (StockedClause*)this);
+    _watched.var()->linkToClause(_watched.pos(), (Clause*)this);
     #if VERBOSE > 5
     std::cout << "Watched Lit (" << _number << ") : " << _watched.var()->varNumber<<"."<<_watched.pos()<<std::endl;
     #endif
 }
+
 
 
 inline bool OneWatchedClause::setLitFalse(const Literal& l)
@@ -44,7 +44,7 @@ inline bool OneWatchedClause::setLitFalse(const Literal& l)
         {
             //_watched.var()->unlinkToClause(_watched.pos(), (StockedClause*)this);
             _watched = it->invert();
-            _watched.var()->linkToClause(_watched.pos(), (StockedClause*)this);
+            _watched.var()->linkToClause(_watched.pos(), (Clause*)this);
             #if VERBOSE >= 10
             std::cout << "Change Watched " << _number << " : " << _watched.var()->varNumber<< "." << _watched.pos() <<std::endl;
             #endif
@@ -55,7 +55,7 @@ inline bool OneWatchedClause::setLitFalse(const Literal& l)
     {
             //_watched.var()->unlinkToClause(_watched.pos(), (StockedClause*)this);
             _watched = l;
-            _watched.var()->linkToClause(_watched.pos(), (StockedClause*)this);
+            _watched.var()->linkToClause(_watched.pos(), (Clause*)this);
             #if VERBOSE >= 10
             std::cout << "Change Watched (clause true) " << _number << " : " << _watched.var()->varNumber<< "." << _watched.pos() <<std::endl;
             #endif
@@ -65,6 +65,7 @@ inline bool OneWatchedClause::setLitFalse(const Literal& l)
     }
     return false;
 }
+
 inline bool OneWatchedClause::setLitTrue(const Literal& l)
 {
     return false;
@@ -72,12 +73,15 @@ inline bool OneWatchedClause::setLitTrue(const Literal& l)
 }
 
 
+
 inline void OneWatchedClause::freeLitTrue(const Literal& l)
 {
 }
+
 inline void OneWatchedClause::freeLitFalse(const Literal& l)
 {
 }
+
 
 
 inline size_t OneWatchedClause::freeSize (void) const
@@ -96,11 +100,16 @@ inline Literal OneWatchedClause::chooseFree(void) const
     #endif
     return _watched;
 }
+
 inline bool OneWatchedClause::satisfied(void) const
 {
     return (_watched.var()->_varState == TRUE && _watched.pos()) || (_watched.var()->_varState == FALSE && !_watched.pos());
 }
 
-inline OneWatchedClause::~OneWatchedClause() { }
+
+
+inline OneWatchedClause::~OneWatchedClause()
+{
+}
 
 #endif//ONEWATCHEDCLAUSE_INLINE_HH

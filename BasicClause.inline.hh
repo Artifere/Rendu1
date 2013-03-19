@@ -9,13 +9,15 @@
 #include <cstdlib> // pour exit()
 
 
+
 inline BasicClause::BasicClause(const CONSTR_ARGS(list))
     :  INIT_FOR_VERBOSE()  _satisfied(false), _free(list.begin(),list.end())
 {
     std::vector<Literal>::const_iterator it;
     for (it = list.begin(); it != list.end(); ++it)
-        it->var()->linkToClause(it->pos(), (StockedClause*)this);
+        it->var()->linkToClause(it->pos(), (Clause*)this);
 }
+
 
 
 inline bool BasicClause::setLitFalse(const Literal& l)
@@ -28,6 +30,7 @@ inline bool BasicClause::setLitFalse(const Literal& l)
     }
     return false;
 }
+
 inline bool BasicClause::setLitTrue(const Literal& l)
 {
     if(! _satisfied)
@@ -41,6 +44,7 @@ inline bool BasicClause::setLitTrue(const Literal& l)
 }
 
 
+
 inline void BasicClause::freeLitTrue(const Literal &l)
 {
     if (!_assigned.empty() && _assigned.top().var() == l.var())
@@ -50,6 +54,7 @@ inline void BasicClause::freeLitTrue(const Literal &l)
         _satisfied = false;
     }
 }
+
 inline void BasicClause::freeLitFalse(const Literal &l)
 {
     if (!_assigned.empty() && _assigned.top().var() == l.var())
@@ -61,10 +66,12 @@ inline void BasicClause::freeLitFalse(const Literal &l)
 }
 
 
+
 inline size_t BasicClause::freeSize(void) const
 {
     return _free.size();
 }
+
 inline Literal BasicClause::chooseFree(void) const
 {
     return *_free.begin();

@@ -7,6 +7,7 @@
 #define SMARTCLAUSE_INLINE_HH
 
 
+
 inline SmartClause::SmartClause(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size()), _notWatched(0)
 {
@@ -16,9 +17,10 @@ inline SmartClause::SmartClause(const CONSTR_ARGS(list))
     {
         _currentHash += (intptr_t)it->var();
         _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
-        it->var()->linkToClause(it->pos(), (StockedClause*)this);
+        it->var()->linkToClause(it->pos(), (Clause*)this);
     }
 }
+
 
 
 inline bool SmartClause::setLitFalse(const Literal& l)
@@ -33,6 +35,7 @@ inline bool SmartClause::setLitFalse(const Literal& l)
     }
     return _satisfied;
 }
+
 inline bool SmartClause::setLitTrue(const Literal& l)
 {
     const bool res = _satisfied;
@@ -43,6 +46,7 @@ inline bool SmartClause::setLitTrue(const Literal& l)
 }
 
 
+
 inline void SmartClause::freeLitTrue(const Literal& l)
 {
     // pas de condition : comme on arrête de surveiller un litéral après que la clause soit vraie,
@@ -50,9 +54,10 @@ inline void SmartClause::freeLitTrue(const Literal& l)
     _satisfied = false;
     std::vector<Literal>::const_iterator it;
     for(it = _notWatched.begin(); it != _notWatched.end(); it++)
-        it->var()->linkToClause(it->pos(), (StockedClause*)this);
+        it->var()->linkToClause(it->pos(), (Clause*)this);
     _notWatched.clear();
 }
+
 inline void SmartClause::freeLitFalse(const Literal& l)
 {
     // pas de condition : comme on arrête de surveiller un litéral après que la clause soit vraie,
@@ -61,6 +66,7 @@ inline void SmartClause::freeLitFalse(const Literal& l)
     _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen avec l.invert().pos()
     _numOfFree++;
 }
+
 
 
 inline size_t SmartClause::freeSize (void) const
@@ -72,11 +78,16 @@ inline Literal SmartClause::chooseFree(void) const
 {
     return Literal((Variable*)_currentHash, _currentHashVal);
 }
+
 inline bool SmartClause::satisfied(void) const
 {
     return _satisfied;
 }
 
-inline SmartClause::~SmartClause() { }
+
+
+inline SmartClause::~SmartClause()
+{
+}
 
 #endif//SMARTCLAUSE_INLINE_HH

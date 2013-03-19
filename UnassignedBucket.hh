@@ -3,6 +3,7 @@
 /** A FAIRE : std::swap... **/
 
 #include "Variable.hh"
+#include <cstdlib>
 #include <vector>
 
 

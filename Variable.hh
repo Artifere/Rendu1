@@ -6,14 +6,6 @@
 #include <stack>
 
 
-// choisir quelle implémentation de clause servira
-//#define UsedClause ConstAssignClause
-//#define UsedClause BasicClauseWatched
-//#define UsedClause BasicClause
-#define UsedClause SmartClause
-//#define UsedClause SmartClauseWatched
-//buggé : #define UsedClause OneWatchedClause
-
 
 typedef
 enum varState
@@ -21,24 +13,22 @@ enum varState
     TRUE, FALSE, FREE
 } varState;
 
+
 class Literal;
 
-
-#ifdef INLINED_CLAUSE
-class UsedClause;
-typedef UsedClause StockedClause;
-#else
-class Clause;
-typedef Clause StockedClause;
+#ifndef CLAUSE
+ #define CLAUSE BasicClause
 #endif
+class CLAUSE;
+typedef CLAUSE Clause;
 
 
 
 
 class Variable {
 protected:
-    std::vector<StockedClause*> _litTrue;
-    std::vector<StockedClause*> _litFalse;
+    std::vector<Clause*> _litTrue;
+    std::vector<Clause*> _litFalse;
 public:
     const unsigned int varNumber;
     varState _varState;
@@ -48,7 +38,7 @@ public:
     inline unsigned sizeLitTrue() const { return _litTrue.size(); };
     inline unsigned sizeLitFalse() const { return _litFalse.size(); };
     
-    void linkToClause(bool,StockedClause*);
+    void linkToClause(bool,Clause*);
     
     bool propagateVariable(std::stack<Literal>& deductions);
     void releaseVariable();
@@ -61,7 +51,7 @@ public:
 
 
 
-inline void Variable::linkToClause(bool val, StockedClause* c)
+inline void Variable::linkToClause(bool val, Clause* c)
 {
     if (val)
         _litTrue.push_back(c);

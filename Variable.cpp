@@ -1,6 +1,5 @@
 #include "Variable.hh"
 #include "Clause.hh"
-//#include "BasicClause.hh"
 #if VERBOSE > 0
 #include <iostream>
 #endif
@@ -11,9 +10,9 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
     const bool isTrue = _varState == TRUE;
     const Literal lit = Literal(this, isTrue);
 
-    std::vector<StockedClause*>& cTrue  = isTrue ? _litTrue : _litFalse;
-    std::vector<StockedClause*>& cFalse = isTrue ? _litFalse : _litTrue;
-    std::vector<StockedClause*>::iterator it;
+    std::vector<Clause*>& cTrue  = isTrue ? _litTrue : _litFalse;
+    std::vector<Clause*>& cFalse = isTrue ? _litFalse : _litTrue;
+    std::vector<Clause*>::iterator it;
     
     // propagation des litéraux true
     it = cTrue.begin();
@@ -33,7 +32,7 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
     it = cFalse.begin();
     while (it != cFalse.end())
     {
-        StockedClause* target = *it;
+        Clause* target = *it;
         if(target->setLitFalse(lit))
         {
             //if (it+1 != cFalse.end())
@@ -97,9 +96,9 @@ void Variable::releaseVariable()
 {
     const bool isTrue = _varState == TRUE;
     const Literal lit = Literal(this, isTrue);
-    const std::vector<StockedClause*>& cTrue  = isTrue ? _litTrue : _litFalse;
-    const std::vector<StockedClause*>& cFalse = isTrue ? _litFalse : _litTrue;
-    std::vector<StockedClause*>::const_iterator it;
+    const std::vector<Clause*>& cTrue  = isTrue ? _litTrue : _litFalse;
+    const std::vector<Clause*>& cFalse = isTrue ? _litFalse : _litTrue;
+    std::vector<Clause*>::const_iterator it;
 
     for(it = cTrue.begin(); it != cTrue.end(); ++it)
         (*it)->freeLitTrue(lit);

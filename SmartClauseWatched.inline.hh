@@ -6,24 +6,13 @@
 #ifndef SMARTCLAUSEWATCHED_INLINE_HH
 #define SMARTCLAUSEWATCHED_INLINE_HH
 
-#if VERBOSE > 0
-#include <iostream>
-#endif
-
-/*
-static inline bool isLitTrue(const Literal& lit)
-{
-    const varState v = lit.var()->_varState;
-    return (v == TRUE && lit.pos()) || (v == FALSE && !lit.pos());
-}
-*/
 
 
 inline SmartClauseWatched::SmartClauseWatched(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE() _lits(list), _watcheSecond(true)
 {
-    list[0].var()->linkToClause(list[0].pos(), (StockedClause*)this);
-    list[1].var()->linkToClause(list[1].pos(), (StockedClause*)this);
+    list[0].var()->linkToClause(list[0].pos(), (Clause*)this);
+    list[1].var()->linkToClause(list[1].pos(), (Clause*)this);
     #if VERBOSE > 5
     std::cout << "Watched Lit (" << _number << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
               << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
@@ -39,7 +28,7 @@ inline bool SmartClauseWatched::setLitFalse(const Literal& l)
               << " (watched " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
               << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << ")"<< std::endl;
     #endif
-    if (isLitTrue(_lits[0]))
+    if (_lits[0].isTrue())
     {
         _watcheSecond = false;
         return true;
@@ -66,7 +55,7 @@ inline bool SmartClauseWatched::setLitFalse(const Literal& l)
     if (posFree != _lits.end())
     {
         //_lits[0].var()->unlinkToClause(_lits[0].pos(), (StockedClause*)this);
-        posFree->var()->linkToClause(posFree->pos(), (StockedClause*)this);
+        posFree->var()->linkToClause(posFree->pos(), (Clause*)this);
         std::swap(_lits[0], *posFree);
         #if VERBOSE > 5
             std::cout << "new watched : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
@@ -77,7 +66,6 @@ inline bool SmartClauseWatched::setLitFalse(const Literal& l)
         return false;
 }
 
-
 inline bool SmartClauseWatched::setLitTrue(const Literal& l)
 {
     if (l.var() == _lits[0].var())
@@ -86,7 +74,7 @@ inline bool SmartClauseWatched::setLitTrue(const Literal& l)
     }
     else
     {
-        if( isLitTrue(_lits[0]))
+        if(_lits[0].isTrue())
         {
             _watcheSecond = false;
             return true;
@@ -100,15 +88,15 @@ inline bool SmartClauseWatched::setLitTrue(const Literal& l)
 }
 
 
+
 inline void SmartClauseWatched::freeLitTrue(const Literal& l)
 {
     if (!_watcheSecond)
     {
         _watcheSecond = true;
-        _lits[1].var()->linkToClause(_lits[1].pos(), (StockedClause*)this);
+        _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
     }
 }
-
 
 inline void SmartClauseWatched::freeLitFalse(const Literal& l)
 {
@@ -142,7 +130,7 @@ inline Literal SmartClauseWatched::chooseFree() const
 
 inline bool SmartClauseWatched::satisfied() const
 {
-    return isLitTrue(_lits[0]) || isLitTrue(_lits[1]);
+    return _lits[0].isTrue() || _lits[1].isTrue();
     //const varState v = _lits[0].var()->_varState;
     //return (v == TRUE && _lits[0].pos()) || (v == FALSE && !_lits[0].pos());
 }

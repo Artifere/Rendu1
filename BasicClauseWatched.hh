@@ -4,22 +4,22 @@
 
 #include <vector>
 
-class BasicClauseWatched HERITED_CLAUSE
+class BasicClauseWatched
 {
 public:
     BasicClauseWatched(const CONSTR_ARGS(list));
     
-    VIRTUAL bool setLitFalse(const Literal& l);
-    VIRTUAL bool setLitTrue(const Literal& l);
+    bool setLitFalse(const Literal& l);
+    bool setLitTrue(const Literal& l);
 
-    VIRTUAL void freeLitFalse(const Literal &l);
-    VIRTUAL void freeLitTrue(const Literal &l);
+    void freeLitFalse(const Literal &l);
+    void freeLitTrue(const Literal &l);
     
-    VIRTUAL size_t freeSize (void) const;
-    VIRTUAL Literal chooseFree(void) const;
-    VIRTUAL bool satisfied(void) const;
+    size_t freeSize (void) const;
+    Literal chooseFree(void) const;
+    bool satisfied(void) const;
 
-    VIRTUAL ~BasicClauseWatched();
+    ~BasicClauseWatched();
 
     #if VERBOSE > 1
     const unsigned _number;
