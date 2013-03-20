@@ -242,8 +242,8 @@ bool SatProblem::satisfiability()
         Literal newAssign;
         if(_deductions.empty())
         {
-            //newAssign = _unassignedVar.chooseRAND();
-            newAssign = _unassignedVar.chooseUnassigned();
+            newAssign = _unassignedVar.chooseRAND();
+            //newAssign = _unassignedVar.chooseUnassigned();
             #if VERBOSE > 1
             print_debug();
             std::cout<<"Assignation : ";

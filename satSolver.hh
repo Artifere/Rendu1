@@ -17,7 +17,7 @@ class SatProblem
 protected:
     std::vector<Variable*> _variables;
     std::vector<Clause*> _clauses;
-	
+
     // true si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,Variable*> > _stackBacktrack;
 
