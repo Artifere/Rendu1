@@ -2,11 +2,11 @@ SRC= parser.cpp Variable.cpp satSolver.cpp
 r_OBJ= ${SRC:.cpp=_r.o}
 d_OBJ= ${SRC:.cpp=_d.o}
 b_OBJ= ${SRC:.cpp=_b.o}
-CXX	 = g++
+CXX	 = g++ -DCLAUSE=SmartClause
 LFLAGS   = -lm
-CXXFLAGS = -DINLINED_CLAUSE -DVERBOSE=1 -Wall -Wextra -O2 -s -Wno-unused-parameter
-CXXDEBUGFLAGS = -DINLINED_CLAUSE -DVERBOSE=10 -Wall -Wextra -O0 -g -Wno-unused-parameter
-CXXBENCHFLAGS = -DINLINED_CLAUSE -DVERBOSE=0 -Wall -Wextra -O2 -s -Wno-unused-parameter
+CXXFLAGS = -DVERBOSE=1 -Wall -Wextra -O2 -s -Wno-unused-parameter
+CXXDEBUGFLAGS = -DVERBOSE=10 -Wall -Wextra -O0 -g -Wno-unused-parameter
+CXXBENCHFLAGS = -DVERBOSE=0 -Wall -Wextra -O2 -s -Wno-unused-parameter
 
 all : release
 

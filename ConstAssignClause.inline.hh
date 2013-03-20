@@ -7,6 +7,7 @@
 #define CONSTASSIGNCLAUSE_INLINE_HH
 
 
+
 inline ConstAssignClause::ConstAssignClause(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(NULL), _numOfFree(list.size())
 {
@@ -15,9 +16,10 @@ inline ConstAssignClause::ConstAssignClause(const CONSTR_ARGS(list))
     {
         _currentHash += (intptr_t)it->var();
         _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
-        it->var()->linkToClause(it->pos(), (StockedClause*)this);
+        it->var()->linkToClause(it->pos(), (Clause*)this);
     }
 }
+
 
 
 inline bool ConstAssignClause::setLitFalse(const Literal& l)
@@ -30,6 +32,7 @@ inline bool ConstAssignClause::setLitFalse(const Literal& l)
     }
     return false;
 }
+
 inline bool ConstAssignClause::setLitTrue(const Literal& l)
 {
     if(_satisfied == NULL)
@@ -38,11 +41,13 @@ inline bool ConstAssignClause::setLitTrue(const Literal& l)
 }
 
 
+
 inline void ConstAssignClause::freeLitTrue(const Literal& l)
 {
     if(_satisfied == l.var())
         _satisfied = NULL;
 }
+
 inline void ConstAssignClause::freeLitFalse(const Literal& l)
 {
     if(_satisfied == NULL)
@@ -54,6 +59,7 @@ inline void ConstAssignClause::freeLitFalse(const Literal& l)
 }
 
 
+
 inline size_t ConstAssignClause::freeSize (void) const
 {
     return _numOfFree;
@@ -63,11 +69,16 @@ inline Literal ConstAssignClause::chooseFree(void) const
 {
     return Literal((Variable*)_currentHash, _currentHashVal);
 }
+
 inline bool ConstAssignClause::satisfied(void) const
 {
     return _satisfied;
 }
 
-inline ConstAssignClause::~ConstAssignClause() { }
+
+
+inline ConstAssignClause::~ConstAssignClause()
+{
+}
 
 #endif//CONSTASSIGNCLAUSE_INLINE_HH

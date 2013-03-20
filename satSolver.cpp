@@ -221,18 +221,10 @@ void SatProblem::addClause(CONSTR_ARGS(list))
         else
         {
             // on passe par des pointeurs pour garder la structure d'objet :
-            // UsedClause hérite de StockedClause, donc UsedClause* passe pour StockedClause*
-            // alors que UsedClause ne passe pas pour StockedClause à priori
-            // (et on perd l'interet de la surcharge avec la conversion de UsedClause vers StockedClause)
-            #ifdef INLINED_CLAUSE
-            StockedClause* nclause = new UsedClause(CALL_CONSTR(list));
-            #else
-            StockedClause * nclause;
-            if(list.size() > 8)
-                nclause = new BasicClauseWatched(CALL_CONSTR(list));
-             else
-                nclause = new SmartClause(CALL_CONSTR(list));
-            #endif
+            // UsedClause hérite de Clause, donc UsedClause* passe pour Clause*
+            // alors que UsedClause ne passe pas pour Clause à priori
+            // (et on perd l'interet de la surcharge avec la conversion de UsedClause vers Clause)
+            Clause* nclause = new Clause(CALL_CONSTR(list));
             _clauses.push_back(nclause);
         }
     }

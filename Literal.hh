@@ -47,6 +47,13 @@ public:
     {
         return _var < lit._var || (_var == lit._var && !_pos && lit._pos);
     };
+
+    inline bool isTrue(void) const
+    {
+        const varState v = _var->_varState;
+        return (v == TRUE && _pos) || (v == FALSE && !_pos);
+    };
+
 };
 
 
