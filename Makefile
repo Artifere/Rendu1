@@ -1,40 +1,31 @@
+# implementation par défaut (est remplacée avec make CLAUSE=[AutreImplementation])
+CLAUSE   = SmartClause
+# niveau de verbose par défaut du release (est remplacé avec make VERBOSE=n)
+VERBOSE  = 1
+
 SRC= parser.cpp Variable.cpp satSolver.cpp
-r_OBJ= ${SRC:.cpp=_r.o}
-d_OBJ= ${SRC:.cpp=_d.o}
-b_OBJ= ${SRC:.cpp=_b.o}
-CXX	 = g++ -DCLAUSE=BasicClauseWatched
+OBJ= ${SRC:.cpp=.o}
+d_OBJ= ${SRC:.cpp=.o}
+CXX	 = g++
 LFLAGS   = -lm
-CXXFLAGS = -DVERBOSE=1 -Wall -Wextra -O2 -s -Wno-unused-parameter
+CXXFLAGS = -DVERBOSE=$(VERBOSE) -Wall -Wextra -O2 -s -Wno-unused-parameter
 CXXDEBUGFLAGS = -DVERBOSE=10 -Wall -Wextra -O0 -g -Wno-unused-parameter
-CXXBENCHFLAGS = -DVERBOSE=0 -Wall -Wextra -O2 -s -Wno-unused-parameter
 
 all : release
 
-release: $(r_OBJ) $(HDR) 
-	${CXX} $(CXXFLAGS) -o $@ $(r_OBJ) $(LFLAGS)  $(LIB) ;\
-    cp release testsSatisfiable/exe;\
-    cp release testsUnsatisfiable/exe
+release: $(OBJ) $(HDR) 
+	${CXX} $(CXXFLAGS) -o $@ $(OBJ) $(LFLAGS)  $(LIB)
 
 debug: $(d_OBJ) $(HDR) 
 	${CXX} $(CXXDEBUGFLAGS) -o $@ $(d_OBJ) $(LFLAGS)  $(LIB)
 
-bench  : $(b_OBJ) $(HDR)
-	${CXX} $(CXXBENCHFLAGS) -o $@ $(b_OBJ) $(LFLAGS) $(LIB);\
-    cp bench testsSatisfiable/;\
-    cp bench testsUnsatisfiable/;\
-
-
 clean: 
-	rm -f $(r_OBJ) $(d_OBJ) $(b_OBJ) $(DEP)
+	rm -f $(OBJ) $(d_OBJ)
 
 destroy: clean
-	rm -f release debug bench
+	rm -f release debug
 
-%_r.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+%.o: %.cpp
+	$(CXX) -DCLAUSE=$(CLAUSE) $(CXXFLAGS) -c $< -o $@
+     
 
-%_d.o: %.cpp
-	$(CXX) $(CXXDEBUGFLAGS) -c $< -o $@
-
-%_b.o: %.cpp
-	$(CXX) $(CXXBENCHFLAGS) -c $< -o $@
