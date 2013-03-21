@@ -5,7 +5,15 @@
 #include "Variable.hh"
 #include <cstdlib>
 #include <vector>
+#include <cstdlib>
+#include <boost/random/taus88.hpp>
+#include <boost/random/bernoulli_distribution.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
+#include <boost/random.hpp>
 
+boost::taus88 boostRand;
+boost::random::uniform_int_distribution<> dist;
+boost::random::bernoulli_distribution<> boolDist;
 
 
 class UnassignedBucket
@@ -22,7 +30,7 @@ public:
     void deleteUnassigned(Variable *var);
 
 private:
-    
+       
     std::vector<Variable*> _unassignedList;
     std::vector<std::vector<Variable*>::iterator > _unassignedIndex;
     
@@ -36,7 +44,7 @@ inline UnassignedBucket::UnassignedBucket(const unsigned int nbrVar)
     : _unassignedList(), _unassignedIndex(nbrVar)
 {
     _unassignedList.reserve(nbrVar);
-    srand(17);
+    //srandom(17);
 }
           
 
@@ -71,10 +79,10 @@ inline Literal UnassignedBucket::chooseUnassigned(void)
 
 inline Literal UnassignedBucket::chooseRAND(void)
 {
-    unsigned int retId = rand()%_unassignedList.size();
+    unsigned int retId = dist(boostRand)%_unassignedList.size();
     Variable* ret = _unassignedList[retId];
     deleteUnassigned(ret);
-    return Literal(ret, rand()%2);
+    return Literal(ret, boolDist(boostRand));
 }
 
 

@@ -102,7 +102,7 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     
     // initialise _unassignedVar
     // commence par trier les variables (heuristique faite pour améliorer le choix de unassignedVar dans le cas non rand)
-    std::sort(_variables.begin(), _variables.end(), varCompr);
+    //std::sort(_variables.begin(), _variables.end(), varCompr);
     std::vector<Variable*>::const_iterator it;
     for (it = _variables.begin(); it != _variables.end(); it++)
         _unassignedVar.addUnassigned(*it);
