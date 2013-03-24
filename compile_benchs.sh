@@ -1,7 +1,7 @@
 #! /bin/bash
 
 make clean ;
-for clause in "SmartClause" "BasicClauseWatched" "SmartClauseWatched"
+for clause in "SmartClause" "WatchedClause" "SmartWatchedClause"
 do (
   echo "Génération de $clause :" ;
   make CLAUSE=$clause VERBOSE=0 ;

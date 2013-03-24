@@ -19,10 +19,9 @@
 #include "BasicClause.hh"
 #include "ConstAssignClause.hh"
 #include "OneWatchedClause.hh"
-#include "BasicClauseWatched.hh"
+#include "WatchedClause.hh"
 #include "SmartClause.hh"
-#include "SmartClauseWatched.hh"
+#include "SmartWatchedClause.hh"
 
-//typedef SmartClause Clause;
 
 #endif //CLAUSE_HH

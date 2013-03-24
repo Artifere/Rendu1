@@ -74,7 +74,7 @@ static inline bool varCompr(const Variable* v1, const Variable* v2)
 {
     return std::max(v1->sizeLitTrue(), v1->sizeLitFalse()) < std::max(v2->sizeLitTrue(), v2->sizeLitFalse());
     //return v1->sizeLitTrue() + v1->sizeLitFalse() < v2->sizeLitTrue() + v2->sizeLitFalse();
-    //eturn v2->sizeLitTrue() + v2->sizeLitFalse() < v1->sizeLitTrue() + v1->sizeLitFalse(); // 5.5s pour BasicClauseWatched sur unsat-41
+    //eturn v2->sizeLitTrue() + v2->sizeLitFalse() < v1->sizeLitTrue() + v1->sizeLitFalse(); // 5.5s pour WatchedClause sur unsat-41
 }
 
 

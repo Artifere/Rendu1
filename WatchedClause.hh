@@ -1,13 +1,13 @@
 #include "Clause.hh"
-#ifndef BASICCLAUSEWATCHED_HH
-#define BASICCLAUSEWATCHED_HH
+#ifndef WATCHEDCLAUSE_HH
+#define WATCHEDCLAUSE_HH
 
 #include <vector>
 
-class BasicClauseWatched
+class WatchedClause
 {
 public:
-    BasicClauseWatched(const CONSTR_ARGS(list));
+    WatchedClause(const CONSTR_ARGS(list));
     
     bool setLitFalse(const Literal& l);
     bool setLitTrue(const Literal& l);
@@ -19,7 +19,7 @@ public:
     Literal chooseFree(void) const;
     bool satisfied(void) const;
 
-    ~BasicClauseWatched();
+    ~WatchedClause();
 
     #if VERBOSE > 1
     const unsigned _number;
@@ -40,7 +40,7 @@ protected:
 ***/
 
 
-inline BasicClauseWatched::BasicClauseWatched(const CONSTR_ARGS(list))
+inline WatchedClause::WatchedClause(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE() _lits(list)
 {
     list[0].var()->linkToClause(list[0].pos(), (Clause*)this);
@@ -53,7 +53,7 @@ inline BasicClauseWatched::BasicClauseWatched(const CONSTR_ARGS(list))
 
 
 
-inline bool BasicClauseWatched::setLitFalse(const Literal& l)
+inline bool WatchedClause::setLitFalse(const Literal& l)
 {
     #if VERBOSE >= 10
     std::cout << "setLitFalse " << _number << " : " << l.var()->varNumber << "." << l.pos()
@@ -92,7 +92,7 @@ inline bool BasicClauseWatched::setLitFalse(const Literal& l)
     return (newWatched != end);
 }
 
-inline bool BasicClauseWatched::setLitTrue(const Literal& l)
+inline bool WatchedClause::setLitTrue(const Literal& l)
 {
     //if (l.var() == _lits[0].var())//!isLitTrue(_lits[0]))
     //    std::swap(_lits[0], _lits[1]);
@@ -101,36 +101,36 @@ inline bool BasicClauseWatched::setLitTrue(const Literal& l)
 
 
 
-inline void BasicClauseWatched::freeLitTrue(const Literal& l)
+inline void WatchedClause::freeLitTrue(const Literal& l)
 {
 }
 
-inline void BasicClauseWatched::freeLitFalse(const Literal& l)
+inline void WatchedClause::freeLitFalse(const Literal& l)
 {
 }
 
 
 
-inline size_t BasicClauseWatched::freeSize() const
+inline size_t WatchedClause::freeSize() const
 {
     return (_lits[0].var()->_varState == FREE) // utilise la conversion true->1, false->0
          + (_lits[1].var()->_varState == FREE);
 }
 
-inline Literal BasicClauseWatched::chooseFree() const
+inline Literal WatchedClause::chooseFree() const
 {
     return _lits[_lits[1].var()->_varState == FREE]; // utilise la conversion true->1, false->0
 }
 
-inline bool BasicClauseWatched::satisfied() const
+inline bool WatchedClause::satisfied() const
 {
     return _lits[0].isTrue() || _lits[1].isTrue();
 }
 
 
 
-inline BasicClauseWatched::~BasicClauseWatched()
+inline WatchedClause::~WatchedClause()
 {
 }
 
-#endif //BASICCLAUSEWATCHED_HH
+#endif //WATCHEDCLAUSE_HH

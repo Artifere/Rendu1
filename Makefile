@@ -11,8 +11,8 @@ LFLAGS   = -lm
 CXXFLAGS = -DVERBOSE=$(VERBOSE) -Wall -Wextra -O2 -s -Wno-unused-parameter
 CXXDEBUGFLAGS = -DVERBOSE=10 -Wall -Wextra -O0 -g -Wno-unused-parameter
 
-all : release
-
+all : release clean
+      
 release: $(OBJ) $(HDR) 
 	${CXX} $(CXXFLAGS) -o $@ $(OBJ) $(LFLAGS)  $(LIB)
 

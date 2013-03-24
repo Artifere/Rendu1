@@ -1,13 +1,13 @@
 #include "Clause.hh"
-#ifndef SMARTCLAUSEWATCHED_HH
-#define SMARTCLAUSEWATCHED_HH
+#ifndef SMARTWATCHEDWATCHED_HH
+#define SMARTWATCHEDWATCHED_HH
 
 #include <vector>
 
-class SmartClauseWatched
+class SmartWatchedClause
 {
 public:
-    SmartClauseWatched(const CONSTR_ARGS(list));
+    SmartWatchedClause(const CONSTR_ARGS(list));
     
     bool setLitFalse(const Literal& l);
     bool setLitTrue(const Literal& l);
@@ -19,7 +19,7 @@ public:
     Literal chooseFree(void) const;
     bool satisfied(void) const;
 
-    ~SmartClauseWatched();
+    ~SmartWatchedClause();
 
     #if VERBOSE > 1
     const unsigned _number;
@@ -41,7 +41,7 @@ protected:
 ***/
 
 
-inline SmartClauseWatched::SmartClauseWatched(const CONSTR_ARGS(list))
+inline SmartWatchedClause::SmartClauseWatched(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE() _lits(list), _watcheSecond(true)
 {
     list[0].var()->linkToClause(list[0].pos(), (Clause*)this);
@@ -54,7 +54,7 @@ inline SmartClauseWatched::SmartClauseWatched(const CONSTR_ARGS(list))
 
 
 
-inline bool SmartClauseWatched::setLitFalse(const Literal& l)
+inline bool SmartWatchedClause::setLitFalse(const Literal& l)
 {
     #if VERBOSE >= 10
     std::cout << "setLitFalse " << _number << " : " << l.var()->varNumber << "." << l.pos()
@@ -99,7 +99,7 @@ inline bool SmartClauseWatched::setLitFalse(const Literal& l)
         return false;
 }
 
-inline bool SmartClauseWatched::setLitTrue(const Literal& l)
+inline bool SmartWatchedClause::setLitTrue(const Literal& l)
 {
     if (l.var() == _lits[0].var())
     {
@@ -122,7 +122,7 @@ inline bool SmartClauseWatched::setLitTrue(const Literal& l)
 
 
 
-inline void SmartClauseWatched::freeLitTrue(const Literal& l)
+inline void SmartWatchedClause::freeLitTrue(const Literal& l)
 {
     if (!_watcheSecond)
     {
@@ -131,20 +131,20 @@ inline void SmartClauseWatched::freeLitTrue(const Literal& l)
     }
 }
 
-inline void SmartClauseWatched::freeLitFalse(const Literal& l)
+inline void SmartWatchedClause::freeLitFalse(const Literal& l)
 {
 }
 
 
 
-inline size_t SmartClauseWatched::freeSize() const
+inline size_t SmartWatchedClause::freeSize() const
 {
     // utilise la conversion tru=>1, false=>0
     return (_lits[0].var()->_varState == FREE)
          + (_lits[1].var()->_varState == FREE);
 }
 
-inline Literal SmartClauseWatched::chooseFree() const
+inline Literal SmartWatchedClause::chooseFree() const
 {
     if (_lits[0].var()->_varState == FREE)
         return _lits[0];
@@ -152,7 +152,7 @@ inline Literal SmartClauseWatched::chooseFree() const
         return _lits[1];
 }
 
-inline bool SmartClauseWatched::satisfied() const
+inline bool SmartWatchedClause::satisfied() const
 {
     return _lits[0].isTrue() || _lits[1].isTrue();
     //const varState v = _lits[0].var()->_varState;
@@ -161,8 +161,8 @@ inline bool SmartClauseWatched::satisfied() const
 
 
 
-inline SmartClauseWatched::~SmartClauseWatched()
+inline SmartWatchedClause::~SmartClauseWatched()
 {
 }
 
-#endif //SMARTCLAUSEWATCHED_HH
+#endif //SMARTWATCHEDCLAUSE_HH
