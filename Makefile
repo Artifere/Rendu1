@@ -6,7 +6,7 @@ VERBOSE  = 1
 SRC= parser.cpp Variable.cpp satSolver.cpp
 OBJ= ${SRC:.cpp=.o}
 d_OBJ= ${SRC:.cpp=.o}
-p_OBJ= ${SRC:.cpp=.o}
+p_OBJ= ${SRC:.cpp=_p.o}
 CXX	 = g++
 LFLAGS   = -lm
 CXXFLAGS = -DVERBOSE=$(VERBOSE) -Wall -Wextra -s -O2 -Wno-unused-parameter
@@ -21,8 +21,8 @@ release: $(OBJ) $(HDR)
 debug: $(d_OBJ) $(HDR) 
 	${CXX} $(CXXDEBUGFLAGS) -o $@ $(d_OBJ) $(LFLAGS)  $(LIB)
 
-profile: $(p_OBJ) $(p_HDR) 
-	${CXX} $(CXXFLAGS) -o $@ $(OBJ) $(LFLAGS)  $(LIB)
+profile: $(p_OBJ) $(HDR) 
+	${CXX} $(CXXPROFILEFLAGS) -o $@ $(p_OBJ) $(LFLAGS)  $(LIB)
 
 clean: 
 	rm -f $(OBJ) $(d_OBJ) $(p_OBJ)
@@ -33,4 +33,6 @@ destroy: clean
 %.o: %.cpp
 	$(CXX) -DCLAUSE=$(CLAUSE) $(CXXFLAGS) -c $< -o $@
      
-
+%_p.o: %.cpp
+	$(CXX) -DCLAUSE=$(CLAUSE) $(CXXPROFILEFLAGS) -c $< -o $@
+ 
