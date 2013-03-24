@@ -1,19 +1,10 @@
 #ifndef UNASSIGNED_BUCKET_HH
 #define UNASSIGNED_BUCKET_HH
-/** A FAIRE : std::swap... **/
 
 #include "Variable.hh"
 #include <cstdlib>
 #include <vector>
 #include <cstdlib>
-#include <boost/random/taus88.hpp>
-#include <boost/random/bernoulli_distribution.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
-#include <boost/random.hpp>
-
-boost::taus88 boostRand;
-boost::random::uniform_int_distribution<> dist;
-boost::random::bernoulli_distribution<> boolDist;
 
 
 class UnassignedBucket
@@ -44,7 +35,7 @@ inline UnassignedBucket::UnassignedBucket(const unsigned int nbrVar)
     : _unassignedList(), _unassignedIndex(nbrVar)
 {
     _unassignedList.reserve(nbrVar);
-    //srandom(17);
+    srandom(17);
 }
           
 
@@ -79,10 +70,10 @@ inline Literal UnassignedBucket::chooseUnassigned(void)
 
 inline Literal UnassignedBucket::chooseRAND(void)
 {
-    unsigned int retId = dist(boostRand)%_unassignedList.size();
+    unsigned int retId = random()%_unassignedList.size();
     Variable* ret = _unassignedList[retId];
     deleteUnassigned(ret);
-    return Literal(ret, boolDist(boostRand));
+    return Literal(ret, random()%2);
 }
 
 
