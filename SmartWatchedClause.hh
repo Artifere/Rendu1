@@ -41,7 +41,7 @@ protected:
 ***/
 
 
-inline SmartWatchedClause::SmartClauseWatched(const CONSTR_ARGS(list))
+inline SmartWatchedClause::SmartWatchedClause(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE() _lits(list), _watcheSecond(true)
 {
     list[0].var()->linkToClause(list[0].pos(), (Clause*)this);
@@ -161,7 +161,7 @@ inline bool SmartWatchedClause::satisfied() const
 
 
 
-inline SmartWatchedClause::~SmartClauseWatched()
+inline SmartWatchedClause::~SmartWatchedClause()
 {
 }
 
