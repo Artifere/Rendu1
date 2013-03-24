@@ -45,9 +45,9 @@ int main()
 
     SatProblem problem(std::cin, nbrVar, nbrClauses);
 
-    bool is_sat = problem.satisfiability();
+    bool isSat = problem.satisfiability();
     #if VERBOSE > 0
-    if(is_sat)
+    if(isSat)
     {
         std::cout << "s SATISFIABLE" << std::endl;
         const std::vector<std::pair<unsigned,varState> > assign = problem.getAssign();

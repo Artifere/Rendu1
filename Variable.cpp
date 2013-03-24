@@ -27,8 +27,7 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
             ++it;
     }
 
-    // on sépare en deux pour faire encore quelques tests de moins si il y a une erreure
-    // (comme je sais que tu t'inquiète de quelques tests ;)
+    // on sépare en deux pour faire encore quelques tests de moins si il y a une erreur
     it = cFalse.begin();
     while (it != cFalse.end())
     {
