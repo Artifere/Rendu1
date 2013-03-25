@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <vector>
 #include <cstdlib>
+#include <ctime>
 
 
 class UnassignedBucket
@@ -23,7 +24,7 @@ public:
 private:
        
     std::vector<Variable*> _unassignedList;
-    std::vector<std::vector<Variable*>::iterator > _unassignedIndex;
+    std::vector<std::vector<Variable*>::iterator> _unassignedIndex;
     
 };
 
@@ -35,7 +36,7 @@ inline UnassignedBucket::UnassignedBucket(const unsigned int nbrVar)
     : _unassignedList(), _unassignedIndex(nbrVar)
 {
     _unassignedList.reserve(nbrVar);
-    srandom(17);
+    srandom(time(NULL));
 }
           
 
@@ -55,7 +56,7 @@ inline void UnassignedBucket::deleteUnassigned(Variable* var)
     _unassignedIndex[last] = _unassignedIndex[toDel];
     *_unassignedIndex[last] = _unassignedList.back();
     _unassignedList.pop_back();
-} 
+}
 
 
 
@@ -74,6 +75,26 @@ inline Literal UnassignedBucket::chooseRAND(void)
     Variable* ret = _unassignedList[retId];
     deleteUnassigned(ret);
     return Literal(ret, random()%2);
+}
+
+inline Literal UnassignedBucket::chooseMOMS(void)
+{
+    unsigned maxVal = 0;
+    Variable* currentMax = _unassignedList.back();
+    
+    std::vector<Variable*>::iterator it;
+    for(it = _unassignedList.begin(); it != _unassignedList.end(); it++)
+    {
+        unsigned m = std::max((*it)->sizeLitTrue(), (*it)->sizeLitFalse());
+        if (m > maxVal)
+        {
+            maxVal = m;
+            currentMax = *it;
+        }
+    }
+    //std::cout << "choix de " << currentMax->varNumber << " (maxval : " << maxVal << ")" << std::endl;
+    deleteUnassigned(currentMax);
+    return Literal(currentMax, currentMax->sizeLitTrue() > currentMax->sizeLitFalse());
 }
 
 
