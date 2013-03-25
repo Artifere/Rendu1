@@ -3,12 +3,13 @@
 make clean ;
 for clause in "SmartClause" "WatchedClause" "SmartWatchedClause"
 do (
-  echo "Génération de $clause :" ;
+  newName= bench$clause ;
+  echo "Génération de $newName :" ;
   make CLAUSE=$clause VERBOSE=0 ;
-  mv release b_$clause
-  cp b_$clause testsSatisfiable/ ;
-  cp b_$clause testsUnsatisfiable/ ;
-#  rm b_$clause
+  mv release $newName ;
+  cp $newName Moulinette/ ;
+  cp $newName Moulinette/ ;
+  rm $newName ;
   make clean ;
 ) done ;
 
