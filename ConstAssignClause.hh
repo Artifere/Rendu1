@@ -2,7 +2,7 @@
 #define CONSTASSIGNCLAUSE_HH
 
 // Pour intptr_t
-#include <cstdint>
+#include <stdint.h>
 
 
 /***
@@ -54,7 +54,7 @@ protected:
 /* Le constructeur initialise les différents « hash » et lie la clause à toutes
    les variables qu'elle contient */
 inline ConstAssignClause::ConstAssignClause(const CONSTR_ARGS(list))
-    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _isSatisfied(NULL), _numOfFree(list.size())
+    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(NULL), _numOfFree(list.size())
 {
     std::vector<Literal>::const_iterator it;
     for(it = list.begin(); it != list.end(); ++it)

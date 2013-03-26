@@ -47,7 +47,7 @@ protected:
 
 
 inline BasicClause::BasicClause(const CONSTR_ARGS(list))
-    :  INIT_FOR_VERBOSE()  _isSatisfied(false), _free(list.begin(),list.end())
+    :  INIT_FOR_VERBOSE()  _satisfied(false), _free(list.begin(),list.end())
 {
     std::vector<Literal>::const_iterator it;
     for (it = list.begin(); it != list.end(); ++it)

@@ -1,7 +1,7 @@
 #ifndef SMARTCLAUSE_HH
 #define SMARTCLAUSE_HH
 
-#include <cstdint> // pour intptr_t
+#include <stdint.h> // pour intptr_t
 #include <vector>
 
 
@@ -11,8 +11,8 @@ class SmartClause
 public:
     SmartClause(const CONSTR_ARGS(list));
 
-    bool setLitFalse(const Literal& l);
-    bool setLitTrue(const Literal& l);
+    bool setLitFalse(const Literal &l);
+    bool setLitTrue(const Literal &l);
 
     void freeLitFalse(const Literal &l);
     void freeLitTrue(const Literal &l);
@@ -32,11 +32,11 @@ protected:
     // XOR des polarités des litéraux libres contenus dans la clause
     bool _currentHashVal;
     bool _satisfied;
-    // Liste des litéraux que l'on a arrêté de « surveiller » après avoir satisfait une clause
-    std::vector<Literal> _notWatched;
     // Nombere de variables libres restantes (taille de la partie « vivante » de la clause)
     unsigned int _numOfFree;
-};
+    // Liste des litéraux que l'on a arrêté de « surveiller » après avoir satisfait une clause
+    std::vector<Literal> _notWatched;
+    };
 
 
 
@@ -50,7 +50,7 @@ protected:
 /* le constructeur initialise les différents « hash » et lie la clause à toutes
    les variables qu'elle contient */
 inline SmartClause::SmartClause(const CONSTR_ARGS(list))
-    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _isSatisfied(false), _numOfFree(list.size()), _notWatched(0)
+    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size()), _notWatched(0)
 {
     std::vector<Literal>::const_iterator it;
     for(it = list.begin(); it != list.end(); ++it)
@@ -66,7 +66,7 @@ inline SmartClause::SmartClause(const CONSTR_ARGS(list))
 /* Met un litéral à faux dans la clause. Si la clause est satisfaite, on arrête de la « surveiller » via ce litéral.
    Sinon, on met à jour les hash et le nombre de variables libres. */
 
-inline bool SmartClause::setLitFalse(const Literal& l)
+inline bool SmartClause::setLitFalse(const Literal &l)
 {
     if(_satisfied)
         _notWatched.push_back(l.invert());
@@ -82,7 +82,7 @@ inline bool SmartClause::setLitFalse(const Literal& l)
 
 
 // Idem que pour setLitFalse, mais on n'a pas besoin de mettre à jour les hash et le nombre de variables libres.
-inline bool SmartClause::setLitTrue(const Literal& l)
+inline bool SmartClause::setLitTrue(const Literal &l)
 {
     const bool res = _satisfied;
     _satisfied = true;
