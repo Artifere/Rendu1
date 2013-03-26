@@ -47,7 +47,7 @@ protected:
  * (toutes inlines)
 ***/
 
-/* le constructeur initialise les différents « hash » et lie la clause à toutes
+/* Le constructeur initialise les différents « hash » et lie la clause à toutes
    les variables qu'elle contient */
 inline SmartClause::SmartClause(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size()), _notWatched(0)
@@ -65,7 +65,6 @@ inline SmartClause::SmartClause(const CONSTR_ARGS(list))
 
 /* Met un litéral à faux dans la clause. Si la clause est satisfaite, on arrête de la « surveiller » via ce litéral.
    Sinon, on met à jour les hash et le nombre de variables libres. */
-
 inline bool SmartClause::setLitFalse(const Literal &l)
 {
     if(_satisfied)

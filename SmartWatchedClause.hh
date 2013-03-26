@@ -30,9 +30,9 @@ public:
 protected:
     /* Les watched literals sont les deux premiers de ce tableau. */
     std::vector<Literal> _lits;
-    /* indique si le deuxième watched du tableau est vraiment surveillé ou pas
-       (optimisation "smart" semblable à SmartClause, mais pour les watched) */
-    bool _watcheSecond;
+    /* Indique si le deuxième watched du tableau est vraiment surveillé ou pas
+       (optimisation « smart » semblable à SmartClause, mais pour les watched) */
+    bool _watchSecond;
 };
 
 
@@ -45,9 +45,9 @@ protected:
 ***/
 
 
-// Quand on initialise une clause, on définit les watched litéraux
+// Quand on initialise une clause, on définit les watched litérals
 inline SmartWatchedClause::SmartWatchedClause(const CONSTR_ARGS(list))
-    : INIT_FOR_VERBOSE() _lits(list), _watcheSecond(true)
+    : INIT_FOR_VERBOSE() _lits(list), _watchSecond(true)
 {
     list[0].var()->linkToClause(list[0].pos(), (Clause*)this);
     list[1].var()->linkToClause(list[1].pos(), (Clause*)this);
@@ -69,14 +69,14 @@ inline bool SmartWatchedClause::setLitFalse(const Literal& lit)
     #endif
     if (_lits[0].isTrue())
     {
-        _watcheSecond = false;
+        _watchSecond = false;
         return true;
     }
-    // échange _lts[0] et _lits[1] pour que lit soit le watched 0
+    // Échange _lits[0] et _lits[1] pour que lit soit le watched 0
     if (lit.var() == _lits[1].var())
         std::swap(_lits[0], _lits[1]);
-    // si l'un des litéraux est vrai, posFree pointe sur ce litéral
-    // sinon il pointe sur un litéral FREE (ou sur end() s'il n'y en a pas)
+    /* si l'un des litéraux est vrai, posFree pointe sur ce litéral.
+       sinon il pointe sur un litéral FREE (ou sur end() s'il n'y en a pas). */
     std::vector<Literal>::iterator it, posFree = _lits.end();
     for (it = _lits.begin()+2; it != _lits.end(); ++it)
     {
@@ -102,6 +102,8 @@ inline bool SmartWatchedClause::setLitFalse(const Literal& lit)
     return posFree == _lits.end();
 }
 
+
+
 inline bool SmartWatchedClause::setLitTrue(const Literal& l)
 {
     if (l.var() == _lits[0].var())
@@ -112,7 +114,7 @@ inline bool SmartWatchedClause::setLitTrue(const Literal& l)
     {
         if(_lits[0].isTrue())
         {
-            _watcheSecond = false;
+            _watchSecond = false;
             return true;
         }
         else
@@ -125,15 +127,16 @@ inline bool SmartWatchedClause::setLitTrue(const Literal& l)
 
 
 
-// nécessaire de recommencer à surveiller watched[1] si _watchesecond
+// Il est nécessaire de recommencer à surveiller watched[1] si _watchSecond
 inline void SmartWatchedClause::freeLitTrue(const Literal& l)
 {
-    if (!_watcheSecond)
+    if (!_watchSecond)
     {
-        _watcheSecond = true;
+        _watchSecond = true;
         _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
     }
 }
+
 
 inline void SmartWatchedClause::freeLitFalse(const Literal& l)
 {
@@ -143,10 +146,11 @@ inline void SmartWatchedClause::freeLitFalse(const Literal& l)
 
 inline unsigned int SmartWatchedClause::freeSize() const
 {
-    // utilise la conversion true=>1, false=>0
+    // Utilise la conversion true=>1, false=>0
     return (_lits[0].var()->_varState == FREE)
          + (_lits[1].var()->_varState == FREE);
 }
+
 
 inline Literal SmartWatchedClause::getRemaining() const
 {
@@ -167,4 +171,4 @@ inline SmartWatchedClause::~SmartWatchedClause()
 {
 }
 
-#endif //SMARTWATCHEDCLAUSE_HH
+#endif // SMARTWATCHEDCLAUSE_HH defined
