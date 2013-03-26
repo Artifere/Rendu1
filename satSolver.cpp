@@ -40,16 +40,52 @@ int main()
 {
     std::ios_base::sync_with_stdio(false);
     
+    /*
+    // récupère l'heuristique à utiliser pour le programme
+    Literal (UnassignedBucket::*heuristique)(void) = NULL;
+    if (argc == 2)
+    {
+        std::string arg(argv[1]);
+        
+        if (arg == "BASIC")
+            heuristique = & UnassignedBucket::chooseBASIC;
+        else if (arg == "RAND")
+            heuristique = & UnassignedBucket::chooseRAND;
+        else if (arg == "MOMS")
+            heuristique = & UnassignedBucket::chooseMOMS;
+        #if VERBOSE > 1
+        else
+            std::cout << "c L'heuristique '"<<arg<<"' passée en paramêtre est invalide.\n";
+        #endif
+    }
+    #if VERBOSE > 2
+    else
+        std::cout << "c PAs d'heuristique passée en argument (nombre d'argument invalide)\n";
+    #endif
+    if (heuristique == NULL)
+    {
+        #if VERBOSE > 1
+        std::cout << "c L'heuristique par défaut BASIC est choisie.\n";
+        #endif
+        heuristique = & UnassignedBucket::chooseBASIC;
+    }
+    */
+
+    // parse le header dans l'entrée standart : nombre de variables/clauses
     unsigned int nbrVar, nbrClauses;
     parserHeader(std::cin, nbrVar, nbrClauses);
 
+    // initialise le problème en lisant l'entrée standart
     SatProblem problem(std::cin, nbrVar, nbrClauses);
 
+    // résoud le problème
+    #if VERBOSE == 0
+    problem.satisfiability();
+    #else
     bool isSat = problem.satisfiability();
-    #if VERBOSE > 0
     if(isSat)
     {
-        std::cout << "s SATISFIABLE" << std::endl;
+        std::cout << "s SATISFIABLE\n";
         const std::vector<std::pair<unsigned,varState> > assign = problem.getAssign();
         for(size_t k = 0; k < assign.size(); k++)
         {
@@ -58,24 +94,15 @@ int main()
                 std::cout << "-";
             if (assign[k].second == FREE)
                 std::cout << "?";
-            std::cout << assign[k].first << std::endl;
+            std::cout << assign[k].first << '\n';
         }
     }
     else
-        std::cout << "s UNSATISFIABLE" << std::endl;
+        std::cout << "s UNSATISFIABLE\n";
     #endif
 }
 
 
-
-
-
-static inline bool varCompr(const Variable* v1, const Variable* v2)
-{
-    return std::max(v1->sizeLitTrue(), v1->sizeLitFalse()) < std::max(v2->sizeLitTrue(), v2->sizeLitFalse());
-    //return v1->sizeLitTrue() + v1->sizeLitFalse() < v2->sizeLitTrue() + v2->sizeLitFalse();
-    //eturn v2->sizeLitTrue() + v2->sizeLitFalse() < v1->sizeLitTrue() + v1->sizeLitFalse(); // 5.5s pour WatchedClause sur unsat-41
-}
 
 
 SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses)
@@ -243,8 +270,9 @@ bool SatProblem::satisfiability()
         if(_deductions.empty())
         {
             //newAssign = _unassignedVar.chooseRAND();
-            //newAssign = _unassignedVar.chooseUnassigned();
-            newAssign = _unassignedVar.chooseMOMS();
+            //newAssign = _unassignedVar.chooseBASIC();
+            //newAssign = _unassignedVar.chooseMOMS();
+            newAssign = _unassignedVar.chooseUnassigned();
             #if VERBOSE > 1
             print_debug();
             std::cout<<"Assignation : ";

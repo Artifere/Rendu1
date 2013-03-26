@@ -1,7 +1,11 @@
 # implementation par défaut (est remplacée avec make CLAUSE=[AutreImplementation])
 CLAUSE   = SmartClause
+# heuristique utilisée pour le programme pour choisir une variable non affectée
+# (est remplacée avec  make CHOOSE=[choix de l'heuristique])
+CHOOSE   = BASIC
 # niveau de verbose par défaut du release (est remplacé avec make VERBOSE=n)
 VERBOSE  = 1
+
 
 SRC= parser.cpp Variable.cpp satSolver.cpp
 OBJ= ${SRC:.cpp=.o}
@@ -9,9 +13,9 @@ d_OBJ= ${SRC:.cpp=.o}
 p_OBJ= ${SRC:.cpp=_p.o}
 CXX	 = g++
 LFLAGS   = -lm
-CXXFLAGS = -DVERBOSE=$(VERBOSE) -Wall -Wextra -s -O2 -Wno-unused-parameter
-CXXDEBUGFLAGS = -DVERBOSE=10 -Wall -Wextra -O0 -g -Wno-unused-parameter
-CXXPROFILEFLAGS = -DVERBOSE=0 -Wall -Wextra -g -O2 -Wno-unused-parameter
+CXXFLAGS =  -DCLAUSE=$(CLAUSE) -DCHOOSE=$(CHOOSE) -DVERBOSE=$(VERBOSE) -Wall -Wextra -s -O2 -Wno-unused-parameter
+CXXDEBUGFLAGS = -DCLAUSE=$(CLAUSE) -DCHOOSE=$(CHOOSE) -DVERBOSE=10 -Wall -Wextra -O0 -g -Wno-unused-parameter
+CXXPROFILEFLAGS = -DCLAUSE=$(CLAUSE) -DCHOOSE=$(CHOOSE) -DVERBOSE=0 -Wall -Wextra -g -O2 -Wno-unused-parameter
 
 all : release
       
@@ -31,8 +35,8 @@ destroy: clean
 	rm -f release debug profile
 
 %.o: %.cpp
-	$(CXX) -DCLAUSE=$(CLAUSE) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
      
 %_p.o: %.cpp
-	$(CXX) -DCLAUSE=$(CLAUSE) $(CXXPROFILEFLAGS) -c $< -o $@
- 
+	$(CXX) $(CXXPROFILEFLAGS) -c $< -o $@
+

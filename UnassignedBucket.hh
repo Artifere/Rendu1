@@ -7,22 +7,34 @@
 #include <cstdlib>
 #include <ctime>
 
+#include <algorithm> // pour std::max_element
+
+
+#ifndef CHOOSE
+ #define CHOOSE BASIC
+#endif
+// un peu de vaudou préprocesseur
+#define FNC_CHOIX(u) choose ## u
+#define FNC_CHOIX_E(u) FNC_CHOIX(u)
+
+#define chooseUnassigned FNC_CHOIX_E(CHOOSE)
+
 
 class UnassignedBucket
 {
 public:
     UnassignedBucket(const unsigned int nbrVar);
 
-    Literal chooseUnassigned(void);
-    Literal chooseRAND(void);
-    Literal chooseMOMS();
-    Literal chooseDLIS();
-    
     void addUnassigned(Variable *var);
     void deleteUnassigned(Variable *var);
+    
+    Literal chooseBASIC(void);
+    Literal chooseRAND(void);
+    Literal chooseMOMS(void);
+    Literal chooseDLIS(void);
 
 private:
-       
+    
     std::vector<Variable*> _unassignedList;
     std::vector<std::vector<Variable*>::iterator> _unassignedIndex;
     
@@ -62,7 +74,7 @@ inline void UnassignedBucket::deleteUnassigned(Variable* var)
 
 
 
-inline Literal UnassignedBucket::chooseUnassigned(void)
+inline Literal UnassignedBucket::chooseBASIC(void)
 {
     Variable* ret = _unassignedList.back();
     _unassignedList.pop_back();
@@ -71,7 +83,7 @@ inline Literal UnassignedBucket::chooseUnassigned(void)
 
 inline Literal UnassignedBucket::chooseRAND(void)
 {
-    unsigned int retId = random()%_unassignedList.size();
+    unsigned int retId = random() % _unassignedList.size();
     Variable* ret = _unassignedList[retId];
     deleteUnassigned(ret);
     return Literal(ret, random()%2);
@@ -79,22 +91,9 @@ inline Literal UnassignedBucket::chooseRAND(void)
 
 inline Literal UnassignedBucket::chooseMOMS(void)
 {
-    unsigned maxVal = 0;
-    Variable* currentMax = _unassignedList.back();
-    
-    std::vector<Variable*>::iterator it;
-    for(it = _unassignedList.begin(); it != _unassignedList.end(); it++)
-    {
-        unsigned m = std::max((*it)->sizeLitTrue(), (*it)->sizeLitFalse());
-        if (m > maxVal)
-        {
-            maxVal = m;
-            currentMax = *it;
-        }
-    }
-    //std::cout << "choix de " << currentMax->varNumber << " (maxval : " << maxVal << ")" << std::endl;
-    deleteUnassigned(currentMax);
-    return Literal(currentMax, currentMax->sizeLitTrue() > currentMax->sizeLitFalse());
+    Variable* m = *std::max_element(_unassignedList.begin(), _unassignedList.end(), varCompr);
+    deleteUnassigned(m);
+    return Literal(m, m->sizeLitTrue() > m->sizeLitFalse());
 }
 
 
