@@ -138,7 +138,7 @@ Dans le dossier d'une courbe :
 	./run-tests.sh    (pour lancer les calculs (temps d'exécution) d'une courbe)
 	gnuplot -persist script-plot.p  (pour tracer/visualiser la courbe)
 NOTE :
-	pour que gnuplot affiche la courbe directement à l'éxécution de la commande,
+	Pour que gnuplot affiche la courbe directement à l'éxécution de la commande,
 	il est nécessaire que le packet gnuplot-x11 soit installé sur la machine (et non pas gnuplot-nox)
 
 
