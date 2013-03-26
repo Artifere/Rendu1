@@ -16,4 +16,4 @@ void parserListLit(std::istream& input, std::vector<Literal>& ans, const std::ve
 
 
 
-#endif//PARSER_HH
+#endif //PARSER_HH defined

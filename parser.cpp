@@ -2,16 +2,16 @@
 #include <string>
 
 
-
+//Ignore les commentaires
 void skipComment(std::istream& input)
 {
-    // skip comments
     std::string read;
     while((input >> std::ws) && (std::cin.peek()=='c'))
         std::getline(input, read);
 }
 
 
+// Parse l'en-tête du fichier d'entrée, et signale s'il y a une erreur de format
 void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrClauses)
 {
     std::string read;
@@ -28,6 +28,7 @@ void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrCl
 }
 
 
+// Parse le reste du fichier
 void parserListLit(std::istream& input, std::vector<Literal>& ans, const std::vector<Variable*>& addr)
 {
     int n;
@@ -42,7 +43,7 @@ void parserListLit(std::istream& input, std::vector<Literal>& ans, const std::ve
                       <<"variable d'indice "<<abs_n<<" invalide "
                       <<"(l'indice doit être compris entre 1 et "<<addr.size()<<")."
                       <<std::endl;
-            // le programme continu en ignorant la variable
+            // le programme continue en ignorant la variable
             std::cout <<"c La variable est ignorée." << std::endl;
             #endif
         }
