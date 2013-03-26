@@ -4,6 +4,9 @@
 #include <iostream>
 #endif
 
+
+/* propage l'assignation d'une variable dans toutes les clauses dans lesquelles elle apparaît
+   arrête de surveiller une clause si setLitTrue/False renvoie true */
 bool Variable::propagateVariable(std::stack<Literal>& deductions)
 {
     bool isError = false;
@@ -34,7 +37,6 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
         Clause* target = *it;
         if(target->setLitFalse(lit))
         {
-            //if (it+1 != cFalse.end())
             *it = cFalse.back();
             cFalse.pop_back();
         }
@@ -74,7 +76,7 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
             }
         }
     }
-    // on fini la propagation si il y a une erreur
+    // On fini la propagation (n'arrive que si il y a eu une erreur)
     while (it != cFalse.end())
     {
         if((*it)->setLitFalse(lit))
@@ -91,7 +93,9 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
 
 
 
-void Variable::releaseVariable()
+/* Annule les changements fait par propagateVariable dans les clauses contenant la variable.
+   Cette fonction doit être appellée lors du backtrack */
+void Variable::releaseVariable(void)
 {
     const bool isTrue = _varState == TRUE;
     const Literal lit = Literal(this, isTrue);
