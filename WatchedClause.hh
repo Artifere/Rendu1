@@ -1,8 +1,8 @@
-#include "Clause.hh"
 #ifndef WATCHEDCLAUSE_HH
 #define WATCHEDCLAUSE_HH
 
 #include <vector>
+#include "Literal.hh"
 
 class WatchedClause
 {
@@ -25,8 +25,8 @@ public:
     const unsigned _number;
     #endif
 protected:
-    // les deux premers éléments du tableau sont surveillés
-    // si on trouve un litéral vrai, on le surveille dans _literals[0]
+    /* Les watched literals sont les deux premiers de ce tableau. Si de plus un des litéraux surveillés est à vrai,
+       On le met en première case du tableau. */
     std::vector<Literal> _lits;
 
 };
@@ -35,11 +35,12 @@ protected:
 
 
 /***
- * Implementation des methodes de la classe
+ * Implémentation des méthodes de la classe
  * (toutes inlines)
 ***/
 
 
+// Quand on initialise une clause, on définis les watched litéraux
 inline WatchedClause::WatchedClause(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE() _lits(list)
 {
@@ -60,8 +61,10 @@ inline bool WatchedClause::setLitFalse(const Literal& l)
               << " (watched " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
               << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << ")"<< std::endl;
     #endif
-    if (_lits[0].isTrue())//|| _lits[1].isTrue()) // possible optimisation. ne semble pas gagner grand chose
+    // Ne tester qu'un seul des litéraux améliore les performances :o
+    if (_lits[0].isTrue()) //|| _lits[1].isTrue())
         return false;
+
     // si l'un des litéraux est vrai, newWatched pointe sur ce litéral
     // sinon il pointe sur un litéral FREE (ou sur end() s'il n'y en a pas)
     const std::vector<Literal>::iterator end = _lits.end();
@@ -133,4 +136,4 @@ inline WatchedClause::~WatchedClause()
 {
 }
 
-#endif //WATCHEDCLAUSE_HH
+#endif // WATCHEDCLAUSE_HH defined
