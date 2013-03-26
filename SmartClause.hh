@@ -9,16 +9,16 @@ class SmartClause
 {
 public:
     SmartClause(const CONSTR_ARGS(list));
-    
+
     bool setLitFalse(const Literal& l);
     bool setLitTrue(const Literal& l);
 
     void freeLitFalse(const Literal &l);
     void freeLitTrue(const Literal &l);
-    
+
     size_t freeSize (void) const;
-    Literal chooseFree(void) const;
-    bool satisfied(void) const;
+    Literal getRemaining(void) const;
+    bool isSatisfied(void) const;
 
     ~SmartClause();
 
@@ -26,11 +26,15 @@ public:
     const unsigned _number;
     #endif
 protected:
-    intptr_t _currentHash; // sum of the adresses of the FREE Variables contained in the ConstAssignClause
-    bool _currentHashVal; // xor of all the pos() of the free literals contained in the ConstAssignClause
-    bool _satisfied; // the adresse of the first TRUE Literal of the ConstAssignClause
-    unsigned int _numOfFree; // number of FREE Variables contained in the ConstAssignClause
+    // Somme des adresses des variables libres contenues dans la clause
+    intptr_t _currentHash;
+    // XOR des polarités des litéraux libres contenus dans la clause
+    bool _currentHashVal;
+    bool _satisfied;
+    // Liste des litéraux que l'on a arrêté de « surveiller » après avoir satisfait une clause
     std::vector<Literal> _notWatched;
+    // Nombere de variables libres restantes (taille de la partie « vivante » de la clause)
+    unsigned int _numOfFree;
 };
 
 
@@ -38,15 +42,15 @@ protected:
 
 
 /***
- * Implementation des methodes de la classe
+ * Implémentation des méthodes de la classe
  * (toutes inlines)
 ***/
 
-
+/* le constructeur initialise les différents « hash » et lie la clause à toutes
+   les variables qu'elle contient */
 inline SmartClause::SmartClause(const CONSTR_ARGS(list))
-    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size()), _notWatched(0)
+    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _isSatisfied(false), _numOfFree(list.size()), _notWatched(0)
 {
-    //_notWatched.reserve(6);
     std::vector<Literal>::const_iterator it;
     for(it = list.begin(); it != list.end(); ++it)
     {
@@ -57,6 +61,9 @@ inline SmartClause::SmartClause(const CONSTR_ARGS(list))
 }
 
 
+
+/* Met un litéral à faux dans la clause. Si la clause est satisfaite, on arrête de la « surveiller » via ce litéral.
+   Sinon, on met à jour les hash et le nombre de variables libres. */
 
 inline bool SmartClause::setLitFalse(const Literal& l)
 {
@@ -71,6 +78,9 @@ inline bool SmartClause::setLitFalse(const Literal& l)
     return _satisfied;
 }
 
+
+
+// Idem que pour setLitFalse, mais on n'a pas besoin de mettre à jour les hash et le nombre de variables libres.
 inline bool SmartClause::setLitTrue(const Literal& l)
 {
     const bool res = _satisfied;
@@ -81,11 +91,11 @@ inline bool SmartClause::setLitTrue(const Literal& l)
 }
 
 
-
+/* Comme on arête de surveiller un litéral dès que la clause devient satisfaite, si on appelle
+   freeLitTrue, c'est forcément sur le premier litéral qui l'a rendue satisfaite. La clause
+   n'est ainsi plus satisfiable, et on resurveille donc tous ses litéraux. */
 inline void SmartClause::freeLitTrue(const Literal& l)
 {
-    // pas de condition : comme on arrête de surveiller un litéral après que la clause soit vraie,
-    // si on appelle freeLitTrue c'est forcement sur le premier litéral qui l'a mise à vrai
     _satisfied = false;
     std::vector<Literal>::const_iterator it;
     for(it = _notWatched.begin(); it != _notWatched.end(); it++)
@@ -93,10 +103,13 @@ inline void SmartClause::freeLitTrue(const Literal& l)
     _notWatched.clear();
 }
 
+
+
+/* Comme on arête de surveiller un litéral une fois que la clause devient satisfaite, on n'a pas
+   besoin de vérifier qu'on a bien mis à jour le hash et le nombre de variables libres pour ce
+   litéral : il a bien été mis à faux si l'on appelle freeLitFalse. */
 inline void SmartClause::freeLitFalse(const Literal& l)
 {
-    // pas de condition : comme on arrête de surveiller un litéral après que la clause soit vraie,
-    // si on appelle freeLitFalse, alors c'est que la clause n'est pas vraie
     _currentHash += (intptr_t)l.var();
     _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen avec l.invert().pos()
     _numOfFree++;
@@ -109,12 +122,17 @@ inline size_t SmartClause::freeSize (void) const
     return _numOfFree;
 }
 
-inline Literal SmartClause::chooseFree(void) const
+
+
+// Cette fonction est appelée quand il ne reste plus qu'une variable libre, et renvoie le litéral en question
+inline Literal SmartClause::getRemaining(void) const
 {
     return Literal((Variable*)_currentHash, _currentHashVal);
 }
 
-inline bool SmartClause::satisfied(void) const
+
+
+inline bool SmartClause::isSatisfied(void) const
 {
     return _satisfied;
 }
@@ -125,4 +143,4 @@ inline SmartClause::~SmartClause()
 {
 }
 
-#endif //SMARTCLAUSE_HH
+#endif // SMARTCLAUSE_HH defined

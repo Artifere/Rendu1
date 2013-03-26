@@ -115,7 +115,7 @@ inline size_t ConstAssignClause::freeSize (void) const
 }
 
 
-// Cette fonction est appelés quand il ne reste plus qu'une variable libre, et renvoie le litéral en question
+// Cette fonction est appelée quand il ne reste plus qu'une variable libre, et renvoie le litéral en question
 inline Literal ConstAssignClause::getRemaining(void) const
 {
     return Literal((Variable*)_currentHash, _currentHashVal);

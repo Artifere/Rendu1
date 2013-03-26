@@ -1,24 +1,29 @@
-#include "Clause.hh"
 #ifndef BASICCLAUSE_HH
 #define BASICCLAUSE_HH
 
 #include <set>
 #include <stack>
 
+
+/***
+   * Version des clauses de base du rendu 1.
+***/
+
+
 class BasicClause
 {
 public:
     BasicClause(const CONSTR_ARGS(list));
-    
+
     bool setLitFalse(const Literal& l);
     bool setLitTrue(const Literal& l);
 
     void freeLitFalse(const Literal &l);
     void freeLitTrue(const Literal &l);
-    
+
     size_t freeSize (void) const;
-    Literal chooseFree(void) const;
-    bool satisfied(void) const;
+    Literal getRemaining(void) const;
+    bool isSatisfied(void) const;
 
     ~BasicClause();
 
@@ -42,7 +47,7 @@ protected:
 
 
 inline BasicClause::BasicClause(const CONSTR_ARGS(list))
-    :  INIT_FOR_VERBOSE()  _satisfied(false), _free(list.begin(),list.end())
+    :  INIT_FOR_VERBOSE()  _isSatisfied(false), _free(list.begin(),list.end())
 {
     std::vector<Literal>::const_iterator it;
     for (it = list.begin(); it != list.end(); ++it)
@@ -103,12 +108,12 @@ inline size_t BasicClause::freeSize(void) const
     return _free.size();
 }
 
-inline Literal BasicClause::chooseFree(void) const
+inline Literal BasicClause::getRemaining(void) const
 {
     return *_free.begin();
 }
 
-inline bool BasicClause::satisfied(void) const
+inline bool BasicClause::isSatisfied(void) const
 {
     return _satisfied;
 }
@@ -120,4 +125,4 @@ inline BasicClause::~BasicClause()
 }
 
 
-#endif //BASICCLAUSE_HH
+#endif // BASICCLAUSE_HH defined
