@@ -22,7 +22,7 @@ protected:
     std::stack<std::pair<bool,Variable*> > _stackBacktrack;
 
     /* Ensemble de valeurs à propager (literaux dont on connaît la valeur).
-       Il est d'intersection vide avec celles déjà assignées (dans _stackCallback), et il n'y aaucune contradiction entre les déductions.
+       Il est d'intersection vide avec celles déjà assignées (dans _stackCallback), et il n'y a aucune contradiction entre les déductions.
        Remarque : on n'a pas besoin de stoquer la valeur déduite : elle est contenue dans _varStates */
     std::stack<Literal> _deductions; 
 
