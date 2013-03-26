@@ -11,13 +11,13 @@ VERBOSE  = 1
 
 SRC= parser.cpp Variable.cpp satSolver.cpp
 OBJ= ${SRC:.cpp=.o}
-d_OBJ= ${SRC:.cpp=.o}
+d_OBJ= ${SRC:.cpp=_d.o}
 p_OBJ= ${SRC:.cpp=_p.o}
 CXX	 = g++
 LFLAGS   = -lm
 IMPLFLAGS= -DCLAUSE=$(CLAUSE) -DCHOOSE=$(CHOOSE) -DVERBOSE=$(VERBOSE) -DINIT_SORT=$(INIT_SORT)
 CXXFLAGS = $(IMPLFLAGS) -Wall -Wextra -s -O2 -Wno-unused-parameter
-CXXDEBUGFLAGS = $(IMPLFLAGS) -DVERBOSE=10 -Wall -Wextra -O0 -g -Wno-unused-parameter
+CXXDEBUGFLAGS = $(IMPLFLAGS) -Wall -Wextra -O0 -g -Wno-unused-parameter
 CXXPROFILEFLAGS = $(IMPLFLAGS) -DVERBOSE=0 -Wall -Wextra -g -O2 -Wno-unused-parameter
 
 all : release
@@ -43,3 +43,5 @@ destroy: clean
 %_p.o: %.cpp
 	$(CXX) $(CXXPROFILEFLAGS) -c $< -o $@
 
+%_d.o: %.cpp
+	$(CXX) $(CXXDEBUGFLAGS) -c $< -o $@
