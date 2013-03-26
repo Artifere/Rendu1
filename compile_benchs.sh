@@ -1,15 +1,26 @@
 #! /bin/bash
 
 make clean ;
-for clause in "SmartClause" "WatchedClause" "SmartWatchedClause"
+for clause in "Smart" "Watched" "SmartWatched" "ConstAssign" "Basic"
 do (
-  newName= bench$clause ;
-  echo "Génération de $newName :" ;
-  make CLAUSE=$clause VERBOSE=0 ;
-  mv release $newName ;
-  cp $newName Moulinette/ ;
-  cp $newName Moulinette/ ;
-  rm $newName ;
-  make clean ;
+    for heur in "BASIC" "RAND" "DLIS"
+    do (
+        # avec tri
+        newName=bench${clause}${heur}AvecTri;
+        echo "***** Génération de $newName *****" ;
+        make CLAUSE=${clause}Clause CHOOSE=$heur VERBOSE=0 INIT_SORT=1 ;
+        mv release $newName ;
+        cp $newName Moulinette/Executables ;
+        rm $newName ;
+        make clean ;
+        # sans tri
+        newName=bench${clause}${heur};
+        echo "***** Génération de $newName *****" ;
+        make CLAUSE=${clause}Clause CHOOSE=$heur VERBOSE=0 INIT_SORT=0 ;
+        mv release $newName ;
+        cp $newName Moulinette/Executables ;
+        rm $newName ;
+        make clean ;
+    ) done ;
 ) done ;
 
