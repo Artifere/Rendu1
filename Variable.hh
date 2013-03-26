@@ -13,7 +13,8 @@ enum varState
 } varState;
 
 
-// Besoin de forward declaration de Literal pour éviter une dépendance circulaire
+// Besoin de forward declaration pour Literal et Clause  pour éviter une dépendance circulaire
+   
 class Literal;
 
 #ifndef CLAUSE
@@ -42,16 +43,16 @@ public:
     void linkToClause(bool,Clause*);
     
     bool propagateVariable(std::stack<Literal>& deductions);
-    void releaseVariable();
+    void releaseVariable(void);
     
     #if VERBOSE > 0
-    void print_state() const;
+    void print_state(void) const;
     #endif
     
 };
 
 
-
+// Associe une clause à une variable
 inline void Variable::linkToClause(bool val, Clause* c)
 {
     if (val)
@@ -62,19 +63,18 @@ inline void Variable::linkToClause(bool val, Clause* c)
 
 
 
-
+/* v1 < v2 si le maximum de clauses que permet de satisfaire v1 < au même nombre pour v2
+   On utilise cette comparaison pour l'heuristique statique dans le cas de choose=basic */
 static inline bool varCompr(const Variable* v1, const Variable* v2)
 {
     return std::max(v1->sizeLitTrue(), v1->sizeLitFalse()) < std::max(v2->sizeLitTrue(), v2->sizeLitFalse());
-    //return v1->sizeLitTrue() + v1->sizeLitFalse() < v2->sizeLitTrue() + v2->sizeLitFalse();
-    //eturn v2->sizeLitTrue() + v2->sizeLitFalse() < v1->sizeLitTrue() + v1->sizeLitFalse(); // 5.5s pour WatchedClause sur unsat-41
 }
 
 
 
 #if VERBOSE > 0
 #include <iostream>
-inline void Variable::print_state() const
+inline void Variable::print_state(void) const
 {
     if (_varState == FREE)
         std::cout << "?";
