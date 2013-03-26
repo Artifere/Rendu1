@@ -25,6 +25,7 @@ Julien :
 	- SmartWatchedClause : même optimisation que SmartClause, mais pour les Watched.
 	- chooseMOMS (dans UnassignedBucket) : implémentation de l'heuristique MOMS
 	- compile_bench.sh : script pour compiler les différentes variantes du programme et générer les exécutables
+	- ajout de VERBOSE : option de compilation pour afficher des détails su le déroulement du programme
 
 On a fait en commun les analyses finales et conclusions sur les différentes versions en fonction des types d'entrées.
 	
@@ -100,29 +101,44 @@ On compile le fichier gen en un exécutable gen avec :
 	gcc -Wall -Wextra -O2 -o gen gen.c
 
 On lance alors ./gen v c k n. Ceci a pour effet de créer :
-	* Un dossier tests-v-c-k-n contenant n fichiers à v variables, c clauses, toutes de taille k.
-	  Ces fichiers d'entrés sont générés aléatoirement.
-	* Un script batch-v-c-k-n.sh, par exemple :
-		#!/bin/bash
-		for i in tests-v-c-k-n/*.cnf
-		do
-			$* < $i
-		done
-		exit 0
+	Un dossier tests-v-c-k-n contenant n fichiers à v variables, c clauses, toutes de taille k.
+	(les fichiers d'entrés sont générés aléatoirement)
+	Un script batch-v-c-k-n.sh, par exemple :
+	   #!/bin/bash
+	   for i in tests-v-c-k-n/*.cnf
+	   do
+	      $* < $i
+	   done
+	   exit 0
 	Ce script lance l'exécutable passé en paramètre sur tous les tests du dossier associé.
-Il faut alors rajouter manuellement, pour chaque courbe : script-plot.p et run-tests.sh.
-On a un dossier "Moulinette", qui contient tout ce qui concerne les benchmarks. Dedans :
-	* Un dossier "Exécutables" qui contient les différentes versions du solveur.
-	* Des dossiers, un par courbe, contenant script-plot.p, run-tests.sh, bath-v-c-k-n, ainsi que le dossier d'entrées associé.
-		- script-plot.p contient juste les informations sur le nombre de courbes à tracer ainsi que le nom des graduation de l'axe des abscisses, le style de tracé, et la sortie de gnuplot.
-		- run-tests.sh va exécuter chacun des exécutables spécifiés à l'intérieur sur chacun des batch-v-c-k-n.sh et écrire le temps pris dans comparaison.dat.
-Ainsi pour lancerle benchmark sur une série d'entrées d'un certain type, il suffit de faire ./run-tests.sh, puis de tracer la courbe avec "gnuplot -persist script-plot.p".
+	Il suffit alors de mesurer de temps d'exécution du script
 
 
 
 
-===== Fonctionnement et utilisation de la moulinette =====
 
-Fonctionnement et utilisation du générateur de tests et des scripts pour gnuplot :
-On compile le fichier gen.c en un exécutable gen.
+
+===== Fonctionnement/utilisation de la moulinette =====
+
+On utilise les tests créés par le générateur de tests.
+
+Le dossier Moulinette contient tout ce qui concerne les benchmarks :
+	- Un dossier Executables qui contient les différentes versions du solveur
+	- Un dossier par courbe, contenant :
+		- des dossiers tests-v-c-k-n (générés par le générateur de tests)
+		- sript-plot.p (informations sur le nombre de courbes à tracer, le nom des graduations de l'axe des abscisses, le style de tracé, et la sortie de gnuplot)
+		- run-tests.sh (éxécute chacun des éxécutables spécifiés dans le script sur chacun des batch-v-c-k-n.sh, et écrit le temps pris dans comparaison.dat)
+		- comparaison.dat (le résultat des temps d'exécutions des solveurs)
+
+Dans le dossier d'une courbe :
+	./run-tests.sh    (pour lancer les calculs (temps d'execution) d'une courbe)
+	gnuplot -persist script-plot.p  (pour tracer/visualiser la courbe)
+NOTE :
+	pour que gnuplot affiche la courbe directement à l'éxécution de la commande,
+	il est nécessaire que le packet gnuplot-x11 soit installé (et non pas gnuplot-nox)
+
+
+
+
+
 
