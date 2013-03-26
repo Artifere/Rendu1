@@ -23,12 +23,12 @@ Julien :
 	- Création de Variable (pour utiliser l'adresse de l'objet comme identifiant de variable)
 	- SmartClause : fonctionne comme ConstAssignClause, mais évite la propagation des littéraux dans les clauses déjà satisfaites
 	- SmartWatchedClause : même optimisation que SmartClause, mais pour les Watched.
-	- chooseDLIS (dans UnassignedBucket) : implémentation de l'heuristique DLIS
+	- chooseMOMS (dans UnassignedBucket) : implémentation de l'heuristique MOMS
 	- compile_bench.sh : script pour compiler les différentes variantes du programme et générer les exécutables
 	- ajout de VERBOSE : option de compilation pour afficher des détails su le déroulement du programme
 
 On a fait en commun les analyses finales et conclusions sur les différentes versions en fonction des types d'entrées.
-
+	
 
 
 
@@ -46,15 +46,18 @@ Il contient la valeur courrante de chaque variable, ainsi que la liste des claus
 	- ajout d'une structure UnassignedBucket, qui gère la liste des variables libres.
 C'est cet objet qui sert d'interface pour les heuristiques de choix de variable non assignée.
 Il contient une liste des variables libres (ni assignées, ni déduites en attente d'être assignées),
-et un tableau d'indirection pour trouver la position d'une variable dans la liste en temps constant.
+et un tableau d'indirection pour trouver la position d'une variable dans la liste en temps constant. 
 
 	- ajout des implémentations de clause SmartClause et SmartWatchedClause :
 Ces deux implémentations fonctionnent de la même manière que ConstAssignClause et WatchedClause,
 mais évite de propager les litéraux dans les clauses déjà satisfaites.
+On repère au moment d'assigner un litéral dans une clause que celle-ci est déjà satisfaite,
+et dans ce cas, on "délie" la variable et la clause (la variable ne surveille plus la clause).
+Lorsque la variable qui rendait la clause vraie est libérée, on lie à nouveau toutes les variables qu'on avait délié à la clause.
 
 	- Les fonctions setLitTrue et setLitFalse renvoie un booléen :
 True indique que le littéral passé en paramêtre ne doit plus surveiller la clause.
-Ceci sert pour délier efficacement une variable et une clause (dans Watched et Smart); et résoud un problème d'implémentation qui était présent dans Variable::propagateVariable, qui obligeait à dupliquer la listes des clauses dans laquelle la variable était présente.
+Ceci sert pour délier efficacement une variable et une clause (dans Watched et Smart); et résoud un problème d'implémentation qui était présent dans Variable::propagateVariable, qui obligeait à dupliquer la listes des clauses dans laquelle la variable était présente. 
 
 	- Les implémentations des clauses sont maintenant dans le .hh où elles sont définies au lieu d'un .inline.hh séparé
 Les implémentations sont toutes assez courtes, et le code est plus clair/maintenable (pas besoin de chercher deux fichiers différents pour avoir une implémentation)
@@ -72,7 +75,7 @@ On précise au moment de la compilation l'implémentation des clauses voulue, et
 	make CLAUSE=[clause] CHOOSE=[heuristique] VERBOSE=[verbose_mode]
 avec:
 [clause]       = BasicClause, ConstAssignClause, SmartClause, WatchedClause, SmartWatchedClause
-[heuristique]  = BASIC, RAND, DLIS
+[heuristique]  = BASIC, RAND, MOMS
 [verbose_mode] = entier entre 0 et 10, précise le détail de ce qu'affiche le programme :
     0: rien
     1: uniquement le résultat du programme
@@ -135,7 +138,7 @@ Dans le dossier d'une courbe :
 	gnuplot -persist script-plot.p  (pour tracer/visualiser la courbe)
 NOTE :
 	pour que gnuplot affiche la courbe directement à l'éxécution de la commande,
-	il est nécessaire que le packet gnuplot-x11 soit installé (et non pas gnuplot-nox)
+	il est nécessaire que le packet gnuplot-x11 soit installé sur la machine (et non pas gnuplot-nox)
 
 
 

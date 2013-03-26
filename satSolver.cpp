@@ -40,50 +40,18 @@ int main()
 {
     std::ios_base::sync_with_stdio(false);
 
-    /*
-    // récupère l'heuristique à utiliser pour le programme
-    Literal (UnassignedBucket::*heuristique)(void) = NULL;
-    if (argc == 2)
-    {
-        std::string arg(argv[1]);
-
-        if (arg == "BASIC")
-            heuristique = & UnassignedBucket::chooseBASIC;
-        else if (arg == "RAND")
-            heuristique = & UnassignedBucket::chooseRAND;
-        else if (arg == "DLIS")
-            heuristique = & UnassignedBucket::chooseDLIS;
-        #if VERBOSE > 1
-        else
-            std::cout << "c L'heuristique '"<<arg<<"' passée en paramêtre est invalide.\n";
-        #endif
-    }
-    #if VERBOSE > 2
-    else
-        std::cout << "c PAs d'heuristique passée en argument (nombre d'argument invalide)\n";
-    #endif
-    if (heuristique == NULL)
-    {
-        #if VERBOSE > 1
-        std::cout << "c L'heuristique par défaut BASIC est choisie.\n";
-        #endif
-        heuristique = & UnassignedBucket::chooseBASIC;
-    }
-    */
-
-    // parse le header dans l'entrée standart : nombre de variables/clauses
+    // parse le header dans l'entrée standard : récupère nombre de variables/clauses
     unsigned int nbrVar, nbrClauses;
     parserHeader(std::cin, nbrVar, nbrClauses);
 
-    // initialise le problème en lisant l'entrée standart
+    // initialise le problème en lisant l'entrée standard
     SatProblem problem(std::cin, nbrVar, nbrClauses);
 
     // résoud le problème
     #if VERBOSE == 0
     problem.satisfiability();
     #else
-    bool isSat = problem.satisfiability();
-    if(isSat)
+    if(problem.satisfiability())
     {
         std::cout << "s SATISFIABLE\n";
         const std::vector<std::pair<unsigned,varState> > assign = problem.getAssign();
@@ -108,15 +76,15 @@ int main()
 SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses)
     : _unassignedVar(nbrVar)
 {
-    // optionnel. rend l'initialisation un peu plus rapide
+    // Optionnel. rend l'initialisation un peu plus rapide
     _variables.reserve(nbrVar);
     _clauses.reserve(nbrClauses);
 
-    // initialise les variables
+    // Initialise les variables
     for(unsigned k = 1; k <= nbrVar; k++)
         _variables.push_back(new Variable(k));
 
-    // parse chaque clause du fichier (et crée les liens entre variables et clauses)
+    // Parse chaque clause du fichier (et crée les liens entre variables et clauses)
     unsigned number = 0;
     std::vector<Literal> listClause;
     for(unsigned int k = 0; k < nbrClauses; k++)
@@ -127,15 +95,15 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
         number++;
     }
 
-    // initialise _unassignedVar
+    // Initialise _unassignedVar
     // commence par trier les variables (heuristique faite pour améliorer le choix de unassignedVar dans le cas non rand)
     //std::sort(_variables.begin(), _variables.end(), varCompr);
     std::vector<Variable*>::const_iterator it;
     for (it = _variables.begin(); it != _variables.end(); it++)
         _unassignedVar.addUnassigned(*it);
 
-    // affiche le nombre de fois que chaque variable apparaît dans une clause
-    #if VERBOSE > 2
+    // Affiche le nombre de fois que chaque variable apparaît dans une clause
+    #if VERBOSE >= 5
     std::cout << "c Etat des variables à la fin du parsage : ";
     for (it = _variables.begin(); it != _variables.end(); it++)
     {
@@ -187,7 +155,7 @@ void SatProblem::addClause(CONSTR_ARGS(list))
                 }
                 else
                 {
-                    #if VERBOSE > 3
+                    #if VERBOSE >= 2
                     print_debug();
                     std::cout << "Doublon repéré dans une clause (variable n°" << list[v].var()->varNumber << ")" << std::endl;
                     #endif
@@ -201,16 +169,16 @@ void SatProblem::addClause(CONSTR_ARGS(list))
     // dans ce cas, associe la clause à toutes les variables concernées
     if(trivial)
     {
-        #if VERBOSE > 1
+        #if VERBOSE >= 2
         print_debug();
         std::cout<<"Clause trivialement vraie lue. Elle est ignorée."<<std::endl;
         #endif
     }
     else if(list.size() == 0)
     {
-        #if VERBOSE > 1
+        #if VERBOSE >= 2
         print_debug();
-        std::cout<<"c Clause trivialement fausse lue (clause vide)."<<std::endl;
+        std::cout<<"Clause trivialement fausse lue (clause vide)."<<std::endl;
         #endif
         #if VERBOSE > 0
         std::cout<<"s UNSATISFIABLE"<<std::endl;
@@ -223,7 +191,7 @@ void SatProblem::addClause(CONSTR_ARGS(list))
         if(list.size() == 1)
         {
             Literal& lit = *(list.begin());
-            #if VERBOSE > 2
+            #if VERBOSE >= 2
             print_debug();
             std::cout<<"Clause à déduction immédiate ajoutée : "<<lit.var()->varNumber<<" (valeur "<<lit.pos()<<")"<<std::endl;
             #endif
@@ -235,7 +203,7 @@ void SatProblem::addClause(CONSTR_ARGS(list))
             }
             else if((lit.var()->_varState == TRUE) != lit.pos())
             {
-                #if VERBOSE > 1
+                #if VERBOSE >= 2
                 print_debug();
                 std::cout<<"Clause à déduction immédiate contradictoire avec une autre clause."<<std::endl;
                 #endif
@@ -269,11 +237,8 @@ bool SatProblem::satisfiability()
         Literal newAssign;
         if(_deductions.empty())
         {
-            //newAssign = _unassignedVar.chooseRAND();
-            //newAssign = _unassignedVar.chooseBASIC();
-            //newAssign = _unassignedVar.chooseDLIS();
             newAssign = _unassignedVar.chooseUnassigned();
-            #if VERBOSE > 1
+            #if VERBOSE >= 3
             print_debug();
             std::cout<<"Assignation : ";
             newAssign.var()->print_state();
@@ -287,7 +252,7 @@ bool SatProblem::satisfiability()
         {
             newAssign = _deductions.top();
             _deductions.pop();
-            #if VERBOSE > 1
+            #if VERBOSE >= 3
             print_debug();
             std::cout<<"Assignation ";
             newAssign.var()->print_state();
@@ -297,7 +262,7 @@ bool SatProblem::satisfiability()
             _unassignedVar.deleteUnassigned(newAssign.var());
             _stackBacktrack.push( std::pair<bool, Variable*>(false, newAssign.var()) );
         }
-        #if VERBOSE > 5
+        #if VERBOSE >= 5
         print_debug();
         std::cout << "État des variables :   ";
         std::vector<Variable*>::const_iterator it_debug;
@@ -313,14 +278,14 @@ bool SatProblem::satisfiability()
         // on fait le callback si besoin
         if(isError)
         {
-            #if VERBOSE > 1
+            #if VERBOSE >= 3
             print_debug();
             std::cout<<"Backtrack"<<std::endl;
             #endif
             // vide les déductions pas encore propagées dans les clauses
             while (!_deductions.empty())
             {
-                #if VERBOSE > 4
+                #if VERBOSE >= 4
                 print_debug();
                 std::cout<<"suppression de la déduction ";
                 _deductions.top().var()->print_state();
@@ -337,7 +302,7 @@ bool SatProblem::satisfiability()
                     return false;
                 // sinon, on libère la variable du haut de _stackCallback
                 Variable * var = _stackBacktrack.top().second;
-                #if VERBOSE > 2
+                #if VERBOSE >= 3
                 print_debug();
                 std::cout<<"Retour sur la valeur de la variable "<<var->varNumber<<std::endl;
                 #endif
@@ -355,7 +320,7 @@ bool SatProblem::satisfiability()
                 _unassignedVar.addUnassigned(var);
                 _stackBacktrack.pop();
             } while (_deductions.empty());
-            #if VERBOSE > 4
+            #if VERBOSE >= 4
             print_debug();
             std::cout<<"Fin du backtrack."<<std::endl;
             #endif
