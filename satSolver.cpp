@@ -51,8 +51,8 @@ int main()
             heuristique = & UnassignedBucket::chooseBASIC;
         else if (arg == "RAND")
             heuristique = & UnassignedBucket::chooseRAND;
-        else if (arg == "MOMS")
-            heuristique = & UnassignedBucket::chooseMOMS;
+        else if (arg == "DLIS")
+            heuristique = & UnassignedBucket::chooseDLIS;
         #if VERBOSE > 1
         else
             std::cout << "c L'heuristique '"<<arg<<"' passée en paramêtre est invalide.\n";
@@ -271,7 +271,7 @@ bool SatProblem::satisfiability()
         {
             //newAssign = _unassignedVar.chooseRAND();
             //newAssign = _unassignedVar.chooseBASIC();
-            //newAssign = _unassignedVar.chooseMOMS();
+            //newAssign = _unassignedVar.chooseDLIS();
             newAssign = _unassignedVar.chooseUnassigned();
             #if VERBOSE > 1
             print_debug();

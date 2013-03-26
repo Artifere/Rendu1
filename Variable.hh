@@ -2,11 +2,10 @@
 #define VARIABLE_HH
 
 #include <vector>
-#include <set>
 #include <stack>
 
 
-
+// L'état d'assignation d'une variable
 typedef
 enum varState
 {
@@ -14,10 +13,11 @@ enum varState
 } varState;
 
 
+// Besoin de forward declaration de Literal pour éviter une dépendance circulaire
 class Literal;
 
 #ifndef CLAUSE
- #define CLAUSE BasicClause
+    #define CLAUSE BasicClause
 #endif
 class CLAUSE;
 typedef CLAUSE Clause;
@@ -37,6 +37,7 @@ public:
     
     inline unsigned sizeLitTrue() const { return _litTrue.size(); };
     inline unsigned sizeLitFalse() const { return _litFalse.size(); };
+    
     
     void linkToClause(bool,Clause*);
     

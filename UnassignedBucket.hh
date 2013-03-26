@@ -26,17 +26,17 @@ public:
 
     void addUnassigned(Variable *var);
     void deleteUnassigned(Variable *var);
-    
+
     Literal chooseBASIC(void);
     Literal chooseRAND(void);
-    Literal chooseMOMS(void);
     Literal chooseDLIS(void);
+    Literal chooseMOMS(void);
 
 private:
-    
+
     std::vector<Variable*> _unassignedList;
     std::vector<std::vector<Variable*>::iterator> _unassignedIndex;
-    
+
 };
 
 
@@ -50,7 +50,7 @@ inline UnassignedBucket::UnassignedBucket(const unsigned int nbrVar)
     _unassignedList.reserve(nbrVar);
     srandom(time(NULL));
 }
-          
+
 
 
 
@@ -68,7 +68,7 @@ inline void UnassignedBucket::deleteUnassigned(Variable* var)
 {
     const unsigned int toDel = var->varNumber-1;
     const unsigned int last = _unassignedList.back()->varNumber-1;
-    
+
     _unassignedIndex[last] = _unassignedIndex[toDel];
     *_unassignedIndex[last] = _unassignedList.back();
     _unassignedList.pop_back();
@@ -98,9 +98,9 @@ inline Literal UnassignedBucket::chooseRAND(void)
 
 
 
-/* Heuristique MOMS. On parcourt toutes les variables pour déterminer la meilleure. Ce choix se base sur les
+/* Heuristique DLIS. On parcourt toutes les variables pour déterminer la meilleure. Ce choix se base sur les
    informations que l'on a sur chaque variable. */
-inline Literal UnassignedBucket::chooseMOMS(void)
+inline Literal UnassignedBucket::chooseDLIS(void)
 {
     Variable* m = *std::max_element(_unassignedList.begin(), _unassignedList.end(), varCompr);
     deleteUnassigned(m);
