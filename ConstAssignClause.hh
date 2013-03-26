@@ -2,7 +2,7 @@
 #define CONSTASSIGNCLAUSE_HH
 
 // Pour intptr_t
-#include <stdint.h>
+#include <cstdint>
 
 
 /***
