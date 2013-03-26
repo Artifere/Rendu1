@@ -18,25 +18,22 @@ protected:
     std::vector<Variable*> _variables;
     std::vector<Clause*> _clauses;
 
-    // true si on peut changer la valeur, false si c'était un choix contraint
+    // Vaut true si on peut changer la valeur, false si c'était un choix contraint
     std::stack<std::pair<bool,Variable*> > _stackBacktrack;
 
-    // heuristique choisie pour choisir une variable non assignée
-    //Literal (UnassignedBucket::*const heuristique)(void);
+    /* Ensemble de valeurs à propager (literaux dont on connaît la valeur).
+       Il est d'intersection vide avec celles déjà assignées (dans _stackCallback), et il n'y aaucune contradiction entre les déductions.
+       Remarque : on n'a pas besoin de stoquer la valeur déduite : elle est contenue dans _varStates */
+    std::stack<Literal> _deductions; 
 
-    // ensemble de valeurs à propager (Literaux dont on connaît la valeur).
-    // d'intersection vide avec celles déjà assignées (dans _stackCallback), et aucune contradictions entre les déductions
-    std::stack<Literal> _deductions; // note : on n'a pas besoin de stoquer la valeur déduite : elle est contenue dans _varStates
-
-    // set of all unassigned Variables (ie complementary set of _stackBacktrack)
-    //Pour choisir/mettre à jour la liste des variables non assignées
+    // Ensemble des variables non assignées ni en cours de déductions, utilisées pour les « paris »
     UnassignedBucket _unassignedVar;
 
 public:
     SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses);
     ~SatProblem();
 
-    const std::vector<std::pair<unsigned int,varState> > getAssign() const;
+    inline const std::vector<std::pair<unsigned int,varState> > getAssign(void) const;
 
     void addClause(CONSTR_ARGS(list));
     bool satisfiability();
@@ -45,11 +42,12 @@ public:
 
 
 
-
-const std::vector<std::pair<unsigned, varState> > SatProblem::getAssign() const
+// Appelée à la fin du programme dans le cas où le problème est satisfiable
+inline const std::vector<std::pair<unsigned, varState> > SatProblem::getAssign(void) const
 {
     typedef std::pair<unsigned, varState> return_type;
     std::vector<return_type> res(_variables.size());
+
     for (unsigned k = 0; k < _variables.size(); k++)
         res[k] = return_type(_variables[k]->varNumber, _variables[k]->_varState);
     return res;
@@ -59,4 +57,4 @@ const std::vector<std::pair<unsigned, varState> > SatProblem::getAssign() const
 
 
 
-#endif//SAT_SOLVER_HH
+#endif // SAT_SOLVER_HH defined
