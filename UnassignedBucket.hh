@@ -102,7 +102,7 @@ inline Literal UnassignedBucket::chooseRAND(void)
    informations que l'on a sur chaque variable. */
 inline Literal UnassignedBucket::chooseDLIS(void)
 {
-    Variable* m = *std::max_element(_unassignedList.begin(), _unassignedList.end(), varCompr);
+    Variable* m = *std::max_element(_unassignedList.begin(), _unassignedList.end(), DLISvarCompr);
     deleteUnassigned(m);
     return Literal(m, m->sizeLitTrue() > m->sizeLitFalse());
 }

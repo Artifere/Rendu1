@@ -97,7 +97,7 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     #if defined(INIT_SORT) && INIT_SORT
     /* Commence par trier les variables : celles qui satisfont le plus de clauses sont placées en tête.
        C'est une heuristique faite pour améliorer le choix basique */
-    std::sort(_variables.begin(), _variables.end(), varCompr);
+    std::sort(_variables.begin(), _variables.end(), DLISvarCompr);
     #endif
     std::vector<Variable*>::const_iterator it;
     for (it = _variables.begin(); it != _variables.end(); it++)

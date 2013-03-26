@@ -64,8 +64,8 @@ inline void Variable::linkToClause(bool val, Clause* c)
 
 
 /* v1 < v2 si le maximum de clauses que permet de satisfaire v1 < au même nombre pour v2
-   On utilise cette comparaison pour l'heuristique statique dans le cas de choose=basic */
-static inline bool varCompr(const Variable* v1, const Variable* v2)
+   On utilise cette comparaison pour l'heuristique statique dans le cas de choose=basic et choose = DLIS */
+static inline bool DLISvarCompr(const Variable* v1, const Variable* v2)
 {
     return std::max(v1->sizeLitTrue(), v1->sizeLitFalse()) < std::max(v2->sizeLitTrue(), v2->sizeLitFalse());
 }
