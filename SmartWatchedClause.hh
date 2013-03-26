@@ -1,8 +1,11 @@
-#include "Clause.hh"
 #ifndef SMARTWATCHEDWATCHED_HH
 #define SMARTWATCHEDWATCHED_HH
 
 #include <vector>
+#include "Literal.hh"
+
+
+
 
 class SmartWatchedClause
 {
@@ -25,8 +28,8 @@ public:
     const unsigned _number;
     #endif
 protected:
-    // les deux premers éléments du tableau sont surveillés
-    // si on trouve un litéral vrai, on le surveille dans _literals[0]
+    /* Les watched literals sont les deux premiers de ce tableau. Si de plus un des litéraux surveillés est à vrai,
+       On le met en première case du tableau. */
     std::vector<Literal> _lits;
     bool _watcheSecond;
 };
@@ -36,11 +39,12 @@ protected:
 
 
 /***
- * Implementation des methodes de la classe
+ * Implémentation des méthodes de la classe
  * (toutes inlines)
 ***/
 
 
+// Quand on initialise une clause, on définit les watched litéraux
 inline SmartWatchedClause::SmartWatchedClause(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE() _lits(list), _watcheSecond(true)
 {
