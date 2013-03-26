@@ -105,7 +105,7 @@ inline bool WatchedClause::setLitFalse(const Literal& l)
 }
 
 
-/* on ne fait rien : le litéral passe à vrai, et reste surveillé */
+// on ne fait rien : le litéral passe à vrai, et reste surveillé
 inline bool WatchedClause::setLitTrue(const Literal& l)
 {
     return false;
@@ -113,12 +113,12 @@ inline bool WatchedClause::setLitTrue(const Literal& l)
 
 
 
-/* pas de backtrack pour les watched literals */
+// pas de backtrack pour les watched literals
 inline void WatchedClause::freeLitTrue(const Literal& l)
 {
 }
 
-/* pas de backtrack pour les watched literals */
+// pas de backtrack pour les watched literals
 inline void WatchedClause::freeLitFalse(const Literal& l)
 {
 }

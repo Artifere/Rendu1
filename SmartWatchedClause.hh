@@ -28,9 +28,10 @@ public:
     const unsigned _number;
     #endif
 protected:
-    /* Les watched literals sont les deux premiers de ce tableau. Si de plus un des litéraux surveillés est à vrai,
-       On le met en première case du tableau. */
+    /* Les watched literals sont les deux premiers de ce tableau. */
     std::vector<Literal> _lits;
+    /* indique si le deuxième watched du tableau est vraiment surveillé ou pas
+       (optimisation "smart" semblable à SmartClause, mais pour les watched) */
     bool _watcheSecond;
 };
 
@@ -58,10 +59,11 @@ inline SmartWatchedClause::SmartWatchedClause(const CONSTR_ARGS(list))
 
 
 
-inline bool SmartWatchedClause::setLitFalse(const Literal& l)
+
+inline bool SmartWatchedClause::setLitFalse(const Literal& lit)
 {
     #if VERBOSE >= 10
-    std::cout << "setLitFalse " << _number << " : " << l.var()->varNumber << "." << l.pos()
+    std::cout << "setLitFalse " << _number << " : " << lit.var()->varNumber << "." << lit.pos()
               << " (watched " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
               << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << ")"<< std::endl;
     #endif
@@ -70,8 +72,8 @@ inline bool SmartWatchedClause::setLitFalse(const Literal& l)
         _watcheSecond = false;
         return true;
     }
-    // échange _lts[0] et _lits[1] pour que l soit le watched 0
-    if (l.var() == _lits[1].var())
+    // échange _lts[0] et _lits[1] pour que lit soit le watched 0
+    if (lit.var() == _lits[1].var())
         std::swap(_lits[0], _lits[1]);
     // si l'un des litéraux est vrai, posFree pointe sur ce litéral
     // sinon il pointe sur un litéral FREE (ou sur end() s'il n'y en a pas)
@@ -88,19 +90,16 @@ inline bool SmartWatchedClause::setLitFalse(const Literal& l)
         }
     }
     // posFree devient le nouveau litéral surveillé
-    // (on a donc encore :  si l'un des litéraux de la clause est vrai, alors _lits[0] est vrai)
     if (posFree != _lits.end())
     {
-        //_lits[0].var()->unlinkToClause(_lits[0].pos(), (StockedClause*)this);
         posFree->var()->linkToClause(posFree->pos(), (Clause*)this);
         std::swap(_lits[0], *posFree);
         #if VERBOSE > 5
             std::cout << "new watched : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
                       << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
         #endif
-        return true;
-    } else
-        return false;
+    }
+    return posFree == _lits.end();
 }
 
 inline bool SmartWatchedClause::setLitTrue(const Literal& l)
@@ -126,6 +125,7 @@ inline bool SmartWatchedClause::setLitTrue(const Literal& l)
 
 
 
+// nécessaire de recommencer à surveiller watched[1] si _watchesecond
 inline void SmartWatchedClause::freeLitTrue(const Literal& l)
 {
     if (!_watcheSecond)
@@ -143,7 +143,7 @@ inline void SmartWatchedClause::freeLitFalse(const Literal& l)
 
 inline unsigned int SmartWatchedClause::freeSize() const
 {
-    // utilise la conversion tru=>1, false=>0
+    // utilise la conversion true=>1, false=>0
     return (_lits[0].var()->_varState == FREE)
          + (_lits[1].var()->_varState == FREE);
 }
@@ -159,8 +159,6 @@ inline Literal SmartWatchedClause::getRemaining() const
 inline bool SmartWatchedClause::isSatisfied() const
 {
     return _lits[0].isTrue() || _lits[1].isTrue();
-    //const varState v = _lits[0].var()->_varState;
-    //return (v == TRUE && _lits[0].pos()) || (v == FALSE && !_lits[0].pos());
 }
 
 
