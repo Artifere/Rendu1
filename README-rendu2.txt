@@ -17,7 +17,7 @@ On a fait en commun les analyses finales et conclusions sur les différentes ver
 
 
 Fonctionnement de UnassignedBucket :
-On a un tableau qui contient la liste des variables libres (ni assignées ni déduites).
+On a un tableau _unassignedList qui contient la liste des variables libres (ni assignées ni déduites). De plus, on dispose d'un tableau d'itérateurs _unassignedIndex tel que _unassignedIndex[var] pointe vers la position de var dans le tableau _unassignedList. Ceci permet de supprimer une variable quelconque en temps constant, ce qui est utile dans les heuristiques. L'ajout d'une variable dans la liste se fait également en temps constant.
 
 
 
