@@ -3,7 +3,7 @@
 
 // Pour intptr_t
 #include <stdint.h>
-
+#include "Literal.hh"
 
 /***
    * Cette version est l'ancêtre de SmartClause : elle est plus lente que cette dernière et ne

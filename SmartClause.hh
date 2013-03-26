@@ -3,7 +3,7 @@
 
 #include <stdint.h> // pour intptr_t
 #include <vector>
-
+#include "Literal.hh"
 
 
 class SmartClause

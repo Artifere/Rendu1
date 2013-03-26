@@ -40,7 +40,7 @@ protected:
 ***/
 
 
-// Quand on initialise une clause, on définis les watched litéraux
+// Quand on initialise une clause, on définit les watched litéraux
 inline WatchedClause::WatchedClause(const CONSTR_ARGS(list))
     : INIT_FOR_VERBOSE() _lits(list)
 {

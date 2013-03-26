@@ -3,7 +3,7 @@
 
 #include <set>
 #include <stack>
-
+#include "Literal.hh"
 
 /***
    * Version des clauses de base du rendu 1.
@@ -40,7 +40,7 @@ protected:
 
 
 /***
- * Implementation des methodes de la classe
+ * Implémentation des methodes de la classe
  * (toutes inlines)
 ***/
 #include <cstdlib> // pour exit()
