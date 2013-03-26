@@ -8,16 +8,16 @@ class OneWatchedClause
 {
 public:
     OneWatchedClause(const CONSTR_ARGS(list));
-    
+
     bool setLitFalse(const Literal& l);
     bool setLitTrue(const Literal& l);
 
     void freeLitFalse(const Literal &l);
     void freeLitTrue(const Literal &l);
-    
-    size_t freeSize (void) const;
-    Literal chooseFree(void) const;
-    bool satisfied(void) const;
+
+    unsigned int freeSize (void) const;
+    Literal getRemaining(void) const;
+    bool isSatisfied(void) const;
 
     ~OneWatchedClause();
 
@@ -62,7 +62,7 @@ inline bool OneWatchedClause::setLitFalse(const Literal& l)
     #if VERBOSE >= 10
     std::cout << "setLitFalse " << _number << " : " << l.var()->varNumber << "." << l.pos() << " (watched " << _watched.var()->varNumber << "." << _watched.pos() <<")" << std::endl;
     #endif
-    if(!satisfied())
+    if(!isSatisfied())
     {
     if(((l.var() == _watched.var())))
     {
@@ -116,16 +116,16 @@ inline void OneWatchedClause::freeLitFalse(const Literal& l)
 
 
 
-inline size_t OneWatchedClause::freeSize (void) const
+inline unsigned int OneWatchedClause::freeSize (void) const
 {
-    size_t res = 0;
+    unsigned int res = 0;
     std::vector<Literal>::const_iterator it;
     for (it = _literals.begin(); it != _literals.end(); it++)
         if(it->var()->_varState == FREE) res++;
     return res;
 }
 
-inline Literal OneWatchedClause::chooseFree(void) const
+inline Literal OneWatchedClause::getRemaining(void) const
 {
     #if VERBOSE >= 10
     std::cout << "c Deduct from clause " << _number << " : " << _watched.var()->varNumber << "." << _watched.pos() << std::endl;
@@ -133,7 +133,7 @@ inline Literal OneWatchedClause::chooseFree(void) const
     return _watched;
 }
 
-inline bool OneWatchedClause::satisfied(void) const
+inline bool OneWatchedClause::isSatisfied(void) const
 {
     return (_watched.var()->_varState == TRUE && _watched.pos()) || (_watched.var()->_varState == FALSE && !_watched.pos());
 }

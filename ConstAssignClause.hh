@@ -21,7 +21,7 @@ public:
     void freeLitFalse(const Literal &l);
     void freeLitTrue(const Literal &l);
 
-    size_t freeSize (void) const;
+    unsigned int freeSize (void) const;
     Literal getRemaining(void) const;
     bool isSatisfied(void) const;
 
@@ -109,7 +109,7 @@ inline void ConstAssignClause::freeLitFalse(const Literal& l)
 
 
 
-inline size_t ConstAssignClause::freeSize (void) const
+inline unsigned int ConstAssignClause::freeSize (void) const
 {
     return _numOfFree;
 }

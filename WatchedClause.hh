@@ -8,16 +8,16 @@ class WatchedClause
 {
 public:
     WatchedClause(const CONSTR_ARGS(list));
-    
+
     bool setLitFalse(const Literal& l);
     bool setLitTrue(const Literal& l);
 
     void freeLitFalse(const Literal &l);
     void freeLitTrue(const Literal &l);
-    
-    size_t freeSize (void) const;
-    Literal chooseFree(void) const;
-    bool satisfied(void) const;
+
+    unsigned int freeSize (void) const;
+    Literal getRemaining(void) const;
+    bool isSatisfied(void) const;
 
     ~WatchedClause();
 
@@ -111,18 +111,18 @@ inline void WatchedClause::freeLitFalse(const Literal& l)
 
 
 
-inline size_t WatchedClause::freeSize() const
+inline unsigned int WatchedClause::freeSize() const
 {
     return (_lits[0].var()->_varState == FREE) // utilise la conversion true->1, false->0
          + (_lits[1].var()->_varState == FREE);
 }
 
-inline Literal WatchedClause::chooseFree() const
+inline Literal WatchedClause::getRemaining() const
 {
     return _lits[_lits[1].var()->_varState == FREE]; // utilise la conversion true->1, false->0
 }
 
-inline bool WatchedClause::satisfied() const
+inline bool WatchedClause::isSatisfied() const
 {
     return _lits[0].isTrue() || _lits[1].isTrue();
 }

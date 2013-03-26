@@ -8,16 +8,16 @@ class SmartWatchedClause
 {
 public:
     SmartWatchedClause(const CONSTR_ARGS(list));
-    
+
     bool setLitFalse(const Literal& l);
     bool setLitTrue(const Literal& l);
 
     void freeLitFalse(const Literal &l);
     void freeLitTrue(const Literal &l);
-    
-    size_t freeSize (void) const;
-    Literal chooseFree(void) const;
-    bool satisfied(void) const;
+
+    unsigned int freeSize (void) const;
+    Literal getRemaining(void) const;
+    bool isSatisfied(void) const;
 
     ~SmartWatchedClause();
 
@@ -137,14 +137,14 @@ inline void SmartWatchedClause::freeLitFalse(const Literal& l)
 
 
 
-inline size_t SmartWatchedClause::freeSize() const
+inline unsigned int SmartWatchedClause::freeSize() const
 {
     // utilise la conversion tru=>1, false=>0
     return (_lits[0].var()->_varState == FREE)
          + (_lits[1].var()->_varState == FREE);
 }
 
-inline Literal SmartWatchedClause::chooseFree() const
+inline Literal SmartWatchedClause::getRemaining() const
 {
     if (_lits[0].var()->_varState == FREE)
         return _lits[0];
@@ -152,7 +152,7 @@ inline Literal SmartWatchedClause::chooseFree() const
         return _lits[1];
 }
 
-inline bool SmartWatchedClause::satisfied() const
+inline bool SmartWatchedClause::isSatisfied() const
 {
     return _lits[0].isTrue() || _lits[1].isTrue();
     //const varState v = _lits[0].var()->_varState;

@@ -1,9 +1,10 @@
-#include "Clause.hh"
 #ifndef SMARTCLAUSE_HH
 #define SMARTCLAUSE_HH
 
-#include <stdint.h> // pour intptr_t
-#include <stack>
+#include <cstdint> // pour intptr_t
+#include <vector>
+
+
 
 class SmartClause
 {
@@ -16,7 +17,7 @@ public:
     void freeLitFalse(const Literal &l);
     void freeLitTrue(const Literal &l);
 
-    size_t freeSize (void) const;
+    unsigned int freeSize (void) const;
     Literal getRemaining(void) const;
     bool isSatisfied(void) const;
 
@@ -117,7 +118,7 @@ inline void SmartClause::freeLitFalse(const Literal& l)
 
 
 
-inline size_t SmartClause::freeSize (void) const
+inline unsigned int SmartClause::freeSize (void) const
 {
     return _numOfFree;
 }
