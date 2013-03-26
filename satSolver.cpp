@@ -32,21 +32,21 @@
         }  \
     }
 #else
-#define print_debug()  
+#define print_debug()
 #endif
 
 
 int main()
 {
     std::ios_base::sync_with_stdio(false);
-    
+
     /*
     // récupère l'heuristique à utiliser pour le programme
     Literal (UnassignedBucket::*heuristique)(void) = NULL;
     if (argc == 2)
     {
         std::string arg(argv[1]);
-        
+
         if (arg == "BASIC")
             heuristique = & UnassignedBucket::chooseBASIC;
         else if (arg == "RAND")
@@ -87,7 +87,7 @@ int main()
     {
         std::cout << "s SATISFIABLE\n";
         const std::vector<std::pair<unsigned,varState> > assign = problem.getAssign();
-        for(size_t k = 0; k < assign.size(); k++)
+        for(unsigned int k = 0; k < assign.size(); k++)
         {
             std::cout << "v ";
             if (assign[k].second == FALSE)
@@ -111,11 +111,11 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     // optionnel. rend l'initialisation un peu plus rapide
     _variables.reserve(nbrVar);
     _clauses.reserve(nbrClauses);
-    
+
     // initialise les variables
     for(unsigned k = 1; k <= nbrVar; k++)
         _variables.push_back(new Variable(k));
-    
+
     // parse chaque clause du fichier (et crée les liens entre variables et clauses)
     unsigned number = 0;
     std::vector<Literal> listClause;
@@ -126,14 +126,14 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
         addClause(CALL_CONSTR(listClause));
         number++;
     }
-    
+
     // initialise _unassignedVar
     // commence par trier les variables (heuristique faite pour améliorer le choix de unassignedVar dans le cas non rand)
     //std::sort(_variables.begin(), _variables.end(), varCompr);
     std::vector<Variable*>::const_iterator it;
     for (it = _variables.begin(); it != _variables.end(); it++)
         _unassignedVar.addUnassigned(*it);
-    
+
     // affiche le nombre de fois que chaque variable apparaît dans une clause
     #if VERBOSE > 2
     std::cout << "c Etat des variables à la fin du parsage : ";
@@ -144,7 +144,7 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     }
     std::cout << std::endl;
     #endif
-    
+
     // ajouter un test pour savoir si le fichier est vide ?
     // (pour repérer les erreurs dans le fichier, comme minisat)
 }
@@ -307,7 +307,7 @@ bool SatProblem::satisfiability()
         }
         std::cout<<std::endl;
         #endif
-        
+
         const bool isError = newAssign.var()->propagateVariable(_deductions);
 
         // on fait le callback si besoin
