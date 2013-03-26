@@ -2,23 +2,13 @@
 #define LITERAL_HH
 
 #include "Variable.hh"
-#include <string>
-
-/*
-static inline bool hasSameValue(const varState& vs, const bool& b) {
-    return (vs == TRUE && b) || (vs == FALSE && !b);
-}
-static inline bool hasOppositeValue(const varState& vs, const bool& b) {
-    return (vs == TRUE && !b) || (vs == FALSE && b);
-}
-*/
 
 
 
 class Literal
 {
 protected:
-    Variable * _var;
+    Variable* _var;
     bool _pos;
 
 public:
@@ -48,6 +38,7 @@ public:
         return _var < lit._var || (_var == lit._var && !_pos && lit._pos);
     };
 
+    // Renvoie si le litéral est vrai ou non étant donné l'assignation en cours
     inline bool isTrue(void) const
     {
         const varState v = _var->_varState;
@@ -59,4 +50,4 @@ public:
 
 
 
-#endif//LITERAL_HH
+#endif // LITERAL_HH defined
