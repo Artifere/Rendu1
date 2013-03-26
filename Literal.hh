@@ -2,6 +2,7 @@
 #define LITERAL_HH
 
 #include "Variable.hh"
+#include <stdlib.h>
 
 
 

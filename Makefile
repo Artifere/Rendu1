@@ -1,8 +1,10 @@
 # implementation par défaut (est remplacée avec make CLAUSE=[AutreImplementation])
-CLAUSE   = SmartClause
+CLAUSE    = SmartClause
 # heuristique utilisée pour le programme pour choisir une variable non affectée
 # (est remplacée avec  make CHOOSE=[choix de l'heuristique])
-CHOOSE   = BASIC
+CHOOSE    = BASIC
+# faire ou non un tri à l'initialisation (approximation de DLIS pour BASIC)
+INIT_SORT = 0
 # niveau de verbose par défaut du release (est remplacé avec make VERBOSE=n)
 VERBOSE  = 1
 
@@ -13,9 +15,10 @@ d_OBJ= ${SRC:.cpp=.o}
 p_OBJ= ${SRC:.cpp=_p.o}
 CXX	 = g++
 LFLAGS   = -lm
-CXXFLAGS =  -DCLAUSE=$(CLAUSE) -DCHOOSE=$(CHOOSE) -DVERBOSE=$(VERBOSE) -Wall -Wextra -s -O2 -Wno-unused-parameter
-CXXDEBUGFLAGS = -DCLAUSE=$(CLAUSE) -DCHOOSE=$(CHOOSE) -DVERBOSE=10 -Wall -Wextra -O0 -g -Wno-unused-parameter
-CXXPROFILEFLAGS = -DCLAUSE=$(CLAUSE) -DCHOOSE=$(CHOOSE) -DVERBOSE=0 -Wall -Wextra -g -O2 -Wno-unused-parameter
+IMPLFLAGS= -DCLAUSE=$(CLAUSE) -DCHOOSE=$(CHOOSE) -DVERBOSE=$(VERBOSE) -DINIT_SORT=$(INIT_SORT)
+CXXFLAGS = $(IMPLFLAGS) -Wall -Wextra -s -O2 -Wno-unused-parameter
+CXXDEBUGFLAGS = $(IMPLFLAGS) -DVERBOSE=10 -Wall -Wextra -O0 -g -Wno-unused-parameter
+CXXPROFILEFLAGS = $(IMPLFLAGS) -DVERBOSE=0 -Wall -Wextra -g -O2 -Wno-unused-parameter
 
 all : release
       

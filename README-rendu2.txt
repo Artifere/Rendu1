@@ -72,10 +72,11 @@ Les implémentations sont toutes assez courtes, et le code est plus clair/mainte
 La compilation se fait en utilisant `make`. L'exécutable produit est 'release'.
 Il est préférable de faire un `make clean` avant (surtout lorsque plusieurs compilations sont faites avec des options différentes)
 On précise au moment de la compilation l'implémentation des clauses voulue, et l'heuristique choisie :
-	make CLAUSE=[clause] CHOOSE=[heuristique] VERBOSE=[verbose_mode]
+	make CLAUSE=[clause] CHOOSE=[heuristique] INIT_SORT=[val_sort] VERBOSE=[verbose_mode]
 avec:
 [clause]       = BasicClause, ConstAssignClause, SmartClause, WatchedClause, SmartWatchedClause
-[heuristique]  = BASIC, RAND, MOMS
+[heuristique]  = BASIC, RAND, DLIS
+[val_sort]     = 0 ou 1  (si on doit ou pas faire un tri des variables suivant leur nombre d'occurence)
 [verbose_mode] = entier entre 0 et 10, précise le détail de ce qu'affiche le programme :
     0: rien
     1: uniquement le résultat du programme
@@ -83,7 +84,7 @@ avec:
     3: affiche la pile des assignations/déductions
    >3: de plus en plus de détails sur le déroulement du programme
 Les options peuvent être omises ou précisées dans n'importe quel ordre.
-Les valeurs par défaut sont [clause]=SmartClause, [heuristique]=BASIC et [verbose_mode]=1
+Les valeurs par défaut sont [clause]=SmartClause, [heuristique]=BASIC, [val_sort]=0 et [verbose_mode]=1
 
 Est également présent le script compile_bench.sh, qui compile toutes les variantes avec VERBOSE=0,
 et les déplace dans Moulinette/Executables en les renommant de manière adéquate.
