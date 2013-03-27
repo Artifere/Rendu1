@@ -140,9 +140,14 @@ Dans le dossier d'une courbe :
 NOTE :
 	Pour que gnuplot affiche la courbe directement à l'éxécution de la commande,
 	il est nécessaire que le packet gnuplot-x11 soit installé sur la machine (et non pas gnuplot-nox)
+	
 
 
+===== Points négatifs =====
+La façon de choisir une variable avec l'heuristique DLIS est codée de manière plutôt naïve. En effet, l'implémentation que nous avons du reste du
+solveur rend difficile le fait de mettre à jour dynamiquement les scores des différentes variables pour DLIS.
 
-
+De plus, nous n'avons pas implémenté MOMS car nous n'avions pas de manière efficace de l'implémenter autre que de parcourir tout le problème SAT. Nous avons donc
+préféré nous concentrer sur le reste du solveur.
 
 
