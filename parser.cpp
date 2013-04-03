@@ -35,8 +35,18 @@ void parserListLit(std::istream& input, std::vector<Literal>& ans, const std::ve
     skipComment(input);
     while( (input >> n) && n )
     {
+        // trouve la variable numero abs_s
         unsigned int abs_n = (n < 0) ? -n : n;
-        if(abs_n > addr.size())
+        std::vector<Variable*>::const_iterator it = addr.begin();
+        while (it != addr.end())
+        {
+            if ((*it)->varNumber == abs_n)
+                break;
+            it ++;
+        }
+        if (it != addr.end())
+            ans.push_back(Literal(*it, (n > 0)));
+        else
         {
             #if VERBOSE > 0
             std::cout <<"c Erreur de syntaxe dans l'entrée: "
@@ -47,8 +57,6 @@ void parserListLit(std::istream& input, std::vector<Literal>& ans, const std::ve
             std::cout <<"c La variable est ignorée." << std::endl;
             #endif
         }
-        else
-            ans.push_back(Literal(addr[abs_n-1], (n > 0)));
     }
 }
 

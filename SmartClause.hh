@@ -127,6 +127,9 @@ inline unsigned int SmartClause::freeSize (void) const
 // Cette fonction est appelée quand il ne reste plus qu'une variable libre, et renvoie le litéral en question
 inline Literal SmartClause::getRemaining(void) const
 {
+    #if VERBOSE >= 10
+    std::cout << "c getRemaining : " << ((Variable*)_currentHash)->varNumber << "." << _currentHashVal << std::endl;
+    #endif
     return Literal((Variable*)_currentHash, _currentHashVal);
 }
 
