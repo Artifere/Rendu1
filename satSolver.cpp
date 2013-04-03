@@ -10,6 +10,7 @@
 #include "Clause.hh"
 //#include "UnassignedBucket.hh"
 #include "parser.hh"
+#include <algorithm>
 
 
 #if VERBOSE > 1
@@ -125,7 +126,7 @@ void SatProblem::addClause(CONSTR_ARGS(list))
         std::cout << list[kDebug].var()->varNumber << "." << list[kDebug].pos() << ", ";
     std::cout << std::endl;
     #endif
-/*    // supprime les doublons (O(n.log n))
+    // supprime les doublons (O(n.log n))
     std::sort(list.begin(), list.end());
     list.resize(std::unique(list.begin(), list.end()) - list.begin());
     // teste si la clause est trivialement vraie :
@@ -137,7 +138,7 @@ void SatProblem::addClause(CONSTR_ARGS(list))
             break;
         }
     }
-*/
+/*
     // supprime de list les doublons, et repère si trivialement vraie
     bool trivial = false; // ssi clause trivialement vraie
     for (unsigned int u = 0; u < list.size() && !trivial; u++)
@@ -229,16 +230,17 @@ void SatProblem::addClause(CONSTR_ARGS(list))
 bool SatProblem::satisfiability()
 {
     // On continue l'exécution tant qu'on n'a pas assigné toutes les variables (ou que l'on a quitté la boucle à cause d'une contradiction)
-    while (Variable::_endAssigned < Variable::_vars.end())
+    while (Variable::_endAssigned != Variable::_vars.end())
     {
-        Variable * newAssign = * Variable::_endAssigned;
         // si pas de déduction : on doit faire un pari
         if(Variable::_endAssigned == Variable::_endDeducted)
         {
+            // choisit une variable libre, qu'on ajoute aux déductions
+            Variable::choseFromFree_DLIS();
+            // ajoute un choix libre pour le backtrack
             _stackBacktrack.push_back(Variable::_endAssigned);
-            newAssign->deductedFromFree(newAssign->_varState);
         }
-        Variable::_endAssigned ++;
+        Variable * newAssign = * (Variable::_endAssigned ++);
         #if VERBOSE >= 3
         print_debug();
         std::cout<<"Assignation : ";
@@ -271,6 +273,7 @@ bool SatProblem::satisfiability()
             // Si on n'a aucun choix libre, on renvoie faux (UNSAT)
             if (_stackBacktrack.empty())
                 return false;
+            
             // On revient au dernier choix libre fait
             std::vector<Variable*>::iterator it, lastChoice = _stackBacktrack.back();
             _stackBacktrack.pop_back();
@@ -280,12 +283,14 @@ bool SatProblem::satisfiability()
                 print_debug();
                 std::cout<<"Retour sur la valeur de la variable "<<var->varNumber<<std::endl;
                 #endif
-                // On libère la variable, dans toutes les clauses où elle était surveillée
+                // On libère la variable, des clauses où elle était surveillée
                 var->deductedFromAssigned();
             } while (Variable::_endAssigned > lastChoice);
+            
             // on ajoute son contraire comme déduction
             (* lastChoice)->_varState = ! (* lastChoice)->_varState;
             Variable::_endDeducted = lastChoice + 1;
+            
             #if VERBOSE >= 4
             print_debug();
             std::cout<<"Fin du backtrack."<<std::endl;

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <stack>
+#include <algorithm>
 
 
 // Besoin de forward declaration pour Literal et Clause  pour éviter une dépendance circulaire
@@ -44,6 +45,9 @@ public:
     bool assignedFromDeducted(void);
     void deductedFromAssigned(void);
     
+    static void choseFromFree_BASIC(void);
+    static void choseFromFree_DLIS(void);
+    static void choseFromFree_RAND(void);
     
     void linkToClause(bool,Clause*);
     
@@ -52,6 +56,13 @@ public:
     #endif
     
 };
+/* v1 < v2 si le maximum de clauses que permet de satisfaire v1 < au même nombre pour v2
+   On utilise cette comparaison pour l'heuristique statique dans le cas de choose=basic et choose = DLIS */
+static inline bool DLISvarCompr(const Variable* v1, const Variable* v2)
+{
+    return std::max(v1->sizeLitTrue(), v1->sizeLitFalse()) < std::max(v2->sizeLitTrue(), v2->sizeLitFalse());
+}
+
 
 
 inline void Variable::deductedFromFree(bool value)
@@ -64,6 +75,24 @@ inline void Variable::deductedFromFree(bool value)
 
 
 
+inline void Variable::choseFromFree_BASIC()
+{
+    _endDeducted ++;
+}
+
+
+
+inline void Variable::choseFromFree_DLIS()
+{
+    std::vector<Variable*>::iterator it;
+    it = std::max_element(_endDeducted, _vars.end(), DLISvarCompr);
+    std::swap((*_endDeducted)->_posInTable, (*it)->_posInTable);
+    std::iter_swap(_endDeducted, it);
+    _endDeducted ++;
+}
+
+
+
 // Associe une clause à une variable
 inline void Variable::linkToClause(bool val, Clause* c)
 {
@@ -71,15 +100,6 @@ inline void Variable::linkToClause(bool val, Clause* c)
         _litTrue.push_back(c);
     else
         _litFalse.push_back(c);
-}
-
-
-
-/* v1 < v2 si le maximum de clauses que permet de satisfaire v1 < au même nombre pour v2
-   On utilise cette comparaison pour l'heuristique statique dans le cas de choose=basic et choose = DLIS */
-static inline bool DLISvarCompr(const Variable* v1, const Variable* v2)
-{
-    return std::max(v1->sizeLitTrue(), v1->sizeLitFalse()) < std::max(v2->sizeLitTrue(), v2->sizeLitFalse());
 }
 
 
