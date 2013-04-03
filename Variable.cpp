@@ -4,17 +4,20 @@
 #include <iostream>
 #endif
 
+std::vector<Variable*> Variable::_vars;
+std::vector<Variable*>::iterator Variable::_endAssigned = _vars.begin();
+std::vector<Variable*>::iterator Variable::_endDeducted = _vars.begin();
+
 
 /* Propage l'assignation d'une variable dans toutes les clauses dans lesquelles elle apparaît
    et arrête de surveiller une clause si setLitTrue/False renvoie true */
-bool Variable::propagateVariable(std::stack<Literal>& deductions)
+bool Variable::assignedFromDeducted()
 {
     bool isError = false;
-    const bool isTrue = _varState == TRUE;
-    const Literal lit = Literal(this, isTrue);
+    const Literal lit = Literal(this, _varState);
 
-    std::vector<Clause*>& cTrue  = isTrue ? _litTrue : _litFalse;
-    std::vector<Clause*>& cFalse = isTrue ? _litFalse : _litTrue;
+    std::vector<Clause*>& cTrue  = _varState ? _litTrue : _litFalse;
+    std::vector<Clause*>& cFalse = _varState ? _litFalse : _litTrue;
     std::vector<Clause*>::iterator it;
 
     // On propage les litéraux qui deviennent satisfaits
@@ -49,6 +52,9 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
             const unsigned int fs = target->freeSize();
             if (fs == 0)
             {
+                #if VERBOSE > 4
+                std::cout << "c Contradiction (clause " <<target->_number<< ")" << std::endl;
+                #endif
                 isError = true;
                 break;
             }
@@ -56,18 +62,15 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
             else if(fs == 1)
             {
                 const Literal deduct = target->getRemaining();
-                #if VERBOSE > 5
-                std::cout << "c Nouvelle déduction :  " << deduct.var()->varNumber << "." << deduct.pos() << std::endl;
+                #if VERBOSE > 4
+                std::cout << "c Nouvelle déduction (clause " <<target->_number<< ") :  " << deduct.var()->varNumber << "." << deduct.pos() << std::endl;
                 #endif
                 // Si la déduction concerne une nouvelle variable, on l'ajoute
-                if(deduct.var()->_varState == FREE)
-                {
-                    deductions.push(deduct);
-                    deduct.var()->_varState = deduct.pos() ? TRUE:FALSE;
-                }
+                if(deduct.var()->isFree())
+                    deduct.var()->deductedFromFree(deduct.pos());
                 /* Sinon, si la déduction a déjà été faite, on ne fait rien.
                    Sinon, si on a déjà fait une déduction contraire, on a une contraduction. */
-                else if(deduct.pos() != (deduct.var()->_varState == TRUE))
+                else if(deduct.pos() != deduct.var()->_varState)
                 {
                     isError = true;
                     break;
@@ -95,12 +98,11 @@ bool Variable::propagateVariable(std::stack<Literal>& deductions)
 
 /* Annule les changements faits par propagateVariable dans les clauses contenant la variable.
    Cette fonction doit être appelée lors du backtrack. */
-void Variable::releaseVariable(void)
+void Variable::deductedFromAssigned(void)
 {
-    const bool isTrue = _varState == TRUE;
-    const Literal lit = Literal(this, isTrue);
-    const std::vector<Clause*>& cTrue  = isTrue ? _litTrue : _litFalse;
-    const std::vector<Clause*>& cFalse = isTrue ? _litFalse : _litTrue;
+    const Literal lit = Literal(this, _varState);
+    const std::vector<Clause*>& cTrue  = _varState ? _litTrue : _litFalse;
+    const std::vector<Clause*>& cFalse = _varState ? _litFalse : _litTrue;
     std::vector<Clause*>::const_iterator it;
 
     for(it = cTrue.begin(); it != cTrue.end(); ++it)

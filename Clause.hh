@@ -16,11 +16,11 @@
 #endif
 
 
-#include "BasicClause.hh"
-#include "ConstAssignClause.hh"
-#include "WatchedClause.hh"
+//#include "BasicClause.hh"
+//#include "ConstAssignClause.hh"
+//#include "WatchedClause.hh"
 #include "SmartClause.hh"
-#include "SmartWatchedClause.hh"
+//#include "SmartWatchedClause.hh"
 
 
 #endif // CLAUSE_HH defined

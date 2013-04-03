@@ -1,6 +1,9 @@
 #ifndef UNASSIGNED_BUCKET_HH
 #define UNASSIGNED_BUCKET_HH
 
+#error toto
+#if 0
+
 #include <cstdlib>
 #include <vector>
 #include <ctime>
@@ -107,5 +110,8 @@ inline Literal UnassignedBucket::chooseDLIS(void)
     return Literal(m, m->sizeLitTrue() > m->sizeLitFalse());
 }
 
+
+
+#endif
 
 #endif //UNASSIGNED_BUCKET_HH defined

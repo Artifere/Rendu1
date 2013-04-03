@@ -5,14 +5,6 @@
 #include <stack>
 
 
-// L'état d'assignation d'une variable
-typedef
-enum varState
-{
-    TRUE, FALSE, FREE
-} varState;
-
-
 // Besoin de forward declaration pour Literal et Clause  pour éviter une dépendance circulaire
    
 class Literal;
@@ -30,26 +22,46 @@ class Variable {
 protected:
     std::vector<Clause*> _litTrue;
     std::vector<Clause*> _litFalse;
-public:
-    const unsigned int varNumber;
-    varState _varState;
+    
+    std::vector<Variable*>::iterator _posInTable;
 
-    inline Variable(unsigned int varNum) : varNumber(varNum), _varState(FREE) { };
+public:
+    static std::vector<Variable*> _vars;
+    static std::vector<Variable*>::iterator _endAssigned;
+    static std::vector<Variable*>::iterator _endDeducted;
+
+    bool _varState;
+    const unsigned int varNumber;
+
+    inline Variable(unsigned int varNum) : _posInTable(_vars.end()), _varState(false), varNumber(varNum) { _vars.push_back(this); };
     
     inline unsigned sizeLitTrue() const { return _litTrue.size(); };
     inline unsigned sizeLitFalse() const { return _litFalse.size(); };
     
+    inline bool isFree(void) const { return _posInTable >= _endDeducted; }
+
+    void deductedFromFree(bool value);
+    bool assignedFromDeducted();
+    void deductedFromAssigned();
+    
     
     void linkToClause(bool,Clause*);
-    
-    bool propagateVariable(std::stack<Literal>& deductions);
-    void releaseVariable(void);
     
     #if VERBOSE > 0
     void print_state(void) const;
     #endif
     
 };
+
+
+inline void Variable::deductedFromFree(bool value)
+{
+    Variable * var = * (_endDeducted ++);
+    std::swap(_posInTable, var->_posInTable);
+    std::iter_swap(_posInTable, var->_posInTable);
+    _varState = value ? true : false;
+}
+
 
 
 // Associe une clause à une variable
@@ -76,12 +88,12 @@ static inline bool DLISvarCompr(const Variable* v1, const Variable* v2)
 #include <iostream>
 inline void Variable::print_state(void) const
 {
-    if (_varState == FREE)
+    if (isFree())
         std::cout << "?";
-    else if (_varState == FALSE)
-        std::cout << "-";
-    else
+    else if (_varState)
         std::cout << " ";
+    else
+        std::cout << "-";
     std::cout << varNumber;
 }
 #endif

@@ -28,7 +28,6 @@ public:
         return _pos;
     };
 
-
     inline Literal invert() const
     {
         return Literal(_var, !_pos);
@@ -36,14 +35,18 @@ public:
 
     inline bool operator<(const Literal& lit) const
     {
-        return _var < lit._var || (_var == lit._var && !_pos && lit._pos);
-    };
+        return _var < lit._var || (_var == lit._var && _pos && !lit._pos);
+    }
+
+    inline bool operator==(const Literal& lit) const
+    {
+        return (_var == lit._var) && (_pos == lit._pos);
+    }
 
     // Renvoie si le litéral est vrai ou non étant donné l'assignation en cours
     inline bool isTrue(void) const
     {
-        const varState v = _var->_varState;
-        return (v == TRUE && _pos) || (v == FALSE && !_pos);
+        return (! _var->isFree()) && (_pos == _var->_varState);
     };
 
 };
