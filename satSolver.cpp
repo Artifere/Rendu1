@@ -160,6 +160,13 @@ void SatProblem::addClause(CONSTR_ARGS(list))
             }
         }
     }
+    #if VERBOSE > 6
+    print_debug();
+    std::cout << "   apres simplification : ";
+    for(unsigned kDebug = 0; kDebug < list.size(); kDebug++)
+        std::cout << list[kDebug].var()->varNumber << "." << list[kDebug].pos() << ", ";
+    std::cout << std::endl;
+    #endif
     /* On nee crée la clause que si elle n'est ni trivialement vraie, ni trivialement fausse.
        Dans ce cas, on associe la clause à toutes les variables qu'elle contient. */
     if(trivial)
@@ -222,7 +229,7 @@ void SatProblem::addClause(CONSTR_ARGS(list))
 bool SatProblem::satisfiability()
 {
     // On continue l'exécution tant qu'on n'a pas assigné toutes les variables (ou que l'on a quitté la boucle à cause d'une contradiction)
-    while (Variable::_endDeducted < Variable::_vars.end())
+    while (Variable::_endAssigned < Variable::_vars.end())
     {
         Variable * newAssign = * Variable::_endAssigned;
         // si pas de déduction : on doit faire un pari
