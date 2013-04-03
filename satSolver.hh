@@ -17,12 +17,10 @@ class SatProblem
 {
 protected:
     const unsigned _nbrVars;
-
     std::vector<Clause*> _clauses;    
-
     // pile des indices des choix contraints
     std::vector<std::vector<Variable*>::iterator> _stackBacktrack;
-
+    
 public:
     SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses);
     ~SatProblem();
