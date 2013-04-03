@@ -8,7 +8,9 @@
 
 // Besoin de forward declaration pour Literal et Clause  pour éviter une dépendance circulaire
    
+
 class Literal;
+
 
 #ifndef CLAUSE
     #define CLAUSE BasicClause
@@ -16,6 +18,15 @@ class Literal;
 class CLAUSE;
 typedef CLAUSE Clause;
 
+
+#ifndef CHOOSE
+    #define CHOOSE BASIC
+#endif
+// Un peu de vaudou préprocesseur
+#define FNC_CHOIX(u) chooseFromFree_ ## u
+#define FNC_CHOIX_E(u) FNC_CHOIX(u)
+
+#define chooseFromFree FNC_CHOIX_E(CHOOSE)
 
 
 
@@ -45,9 +56,10 @@ public:
     bool assignedFromDeducted(void);
     void deductedFromAssigned(void);
     
-    static void choseFromFree_BASIC(void);
-    static void choseFromFree_DLIS(void);
-    static void choseFromFree_RAND(void);
+    static void chooseFromFree_BASIC(void);
+    static void chooseFromFree_DLIS(void);
+    static void chooseFromFree_RAND(void);
+    static void sortFreeVars(void); 
     
     void linkToClause(bool,Clause*);
     
@@ -75,20 +87,32 @@ inline void Variable::deductedFromFree(bool value)
 
 
 
-inline void Variable::choseFromFree_BASIC()
+inline void Variable::chooseFromFree_BASIC(void)
 {
     _endDeducted ++;
 }
 
 
 
-inline void Variable::choseFromFree_DLIS()
+inline void Variable::chooseFromFree_DLIS(void)
 {
     std::vector<Variable*>::iterator it;
     it = std::max_element(_endDeducted, _vars.end(), DLISvarCompr);
     std::swap((*_endDeducted)->_posInTable, (*it)->_posInTable);
     std::iter_swap(_endDeducted, it);
     _endDeducted ++;
+}
+
+
+
+inline void Variable::sortFreeVars(void)
+{
+    // on trie sans se soucier des itérateurs _posInTable
+    std::sort(_endDeducted, _vars.end(), DLISvarCompr);
+    // on repositionne les itérateurs _posInTable vers _vars
+    std::vector<Variable*>::iterator it;
+    for(it = _endDeducted; it != _vars.end(); it++)
+        (*it)->_posInTable = it;
 }
 
 

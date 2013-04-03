@@ -86,6 +86,11 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
         number++;
     }
 
+    // éventuel tri initial des variables libres
+    #if defined(INIT_SORT) && (INIT_SORT == 1)
+    Variable::sortFreeVars();
+    #endif
+
     // Affiche le nombre de fois que chaque variable apparaît dans une clause
     #if VERBOSE >= 5
     std::cout << "c Etat des variables à la fin du parsage : ";
@@ -138,38 +143,6 @@ void SatProblem::addClause(CONSTR_ARGS(list))
             break;
         }
     }
-/*
-    // supprime de list les doublons, et repère si trivialement vraie
-    bool trivial = false; // ssi clause trivialement vraie
-    for (unsigned int u = 0; u < list.size() && !trivial; u++)
-    {
-        // test si x=list[u] est présent sous forme x ou !x
-        unsigned int v = u+1;
-        while (v < list.size())
-        {
-            if (list[u].var() != list[v].var())
-                v++;
-            else
-            {
-                if (list[u].pos() != list[v].pos())
-                {
-                    trivial = true;
-                    break;
-                }
-                list[v] = list.back();
-                list.pop_back();
-            }
-        }
-    }
-    #if VERBOSE > 6
-    print_debug();
-    std::cout << "   apres simplification : ";
-    for(unsigned kDebug = 0; kDebug < list.size(); kDebug++)
-        std::cout << list[kDebug].var()->varNumber << "." << list[kDebug].pos() << ", ";
-    std::cout << std::endl;
-    #endif
-    /* On nee crée la clause que si elle n'est ni trivialement vraie, ni trivialement fausse.
-       Dans ce cas, on associe la clause à toutes les variables qu'elle contient. */
     if(trivial)
     {
         #if VERBOSE >= 2
@@ -236,7 +209,7 @@ bool SatProblem::satisfiability()
         if(Variable::_endAssigned == Variable::_endDeducted)
         {
             // choisit une variable libre, qu'on ajoute aux déductions
-            Variable::choseFromFree_DLIS();
+            Variable::chooseFromFree();
             // ajoute un choix libre pour le backtrack
             _stackBacktrack.push_back(Variable::_endAssigned);
         }

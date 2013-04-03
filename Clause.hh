@@ -18,7 +18,7 @@
 
 //#include "BasicClause.hh"
 //#include "ConstAssignClause.hh"
-//#include "WatchedClause.hh"
+#include "WatchedClause.hh"
 #include "SmartClause.hh"
 //#include "SmartWatchedClause.hh"
 

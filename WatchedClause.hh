@@ -73,7 +73,7 @@ inline bool WatchedClause::setLitFalse(const Literal& l)
     /* Ne tester qu'un seul des litéraux améliore les performances :o
        C'est un compromis entre tester les deux et ne rien tester
        (comme on appelle setLitFalse, ça signifie qu'au moins un des deux watched est faux) */ 
-    if (_lits[0].isTrue()) //|| _lits[1].isTrue())
+    if (_lits[0].isTrue() || _lits[1].isTrue())
         return false;
     /* Si l'un des litéraux est vrai, newWatched pointe sur ce litéral
        sinon il pointe sur un litéral FREE (ou sur end() s'il n'y en a pas) */
@@ -81,10 +81,9 @@ inline bool WatchedClause::setLitFalse(const Literal& l)
     std::vector<Literal>::iterator it, newWatched = end;
     for (it = _lits.begin()+2; it != end; ++it)
     {
-        const varState v = it->var()->_varState;
-        if (v == FREE)
+        if (it->var()->isFree())
             newWatched = it;
-        else if(it->pos() == (v == TRUE))
+        else if(it->pos() == it->var()->_varState)
         {
             newWatched = it;
             break;
@@ -129,14 +128,14 @@ inline void WatchedClause::freeLitFalse(const Literal& l)
    On suppose que la clause n'est pas satisfaite et que freeSize est appelé après setLitFalse */
 inline unsigned int WatchedClause::freeSize() const
 {
-    return (_lits[0].var()->_varState == FREE) // utilise la conversion true->1, false->0
-         + (_lits[1].var()->_varState == FREE);
+    return (_lits[0].var()->isFree()) // utilise la conversion true->1, false->0
+         + (_lits[1].var()->isFree());
 }
 
 // Cette fonction est appelée quand il ne reste plus qu'une variable libre, et renvoie le litéral en question
 inline Literal WatchedClause::getRemaining() const
 {
-    return _lits[_lits[1].var()->_varState == FREE]; // utilise la conversion true->1, false->0
+    return _lits[_lits[1].var()->isFree()]; // utilise la conversion true->1, false->0
 }
 
 // Renvoie un résultat correct ssi appelé juste après setLitFalse
