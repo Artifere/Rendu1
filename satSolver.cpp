@@ -61,7 +61,7 @@ int main()
 
 
 SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses)
-    : _nbrVars(nbrVar)
+    : _nbrVars(nbrVar), _nbrBets(0)
 {
     // nécessaire pour que les itérateus restent valides
     Variable::_vars.reserve(nbrVar);
