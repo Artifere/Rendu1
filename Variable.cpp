@@ -11,7 +11,7 @@ std::vector<Variable*>::iterator Variable::_endDeducted = _vars.begin();
 
 /* Propage l'assignation d'une variable dans toutes les clauses dans lesquelles elle apparaît
    et arrête de surveiller une clause si setLitTrue/False renvoie true */
-bool Variable::assignedFromDeducted()
+bool Variable::assignedFromDeducted(void)
 {
     bool isError = false;
     const Literal lit = Literal(this, _varState);

@@ -41,8 +41,8 @@ public:
     inline bool isFree(void) const { return _posInTable >= _endDeducted; }
 
     void deductedFromFree(bool value);
-    bool assignedFromDeducted();
-    void deductedFromAssigned();
+    bool assignedFromDeducted(void);
+    void deductedFromAssigned(void);
     
     
     void linkToClause(bool,Clause*);
