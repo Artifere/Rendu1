@@ -8,7 +8,7 @@
 class WatchedClause
 {
 public:
-    WatchedClause(const CONSTR_ARGS(list));
+    WatchedClause(const CONSTR_ARGS(list), Variable *firstTrue);
 
     bool setLitFalse(const Literal& l);
     bool setLitTrue(const Literal& l);
@@ -43,18 +43,36 @@ protected:
 ***/
 
 
-/* Quand on initialise une clause, copie les litéraux dans la clause,
-   et on surveille uniquement les deux premiers */
-inline WatchedClause::WatchedClause(const CONSTR_ARGS(list))
+
+// TODO: affichage de debug pour ajout de clause en cours de route
+
+// Quand on initialise une clause, on définit les watched litérals
+inline WatchedClause::WatchedClause(const CONSTR_ARGS(list), Variable *firstTrue)
     : INIT_FOR_VERBOSE() _lits(list)
 {
-    list[0].var()->linkToClause(list[0].pos(), (Clause*)this);
-    list[1].var()->linkToClause(list[1].pos(), (Clause*)this);
-    #if VERBOSE > 5
-    std::cout << "Watched Lit (" << _number << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
-              << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
-    #endif
+    if (firstTrue)
+    {
+        if (list[0].var() != firstTrue)
+        {
+            std::vector<Literal>::iterator it;
+            for (it = _lits.begin(); it->var() != firstTrue; ++it);
+            std::iter_swap(it, _lits.begin());
+        }
+        _lits[0].var()->linkToClause(_lits[0].pos(), (Clause*)this);
+        _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
+    }
+
+    else
+    {
+        list[0].var()->linkToClause(list[0].pos(), (Clause*)this);
+        list[1].var()->linkToClause(list[1].pos(), (Clause*)this);
+        #if VERBOSE > 5
+        std::cout << "Watched Lit (" << _number << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
+                  << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
+        #endif
+    }
 }
+
 
 
 

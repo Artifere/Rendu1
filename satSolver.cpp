@@ -190,7 +190,7 @@ void SatProblem::addClause(CONSTR_ARGS(list))
         }
         else // On crée la clause
         {
-            Clause* nclause = new Clause(CALL_CONSTR(list));
+            Clause* nclause = new Clause(CALL_CONSTR(list), NULL);
             _clauses.push_back(nclause);
         }
     }

@@ -9,7 +9,7 @@
 class SmartClause
 {
 public:
-    SmartClause(const CONSTR_ARGS(list));
+    SmartClause(const CONSTR_ARGS(list), Variable *firstTrue);
 
     bool setLitFalse(const Literal &l);
     bool setLitTrue(const Literal &l);
@@ -49,15 +49,37 @@ protected:
 
 /* Le constructeur initialise les différents « hash » et lie la clause à toutes
    les variables qu'elle contient */
-inline SmartClause::SmartClause(const CONSTR_ARGS(list))
+inline SmartClause::SmartClause(const CONSTR_ARGS(list), Variable* firstTrue)
     : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size()), _notWatched(0)
 {
     std::vector<Literal>::const_iterator it;
-    for(it = list.begin(); it != list.end(); ++it)
+
+    if (firstTrue != NULL)
     {
+        for (it = list.begin(); it->var() != firstTrue; ++it)
+            _notWatched.push_back(*it);
+
         _currentHash += (intptr_t)it->var();
         _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
         it->var()->linkToClause(it->pos(), (Clause*)this);
+        ++it;
+        
+        while (it != list.end())
+        {
+            _notWatched.push_back(*it);
+            ++it;
+        }
+
+    }
+
+    else
+    {
+        for(it = list.begin(); it != list.end(); ++it)
+        {
+            _currentHash += (intptr_t)it->var();
+            _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
+            it->var()->linkToClause(it->pos(), (Clause*)this);
+        }
     }
 }
 
