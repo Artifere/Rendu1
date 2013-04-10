@@ -20,6 +20,7 @@ public:
     unsigned int freeSize (void) const;
     Literal getRemaining(void) const;
     bool isSatisfied(void) const;
+    std::vector<Literal> getLitList(void) const;
 
     ~SmartClause();
 
