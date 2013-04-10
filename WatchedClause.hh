@@ -20,6 +20,8 @@ public:
     Literal getRemaining(void) const;
     bool isSatisfied(void) const;
 
+    std::vector<Literal> getLiterals(void) const;
+
     ~WatchedClause();
 
     #if VERBOSE > 1
@@ -167,5 +169,14 @@ inline bool WatchedClause::isSatisfied() const
 inline WatchedClause::~WatchedClause()
 {
 }
+
+
+
+
+inline std::vector<Literal> SmartClause::getLiterals(void) const
+{
+    return _literals;
+}
+
 
 #endif // WATCHEDCLAUSE_HH defined

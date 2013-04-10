@@ -55,8 +55,11 @@ public:
     inline unsigned sizeLitTrue() const { return _litTrue.size(); };
     inline unsigned sizeLitFalse() const { return _litFalse.size(); };
     
-    inline bool isFree(void) const { return _posInTable >= _endDeducted; };
+    inline bool isFree(void) const           { return _posInTable >= _endDeducted; };
     inline bool isOlder(Variable* var) const { return _posInTable <= var->_posInTable; };
+    inline bool isFromCurBet(void) const     { return _posInTable >= _stackBacktrack.top() // TODO
+
+    inline Clause* getOriginClause(void) const { return _deductedFromClause; }
 
     void deductedFromFree(bool value, Clause* fromClause);
     Clause* assignedFromDeducted(void);

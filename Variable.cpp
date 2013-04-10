@@ -55,6 +55,7 @@ Clause* Variable::assignedFromDeducted(void)
                 #if VERBOSE > 4
                 std::cout << "c Contradiction (clause " <<target->_number<< ")" << std::endl;
                 #endif
+                std::cout << "bobo" << std::endl;
                 isError = target;
                 break;
             }
