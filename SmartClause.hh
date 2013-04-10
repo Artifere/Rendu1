@@ -69,7 +69,7 @@ inline SmartClause::SmartClause(const CONSTR_ARGS(list), Variable* firstTrue)
             _notWatched.push_back(*it);
             ++it;
         }
-
+        _satisfied = firstTrue;
     }
 
     else
