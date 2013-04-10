@@ -24,10 +24,14 @@ public:
 
     ~SmartClause();
 
+    std::vector<Literal> getLiterals(void) const;
+
     #if VERBOSE > 1
     const unsigned _number;
     #endif
 protected:
+    // liste de tous les littéraux
+    const std::vector<Literal> _literals;
     // Somme des adresses des variables libres contenues dans la clause
     intptr_t _currentHash;
     // XOR des polarités des litéraux libres contenus dans la clause
@@ -37,7 +41,7 @@ protected:
     unsigned int _numOfFree;
     // Liste des litéraux que l'on a arrêté de « surveiller » après avoir satisfait une clause
     std::vector<Literal> _notWatched;
-    };
+};
 
 
 
@@ -54,15 +58,15 @@ protected:
 /* Le constructeur initialise les différents « hash » et lie la clause à toutes
    les variables qu'elle contient */
 inline SmartClause::SmartClause(const CONSTR_ARGS(list), Variable* firstTrue)
-    : INIT_FOR_VERBOSE()  _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size()), _notWatched(0)
+    : INIT_FOR_VERBOSE()  _literals(list), _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(list.size()), _notWatched(0)
 {
     std::vector<Literal>::const_iterator it;
 
     if (firstTrue != NULL)
     {
-        for (it = list.begin(); it->var() != firstTrue; ++it)
+        for (it = list.begin(); it != list.end(); ++it)
         {
-            if (firstTrue->isOlder(*it))
+            if (firstTrue->isOlder(it->var()))
             {
                 _currentHash += (intptr_t)it->var();
                 _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
@@ -71,17 +75,6 @@ inline SmartClause::SmartClause(const CONSTR_ARGS(list), Variable* firstTrue)
 
             else
                 _notWatched.push_back(*it);
-        }
-        it->var()->linkToClause(it->pos(), (Clause*)this);
-        _currentHash += (intptr_t)it->var();
-        _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
-
-        ++it;
-        
-        while (it != list.end())
-        {
-            _notWatched.push_back(*it);
-            ++it;
         }
         _satisfied = firstTrue;
     }
@@ -178,8 +171,16 @@ inline bool SmartClause::isSatisfied(void) const
 
 
 
-inline SmartClause::~SmartClause()
+inline SmartClause::~SmartClause(void)
 {
 }
+
+
+
+inline std::vector<Literal> SmartClause::getLiterals(void) const
+{
+    return _literals;
+}
+
 
 #endif // SMARTCLAUSE_HH defined

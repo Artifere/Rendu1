@@ -11,9 +11,9 @@ std::vector<Variable*>::iterator Variable::_endDeducted = _vars.begin();
 
 /* Propage l'assignation d'une variable dans toutes les clauses dans lesquelles elle apparaît
    et arrête de surveiller une clause si setLitTrue/False renvoie true */
-Clause* Variable::assignedFromDeducted(void)
+bool Variable::assignedFromDeducted(void)
 {
-    Clause* isError = NULL;
+    bool isError = false;
     const Literal lit = Literal(this, _varState);
 
     std::vector<Clause*>& cTrue  = _varState ? _litTrue : _litFalse;
@@ -55,8 +55,7 @@ Clause* Variable::assignedFromDeducted(void)
                 #if VERBOSE > 4
                 std::cout << "c Contradiction (clause " <<target->_number<< ")" << std::endl;
                 #endif
-                std::cout << "bobo" << std::endl;
-                isError = target;
+                isError = true;
                 break;
             }
             // Sinon, s'il n'y a pas déduction, ne rien faire. S'il y a une déduction on teste si elle est contradictoire
@@ -68,12 +67,12 @@ Clause* Variable::assignedFromDeducted(void)
                 #endif
                 // Si la déduction concerne une nouvelle variable, on l'ajoute
                 if(deduct.var()->isFree())
-                    deduct.var()->deductedFromFree(deduct.pos(), target);
+                    deduct.var()->deductedFromFree(deduct.pos());
                 /* Sinon, si la déduction a déjà été faite, on ne fait rien.
                    Sinon, si on a déjà fait une déduction contraire, on a une contraduction. */
                 else if(deduct.pos() != deduct.var()->_varState)
                 {
-                    isError = target;
+                    isError = true;
                     break;
                 }
             }
