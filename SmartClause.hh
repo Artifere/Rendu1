@@ -47,6 +47,9 @@ protected:
  * (toutes inlines)
 ***/
 
+
+//TODO: Verbose pour clause ajoutée en cours de route
+
 /* Le constructeur initialise les différents « hash » et lie la clause à toutes
    les variables qu'elle contient */
 inline SmartClause::SmartClause(const CONSTR_ARGS(list), Variable* firstTrue)
@@ -57,11 +60,21 @@ inline SmartClause::SmartClause(const CONSTR_ARGS(list), Variable* firstTrue)
     if (firstTrue != NULL)
     {
         for (it = list.begin(); it->var() != firstTrue; ++it)
-            _notWatched.push_back(*it);
+        {
+            if (firstTrue->isOlder(*it))
+            {
+                _currentHash += (intptr_t)it->var();
+                _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
+                it->var()->linkToClause(it->pos(), (Clause*)this);
+            }
 
+            else
+                _notWatched.push_back(*it);
+        }
+        it->var()->linkToClause(it->pos(), (Clause*)this);
         _currentHash += (intptr_t)it->var();
         _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
-        it->var()->linkToClause(it->pos(), (Clause*)this);
+
         ++it;
         
         while (it != list.end())
