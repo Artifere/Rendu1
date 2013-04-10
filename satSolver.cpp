@@ -275,3 +275,77 @@ bool SatProblem::satisfiability()
 
 
 
+inline bool litCompVar(const Literal& lit1, const Literal& lit2) const
+{
+    return lit1.var() < lit2.var();
+}
+
+
+void resolve(Clause *conflictClause)
+{
+    std::vector<Literal> mergedLits(conflictClause->getLiterals());
+    bool singleFromCurBet = false;
+    sort(newClauseLits.begin(), mergedLits.end());
+
+
+    while (!singleFromCurBet)
+    {
+        unsigned nbFromCurBet = 0;
+        Variable *v1;
+        std::vector<Literal>::iterator it;
+        for (it = mergedLits.begin();it != mergedLits.end(); ++it)
+        {
+            if (it->var()->isFromCurBet())
+            {
+                nbFromCurBet++;
+                if (nbFromCurBet == 1)
+                    v1 = it->var();
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        
+        Clause *deductedFrom = v1->getOriginClause();
+        std::vector<Literal> toMerge = deductedFrom->getLiterals();
+        sort(toMerge.begin(), toMerge.end());
+        
+        std::vector<Literal> res;
+        std::vector<Literal>::iterator resIt;
+        resIt = set_union(mergedLits.begin(), toMerge.begin(), litCompVar);
+        res.resize(resIt-res.begin());
+        mergedLits.resize(res.size());
+        std::copy(toMerge.begin(), toMerge.end(), mergedLits.begin());
+    }
+
+    
+    Variable *firstTrue;
+    unsigned bestBet = 1<<25; //TODO: changer ça...
+    for (std::vector<Literal>::iterator it = mergedLits.begin(); it != mergedLits.end(); ++it)
+    {
+        if (it->var()->getBetLevel() < bestBet)
+        {
+            bestBet = it->var()->getBetLevel();
+            firstTrue = it->var();
+        }
+    }
+
+
+    return Clause(mergedLits, firstTrue); 
+    //TODO: créer et renvoyer la clause
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

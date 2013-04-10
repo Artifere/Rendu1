@@ -26,6 +26,8 @@ public:
     ~SatProblem();
 
     inline const std::vector<std::pair<unsigned,bool> > getAssign(void) const;
+    
+    void resolve(Clause *firstConflictual);
 
     void addClause(CONSTR_ARGS(list));
     bool satisfiability();
