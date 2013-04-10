@@ -175,7 +175,7 @@ void SatProblem::addClause(CONSTR_ARGS(list))
             
             // On n'ajoute la déduction que si on ne l'a pas déjà faite
             if(lit.var()->isFree())
-                lit.var()->deductedFromFree(lit.pos(), NULL);
+                lit.var()->deductedFromFree(lit.pos());
             else if(lit.var()->_varState != lit.pos())
             {
                 #if VERBOSE >= 2

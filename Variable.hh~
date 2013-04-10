@@ -40,7 +40,7 @@ protected:
     // clause qui a permit de déduire la valeur de la variable
     // ou NULL si on a assigné cette valeur parce qu'on a fait le choix contraire avant et qu'on est arrivé à une contradiction
     // TODO : remplacer le cas NULL par la nouvelle clause déduite de l'erreur lorsqu'on est arrivé à une contradiction
-    Clause* _deductedFromClause;
+    Clause* _deductedFromClause; 
 
 public:
     static std::vector<Variable*> _vars;
