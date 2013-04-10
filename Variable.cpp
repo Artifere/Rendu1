@@ -11,9 +11,9 @@ std::vector<Variable*>::iterator Variable::_endDeducted = _vars.begin();
 
 /* Propage l'assignation d'une variable dans toutes les clauses dans lesquelles elle apparaît
    et arrête de surveiller une clause si setLitTrue/False renvoie true */
-bool Variable::assignedFromDeducted(void)
+Clause* Variable::assignedFromDeducted(void)
 {
-    bool isError = false;
+    Clause* isError = NULL;
     const Literal lit = Literal(this, _varState);
 
     std::vector<Clause*>& cTrue  = _varState ? _litTrue : _litFalse;
@@ -55,7 +55,7 @@ bool Variable::assignedFromDeducted(void)
                 #if VERBOSE > 4
                 std::cout << "c Contradiction (clause " <<target->_number<< ")" << std::endl;
                 #endif
-                isError = true;
+                isError = target;
                 break;
             }
             // Sinon, s'il n'y a pas déduction, ne rien faire. S'il y a une déduction on teste si elle est contradictoire
@@ -72,7 +72,7 @@ bool Variable::assignedFromDeducted(void)
                    Sinon, si on a déjà fait une déduction contraire, on a une contraduction. */
                 else if(deduct.pos() != deduct.var()->_varState)
                 {
-                    isError = true;
+                    isError = target;
                     break;
                 }
             }

@@ -59,7 +59,7 @@ public:
     inline bool isOlder(Variable* var) const { return _posInTable <= var->_posInTable; };
 
     void deductedFromFree(bool value, Clause* fromClause);
-    bool assignedFromDeducted(void);
+    Clause* assignedFromDeducted(void);
     void deductedFromAssigned(void);
     
     static void chooseFromFree_BASIC(void);

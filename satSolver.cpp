@@ -234,10 +234,10 @@ bool SatProblem::satisfiability()
         #endif
 
         // On propage la nouvelle assignation, et on regarde s'il y a eu une contradiction lors de la propagation
-        const bool isError = newAssign->assignedFromDeducted();
+        const Clause* isError = newAssign->assignedFromDeducted();
 
         // On fait le backtrack si besoin
-        if(isError)
+        if(isError != NULL)
         {
             #if VERBOSE >= 3
             print_debug();

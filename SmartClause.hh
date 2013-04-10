@@ -61,7 +61,7 @@ inline SmartClause::SmartClause(const CONSTR_ARGS(list), Variable* firstTrue)
     {
         for (it = list.begin(); it->var() != firstTrue; ++it)
         {
-            if (firstTrue->isOlder(*it))
+            if (firstTrue->isOlder(it->var()))
             {
                 _currentHash += (intptr_t)it->var();
                 _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
