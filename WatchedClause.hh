@@ -175,7 +175,7 @@ inline WatchedClause::~WatchedClause()
 
 inline std::vector<Literal> WatchedClause::getLiterals(void) const
 {
-    return _literals;
+    return _lits;
 }
 
 
