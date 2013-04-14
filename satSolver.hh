@@ -27,7 +27,7 @@ public:
 
     inline const std::vector<std::pair<unsigned,bool> > getAssign(void) const;
     
-    void resolve(Clause *firstConflictual);
+    Clause  resolve(Clause *conflictClause);
 
     void addClause(CONSTR_ARGS(list));
     bool satisfiability();

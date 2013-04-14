@@ -2,6 +2,7 @@
 #include <vector>
 #include <utility>
 #include <cstdlib>
+#include <algorithm>
 
 #include "satSolver.hh"
 
@@ -275,17 +276,17 @@ bool SatProblem::satisfiability()
 
 
 
-inline bool litCompVar(const Literal& lit1, const Literal& lit2) const
+inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 {
     return lit1.var() < lit2.var();
 }
 
 
-void resolve(Clause *conflictClause)
+Clause SatProblem::resolve(Clause *conflictClause)
 {
     std::vector<Literal> mergedLits(conflictClause->getLiterals());
     bool singleFromCurBet = false;
-    sort(newClauseLits.begin(), mergedLits.end());
+    sort(mergedLits.begin(), mergedLits.end());
 
 
     while (!singleFromCurBet)
@@ -314,36 +315,25 @@ void resolve(Clause *conflictClause)
         
         std::vector<Literal> res;
         std::vector<Literal>::iterator resIt;
-        resIt = set_union(mergedLits.begin(), toMerge.begin(), litCompVar);
+        std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), resIt, litCompVar);
         res.resize(resIt-res.begin());
         mergedLits.resize(res.size());
         std::copy(toMerge.begin(), toMerge.end(), mergedLits.begin());
     }
 
     
-    Variable *firstTrue;
-    unsigned bestBet = 1<<25; //TODO: changer ça...
-    for (std::vector<Literal>::iterator it = mergedLits.begin(); it != mergedLits.end(); ++it)
+    Variable *firstTrue = mergedLits.begin()->var();
+    for (std::vector<Literal>::iterator it = mergedLits.begin()+1; it != mergedLits.end(); ++it)
     {
-        if (it->var()->getBetLevel() < bestBet)
+        if (it->var()->isOlder(firstTrue))
         {
-            bestBet = it->var()->getBetLevel();
             firstTrue = it->var();
         }
     }
 
 
     return Clause(mergedLits, firstTrue); 
-    //TODO: créer et renvoyer la clause
 }
-
-
-
-
-
-
-
-
 
 
 
