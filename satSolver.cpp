@@ -246,13 +246,13 @@ bool SatProblem::satisfiability()
             // Si on n'a aucun choix libre, on renvoie faux (UNSAT)
             if (_stackBacktrack.empty())
                 return false;
-           
-            resolve(isError); // TODO : attention, peut-être mal placée...
-            std::cout << "lol1" << std::endl;
+
+            // sinon : on apprend de nos erreurs et on revient sur le dernier paris fait
+            Literal newDeduct = resolve(isError);
+
             // On revient au dernier choix libre fait
             std::vector<Variable*>::iterator it, lastChoice = _stackBacktrack.back();
             _stackBacktrack.pop_back();
-            std::cout << "lol2" << std::endl;
             do {
                 Variable * var = * (-- Variable::_endAssigned);
                 #if VERBOSE >= 3
@@ -262,11 +262,10 @@ bool SatProblem::satisfiability()
                 // On libère la variable, des clauses où elle était surveillée
                 var->deductedFromAssigned();
             } while (Variable::_endAssigned > lastChoice);
+            Variable::_endDeducted = lastChoice;
             
-            std::cout << "lolfin" << std::endl;
-            // on ajoute son contraire comme déduction
-            (* lastChoice)->_varState = ! (* lastChoice)->_varState;
-            Variable::_endDeducted = lastChoice + 1;
+            // on ajoute ce qu'on a appris comme déduction
+            newDeduct.var()->deductedFromFree(newDeduct.pos(), _clauses.back());
             
             #if VERBOSE >= 4
             print_debug();
@@ -286,7 +285,7 @@ inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 
 
 
-void SatProblem::resolve(const Clause *conflictClause)
+Literal SatProblem::resolve(const Clause *conflictClause)
 {
     std::vector<Literal> mergedLits(conflictClause->getLiterals());
     bool singleFromCurBet = false, v1LitValue;
@@ -296,7 +295,7 @@ void SatProblem::resolve(const Clause *conflictClause)
     while (!singleFromCurBet)
     {
         unsigned nbFromCurBet = 0;
-        Variable *v1;
+        Variable *v1 = NULL;
         std::vector<Literal>::iterator it;
         for (it = mergedLits.begin();it != mergedLits.end(); ++it)
         {
@@ -316,6 +315,13 @@ void SatProblem::resolve(const Clause *conflictClause)
                 }
             }
         }
+        
+        if(nbFromCurBet == 0 || v1 == NULL) {
+            cout << "ceci ne devrait pas arriver" << endl;
+            break;
+        }
+        if(nbFromCurBet == 1)
+            break;
 
         
         Clause *deductedFrom = v1->getOriginClause();
@@ -340,18 +346,18 @@ void SatProblem::resolve(const Clause *conflictClause)
     std::cout << "pas mal" << std::endl;
 
     
-    Variable *firstTrue = mergedLits.begin()->var();
+    Literal firstTrue = *mergedLits.begin();
     for (std::vector<Literal>::iterator it = mergedLits.begin()+1; it != mergedLits.end(); ++it)
     {
-        if (it->var()->isOlder(firstTrue))
+        if (it->var()->isOlder(firstTrue.var()))
         {
-            firstTrue = it->var();
+            firstTrue = *it;
         }
     }
-    addClause(mergedLits, firstTrue);
+    addClause(mergedLits, firstTrue.var());
+    return firstTrue;
 //    return Clause(mergedLits, firstTrue); 
 }
-
 
 
 

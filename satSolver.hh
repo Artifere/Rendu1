@@ -27,7 +27,7 @@ public:
     inline const std::vector<Variable*>::iterator getLastBetIterator(void) const {return _stackBacktrack.back();}
     inline const std::vector<std::pair<unsigned,bool> > getAssign(void) const;
     
-    void  resolve(const Clause *conflictClause);
+    Literal resolve(const Clause *conflictClause);
 
     void addClause(std::vector<Literal>& list, Variable *firstTrue);
     bool satisfiability();
