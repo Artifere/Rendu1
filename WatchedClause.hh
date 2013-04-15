@@ -59,13 +59,15 @@ inline WatchedClause::WatchedClause(const CONSTR_ARGS(list), Variable *firstTrue
             std::iter_swap(it, _lits.begin());
         }
         _lits[0].var()->linkToClause(_lits[0].pos(), (Clause*)this);
-        _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
+        if(_lits.size() > 1)
+            _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
     }
 
     else
     {
         list[0].var()->linkToClause(list[0].pos(), (Clause*)this);
-        list[1].var()->linkToClause(list[1].pos(), (Clause*)this);
+        if(_lits.size() > 1)
+            _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
         #if VERBOSE > 5
         std::cout << "Watched Lit (" << _number << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
                   << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
@@ -85,19 +87,21 @@ inline bool WatchedClause::setLitFalse(const Literal& l)
 {
     #if VERBOSE >= 10
     std::cout << "setLitFalse " << _number << " : " << l.var()->varNumber << "." << l.pos()
-              << " (watched " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
-              << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << ")"<< std::endl;
+              << " (watched " << _lits[0].var()->varNumber<<"."<<_lits[0].pos();
+    if(_lits.size() > 1)
+        std::cout << ", " << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << ")";
+    std::cout << std::endl;
     #endif
     /* Ne tester qu'un seul des litéraux améliore les performances :o
        C'est un compromis entre tester les deux et ne rien tester
        (comme on appelle setLitFalse, ça signifie qu'au moins un des deux watched est faux) */ 
-    if (_lits[0].isTrue() || _lits[1].isTrue())
+    if (isSatisfied())
         return false;
     /* Si l'un des litéraux est vrai, newWatched pointe sur ce litéral
        sinon il pointe sur un litéral FREE (ou sur end() s'il n'y en a pas) */
     const std::vector<Literal>::iterator end = _lits.end();
     std::vector<Literal>::iterator it, newWatched = end;
-    for (it = _lits.begin()+2; it != end; ++it)
+    for (it = _lits.begin()+2; it < end; ++it)
     {
         if (it->var()->isFree())
             newWatched = it;
@@ -111,11 +115,12 @@ inline bool WatchedClause::setLitFalse(const Literal& l)
     {
         // *newWatched devient le nouveau litéral surveillé
         newWatched->var()->linkToClause(newWatched->pos(), (Clause*)this);
-        _lits[l.var() == _lits[1].var()] = *newWatched; // utilise la conversion true->1, false->0
+        _lits[_lits.size() > 1 && l.var() == _lits[1].var()] = *newWatched; // utilise la conversion true->1, false->0
         *newWatched = l.invert();
         #if VERBOSE > 5
-        std::cout << "new watched : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
-                  << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
+        std::cout << "new watched : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos();
+        if(_lits.size() > 1)
+            std::cout << ", " << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
         #endif
     }
     return (newWatched != end);
@@ -147,19 +152,19 @@ inline void WatchedClause::freeLitFalse(const Literal& l)
 inline unsigned int WatchedClause::freeSize() const
 {
     return (_lits[0].var()->isFree()) // utilise la conversion true->1, false->0
-         + (_lits[1].var()->isFree());
+         + (_lits.size() > 1 && _lits[1].var()->isFree());
 }
 
 // Cette fonction est appelée quand il ne reste plus qu'une variable libre, et renvoie le litéral en question
 inline Literal WatchedClause::getRemaining() const
 {
-    return _lits[_lits[1].var()->isFree()]; // utilise la conversion true->1, false->0
+    return _lits[_lits.size() > 1 && _lits[1].var()->isFree()]; // utilise la conversion true->1, false->0
 }
 
 // Renvoie un résultat correct ssi appelé juste après setLitFalse
 inline bool WatchedClause::isSatisfied() const
 {
-    return _lits[0].isTrue() || _lits[1].isTrue();
+    return _lits[0].isTrue() || (_lits.size() > 1 && _lits[1].isTrue());
 }
 
 
