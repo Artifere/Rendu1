@@ -320,6 +320,8 @@ void SatProblem::resolve(const Clause *conflictClause)
         res.resize(resIt-res.begin());
         mergedLits.resize(res.size());
         std::copy(res.begin(), res.end(), mergedLits.begin());
+        if (nbFromCurBet < 1)
+            singleFromCurBet = true;
     }
 
     
