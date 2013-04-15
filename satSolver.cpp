@@ -315,7 +315,7 @@ void SatProblem::resolve(const Clause *conflictClause)
         sort(toMerge.begin(), toMerge.end());
         
         std::vector<Literal> res(mergedLits.size()+toMerge.size());
-        std::vector<Literal>::iterator resIt;
+        std::vector<Literal>::iterator resIt = res.begin();
         std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), resIt, litCompVar);
         res.resize(resIt-res.begin());
         mergedLits.resize(res.size());
