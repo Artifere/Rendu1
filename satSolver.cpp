@@ -314,12 +314,12 @@ void SatProblem::resolve(const Clause *conflictClause)
         std::vector<Literal> toMerge = deductedFrom->getLiterals();
         sort(toMerge.begin(), toMerge.end());
         
-        std::vector<Literal> res;
+        std::vector<Literal> res(mergedLits.size()+toMerge.size());
         std::vector<Literal>::iterator resIt;
         std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), resIt, litCompVar);
         res.resize(resIt-res.begin());
         mergedLits.resize(res.size());
-        std::copy(toMerge.begin(), toMerge.end(), mergedLits.begin());
+        std::copy(res.begin(), res.end(), mergedLits.begin());
     }
 
     
