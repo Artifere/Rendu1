@@ -327,12 +327,11 @@ Literal SatProblem::resolve(const Clause *conflictClause)
     #endif
 
     std::vector<Literal> mergedLits(conflictClause->getLiterals());
-/*
-    bool singleFromCurBet = false, youngestVarLitValue;
-    sort(mergedLits.begin(), mergedLits.end(), litCompVar);
-*/
+    
+    
+    
     bool youngestVarLitValue;
-    sort(mergedLits.begin(), mergedLits.end());    
+    sort(mergedLits.begin(), mergedLits.end(), litCompVar);
     
     while (true)
     {
@@ -364,34 +363,18 @@ Literal SatProblem::resolve(const Clause *conflictClause)
         
         Clause *deductedFrom = youngestVar->getOriginClause();
         std::vector<Literal> toMerge = deductedFrom->getLiterals();
-/*
+        #if VERBOSE > 1
+        std::cout << "merge la clause " << deductedFrom->_number << " qui a permis de déduire la variable " << youngestVar->varNumber << std::endl;
+        #endif
         sort(toMerge.begin(), toMerge.end(), litCompVar);
         
         std::vector<Literal> res(mergedLits.size()+toMerge.size());
         std::vector<Literal>::iterator resIt;
         resIt = std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), res.begin(), litCompVar);
+        //resIt = std::remove(res.begin(), resIt, Literal(youngestVar, true));
+        //resIt = std::remove(res.begin(), resIt, Literal(youngestVar, false));
         res.resize(resIt-res.begin());
-    
-       
         res.erase(std::lower_bound(res.begin(), res.end(), Literal(youngestVar, false), litCompVar));
-        mergedLits.resize(res.size());
-
-        std::copy(res.begin(), res.end(), mergedLits.begin());
-        if (nbFromCurBet < 2)
-            singleFromCurBet = true;
-    }
-*/
-        #if VERBOSE > 1
-        std::cout << "merge la clause " << deductedFrom->_number << " qui a permis de déduire la variable " << youngestVar->varNumber << std::endl;
-        #endif
-        sort(toMerge.begin(), toMerge.end());
-        
-        std::vector<Literal> res(mergedLits.size()+toMerge.size());
-        std::vector<Literal>::iterator resIt;
-        resIt = std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), res.begin());
-        resIt = std::remove(res.begin(), resIt, Literal(youngestVar, true));
-        resIt = std::remove(res.begin(), resIt, Literal(youngestVar, false));
-        res.resize(resIt-res.begin());
         std::swap(mergedLits, res);
     }
 
