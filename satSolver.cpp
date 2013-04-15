@@ -246,7 +246,8 @@ bool SatProblem::satisfiability()
             // Si on n'a aucun choix libre, on renvoie faux (UNSAT)
             if (_stackBacktrack.empty())
                 return false;
-            
+           
+            resolve(isError); // TODO : attention, peut-être mal placée...
             // On revient au dernier choix libre fait
             std::vector<Variable*>::iterator it, lastChoice = _stackBacktrack.back();
             _stackBacktrack.pop_back();
@@ -282,7 +283,7 @@ inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 
 
 
-void SatProblem::resolve(Clause *conflictClause)
+void SatProblem::resolve(const Clause *conflictClause)
 {
     std::vector<Literal> mergedLits(conflictClause->getLiterals());
     bool singleFromCurBet = false;
