@@ -330,7 +330,6 @@ Literal SatProblem::resolve(const Clause *conflictClause)
     
     
     
-    bool youngestVarLitValue;
     sort(mergedLits.begin(), mergedLits.end(), litCompVar);
     
     while (true)
@@ -348,7 +347,6 @@ Literal SatProblem::resolve(const Clause *conflictClause)
                 if (youngestVar->isOlder(it->var()))
                 {
                     youngestVar = it->var();
-                    youngestVarLitValue = it->pos();
                 }
             }
         }
