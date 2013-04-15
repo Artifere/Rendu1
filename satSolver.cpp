@@ -288,35 +288,30 @@ inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 Literal SatProblem::resolve(const Clause *conflictClause)
 {
     std::vector<Literal> mergedLits(conflictClause->getLiterals());
-    bool singleFromCurBet = false, v1LitValue;
+    bool singleFromCurBet = false, youngestVarLitValue;
     sort(mergedLits.begin(), mergedLits.end());
 
     std::cout << "debuf" << std::endl;
     while (!singleFromCurBet)
     {
         unsigned nbFromCurBet = 0;
-        Variable *v1 = NULL;
+        Variable *youngestVar = NULL;
         std::vector<Literal>::iterator it;
         for (it = mergedLits.begin();it != mergedLits.end(); ++it)
         {
             if (it->var()->isFromCurBet(_stackBacktrack.back()))
             {
                 nbFromCurBet++;
-                if (nbFromCurBet == 1)
+                std::cout << it->var() << std::endl;
+                if (youngestVar->isOlder(it->var()))
                 {
-                    std::cout << it->var() << std::endl;
-                    v1 = it->var();
-                    v1LitValue = it->pos();
-                }
-                else
-                {
-                    std::cout << it->var() << std::endl;
-                    break;
+                    youngestVar = it->var();
+                    youngestVarLitValue = it->pos();
                 }
             }
         }
         
-        if(nbFromCurBet == 0 || v1 == NULL) {
+        if(nbFromCurBet == 0 || youngestVar == NULL) {
             cout << "ceci ne devrait pas arriver" << endl;
             break;
         }
@@ -324,7 +319,7 @@ Literal SatProblem::resolve(const Clause *conflictClause)
             break;
 
         
-        Clause *deductedFrom = v1->getOriginClause();
+        Clause *deductedFrom = youngestVar->getOriginClause();
         std::vector<Literal> toMerge = deductedFrom->getLiterals();
         sort(toMerge.begin(), toMerge.end());
         
@@ -332,10 +327,10 @@ Literal SatProblem::resolve(const Clause *conflictClause)
         std::vector<Literal>::iterator resIt;
         resIt = std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), res.begin(), litCompVar);
         res.resize(resIt-res.begin());
-        if (std::lower_bound(res.begin(), res.end(), Literal(v1, false), litCompVar) == res.end())
+        if (std::lower_bound(res.begin(), res.end(), Literal(youngestVar, false), litCompVar) == res.end())
             std::cout << "PAS COOL :(" << std::endl;
 
-        res.erase(std::lower_bound(res.begin(), res.end(), Literal(v1, false), litCompVar));
+        res.erase(std::lower_bound(res.begin(), res.end(), Literal(youngestVar, false), litCompVar));
         mergedLits.resize(res.size());
         std::copy(res.begin(), res.end(), mergedLits.begin());
         std::cout << nbFromCurBet << std::endl;
