@@ -239,7 +239,7 @@ bool SatProblem::satisfiability()
         // On fait le backtrack si besoin
         if(isError != NULL)
         {
-            #if VERBOSE >= 3
+            #if VERBOSE >= 2
             print_debug();
             std::cout<<"Backtrack"<<std::endl;
             #endif
@@ -255,7 +255,7 @@ bool SatProblem::satisfiability()
             _stackBacktrack.pop_back();
             do {
                 Variable * var = * (-- Variable::_endAssigned);
-                #if VERBOSE >= 3
+                #if VERBOSE >= 2
                 print_debug();
                 std::cout<<"Retour sur la valeur de la variable "<<var->varNumber<<std::endl;
                 #endif
@@ -264,12 +264,37 @@ bool SatProblem::satisfiability()
             } while (Variable::_endAssigned > lastChoice);
             Variable::_endDeducted = lastChoice;
             
+            #if VERBOSE >= 2
+            print_debug();
+            std::cout<<"Fin du backtrack."<<std::endl;
+        print_debug();
+        std::cout << "État des variables :   ";
+        std::vector<Variable*>::const_iterator itDebug;
+        for (itDebug = Variable::_vars.begin(); itDebug != Variable::_vars.end(); ++ itDebug) {
+            (*itDebug)->print_state();
+            std::cout << " ";
+        }
+        std::cout<<std::endl;
+        std::cout << "number assigned : " << (Variable::_endAssigned - Variable::_vars.begin()) << std::endl;
+        std::cout << "number deducted : " << (Variable::_endDeducted - Variable::_endAssigned) << std::endl;
+            std::cout << "deduct from free : " << newDeduct.var()->varNumber << std::endl;
+            #endif
+            
             // on ajoute ce qu'on a appris comme déduction
             newDeduct.var()->deductedFromFree(newDeduct.pos(), _clauses.back());
             
-            #if VERBOSE >= 4
+            #if VERBOSE >= 2
             print_debug();
             std::cout<<"Fin du backtrack."<<std::endl;
+        print_debug();
+        std::cout << "État des variables :   ";
+        for (itDebug = Variable::_vars.begin(); itDebug != Variable::_vars.end(); ++ itDebug) {
+            (*itDebug)->print_state();
+            std::cout << " ";
+        }
+        std::cout<<std::endl;
+        std::cout << "number assigned : " << (Variable::_endAssigned - Variable::_vars.begin()) << std::endl;
+        std::cout << "number deducted : " << (Variable::_endDeducted - Variable::_endAssigned) << std::endl;
             #endif
         }
     }

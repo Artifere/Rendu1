@@ -24,9 +24,7 @@ public:
 
     ~SmartWatchedClause();
 
-    #if VERBOSE > 1
     const unsigned _number;
-    #endif
 protected:
     /* Les watched literals sont les deux premiers de ce tableau. */
     std::vector<Literal> _lits;

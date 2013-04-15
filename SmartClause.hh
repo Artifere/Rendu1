@@ -25,9 +25,7 @@ public:
 
     std::vector<Literal> getLiterals(void) const;
 
-    #if VERBOSE > 1
     const unsigned _number;
-    #endif
 protected:
     // liste de tous les littéraux
     const std::vector<Literal> _literals;

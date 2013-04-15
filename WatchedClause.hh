@@ -24,9 +24,7 @@ public:
 
     ~WatchedClause();
 
-    #if VERBOSE > 1
     const unsigned _number;
-    #endif
 protected:
     /* Les watched literals sont les deux premiers de ce tableau.
        Après un setLitFalse, on doit avoir :

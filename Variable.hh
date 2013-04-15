@@ -91,8 +91,8 @@ inline void Variable::deductedFromFree(bool value, Clause * fromClause)
     Variable * var = * (_endDeducted ++);
     std::swap(_posInTable, var->_posInTable);
     std::iter_swap(_posInTable, var->_posInTable);
-    _varState = value ? true : false;
     _deductedFromClause = fromClause;
+    _varState = value;
 }
 
 
