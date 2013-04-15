@@ -17,7 +17,8 @@ class SatProblem
 {
 protected:
     const unsigned _nbrVars;
-    std::vector<Clause*> _clauses;    
+    std::vector<Clause*> _clauses;
+    Variable * _varFantome;
     // pile des indices des choix contraints
     std::vector<std::vector<Variable*>::iterator> _stackBacktrack;
     

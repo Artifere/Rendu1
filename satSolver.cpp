@@ -65,15 +65,17 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     : _nbrVars(nbrVar)
 {
     // nécessaire pour que les itérateurs restent valides
-    Variable::_vars.reserve(nbrVar);
+    Variable::_vars.reserve(nbrVar+1);
     Variable::_endDeducted = Variable::_vars.begin();
     Variable::_endAssigned = Variable::_vars.begin();
     // Optionnel, rend l'initialisation un peu plus rapide
     _clauses.reserve(nbrClauses);
     
     // Initialise les variables
+    //_varFantome = new Variable(0);
     for(unsigned k = 1; k <= nbrVar; k++)
         new Variable(k);
+    //_varFantome->deductedFromFree(true, NULL);
 
     // Parse chaque clause du fichier (et crée les liens entre variables et clauses)
     std::vector<Literal> listClause;
@@ -150,7 +152,7 @@ void SatProblem::addClause(std::vector<Literal>& list, Variable* firstTrue)
         std::cout<<"Clause trivialement vraie lue. Elle est ignorée."<<std::endl;
         #endif
     }
-    else if(list.size() == 0)
+    else if(list.size() == 0)// || (list.size() == 1 && list[0].var() == _varFantome))
     {
         #if VERBOSE >= 2
         print_debug();
@@ -165,8 +167,9 @@ void SatProblem::addClause(std::vector<Literal>& list, Variable* firstTrue)
     else
     {
         // Si la clause est de taille 1, on fait une déduction
-        /*(list.size() == 1)
+        if(list.size() == 1)
         {
+            //list.push_back(Literal(_varFantome, false));
             Literal& lit = *(list.begin());
             #if VERBOSE >= 2
             print_debug();
@@ -189,7 +192,7 @@ void SatProblem::addClause(std::vector<Literal>& list, Variable* firstTrue)
             }
         }
         else // On crée la clause
-        */{
+        {
             Clause* nclause = new Clause(CALL_CONSTR(list), firstTrue);
             _clauses.push_back(nclause);
         }
@@ -332,10 +335,11 @@ Literal SatProblem::resolve(const Clause *conflictClause)
     
     sort(mergedLits.begin(), mergedLits.end(), litCompVar);
     
+    Literal youngest;
     while (true)
     {
         unsigned nbFromCurBet = 0;
-        Variable *youngestVar = mergedLits.begin()->var();
+        youngest = * mergedLits.begin();
         for (std::vector<Literal>::iterator it = mergedLits.begin();it != mergedLits.end(); ++it)
         {
             if (it->var()->isFromCurBet(_stackBacktrack.back()))
@@ -344,14 +348,14 @@ Literal SatProblem::resolve(const Clause *conflictClause)
                 std::cout << "variable trouvée : " << it->var()->varNumber << std::endl;
                 #endif
                 nbFromCurBet++;
-                if (youngestVar->isOlder(it->var()))
+                if (youngest.var()->isOlder(it->var()))
                 {
-                    youngestVar = it->var();
+                    youngest = * it;
                 }
             }
         }
         
-        if(nbFromCurBet == 0 || youngestVar == NULL) {
+        if(nbFromCurBet == 0 || youngest.var() == NULL) {
             std::cout << "ceci ne devrait pas arriver" << std::endl;
             break;
         }
@@ -359,10 +363,10 @@ Literal SatProblem::resolve(const Clause *conflictClause)
             break;
 
         
-        Clause *deductedFrom = youngestVar->getOriginClause();
+        Clause *deductedFrom = youngest.var()->getOriginClause();
         std::vector<Literal> toMerge = deductedFrom->getLiterals();
         #if VERBOSE > 1
-        std::cout << "merge la clause " << deductedFrom->_number << " qui a permis de déduire la variable " << youngestVar->varNumber << std::endl;
+        std::cout << "merge la clause " << deductedFrom->_number << " qui a permis de déduire la variable " << youngest.var()->varNumber << std::endl;
         #endif
         sort(toMerge.begin(), toMerge.end(), litCompVar);
         
@@ -372,23 +376,27 @@ Literal SatProblem::resolve(const Clause *conflictClause)
         //resIt = std::remove(res.begin(), resIt, Literal(youngestVar, true));
         //resIt = std::remove(res.begin(), resIt, Literal(youngestVar, false));
         res.resize(resIt-res.begin());
-        res.erase(std::lower_bound(res.begin(), res.end(), Literal(youngestVar, false), litCompVar));
+        res.erase(std::lower_bound(res.begin(), res.end(), youngest, litCompVar));
         std::swap(mergedLits, res);
     }
 
-    //std::cout << "pas mal" << std::endl;
-
-    
-    Literal firstTrue = *mergedLits.begin();
-    for (std::vector<Literal>::iterator it = mergedLits.begin()+1; it != mergedLits.end(); ++it)
+    // TODO plus tard : utiliser une autre methode pour gérér les clauses de taille 1
+    if(mergedLits.size() == 1)
     {
-        if (it->var()->isFromCurBet(_stackBacktrack.back()))
-        {
-            firstTrue = *it;
-        }
+        // on récupère une variable différente de mergedLits[0]
+        Variable * diff = Variable::_vars[(mergedLits[0].var() == Variable::_vars[0]) ? 1 : 0];
+        // on ajoute deux clauses : l'une avec diff, l'autre avec non(diff)
+        mergedLits.push_back(Literal(diff, true));
+        addClause(mergedLits, youngest.var());
+        mergedLits.pop_back();
+        mergedLits.push_back(Literal(diff, false));
+        addClause(mergedLits, youngest.var());
     }
-    addClause(mergedLits, firstTrue.var());
-    return firstTrue;
+    else
+    {
+        addClause(mergedLits, youngest.var());
+    }
+    return youngest;
 }
 
 

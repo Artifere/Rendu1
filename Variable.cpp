@@ -55,9 +55,9 @@ Clause* Variable::assignedFromDeducted(void)
                 #if VERBOSE > 4
                 std::cout << "c Contradiction (clause " <<target->_number<< ")" << std::endl;
                 #endif
-                std::cout << "bobo" << std::endl;
+                //std::cout << "bobo" << std::endl;
                 isError = target;
-                break;
+                //break;
             }
             // Sinon, s'il n'y a pas déduction, ne rien faire. S'il y a une déduction on teste si elle est contradictoire
             else if(fs == 1)
