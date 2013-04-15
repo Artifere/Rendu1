@@ -29,7 +29,7 @@ public:
     
     void  resolve(const Clause *conflictClause);
 
-    void addClause(CONSTR_ARGS(list), Variable *firstTrue);
+    void addClause(std::vector<Literal>& list, Variable *firstTrue);
     bool satisfiability();
 };
 

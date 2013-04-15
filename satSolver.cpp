@@ -76,14 +76,12 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
         new Variable(k);
 
     // Parse chaque clause du fichier (et crée les liens entre variables et clauses)
-    unsigned number = 1;
     std::vector<Literal> listClause;
     for(unsigned int k = 0; k < nbrClauses; k++)
     {
         listClause.clear();
         parserListLit(input, listClause, Variable::_vars);
-        addClause(CALL_CONSTR(listClause), NULL);
-        number++;
+        addClause(listClause, NULL);
     }
 
     // éventuel tri initial des variables libres
@@ -122,8 +120,10 @@ SatProblem::~SatProblem()
 
 /* Crée une clause, tout en vérifiant si elle n'est pas trivialement vraie/fausse, et déduit
    des assignations si la clause est de taille 1. Vérifie aussi que ces déductions ne sont pas contradictoires. */
-void SatProblem::addClause(CONSTR_ARGS(list), Variable* firstTrue)
+void SatProblem::addClause(std::vector<Literal>& list, Variable* firstTrue)
 {
+    static unsigned int number = 0;
+    number ++;
     #if VERBOSE > 6
     print_debug();
     std::cout << "Ajout de clause : ";
@@ -331,7 +331,6 @@ void SatProblem::resolve(const Clause *conflictClause)
             firstTrue = it->var();
         }
     }
-
     addClause(mergedLits, firstTrue);
 //    return Clause(mergedLits, firstTrue); 
 }
