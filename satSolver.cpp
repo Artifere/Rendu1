@@ -292,6 +292,8 @@ Literal SatProblem::resolve(const Clause *conflictClause)
     sort(mergedLits.begin(), mergedLits.end());
 
     std::cout << "debuf" << std::endl;
+    
+    
     while (!singleFromCurBet)
     {
         unsigned nbFromCurBet = 0;
@@ -312,7 +314,7 @@ Literal SatProblem::resolve(const Clause *conflictClause)
         }
         
         if(nbFromCurBet == 0 || youngestVar == NULL) {
-            cout << "ceci ne devrait pas arriver" << endl;
+            std::cout << "ceci ne devrait pas arriver" << std::endl;
             break;
         }
         if(nbFromCurBet == 1)
@@ -325,12 +327,12 @@ Literal SatProblem::resolve(const Clause *conflictClause)
         
         std::vector<Literal> res(mergedLits.size()+toMerge.size());
         std::vector<Literal>::iterator resIt;
-        resIt = std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), res.begin(), litCompVar);
+        resIt = std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), res.begin());
         res.resize(resIt-res.begin());
         if (std::lower_bound(res.begin(), res.end(), Literal(youngestVar, false), litCompVar) == res.end())
             std::cout << "PAS COOL :(" << std::endl;
 
-        res.erase(std::lower_bound(res.begin(), res.end(), Literal(youngestVar, false), litCompVar));
+        res.erase(std::lower_bound(res.begin(), res.end(), Literal(youngestVar, false)));
         mergedLits.resize(res.size());
         std::copy(res.begin(), res.end(), mergedLits.begin());
         std::cout << nbFromCurBet << std::endl;
