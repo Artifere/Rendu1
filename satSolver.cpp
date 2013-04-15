@@ -9,7 +9,6 @@
 #include "Variable.hh"
 #include "Literal.hh"
 #include "Clause.hh"
-//#include "UnassignedBucket.hh"
 #include "parser.hh"
 #include <algorithm>
 
@@ -83,7 +82,7 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     {
         listClause.clear();
         parserListLit(input, listClause, Variable::_vars);
-        addClause(CALL_CONSTR(listClause));
+        addClause(CALL_CONSTR(listClause), NULL);
         number++;
     }
 
@@ -123,7 +122,7 @@ SatProblem::~SatProblem()
 
 /* Crée une clause, tout en vérifiant si elle n'est pas trivialement vraie/fausse, et déduit
    des assignations si la clause est de taille 1. Vérifie aussi que ces déductions ne sont pas contradictoires. */
-void SatProblem::addClause(CONSTR_ARGS(list))
+void SatProblem::addClause(CONSTR_ARGS(list), Variable* firstTrue)
 {
     #if VERBOSE > 6
     print_debug();
@@ -191,7 +190,7 @@ void SatProblem::addClause(CONSTR_ARGS(list))
         }
         else // On crée la clause
         {
-            Clause* nclause = new Clause(CALL_CONSTR(list), NULL);
+            Clause* nclause = new Clause(CALL_CONSTR(list), firstTrue);
             _clauses.push_back(nclause);
         }
     }
@@ -282,7 +281,8 @@ inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 }
 
 
-Clause SatProblem::resolve(Clause *conflictClause)
+
+void SatProblem::resolve(Clause *conflictClause)
 {
     std::vector<Literal> mergedLits(conflictClause->getLiterals());
     bool singleFromCurBet = false;
@@ -331,8 +331,8 @@ Clause SatProblem::resolve(Clause *conflictClause)
         }
     }
 
-
-    return Clause(mergedLits, firstTrue); 
+    addClause(mergedLits, firstTrue);
+//    return Clause(mergedLits, firstTrue); 
 }
 
 
