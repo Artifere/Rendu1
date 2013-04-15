@@ -314,22 +314,19 @@ Literal SatProblem::resolve(const Clause *conflictClause)
 {
     std::vector<Literal> mergedLits(conflictClause->getLiterals());
     bool singleFromCurBet = false, youngestVarLitValue;
-    sort(mergedLits.begin(), mergedLits.end());
+    sort(mergedLits.begin(), mergedLits.end(), litCompVar);
 
-    std::cout << "debuf" << std::endl;
     
     
     while (!singleFromCurBet)
     {
         unsigned nbFromCurBet = 0;
-        Variable *youngestVar = NULL;
-        std::vector<Literal>::iterator it;
-        for (it = mergedLits.begin();it != mergedLits.end(); ++it)
+        Variable *youngestVar = mergedLits.begin()->var();
+        for (std::vector<Literal>::iterator it = mergedLits.begin();it != mergedLits.end(); ++it)
         {
             if (it->var()->isFromCurBet(_stackBacktrack.back()))
             {
                 nbFromCurBet++;
-                std::cout << it->var() << std::endl;
                 if (youngestVar->isOlder(it->var()))
                 {
                     youngestVar = it->var();
@@ -348,37 +345,32 @@ Literal SatProblem::resolve(const Clause *conflictClause)
         
         Clause *deductedFrom = youngestVar->getOriginClause();
         std::vector<Literal> toMerge = deductedFrom->getLiterals();
-        sort(toMerge.begin(), toMerge.end());
+        sort(toMerge.begin(), toMerge.end(), litCompVar);
         
         std::vector<Literal> res(mergedLits.size()+toMerge.size());
         std::vector<Literal>::iterator resIt;
-        resIt = std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), res.begin());
+        resIt = std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), res.begin(), litCompVar);
         res.resize(resIt-res.begin());
-        if (std::lower_bound(res.begin(), res.end(), Literal(youngestVar, false), litCompVar) == res.end())
-            std::cout << "PAS COOL :(" << std::endl;
-
-        res.erase(std::lower_bound(res.begin(), res.end(), Literal(youngestVar, false)));
+    
+       
+        res.erase(std::lower_bound(res.begin(), res.end(), Literal(youngestVar, false), litCompVar));
         mergedLits.resize(res.size());
+
         std::copy(res.begin(), res.end(), mergedLits.begin());
-        std::cout << nbFromCurBet << std::endl;
         if (nbFromCurBet < 2)
             singleFromCurBet = true;
     }
-
-    std::cout << "pas mal" << std::endl;
-
     
     Literal firstTrue = *mergedLits.begin();
     for (std::vector<Literal>::iterator it = mergedLits.begin()+1; it != mergedLits.end(); ++it)
     {
-        if (it->var()->isOlder(firstTrue.var()))
+        if (it->var()->isFromCurBet(_stackBacktrack.back()))
         {
             firstTrue = *it;
         }
     }
     addClause(mergedLits, firstTrue.var());
     return firstTrue;
-//    return Clause(mergedLits, firstTrue); 
 }
 
 
