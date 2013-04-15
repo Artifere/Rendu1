@@ -296,7 +296,7 @@ Clause SatProblem::resolve(Clause *conflictClause)
         std::vector<Literal>::iterator it;
         for (it = mergedLits.begin();it != mergedLits.end(); ++it)
         {
-            if (it->var()->isFromCurBet())
+            if (it->var()->isFromCurBet(_stackBacktrack.back()))
             {
                 nbFromCurBet++;
                 if (nbFromCurBet == 1)

@@ -24,7 +24,7 @@ protected:
 public:
     SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses);
     ~SatProblem();
-
+    inline const std::vector<Variable*>::iterator getLastBetIterator(void) const {return _stackBacktrack.back();}
     inline const std::vector<std::pair<unsigned,bool> > getAssign(void) const;
     
     Clause  resolve(Clause *conflictClause);

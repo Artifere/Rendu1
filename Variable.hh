@@ -57,7 +57,7 @@ public:
     
     inline bool isFree(void) const           { return _posInTable >= _endDeducted; };
     inline bool isOlder(Variable* var) const { return _posInTable <= var->_posInTable; };
-    inline bool isFromCurBet(void) const     {return false;}// return _posInTable >= _stackBacktrack.top()} // TODO
+    inline bool isFromCurBet(std::vector<Variable*>::iterator curBetIterator) const     {return _posInTable >= curBetIterator;} // TODO ==> fait normalement, je te laisse vérifier
 
     inline Clause* getOriginClause(void) const { return _deductedFromClause; }
 
