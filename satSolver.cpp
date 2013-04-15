@@ -64,7 +64,7 @@ int main()
 SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses)
     : _nbrVars(nbrVar)
 {
-    // nécessaire pour que les itérateus restent valides
+    // nécessaire pour que les itérateurs restent valides
     Variable::_vars.reserve(nbrVar);
     Variable::_endDeducted = Variable::_vars.begin();
     Variable::_endAssigned = Variable::_vars.begin();
@@ -248,9 +248,11 @@ bool SatProblem::satisfiability()
                 return false;
            
             resolve(isError); // TODO : attention, peut-être mal placée...
+            std::cout << "lol1" << std::endl;
             // On revient au dernier choix libre fait
             std::vector<Variable*>::iterator it, lastChoice = _stackBacktrack.back();
             _stackBacktrack.pop_back();
+            std::cout << "lol2" << std::endl;
             do {
                 Variable * var = * (-- Variable::_endAssigned);
                 #if VERBOSE >= 3
@@ -261,6 +263,7 @@ bool SatProblem::satisfiability()
                 var->deductedFromAssigned();
             } while (Variable::_endAssigned > lastChoice);
             
+            std::cout << "lolfin" << std::endl;
             // on ajoute son contraire comme déduction
             (* lastChoice)->_varState = ! (* lastChoice)->_varState;
             Variable::_endDeducted = lastChoice + 1;
@@ -286,10 +289,10 @@ inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 void SatProblem::resolve(const Clause *conflictClause)
 {
     std::vector<Literal> mergedLits(conflictClause->getLiterals());
-    bool singleFromCurBet = false;
+    bool singleFromCurBet = false, v1LitValue;
     sort(mergedLits.begin(), mergedLits.end());
 
-
+    std::cout << "debuf" << std::endl;
     while (!singleFromCurBet)
     {
         unsigned nbFromCurBet = 0;
@@ -301,9 +304,14 @@ void SatProblem::resolve(const Clause *conflictClause)
             {
                 nbFromCurBet++;
                 if (nbFromCurBet == 1)
+                {
+                    std::cout << it->var() << std::endl;
                     v1 = it->var();
+                    v1LitValue = it->pos();
+                }
                 else
                 {
+                    std::cout << it->var() << std::endl;
                     break;
                 }
             }
@@ -315,14 +323,21 @@ void SatProblem::resolve(const Clause *conflictClause)
         sort(toMerge.begin(), toMerge.end());
         
         std::vector<Literal> res(mergedLits.size()+toMerge.size());
-        std::vector<Literal>::iterator resIt = res.begin();
-        std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), resIt, litCompVar);
+        std::vector<Literal>::iterator resIt;
+        resIt = std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), res.begin(), litCompVar);
         res.resize(resIt-res.begin());
+        if (std::lower_bound(res.begin(), res.end(), Literal(v1, false), litCompVar) == res.end())
+            std::cout << "PAS COOL :(" << std::endl;
+
+        res.erase(std::lower_bound(res.begin(), res.end(), Literal(v1, false), litCompVar));
         mergedLits.resize(res.size());
         std::copy(res.begin(), res.end(), mergedLits.begin());
-        if (nbFromCurBet < 1)
+        std::cout << nbFromCurBet << std::endl;
+        if (nbFromCurBet < 2)
             singleFromCurBet = true;
     }
+
+    std::cout << "pas mal" << std::endl;
 
     
     Variable *firstTrue = mergedLits.begin()->var();

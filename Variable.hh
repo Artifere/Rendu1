@@ -57,7 +57,7 @@ public:
     
     inline bool isFree(void) const           { return _posInTable >= _endDeducted; };
     inline bool isOlder(Variable* var) const { return _posInTable <= var->_posInTable; };
-    inline bool isFromCurBet(std::vector<Variable*>::iterator curBetIterator) const     {return _posInTable >= curBetIterator;} // TODO ==> fait normalement, je te laisse vérifier
+    inline bool isFromCurBet(std::vector<Variable*>::iterator curBetIterator) const     {return _posInTable >= curBetIterator;} // TODO ==> fait normalement, je te laisse vérifier... Apparemment j'ai fait n'importe quoi :s
 
     inline Clause* getOriginClause(void) const { return _deductedFromClause; }
 
