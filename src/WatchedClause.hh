@@ -69,10 +69,18 @@ inline WatchedClause::WatchedClause(const std::vector<Literal>& list, const unsi
     : clauseNumber(number), _lits(list)
 {
     std::vector<Literal>::iterator it;
-    // cherche à mettre un litéral libre en _lits[0]
+    // place le plus jeune literal en _lits[0]
     for (it = _lits.begin()+1; it != _lits.end(); ++it)
     {
-        if (it->var()->isFree())
+        if (_lits[0].var()->isOlder(it->var()))
+            std::iter_swap(it, _lits.begin());
+    }
+    // place le second plus jeune literal en _lits[1]
+    for (it = _lits.begin()+2; it != _lits.end(); ++it)
+    {
+        if (_lits[1].var()->isOlder(it->var()))
+            std::iter_swap(it, _lits.begin()+1);
+    }/*
         {
             std::iter_swap(it, _lits.begin());
             // cherche à mettre un litéral libre en _lits[1]
@@ -85,7 +93,7 @@ inline WatchedClause::WatchedClause(const std::vector<Literal>& list, const unsi
                 }
             break;
         }
-    }
+    }*/
     _lits[0].var()->linkToClause(_lits[0].pos(), (Clause*)this);
     _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
     #if VERBOSE > 7
