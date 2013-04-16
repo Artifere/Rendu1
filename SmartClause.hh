@@ -83,8 +83,8 @@ inline SmartClause::SmartClause(const std::vector<Literal>& list, const unsigned
             _numOfFree ++;
             _currentHash += (intptr_t)it->var();
             _currentHashVal = (_currentHashVal != it->pos()); // XOR booléen
-            it->var()->linkToClause(it->pos(), (Clause*)this);
         }
+        it->var()->linkToClause(it->pos(), (Clause*)this);
     }
 }
 
@@ -120,10 +120,6 @@ inline bool SmartClause::setLitTrue(const Literal &l)
     _satisfied = true;
     if(res)
         _notWatched.push_back(l);
-    #if VERBOSE >= 5
-    else
-        std::cout << "La clause " << this->clauseNumber << " passe à vrai." << std::endl;
-    #endif
     return res;
 }
 
@@ -133,14 +129,9 @@ inline bool SmartClause::setLitTrue(const Literal &l)
    n'est ainsi plus satisfiable, et on resurveille donc tous ses litéraux. */
 inline void SmartClause::freeLitTrue(const Literal& l)
 {
-    #if VERBOSE >= 5
-    std::cout << "La clause " << this->clauseNumber << " passe à undef." << std::endl;
-    #endif
-/*
     #if VERBOSE >= 10
     std::cout << "free true (" << clauseNumber << "):" << l.var()->varNumber << '.' << l.pos() << std::endl;
     #endif
-*/
     _satisfied = false;
     std::vector<Literal>::const_iterator it;
     for(it = _notWatched.begin(); it != _notWatched.end(); it++)
