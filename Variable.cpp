@@ -15,6 +15,12 @@ Clause* Variable::assignedFromDeducted(void)
 {
     Clause* isError = NULL;
     const Literal lit = Literal(this, _varState);
+    
+    #if VERBOSE >= 5
+    std::cout << "Propagation du litéral :";
+    this->print_state();
+    std::cout << std::endl;
+    #endif
 
     std::vector<Clause*>& cTrue  = _varState ? _litTrue : _litFalse;
     std::vector<Clause*>& cFalse = _varState ? _litFalse : _litTrue;
