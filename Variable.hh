@@ -57,13 +57,14 @@ public:
     
     inline bool isFree(void) const           { return _posInTable >= _endDeducted; };
     inline bool isOlder(Variable* var) const { return _posInTable <= var->_posInTable; };
-    inline bool isFromCurBet(std::vector<Variable*>::iterator curBetIterator) const     {return _posInTable >= curBetIterator;} // TODO ==> fait normalement, je te laisse vérifier... Apparemment j'ai fait n'importe quoi :s
+    inline bool isFromCurBet(std::vector<Variable*>::iterator curBetIterator) const     {return _posInTable >= curBetIterator;}
 
     inline Clause* getOriginClause(void) const { return _deductedFromClause; }
 
     void deductedFromFree(bool value, Clause* fromClause);
     Clause* assignedFromDeducted(void);
     void deductedFromAssigned(void);
+    void moveToLastVars(void);
     
     static void chooseFromFree_BASIC(void);
     static void chooseFromFree_DLIS(void);
@@ -134,6 +135,15 @@ inline void Variable::linkToClause(bool val, Clause* c)
         _litTrue.push_back(c);
     else
         _litFalse.push_back(c);
+}
+
+
+
+inline void Variable::moveToLastVars(void)
+{
+    Variable * lastVar = _vars.back();
+    std::swap((*_endDeducted)->_posInTable, lastVar->_posInTable);
+    std::swap(*(*_endDeducted)->_posInTable, *lastVar->_posInTable);
 }
 
 

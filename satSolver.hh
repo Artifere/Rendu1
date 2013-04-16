@@ -31,6 +31,7 @@ public:
     std::pair<std::vector<Literal>,Literal> resolve(const Clause *conflictClause);
 
     void addClause(std::vector<Literal>& list, Variable *firstTrue);
+    void absoluteAssign(Literal lit);
     bool satisfiability();
 };
 

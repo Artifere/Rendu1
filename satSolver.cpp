@@ -113,6 +113,8 @@ SatProblem::~SatProblem()
     unsigned k;
     for(k = 0; k < Variable::_vars.size(); k++)
         delete Variable::_vars[k];
+    for(k = 0; k < _absoluteAssigned.size(); k++)
+        delete _absoluteAssigned[k];
     for(k = 0; k < _clauses.size(); k++)
         delete _clauses[k];
 }
@@ -134,9 +136,29 @@ void SatProblem::addClause(std::vector<Literal>& list, Variable* firstTrue)
     std::cout << std::endl;
     #endif
     // supprime les variable de _absoluteAssigned
-    //std::vector<Literal>::iterator read = list.begin(), write = list.begin();
-    //while(read != 
-    
+    std::vector<Variable*>::const_iterator assigned;
+    for (assigned = _absoluteAssigned.begin(); assigned != _absoluteAssigned.end(); ++assigned)
+    {
+       std::vector<Literal>::iterator read = list.begin();
+       while (read != list.end())
+       {
+           if (read->var() == *assigned)
+               if (read->pos() == (*assigned)->_varState)
+               {
+                   // on vide la clause car elle est trivialement vraie
+                   list.clear();
+                   break;
+               }
+               else
+               {
+                   // on supprime le litéral de la clause car il est faux
+                   list.pop_back();
+                   *read = *list.end();
+               }
+           else
+               read ++;
+        }
+    }
     // supprime les doublons (O(n.log n))
     std::sort(list.begin(), list.end());
     list.resize(std::unique(list.begin(), list.end()) - list.begin());
@@ -170,30 +192,15 @@ void SatProblem::addClause(std::vector<Literal>& list, Variable* firstTrue)
     }
     else
     {
-        // Si la clause est de taille 1, on fait une déduction
+        // Si la clause est de taille 1, on fait une déduction absolue :
+        // on supprime de l'ensemble du problème la clause et partout ou elle apparaît
         if(list.size() == 1)
         {
-            //list.push_back(Literal(_varFantome, false));
-            Literal& lit = *(list.begin());
             #if VERBOSE >= 2
             print_debug();
-            std::cout<<"Clause à déduction immédiate ajoutée : "<<lit.var()->varNumber<<" (valeur "<<lit.pos()<<")"<<std::endl;
+            std::cout<<"Clause à déduction immédiate ajoutée : "<<list[0].var()->varNumber<<" (valeur "<<list[0].pos()<<")"<<std::endl;
             #endif
-            
-            // On n'ajoute la déduction que si on ne l'a pas déjà faite
-            if(lit.var()->isFree())
-                lit.var()->deductedFromFree(lit.pos(), NULL);
-            else if(lit.var()->_varState != lit.pos())
-            {
-                #if VERBOSE >= 2
-                print_debug();
-                std::cout<<"Clause à déduction immédiate contradictoire avec une autre clause."<<std::endl;
-                #endif
-                #if VERBOSE > 0
-                std::cout<<"s UNSATISFIABLE"<<std::endl;
-                #endif
-                exit(0);
-            }
+            absoluteAssign(list[0]);
         }
         else // On crée la clause
         {
@@ -203,6 +210,32 @@ void SatProblem::addClause(std::vector<Literal>& list, Variable* firstTrue)
     }
 }
 
+
+void SatProblem::absoluteAssign(Literal lit)
+{
+    if (! lit.var()->isFree())
+        std::cout << "Absolute assign : Ceci ne devrait pas arriver : le litéral doit être libre" << std::endl;
+    // TODO : changer ça por quelque chose de plus intelligent
+                // on récupère une variable différente de mergedLits[0]
+                Variable * diff = Variable::_vars[(lit.var() == Variable::_vars[0]) ? 1 : 0];
+                // on ajoute deux clauses : l'une avec diff, l'autre avec non(diff)
+                std::vector<Literal> liste(1, lit);
+                liste.push_back(Literal(diff,true));
+                addClause(liste, lit.var());
+                liste.pop_back();
+                liste.push_back(Literal(diff, false));
+                addClause(liste, lit.var());
+    /*
+    // TODO : supprimmer la variable de l'ensemble du problème
+    lit.var()->_varState = lit.pos();
+    // déplace la variable* de Variable::_vars vers _absoluteAssigned
+    lit.var()->moveToLastVar();
+    Variable::_vars.pop_back();
+    _absoluteAssigned.push_back(lit.var());
+    // parcourt toutes les clauses, pour supprimmer la variable recherchée
+    */
+
+}
 
 
 
@@ -287,23 +320,8 @@ bool SatProblem::satisfiability()
             std::cout << "deduct from free : " << newDeduct.second.var()->varNumber << std::endl;
             #endif
             
-            // TODO plus tard : utiliser une autre methode pour gérér les clauses de taille 1
-            if(newDeduct.first.size() == 1)
-            {
-                // on récupère une variable différente de mergedLits[0]
-                Variable * diff = Variable::_vars[(newDeduct.first[0].var() == Variable::_vars[0]) ? 1 : 0];
-                // on ajoute deux clauses : l'une avec diff, l'autre avec non(diff)
-                newDeduct.first.push_back(Literal(diff, true));
-                addClause(newDeduct.first, newDeduct.second.var());
-                newDeduct.first.pop_back();
-                newDeduct.first.push_back(Literal(diff, false));
-                addClause(newDeduct.first, newDeduct.second.var());
-            }
-            else
-            {
-                addClause(newDeduct.first, newDeduct.second.var());
-            }
             // on ajoute ce qu'on a appris comme déduction
+            addClause(newDeduct.first, newDeduct.second.var());
             newDeduct.second.var()->deductedFromFree(newDeduct.second.pos(), _clauses.back());
             
             #if VERBOSE >= 2
