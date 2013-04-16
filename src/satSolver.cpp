@@ -130,7 +130,8 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
             #endif
         }
         else 
-        // on fait un push_back même si on n'a pas réelement créé de clause : permet d'avoir un compte réel du nombre de clauses concidérées
+        // on fait un push_back même si on n'a pas réelement créé de clause :
+        // cela permet d'avoir un compte réel du nombre de clauses concidérées
         if(addClause(listClause) == NULL)
           listClause[0].var()->deductedFromFree(listClause[0].pos(), NULL);
     }
