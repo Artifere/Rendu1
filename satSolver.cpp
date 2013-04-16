@@ -324,7 +324,7 @@ bool SatProblem::satisfiability()
                 std::cout << "Attention : on ne sait pas encore gérer ça pour le moment" << std::endl;
             }
             // on ajoute ce qu'on a appris comme déduction
-            Clause * newC = new Clause(learned.first, _clauses.size(), *lastChoice);
+            Clause * newC = new Clause(learned.first, _clauses.size()+100, *lastChoice);
             _clauses.push_back(newC);
             learned.second.var()->deductedFromFree(learned.second.pos(), newC);
             
