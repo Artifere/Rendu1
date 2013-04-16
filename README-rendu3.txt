@@ -28,9 +28,10 @@ Julien :
 
 Changements depuis la dernière version :
 
-	- ajout d'une classe Variable pour rendre le code plus clair et modulable.
-Le but est d'avoir un objet pour chaque variable, et ainsi utiliser son adresse comme identifiant de variable (au lieu d'un numéro).
-Il contient la valeur courante de chaque variable, ainsi que la liste des clauses qu'elle surveille.
+	- pour pouvoir gérer le mode interactif, le programme ne lit plus le problème sur l'entrée standard. Il faut lui passer en paramètre
+le nom du fichier d'entrée : "release test.cnf".
+
+	- 
 
 	- ajout d'une structure UnassignedBucket, qui gère la liste des variables libres.
 C'est cet objet qui sert d'interface pour les heuristiques de choix de variable non assignée.
@@ -58,7 +59,7 @@ Les implémentations sont toutes assez courtes, et le code est plus clair/mainte
 
 ===== Compilation du code du solveur =====
 
-La compilation se fait en utilisant `make`. L'exécutable produit est 'release'.
+La compilation se fait en utilisant `make`, depuis le dossier src. L'exécutable produit est 'release'.
 Il est préférable de faire un `make clean` avant (surtout lorsque plusieurs compilations sont faites avec des options différentes)
 On précise au moment de la compilation l'implémentation des clauses voulue, et l'heuristique choisie :
 	make CLAUSE=[clause] CHOOSE=[heuristique] INIT_SORT=[val_sort] VERBOSE=[verbose_mode] INTERACT=[val_interact]
@@ -101,7 +102,7 @@ On lance alors ./gen v c k n. Ceci a pour effet de créer :
 	   #!/bin/bash
 	   for i in tests-v-c-k-n/*.cnf
 	   do
-	      $* < $i
+	      $* $i
 	   done
 	   exit 0
 	Ce script lance l'exécutable passé en paramètre sur tous les tests du dossier associé.
