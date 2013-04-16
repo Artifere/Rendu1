@@ -117,6 +117,26 @@ inline void Variable::chooseFromFree_DLIS(void)
 
 
 
+#include <cstdlib>
+#include <ctime>
+inline void Variable::chooseFromFree_RAND(void)
+{
+    static bool isInit = false;
+    if (! isInit)
+    {
+        isInit = true;
+        srandom(time(NULL));
+    }
+    unsigned int ret = random() % (_vars.end() - _endDeducted);
+    std::vector<Variable*>::iterator it;
+    it = _endDeducted + ret;
+    std::swap((*_endDeducted)->_posInTable, (*it)->_posInTable);
+    std::iter_swap(_endDeducted, it);
+    _endDeducted ++;
+}
+
+
+
 inline void Variable::sortFreeVars(void)
 {
     // on trie sans se soucier des itérateurs _posInTable
