@@ -55,7 +55,7 @@ inline WatchedClause::WatchedClause(const std::vector<Literal>& list, const unsi
 {
     _lits[0].var()->linkToClause(_lits[0].pos(), (Clause*)this);
     _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
-    #if VERBOSE > 5
+    #if VERBOSE > 7
     std::cout << "Watched Lit (" << clauseNumber << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
               << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
     #endif
@@ -88,7 +88,7 @@ inline WatchedClause::WatchedClause(const std::vector<Literal>& list, const unsi
     }
     _lits[0].var()->linkToClause(_lits[0].pos(), (Clause*)this);
     _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
-    #if VERBOSE > 5
+    #if VERBOSE > 7
     std::cout << "Watched Lit (" << clauseNumber << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
               << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
     #endif
@@ -135,7 +135,7 @@ inline bool WatchedClause::setLitFalse(const Literal& l)
         newWatched->var()->linkToClause(newWatched->pos(), (Clause*)this);
         _lits[l.var() == _lits[1].var()] = *newWatched; // utilise la conversion true->1, false->0
         *newWatched = l.invert();
-        #if VERBOSE > 5
+        #if VERBOSE > 7
         std::cout << "new watched : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos()
                   << ", " << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
         #endif
