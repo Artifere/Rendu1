@@ -319,10 +319,6 @@ bool SatProblem::satisfiability()
             } while (Variable::_endAssigned > lastChoice);
             Variable::_endDeducted = lastChoice;
             
-            if(learned.first.size() <= 1) {
-                if(learned.first.size() == 0) { std::cout << "Ceci ne doit pas arriver !!!" << std::endl;  exit(0); }
-                std::cout << "Attention : on ne sait pas encore gérer ça pour le moment" << std::endl;
-            }
             // on ajoute ce qu'on a appris comme déduction
             Clause * newC = new Clause(learned.first, _clauses.size()+100, *lastChoice);
             _clauses.push_back(newC);
