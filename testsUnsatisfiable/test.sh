@@ -2,7 +2,7 @@
 
 for i in *.cnf
 do
-#  echo $i
+  echo $i
   ./exe < $i | grep "s SAT"
 done
 
