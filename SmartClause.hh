@@ -94,6 +94,9 @@ inline SmartClause::SmartClause(const std::vector<Literal>& list, const unsigned
    Sinon, on met à jour les hash et le nombre de variables libres. */
 inline bool SmartClause::setLitFalse(const Literal &l)
 {
+    #if VERBOSE >= 10
+    std::cout << "set false(" << clauseNumber << "):" << l.var()->varNumber << '.' << l.pos() << std::endl;
+    #endif
     if(_satisfied)
         _notWatched.push_back(l.invert());
     else
@@ -110,6 +113,9 @@ inline bool SmartClause::setLitFalse(const Literal &l)
 // Idem que pour setLitFalse, mais on n'a pas besoin de mettre à jour les hash et le nombre de variables libres.
 inline bool SmartClause::setLitTrue(const Literal &l)
 {
+    #if VERBOSE >= 10
+    std::cout << "set true (" << clauseNumber << "):" << l.var()->varNumber << '.' << l.pos() << std::endl;
+    #endif
     const bool res = _satisfied;
     _satisfied = true;
     if(res)
@@ -130,7 +136,11 @@ inline void SmartClause::freeLitTrue(const Literal& l)
     #if VERBOSE >= 5
     std::cout << "La clause " << this->clauseNumber << " passe à undef." << std::endl;
     #endif
-
+/*
+    #if VERBOSE >= 10
+    std::cout << "free true (" << clauseNumber << "):" << l.var()->varNumber << '.' << l.pos() << std::endl;
+    #endif
+*/
     _satisfied = false;
     std::vector<Literal>::const_iterator it;
     for(it = _notWatched.begin(); it != _notWatched.end(); it++)
@@ -145,6 +155,9 @@ inline void SmartClause::freeLitTrue(const Literal& l)
    litéral : il a bien été mis à faux si l'on appelle freeLitFalse. */
 inline void SmartClause::freeLitFalse(const Literal& l)
 {
+    #if VERBOSE >= 10
+    std::cout << "free false(" << clauseNumber << "):" << l.var()->varNumber << '.' << l.pos() << std::endl;
+    #endif
     _currentHash += (intptr_t)l.var();
     _currentHashVal = (_currentHashVal != !l.pos()); // XOR booléen avec l.invert().pos()
     _numOfFree++;

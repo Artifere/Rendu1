@@ -119,3 +119,31 @@ void Variable::deductedFromAssigned(void)
         (*it)->freeLitFalse(lit);
 }
 
+
+
+
+#if VERBOSE > 0
+#include <iostream>
+#include <iomanip>
+void Variable::print_state(void) const
+{
+    if (isFree())
+        std::cout << "?";
+    else if (_varState)
+        std::cout << "+";
+    else
+        std::cout << "-";
+    std::cout << std::setw(2) << std::setfill('_') << varNumber << std::setw(1);
+    //std::cout << '|' << (_posInTable - _vars.begin());
+    std::cout << '(';
+    for(unsigned j = 0; j < _litTrue.size(); j++)
+      std::cout << _litTrue[j]->clauseNumber << ".";
+    std::cout << ", ";
+    for(unsigned j = 0; j < _litFalse.size(); j++)
+      std::cout << _litFalse[j]->clauseNumber << ".";
+    std::cout << ')';
+}
+#endif
+
+
+
