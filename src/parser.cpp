@@ -6,7 +6,7 @@
 void skipComment(std::istream& input)
 {
     std::string read;
-    while((input >> std::ws) && (std::cin.peek()=='c'))
+    while((input >> std::ws) && (input.peek()=='c'))
         std::getline(input, read);
 }
 
@@ -17,7 +17,7 @@ void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrCl
     std::string read;
     char c;
     skipComment(input);
-    if( !(std::cin >> c >> read >> nbrVar >> nbrClauses) || (c != 'p') || (read != "cnf"))
+    if( !(input >> c >> read >> nbrVar >> nbrClauses) || (c != 'p') || (read != "cnf"))
     {
         #if VERBOSE > 0
         std::cout << "c Arg, entrée invalide " << std::endl;

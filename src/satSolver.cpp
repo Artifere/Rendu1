@@ -1,9 +1,10 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <vector>
 #include <utility>
 #include <cstdlib>
 #include <algorithm>
-
 #include "satSolver.hh"
 
 #include "Variable.hh"
@@ -39,18 +40,21 @@
 
 
 
-int main()
+int main(int argc, char *argv[])
 {
     // Pour accélérer les I/O
-    std::ios_base::sync_with_stdio(false);
+    //std::ios_base::sync_with_stdio(false);
 
+    std::ifstream input;
+	input.open (argv[1], std::ios::in);
+    if (!input.is_open())
+        exit(1);
     // Parse le header dans l'entrée standard : récupère nombre de variables et de clauses
     unsigned int nbrVar, nbrClauses;
-    parserHeader(std::cin, nbrVar, nbrClauses);
-
+    parserHeader(input, nbrVar, nbrClauses);
     // Initialise le problème en lisant l'entrée standard
-    SatProblem problem(std::cin, nbrVar, nbrClauses);
-
+    SatProblem problem(input, nbrVar, nbrClauses);
+    input.close();
     // Résoud le problème puis affiche la sortie correspondante
     #if VERBOSE == 0
     problem.satisfiability();
@@ -75,7 +79,7 @@ int main()
 
 
 // modifie la liste en entrée pour enlever les doublons, repérer si trivialement fausse ou vraie :
-// renvoie true ssi trivialeent vraie
+// renvoie true ssi trivialement vraie
 // sinon, list est sans doublons (vide si clause trivialement fausse)
 bool SatProblem::simplify(std::vector<Literal>& list)
 {
@@ -189,7 +193,7 @@ void SatProblem::addClause(const std::vector<Literal>& listeLits, Literal lit)
             exit(0);
         }
     }
-    // sinon : ajout réel de la clause, dans e cas on on déduit un litéral de la clause, et l'autre
+    // sinon : ajout réel de la clause, dans ce cas on on déduit un litéral de la clause, et l'autre
     else if(lit.var() == NULL)
     {
         newC = new Clause(listeLits, number);
@@ -201,7 +205,6 @@ void SatProblem::addClause(const std::vector<Literal>& listeLits, Literal lit)
         _clauses.push_back(newC);
         lit.var()->deductedFromFree(lit.pos(), newC);            
     }
-    //return newC;
 }
 
 
@@ -211,6 +214,9 @@ void SatProblem::addClause(const std::vector<Literal>& listeLits, Literal lit)
 // Le coeur du solveur
 bool SatProblem::satisfiability()
 {
+    #if INTERACT
+        static int nbLeftBeforePrompt = 0;
+    #endif
     // On continue l'exécution tant qu'on n'a pas assigné toutes les variables (ou que l'on a quitté la boucle à cause d'une contradiction)
     while (Variable::_endAssigned != Variable::_vars.end())
     {
@@ -278,8 +284,51 @@ bool SatProblem::satisfiability()
 
             // sinon : on apprend de nos erreurs
             std::pair<std::vector<Literal>,Literal> learned(resolve(conflit));
-            createConflictGraph(conflit);
-            exit(1);
+            
+#if INTERACT
+            if (nbLeftBeforePrompt == 0)
+            {
+                char readCar;
+                bool goOn = true;
+                while (goOn)
+                {
+                    goOn = false;
+                    std::cin >> readCar;
+                    
+                    if (readCar == 'g')
+                        createConflictGraph(conflit);
+                    else if (readCar == 'r')
+                        std::cout << "Pas encore implémenté." << std::endl;
+                    else if (readCar == 'c');
+                    else if (readCar == 's')
+                    {
+                        int readInt=0;
+                        if (std::cin.peek() == '\n')
+                        {
+                            std::string foo;
+                            std::getline(std::cin, foo);
+                        }
+                        while (std::cin.peek() < '1' || std::cin.peek() > '9')
+                        {
+                            std::string foo;
+                            std::getline(std::cin, foo);
+                            std::cout<< "Veuillez entrer un nombre entier plus grand que 1." << std::endl;
+                        }
+                        std::cin >> readInt;
+                        nbLeftBeforePrompt = readInt-1;
+                    }
+                    else if (readCar == 't')
+                        nbLeftBeforePrompt = -1;
+                    else
+                    {
+                        std::cout << "Veuillez entrer une option valide (g,r,c,s,t)." << std::endl;
+                        goOn = true;
+                    }
+                }
+            }
+            else if (nbLeftBeforePrompt > 0)
+                nbLeftBeforePrompt--;
+#endif
 
             // On revient au dernier choix libre fait
             std::vector<Variable*>::iterator it, lastChoice = _stackBacktrack.back();
@@ -373,8 +422,6 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
         std::vector<Literal> res(mergedLits.size()+toMerge.size());
         std::vector<Literal>::iterator resIt;
         resIt = std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), res.begin(), litCompVar);
-        //resIt = std::remove(res.begin(), resIt, Literal(youngestVar, true));
-        //resIt = std::remove(res.begin(), resIt, Literal(youngestVar, false));
         res.resize(resIt-res.begin());
         res.erase(std::lower_bound(res.begin(), res.end(), youngest, litCompVar));
         std::swap(mergedLits, res);
