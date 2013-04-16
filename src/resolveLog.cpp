@@ -41,18 +41,29 @@ void SatProblem::createConflictGraph(const Clause *conflictClause)
 	output << "digraph G {\n";
 	output << "size =\"4,4\";\n";
 	
-	
 	output << conflictLiteral.var()->varNumber << "->error;\n";
 	output << "-" << conflictLiteral.var()->varNumber << "->error;\n";
    
 
-    for (std::vector<Literal>::const_iterator it = curExamined.begin(); it != curExamined.end(); ++it)
+	const  vector<Literal> originConflictLiterals = conflictLiteral.var()->getOriginClause()->getLiterals();
+    for (std::vector<Literal>::const_iterator it = originConflictLiterals.begin(); it != originConflictLiterals.end(); ++it)
     {
         if (it->var()->isFromCurBet(_stackBacktrack.back()))
-            toDraw.push(*it);
+		{
+			seen[it->var()->varNumber] = true;
+	        toDraw.push(*it);
+	    }
     }
 	
-	seen[conflictLiteral.var()->varNumber] = true;
+	for (std::vector<Literal>::const_iterator it = curExamined.begin(); it != curExamined.end(); ++it)
+    {
+        if (it->var()->isFromCurBet(_stackBacktrack.back()) && !seen[it->var()->varNumber])
+        {
+                seen[it->var()->varNumber] = true;
+                toDraw.push(*it);
+		}
+    }
+
 	
     while (toDraw.size() > 1)
     {
@@ -65,6 +76,13 @@ void SatProblem::createConflictGraph(const Clause *conflictClause)
 		
         for (std::vector<Literal>::const_iterator it = curExamined.begin(); it != curExamined.end(); ++it)
         {
+            if (it->var() != cur.var())
+            {
+				const Literal originLiteral = *it;//->getOriginClause()->getRemaining();
+				output << (originLiteral.pos()?"-":"") << originLiteral.var()->varNumber;
+				output << "->" << (cur.pos()?"-":"") << cur.var()->varNumber;
+				output << ";\n";
+            }
             if (it->var()->isFromCurBet(_stackBacktrack.back()) && !seen[it->var()->varNumber])
             {
                 seen[it->var()->varNumber] = true;
@@ -72,10 +90,10 @@ void SatProblem::createConflictGraph(const Clause *conflictClause)
             }
         }
 		
-		const Literal originLiteral = cur.var()->getOriginClause()->getRemaining();
+		/*const Literal originLiteral = cur.var()->getOriginClause()->getRemaining();
 		output << (originLiteral.pos()?"":"-") << originLiteral.var()->varNumber;
 		output << "->" << (cur.pos()?"":"-") << cur.var()->varNumber;
-        output << ";\n";
+        output << ";\n";*/
 	}
     output << "}\n";	
 	/*const Literal last = toDraw.top();
