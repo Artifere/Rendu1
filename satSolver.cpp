@@ -346,14 +346,10 @@ inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 
 std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *conflictClause)
 {
-    #if VERBOSE > 1
+    #if VERBOSE > 5
         print_debug();
-        std::cout << "Resolve : ";
+        std::cout << "Resolve " << conflictClause->clauseNumber << " : ";
         print_vars();
-        print_debug();
-        std::cout << "Pari courant en pos " << _stackBacktrack.back()-Variable::_vars.begin() << " sur la variable " << (*_stackBacktrack.back())->varNumber << std::endl;
-        print_debug();
-        std::cout << "Contradiction depuis la clause " << conflictClause->clauseNumber << std::endl;
     #endif
 
     std::vector<Literal> mergedLits(conflictClause->getLiterals());
@@ -369,8 +365,9 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
         {
             if (it->var()->isFromCurBet(_stackBacktrack.back()))
             {
-                #if VERBOSE > 1
-                std::cout << "variable trouvée : " << it->var()->varNumber << std::endl;
+                #if VERBOSE >= 8
+                print_debug();
+                std::cout << "resolve : variable du pari courrant trouvée : " << it->var()->varNumber << std::endl;
                 #endif
                 nbFromCurBet++;
                 if (youngest.var()->isOlder(it->var()))
@@ -379,7 +376,9 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
         }
         
         if(nbFromCurBet == 0 || youngest.var() == NULL) {
-            std::cout << "ceci ne devrait pas arriver" << std::endl;
+            #if VERBOSE > 1
+            std::cout << "c ATTENTION : ceci ne devrait pas arriver" << std::endl;
+            #endif
             break;
         }
         if(nbFromCurBet == 1)
@@ -388,8 +387,9 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
         
         Clause *deductedFrom = youngest.var()->getOriginClause();
         std::vector<Literal> toMerge = (deductedFrom == NULL) ? std::vector<Literal>(1,youngest) : deductedFrom->getLiterals();
-        #if VERBOSE > 1
-        std::cout << "merge la clause " << deductedFrom->clauseNumber << " qui a permis de déduire la variable " << youngest.var()->varNumber << std::endl;
+        #if VERBOSE >= 7
+        print_debug();
+        std::cout << "resolve : merge la clause " << deductedFrom->clauseNumber << " qui a permis de déduire la variable " << youngest.var()->varNumber << std::endl;
         #endif
         sort(toMerge.begin(), toMerge.end(), litCompVar);
         
@@ -405,30 +405,13 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
 
     #if VERBOSE > 3
         print_debug();
-        std::cout << "Nouvelle clause calculée : ";
+        std::cout << "Resolve : Nouvelle clause calculée : ";
         for(std::vector<Literal>::const_iterator it = mergedLits.begin(); it != mergedLits.end(); ++it)
             std::cout << it->var()->varNumber << '.' << it->pos() << ", ";
         std::cout << std::endl;
     #endif
 
     return std::pair<std::vector<Literal>,Literal>(mergedLits, youngest);
-    /*// TODO plus tard : utiliser une autre methode pour gérér les clauses de taille 1
-    if(mergedLits.size() == 1)
-    {
-        // on récupère une variable différente de mergedLits[0]
-        Variable * diff = Variable::_vars[(mergedLits[0].var() == Variable::_vars[0]) ? 1 : 0];
-        // on ajoute deux clauses : l'une avec diff, l'autre avec non(diff)
-        mergedLits.push_back(Literal(diff, true));
-        addClause(mergedLits, youngest.var());
-        mergedLits.pop_back();
-        mergedLits.push_back(Literal(diff, false));
-        addClause(mergedLits, youngest.var());
-    }
-    else
-    {
-        addClause(mergedLits, youngest.var());
-    }
-    return youngest;*/
 }
 
 
