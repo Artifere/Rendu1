@@ -64,7 +64,6 @@ public:
     void deductedFromFree(bool value, Clause* fromClause);
     Clause* assignedFromDeducted(void);
     void deductedFromAssigned(void);
-    void moveToLastVars(void);
     
     static void chooseFromFree_BASIC(void);
     static void chooseFromFree_DLIS(void);
@@ -72,6 +71,8 @@ public:
     static void sortFreeVars(void); 
     
     void linkToClause(bool,Clause*);
+    
+    void moveToFirstAssign(void);
     
     #if VERBOSE > 0
     void print_state(void) const;
@@ -138,13 +139,17 @@ inline void Variable::linkToClause(bool val, Clause* c)
 }
 
 
-
-inline void Variable::moveToLastVars(void)
+inline void Variable::moveToFirstAssign(void)
 {
-    Variable * lastVar = _vars.back();
-    std::swap((*_endDeducted)->_posInTable, lastVar->_posInTable);
-    std::swap(*(*_endDeducted)->_posInTable, *lastVar->_posInTable);
+    while (_posInTable != _vars.begin())
+    {
+        *_posInTable = *(_posInTable - 1);
+        (*_posInTable)->_posInTable = _posInTable;
+        _posInTable --;
+    }
+    *_posInTable = this;
 }
+
 
 
 
@@ -158,7 +163,7 @@ inline void Variable::print_state(void) const
         std::cout << " ";
     else
         std::cout << "-";
-    std::cout << varNumber;
+    std::cout << varNumber << '|' << (_posInTable - _vars.begin());
 }
 #endif
 

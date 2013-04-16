@@ -53,18 +53,18 @@ Clause* Variable::assignedFromDeducted(void)
             if (fs == 0)
             {
                 #if VERBOSE > 4
-                std::cout << "c Contradiction (clause " <<target->_number<< ")" << std::endl;
+                std::cout << "c Contradiction (clause " <<target->clauseNumber<< ")" << std::endl;
                 #endif
                 //std::cout << "bobo" << std::endl;
                 isError = target;
-                //break;
+                break;
             }
             // Sinon, s'il n'y a pas déduction, ne rien faire. S'il y a une déduction on teste si elle est contradictoire
             else if(fs == 1)
             {
                 const Literal deduct = target->getRemaining();
                 #if VERBOSE > 4
-                std::cout << "c Nouvelle déduction (clause " <<target->_number<< ") :  " << deduct.var()->varNumber << "." << deduct.pos() << std::endl;
+                std::cout << "c Déduction trouvée (clause " <<target->clauseNumber<< ") :  " << deduct.var()->varNumber << "." << deduct.pos() << std::endl;
                 #endif
                 // Si la déduction concerne une nouvelle variable, on l'ajoute
                 if(deduct.var()->isFree())
