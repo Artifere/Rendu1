@@ -3,6 +3,6 @@
 for i in *.cnf
 do
   echo $i
-  ./exe < $i | grep "s SAT"
+  ./exe $i | grep "s SAT"
 done
 
