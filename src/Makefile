@@ -23,19 +23,22 @@ CXXPROFILEFLAGS = $(IMPLFLAGS) -DVERBOSE=0 -Wall -Wextra -g -O2 -Wno-unused-para
 all : release
       
 release: $(OBJ) $(HDR) 
-	${CXX} $(CXXFLAGS) -o $@ $(OBJ) $(LFLAGS)  $(LIB)
+	${CXX} $(CXXFLAGS) -o $@ $(OBJ) $(LFLAGS)  $(LIB);\
+    mv release ../release
 
 debug: $(d_OBJ) $(HDR) 
-	${CXX} $(CXXDEBUGFLAGS) -o $@ $(d_OBJ) $(LFLAGS)  $(LIB)
+	${CXX} $(CXXDEBUGFLAGS) -o $@ $(d_OBJ) $(LFLAGS)  $(LIB);\
+    mv debug ../debug
 
 profile: $(p_OBJ) $(HDR) 
-	${CXX} $(CXXPROFILEFLAGS) -o $@ $(p_OBJ) $(LFLAGS)  $(LIB)
+	${CXX} $(CXXPROFILEFLAGS) -o $@ $(p_OBJ) $(LFLAGS)  $(LIB);\
+    mv profile ../profile
 
 clean: 
 	rm -f $(OBJ) $(d_OBJ) $(p_OBJ)
 
 destroy: clean
-	rm -f release debug profile
+	rm -f ../release ../debug ../profile
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
