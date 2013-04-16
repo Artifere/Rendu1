@@ -7,7 +7,8 @@ CHOOSE    = BASIC
 INIT_SORT = 0
 # niveau de verbose par défaut du release (est remplacé avec make VERBOSE=n)
 VERBOSE  = 1
-
+#interaction avec l'utilisateur ou non
+INTERACT = 0
 
 SRC= parser.cpp Variable.cpp satSolver.cpp resolveLog.cpp
 OBJ= ${SRC:.cpp=.o}
@@ -15,7 +16,7 @@ d_OBJ= ${SRC:.cpp=_d.o}
 p_OBJ= ${SRC:.cpp=_p.o}
 CXX	 = g++
 LFLAGS   = -lm
-IMPLFLAGS= -DCLAUSE=$(CLAUSE) -DCHOOSE=$(CHOOSE) -DVERBOSE=$(VERBOSE) -DINIT_SORT=$(INIT_SORT)
+IMPLFLAGS= -DCLAUSE=$(CLAUSE) -DCHOOSE=$(CHOOSE) -DVERBOSE=$(VERBOSE) -DINIT_SORT=$(INIT_SORT) -DINTERACT=$(INTERACT)
 CXXFLAGS = $(IMPLFLAGS) -Wall -Wextra -s -O2 -Wno-unused-parameter
 CXXDEBUGFLAGS = $(IMPLFLAGS) -Wall -Wextra -O0 -g -Wno-unused-parameter
 CXXPROFILEFLAGS = $(IMPLFLAGS) -DVERBOSE=0 -Wall -Wextra -g -O2 -Wno-unused-parameter
