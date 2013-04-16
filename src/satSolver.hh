@@ -30,6 +30,8 @@ public:
     std::pair<std::vector<Literal>,Literal> resolve(const Clause *conflictClause);
 
     bool simplify(std::vector<Literal>& list);
+    
+    Clause* addClause(const std::vector<Literal>& listLit);
 
     bool satisfiability();
 };

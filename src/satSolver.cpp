@@ -120,7 +120,6 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     std::vector<Literal> listClause;
     for(unsigned k = 0; k < nbrClauses; k++)
     {
-        Clause * newC = NULL;
         listClause.clear();
         parserListLit(input, listClause, Variable::_vars);
         // clause trivialement vraie
@@ -130,36 +129,10 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
             std::cout << "c Clause trivialement vraie lue. Elle est ignorée." << std::endl;
             #endif
         }
-        // clause triialement fausse
-        else if(listClause.size() == 0)
-        {
-            #if VERBOSE > 0
-            std::cout<<"c Clause trivialement fausse lue (clause vide)."<<std::endl;
-            std::cout<<"s UNSATISFIABLE"<<std::endl;
-            #endif
-            exit(0);
-        }
-        // clause de taille 1 : on ne la crée pas, mais on déduit la valeur de la variable
-        else if(listClause.size() == 1)
-        {
-            #if VERBOSE > 3
-            std::cout << "c Clause à déduction immédiate lue : " << listClause[0].var()->varNumber << '.' << listClause[0].pos() << std::endl;
-            #endif
-            if (listClause[0].var()->isFree())
-                listClause[0].var()->deductedFromFree(listClause[0].pos(), NULL);
-            else if(listClause[0].var()->_varState != listClause[0].pos())
-            {
-                #if VERBOSE > 0
-                std::cout<<"s UNSATISFIABLE"<<std::endl;
-                #endif
-                exit(0);
-            }
-        }
-        // sinon : ajout réel de la clause
-        else
-            newC = new Clause(listClause, k+1);
+        else 
         // on fait un push_back même si on n'a pas réelement créé de clause : permet d'avoir un compte réel du nombre de clauses concidérées
-        _clauses.push_back(newC);
+        if(addClause(listClause) == NULL)
+          listClause[0].var()->deductedFromFree(listClause[0].pos(), NULL);
     }
 
     // éventuel tri initial des variables libres
@@ -190,57 +163,43 @@ SatProblem::~SatProblem()
 
 
 
+Clause* SatProblem::addClause(const std::vector<Literal>& listeLits)
+{
+    static unsigned number = 0;
+    number ++;
+    Clause * newC = NULL;
+    // clause triialement fausse
+    if(listeLits.size() == 0)
+    {
+        #if VERBOSE > 0
+        std::cout<<"c Clause trivialement fausse lue (clause vide)."<<std::endl;
+        std::cout<<"s UNSATISFIABLE"<<std::endl;
+        #endif
+        exit(0);
+    }
+    // clause de taille 1 : on ne la crée pas, mais on déduit la valeur de la variable
+    else if(listeLits.size() == 1)
+    {
+        #if VERBOSE > 3
+        std::cout << "c Clause à déduction immédiate lue : " << listeLits[0].var()->varNumber << '.' << listeLits[0].pos() << std::endl;
+        #endif
+        if(!listeLits[0].var()->isFree() && listeLits[0].var()->_varState != listeLits[0].pos())
+        {
+            #if VERBOSE > 0
+            std::cout<<"s UNSATISFIABLE"<<std::endl;
+            #endif
+            exit(0);
+        }
+    }
+    // sinon : ajout réel de la clause
+    else
+    {
+        newC = new Clause(listeLits, number);
+        _clauses.push_back(newC);
+    }
+    return newC;
+}
 
-    /* idée 1 : supprimmer la variable de l'ensemble du problème
-    
-    lit.var()->_varState = lit.pos();
-    // déplace la variable* de Variable::_vars vers _absoluteAssigned
-      lit.var()->moveToLastVar();
-      Variable::_vars.pop_back();
-      _absoluteAssigned.push_back(lit.var());
-    
-    // parcourt toutes les clauses, pour supprimmer la variable recherchée
-    
-    // exemple d'implémentation de la méthode : (à priori très lent. pas possible de trouver mieux ?)
-
-     // pour chaque clause de _clauses
-      // récupérer la liste des litéraux
-       // si lit est dedant, simplement supprimer la clause (en la déliant des variables auquelle elle est liée)
-       // si lit.inert() est dedant
-         // supprimmer la clause en la déliant des variables auquelles elle était liée
-         // supprimer lit.invert() de la liste
-         // si ce qui reste est de taille 1
-           // se débrouiller pour faire un absoluteAssign sur le litéral qui reste (problèmes à gérer : il peut ne pas être libre)
-         // sinon
-           // recréer la clause avec ce qui reste (elle va se lier toute seule aux bonnes variables)
-     
-     // problèmes potentiels :
-       // cette methode est-elle compatible avec les dessins de graphes et autres trucs demandés pour le Rendu 3 ?
-       // si on fait des aboluteAssign en cascade, comment gérer le fait qu'n peut trouver des contradictions sur une même variable ?
-         // (n peut arriver à une clause de taille 0)
-    */
-    
-
-    /* idée 2 : passer la variable en tant que première assignation (elle est libre pour le moment)
-    
-    problème : on ne peut que la déduire à cet endroit solver, pas l'assigner
-    solution 1:
-      on la déduit simplement en disant qu'elle vient de la clause NULL :
-      ce qui voudrait implicitement dire qu'elle vient d'une clause de taille 1
-      on doit alors gérér le cas des getOriginClause() == NULL dans resolve()
-      et on doit modifier assignedFromDeducted() pour que si getOriginClause() == NULL
-        alors on déplace la variable en première assignation (elle ne dépend de personne)
-        ainsi, elle ne sera jamais supprimée par un backtrack
-        (parce qu'on n'a pas créé la clause de taille 1,
-        donc si la variable est prise dans un backtrack, on ne pourra plus utiliser l'info qu'on a calculé avec cete clause de taille 1)
-    solution 2:
-      on l'assigne directement ici, et on la place en tant que première déduction
-      ça nécessite de réécrire une partie (tout?) de satisfiability() car on doit appeller assignedFromDeducted(),
-      donc faire evenetuellement des nouvelles déductions, ...
-    solution 3:
-      on l'ajoute seulement aux déductions, et on modifie satisfiability() pour prendre en compte le cas getOriginClause() == NULL
-      on doit aussi pouvoir utiliser _absoluteAssigned pour repérer les assignations déjà faies et éviter les boucles infinies
-   */
 
 
 
@@ -320,10 +279,8 @@ bool SatProblem::satisfiability()
             Variable::_endDeducted = lastChoice;
             
             // on ajoute ce qu'on a appris comme déduction
-            Clause * newC = new Clause(learned.first, _clauses.size()+100, *lastChoice);
-            _clauses.push_back(newC);
-            learned.second.var()->deductedFromFree(learned.second.pos(), newC);
-            
+            Clause * newC = addClause(learned.first);
+            learned.second.var()->deductedFromFree(learned.second.pos(), newC);            
             
             #if VERBOSE > 2
             print_debug();
