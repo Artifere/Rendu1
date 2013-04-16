@@ -114,6 +114,10 @@ inline bool SmartClause::setLitTrue(const Literal &l)
     _satisfied = true;
     if(res)
         _notWatched.push_back(l);
+    #if VERBOSE >= 5
+    else
+        std::cout << "La clause " << this->clauseNumber << " passe à vrai." << std::endl;
+    #endif
     return res;
 }
 
@@ -123,6 +127,10 @@ inline bool SmartClause::setLitTrue(const Literal &l)
    n'est ainsi plus satisfiable, et on resurveille donc tous ses litéraux. */
 inline void SmartClause::freeLitTrue(const Literal& l)
 {
+    #if VERBOSE >= 5
+    std::cout << "La clause " << this->clauseNumber << " passe à undef." << std::endl;
+    #endif
+
     _satisfied = false;
     std::vector<Literal>::const_iterator it;
     for(it = _notWatched.begin(); it != _notWatched.end(); it++)
