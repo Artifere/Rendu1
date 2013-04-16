@@ -264,6 +264,8 @@ bool SatProblem::satisfiability()
 
             // sinon : on apprend de nos erreurs
             std::pair<std::vector<Literal>,Literal> learned(resolve(conflit));
+            createConflictGraph(conflit);
+            exit(1);
 
             // On revient au dernier choix libre fait
             std::vector<Variable*>::iterator it, lastChoice = _stackBacktrack.back();

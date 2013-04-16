@@ -34,6 +34,8 @@ public:
     Clause* addClause(const std::vector<Literal>& listLit);
 
     bool satisfiability();
+
+    void createConflictGraph(const Clause *conflictClause);
 };
 
 
