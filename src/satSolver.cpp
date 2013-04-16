@@ -132,8 +132,7 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
         else 
         // on fait un push_back même si on n'a pas réelement créé de clause :
         // cela permet d'avoir un compte réel du nombre de clauses concidérées
-        if(addClause(listClause) == NULL)
-          listClause[0].var()->deductedFromFree(listClause[0].pos(), NULL);
+            addClause(listClause);
     }
 
     // éventuel tri initial des variables libres
@@ -164,7 +163,7 @@ SatProblem::~SatProblem()
 
 
 
-Clause* SatProblem::addClause(const std::vector<Literal>& listeLits)
+void SatProblem::addClause(const std::vector<Literal>& listeLits, Literal lit)
 {
     static unsigned number = 0;
     number ++;
@@ -184,6 +183,10 @@ Clause* SatProblem::addClause(const std::vector<Literal>& listeLits)
         #if VERBOSE > 3
         std::cout << "c Clause à déduction immédiate lue : " << listeLits[0].var()->varNumber << '.' << listeLits[0].pos() << std::endl;
         #endif
+        if (listeLits[0].var()->isFree())
+        {
+            listeLits[0].var()->deductedFromFree(listeLits[0].pos(), NULL);            
+        }
         if(!listeLits[0].var()->isFree() && listeLits[0].var()->_varState != listeLits[0].pos())
         {
             #if VERBOSE > 0
@@ -192,13 +195,19 @@ Clause* SatProblem::addClause(const std::vector<Literal>& listeLits)
             exit(0);
         }
     }
-    // sinon : ajout réel de la clause
-    else
+    // sinon : ajout réel de la clause, dans e cas on on déduit un litéral de la clause, et l'autre
+    else if(lit.var() == NULL)
     {
         newC = new Clause(listeLits, number);
         _clauses.push_back(newC);
     }
-    return newC;
+    else
+    {
+        newC = new Clause(listeLits, number, lit.var());
+        _clauses.push_back(newC);
+        lit.var()->deductedFromFree(lit.pos(), newC);            
+    }
+    //return newC;
 }
 
 
@@ -223,9 +232,9 @@ bool SatProblem::satisfiability()
             _stackBacktrack.push_back(Variable::_endAssigned);
             // assigne la variable
             newAssign = * (Variable::_endAssigned ++);
-            #if VERBOSE > 2
+            #if VERBOSE >= 4
             print_debug();
-            std::cout << "Pari de variable : ";
+            std::cout << "Assigne d'après un pari : ";
             newAssign->print_state();
             std::cout << std::endl;
             #endif
@@ -236,9 +245,9 @@ bool SatProblem::satisfiability()
         {
             // assigne la variable
             newAssign = * (Variable::_endAssigned ++);
-            #if VERBOSE > 2
+            #if VERBOSE >= 4
             print_debug();
-            std::cout << "Assigne la déduction : ";
+            std::cout << "Assigne d'après une déduction : ";
             newAssign->print_state();
             std::cout << std::endl;
             #endif
@@ -247,7 +256,7 @@ bool SatProblem::satisfiability()
             if (newAssign->getOriginClause() == NULL)
                 newAssign->moveToFirstAssign();
         }
-        #if VERBOSE > 2
+        #if VERBOSE >= 4
         print_debug();
         std::cout << "Après assign : ";
         print_vars();
@@ -256,7 +265,7 @@ bool SatProblem::satisfiability()
         // On fait le backtrack si besoin
         if(conflit != NULL)
         {
-            #if VERBOSE >= 2
+            #if VERBOSE >= 4
             print_debug(); std::cout<<"Backtrack"<<std::endl;
             #endif
             // Si on n'a aucun choix libre, on renvoie faux (UNSAT)
@@ -271,7 +280,7 @@ bool SatProblem::satisfiability()
             _stackBacktrack.pop_back();
             do {
                 Variable * var = * (-- Variable::_endAssigned);
-                #if VERBOSE >= 2
+                #if VERBOSE >= 5
                 print_debug(); std::cout<<"Retour sur la valeur de la variable "<<var->varNumber<<std::endl;
                 #endif
                 // On libère la variable, des clauses où elle était surveillée
@@ -280,10 +289,9 @@ bool SatProblem::satisfiability()
             Variable::_endDeducted = lastChoice;
             
             // on ajoute ce qu'on a appris comme déduction
-            Clause * newC = addClause(learned.first);
-            learned.second.var()->deductedFromFree(learned.second.pos(), newC);            
+            addClause(learned.first, learned.second);
             
-            #if VERBOSE > 2
+            #if VERBOSE >= 4
             print_debug();
             std::cout << "Fin du backtrack : ";
             print_vars();
@@ -304,7 +312,7 @@ inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 
 std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *conflictClause)
 {
-    #if VERBOSE > 5
+    #if VERBOSE >= 5
         print_debug();
         std::cout << "Resolve " << conflictClause->clauseNumber << " : ";
         print_vars();
@@ -361,9 +369,9 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
         std::swap(mergedLits, res);
     }
 
-    #if VERBOSE > 3
+    #if VERBOSE >= 5
         print_debug();
-        std::cout << "Resolve : Nouvelle clause calculée : ";
+        std::cout << "Nouvelle clause calculée : ";
         for(std::vector<Literal>::const_iterator it = mergedLits.begin(); it != mergedLits.end(); ++it)
             std::cout << it->var()->varNumber << '.' << it->pos() << ", ";
         std::cout << std::endl;

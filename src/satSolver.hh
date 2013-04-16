@@ -31,7 +31,7 @@ public:
 
     bool simplify(std::vector<Literal>& list);
     
-    Clause* addClause(const std::vector<Literal>& listLit);
+    void addClause(const std::vector<Literal>& listLit, Literal lit = Literal(NULL,true));
 
     bool satisfiability();
 };
