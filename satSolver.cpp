@@ -25,6 +25,20 @@
 #endif
 
 
+#if VERBOSE > 0
+#define print_vars() \
+    for (std::vector<Variable*>::const_iterator itDebug = Variable::_vars.begin(); itDebug != Variable::_vars.end(); ++ itDebug) \
+    { \
+        if (itDebug == Variable::_endAssigned || itDebug == Variable::_endDeducted) \
+            std::cout << " | "; \
+        else std::cout << "   "; \
+        (*itDebug)->print_state(); \
+    } \
+    std::cout << std::endl
+#endif
+
+
+
 int main()
 {
     // Pour accélérer les I/O
@@ -156,13 +170,7 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     // Affiche l'état de chaque variable, le nombre de liens avec les clauses
     #if VERBOSE >= 5
     std::cout << "c Etat des variables à la fin du parsage : ";
-    std::vector<Variable*>::iterator it;
-    for (it = Variable::_vars.begin(); it != Variable::_vars.end(); it++)
-    {
-        (*it)->print_state();
-        std::cout << " (" << (*it)->sizeLitTrue() << "x" << (*it)->sizeLitFalse() << "),  ";
-    }
-    std::cout << std::endl;
+    print_vars();
     #endif
 }
 
@@ -245,16 +253,6 @@ bool SatProblem::satisfiability()
     {
         Variable * newAssign = NULL;
         Clause  * conflit = NULL;
-        #if VERBOSE > 2
-            print_debug();
-            std::cout << "Avant asgn (a:" << (Variable::_endAssigned - Variable::_vars.begin())
-                      << ",d:"<<(Variable::_endDeducted - Variable::_endAssigned)<<"): ";
-            for (std::vector<Variable*>::const_iterator itDebug = Variable::_vars.begin(); itDebug != Variable::_vars.end(); ++ itDebug) {
-                (*itDebug)->print_state();
-                std::cout << " ";
-            }
-            std::cout<<std::endl;
-        #endif
 
         // si pas de déduction : on doit faire un pari
         if(Variable::_endAssigned >= Variable::_endDeducted)
@@ -265,6 +263,12 @@ bool SatProblem::satisfiability()
             _stackBacktrack.push_back(Variable::_endAssigned);
             // assigne la variable
             newAssign = * (Variable::_endAssigned ++);
+            #if VERBOSE > 2
+            print_debug();
+            std::cout << "Pari de variable : ";
+            newAssign->print_state();
+            std::cout << std::endl;
+            #endif
             conflit = newAssign->assignedFromDeducted();
         }
         // sinon : on doit faire attention si la variable vient d'une clause de taille 1
@@ -272,20 +276,21 @@ bool SatProblem::satisfiability()
         {
             // assigne la variable
             newAssign = * (Variable::_endAssigned ++);
+            #if VERBOSE > 2
+            print_debug();
+            std::cout << "Assigne la déduction : ";
+            newAssign->print_state();
+            std::cout << std::endl;
+            #endif
             conflit = newAssign->assignedFromDeducted();
             // si déduction depuis une clause à une seule variable, passe la variable en première assignation
             if (newAssign->getOriginClause() == NULL)
                 newAssign->moveToFirstAssign();
         }
         #if VERBOSE > 2
-            print_debug();
-            std::cout << "Après asgn (a:" << (Variable::_endAssigned - Variable::_vars.begin())
-                      << ",d:"<<(Variable::_endDeducted - Variable::_endAssigned)<<"): ";
-            for (std::vector<Variable*>::const_iterator itDebug = Variable::_vars.begin(); itDebug != Variable::_vars.end(); ++ itDebug) {
-                (*itDebug)->print_state();
-                std::cout << " ";
-            }
-            std::cout<<std::endl;
+        print_debug();
+        std::cout << "Après assign : ";
+        print_vars();
         #endif
  
         // On fait le backtrack si besoin
@@ -314,26 +319,20 @@ bool SatProblem::satisfiability()
             } while (Variable::_endAssigned > lastChoice);
             Variable::_endDeducted = lastChoice;
             
-            if(learned.first.size() == 1)
-                std::cout << "Atention : on ne sait pas encore gérer ça pour le moment" << std::endl;
+            if(learned.first.size() <= 1) {
+                if(learned.first.size() == 0) { std::cout << "Ceci ne doit pas arriver !!!" << std::endl;  exit(0); }
+                std::cout << "Attention : on ne sait pas encore gérer ça pour le moment" << std::endl;
+            }
             // on ajoute ce qu'on a appris comme déduction
             Clause * newC = new Clause(learned.first, _clauses.size(), *lastChoice);
             _clauses.push_back(newC);
             learned.second.var()->deductedFromFree(learned.second.pos(), newC);
             
             
-            #if VERBOSE >= 2
+            #if VERBOSE > 2
             print_debug();
-            std::cout<<"Fin du backtrack."<<std::endl;
-            print_debug();
-            std::cout << "État des variables :   ";
-            for (std::vector<Variable*>::const_iterator itDebug = Variable::_vars.begin(); itDebug != Variable::_vars.end(); ++ itDebug) {
-                (*itDebug)->print_state();
-                std::cout << " ";
-            }
-            std::cout<<std::endl;
-            std::cout << "number assigned : " << (Variable::_endAssigned - Variable::_vars.begin()) << std::endl;
-            std::cout << "number deducted : " << (Variable::_endDeducted - Variable::_endAssigned) << std::endl;
+            std::cout << "Fin du backtrack : ";
+            print_vars();
             #endif
         }
     }
@@ -353,13 +352,8 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
 {
     #if VERBOSE > 1
         print_debug();
-        std::cout << "Après asgn (a:" << (Variable::_endAssigned - Variable::_vars.begin())
-                  << ",d:"<<(Variable::_endDeducted - Variable::_endAssigned)<<"): ";
-        for (std::vector<Variable*>::const_iterator itDebug = Variable::_vars.begin(); itDebug != Variable::_vars.end(); ++ itDebug) {
-            (*itDebug)->print_state();
-            std::cout << " ";
-        }
-        std::cout<<std::endl;
+        std::cout << "Resolve : ";
+        print_vars();
         print_debug();
         std::cout << "Pari courant en pos " << _stackBacktrack.back()-Variable::_vars.begin() << " sur la variable " << (*_stackBacktrack.back())->varNumber << std::endl;
         print_debug();
