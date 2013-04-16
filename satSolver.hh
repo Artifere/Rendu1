@@ -18,7 +18,7 @@ class SatProblem
 protected:
     const unsigned _nbrVars;
     std::vector<Clause*> _clauses;
-    Variable * _varFantome;
+    std::vector<Variable*> _absoluteAssigned;
     // pile des indices des choix contraints
     std::vector<std::vector<Variable*>::iterator> _stackBacktrack;
     
@@ -28,7 +28,7 @@ public:
     inline const std::vector<Variable*>::iterator getLastBetIterator(void) const {return _stackBacktrack.back();}
     inline const std::vector<std::pair<unsigned,bool> > getAssign(void) const;
     
-    Literal resolve(const Clause *conflictClause);
+    std::pair<std::vector<Literal>,Literal> resolve(const Clause *conflictClause);
 
     void addClause(std::vector<Literal>& list, Variable *firstTrue);
     bool satisfiability();

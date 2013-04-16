@@ -133,6 +133,10 @@ void SatProblem::addClause(std::vector<Literal>& list, Variable* firstTrue)
         std::cout << list[kDebug].var()->varNumber << "." << list[kDebug].pos() << ", ";
     std::cout << std::endl;
     #endif
+    // supprime les variable de _absoluteAssigned
+    //std::vector<Literal>::iterator read = list.begin(), write = list.begin();
+    //while(read != 
+    
     // supprime les doublons (O(n.log n))
     std::sort(list.begin(), list.end());
     list.resize(std::unique(list.begin(), list.end()) - list.begin());
@@ -251,7 +255,7 @@ bool SatProblem::satisfiability()
                 return false;
 
             // sinon : on apprend de nos erreurs et on revient sur le dernier paris fait
-            Literal newDeduct = resolve(isError);
+            std::pair<std::vector<Literal>,Literal> newDeduct(resolve(isError));
 
             // On revient au dernier choix libre fait
             std::vector<Variable*>::iterator it, lastChoice = _stackBacktrack.back();
@@ -270,21 +274,37 @@ bool SatProblem::satisfiability()
             #if VERBOSE >= 2
             print_debug();
             std::cout<<"Fin du backtrack."<<std::endl;
-        print_debug();
-        std::cout << "État des variables :   ";
-        std::vector<Variable*>::const_iterator itDebug;
-        for (itDebug = Variable::_vars.begin(); itDebug != Variable::_vars.end(); ++ itDebug) {
-            (*itDebug)->print_state();
-            std::cout << " ";
-        }
-        std::cout<<std::endl;
-        std::cout << "number assigned : " << (Variable::_endAssigned - Variable::_vars.begin()) << std::endl;
-        std::cout << "number deducted : " << (Variable::_endDeducted - Variable::_endAssigned) << std::endl;
-            std::cout << "deduct from free : " << newDeduct.var()->varNumber << std::endl;
+            print_debug();
+            std::cout << "État des variables :   ";
+            std::vector<Variable*>::const_iterator itDebug;
+            for (itDebug = Variable::_vars.begin(); itDebug != Variable::_vars.end(); ++ itDebug) {
+                (*itDebug)->print_state();
+                std::cout << " ";
+            }
+            std::cout<<std::endl;
+            std::cout << "number assigned : " << (Variable::_endAssigned - Variable::_vars.begin()) << std::endl;
+            std::cout << "number deducted : " << (Variable::_endDeducted - Variable::_endAssigned) << std::endl;
+            std::cout << "deduct from free : " << newDeduct.second.var()->varNumber << std::endl;
             #endif
             
+            // TODO plus tard : utiliser une autre methode pour gérér les clauses de taille 1
+            if(newDeduct.first.size() == 1)
+            {
+                // on récupère une variable différente de mergedLits[0]
+                Variable * diff = Variable::_vars[(newDeduct.first[0].var() == Variable::_vars[0]) ? 1 : 0];
+                // on ajoute deux clauses : l'une avec diff, l'autre avec non(diff)
+                newDeduct.first.push_back(Literal(diff, true));
+                addClause(newDeduct.first, newDeduct.second.var());
+                newDeduct.first.pop_back();
+                newDeduct.first.push_back(Literal(diff, false));
+                addClause(newDeduct.first, newDeduct.second.var());
+            }
+            else
+            {
+                addClause(newDeduct.first, newDeduct.second.var());
+            }
             // on ajoute ce qu'on a appris comme déduction
-            newDeduct.var()->deductedFromFree(newDeduct.pos(), _clauses.back());
+            newDeduct.second.var()->deductedFromFree(newDeduct.second.pos(), _clauses.back());
             
             #if VERBOSE >= 2
             print_debug();
@@ -313,7 +333,7 @@ inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 
 
 
-Literal SatProblem::resolve(const Clause *conflictClause)
+std::pair<std::vector<Literal>,Literal>  SatProblem::resolve(const Clause *conflictClause)
 {
     #if VERBOSE > 1
         print_debug();
@@ -380,7 +400,8 @@ Literal SatProblem::resolve(const Clause *conflictClause)
         std::swap(mergedLits, res);
     }
 
-    // TODO plus tard : utiliser une autre methode pour gérér les clauses de taille 1
+    return std::pair<std::vector<Literal>,Literal>(mergedLits, youngest);
+    /*// TODO plus tard : utiliser une autre methode pour gérér les clauses de taille 1
     if(mergedLits.size() == 1)
     {
         // on récupère une variable différente de mergedLits[0]
@@ -396,7 +417,7 @@ Literal SatProblem::resolve(const Clause *conflictClause)
     {
         addClause(mergedLits, youngest.var());
     }
-    return youngest;
+    return youngest;*/
 }
 
 
