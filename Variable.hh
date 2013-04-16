@@ -155,15 +155,17 @@ inline void Variable::moveToFirstAssign(void)
 
 #if VERBOSE > 0
 #include <iostream>
+#include <iomanip>
 inline void Variable::print_state(void) const
 {
     if (isFree())
         std::cout << "?";
     else if (_varState)
-        std::cout << " ";
+        std::cout << "+";
     else
         std::cout << "-";
-    std::cout << varNumber << '|' << (_posInTable - _vars.begin());
+    std::cout << std::setw(2) << std::setfill('_') << varNumber << std::setw(1);
+    //std::cout << '|' << (_posInTable - _vars.begin());
 }
 #endif
 
