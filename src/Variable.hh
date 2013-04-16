@@ -50,7 +50,7 @@ public:
     bool _varState;
     const unsigned int varNumber;
     
-    inline Variable(unsigned int varNum) : _posInTable(_vars.end()), _varState(false), varNumber(varNum) { _vars.push_back(this); };
+    inline Variable(unsigned int varNum) : _posInTable(_vars.end()), _deductedFromClause(NULL), _varState(false), varNumber(varNum) { _vars.push_back(this); };
     
     inline unsigned sizeLitTrue() const { return _litTrue.size(); };
     inline unsigned sizeLitFalse() const { return _litFalse.size(); };
