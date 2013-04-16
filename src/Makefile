@@ -9,7 +9,7 @@ INIT_SORT = 0
 VERBOSE  = 1
 
 
-SRC= parser.cpp Variable.cpp satSolver.cpp
+SRC= parser.cpp Variable.cpp satSolver.cpp resolveLog.cpp
 OBJ= ${SRC:.cpp=.o}
 d_OBJ= ${SRC:.cpp=_d.o}
 p_OBJ= ${SRC:.cpp=_p.o}
