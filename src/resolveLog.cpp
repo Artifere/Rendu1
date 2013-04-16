@@ -77,6 +77,7 @@ void SatProblem::createConflictGraph(const Clause *conflictClause)
     output << "-" << conflictLiteral.var()->varNumber << "->error;\n";
     
     output << "}\n";
+    output.close();
     
 }    
 
