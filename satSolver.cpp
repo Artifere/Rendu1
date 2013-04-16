@@ -225,16 +225,57 @@ void SatProblem::absoluteAssign(Literal lit)
                 liste.pop_back();
                 liste.push_back(Literal(diff, false));
                 addClause(liste, lit.var());
-    /*
-    // TODO : supprimmer la variable de l'ensemble du problème
+    
+    /* idée 1 : supprimmer la variable de l'ensemble du problème
+    
     lit.var()->_varState = lit.pos();
     // déplace la variable* de Variable::_vars vers _absoluteAssigned
-    lit.var()->moveToLastVar();
-    Variable::_vars.pop_back();
-    _absoluteAssigned.push_back(lit.var());
+      lit.var()->moveToLastVar();
+      Variable::_vars.pop_back();
+      _absoluteAssigned.push_back(lit.var());
+    
     // parcourt toutes les clauses, pour supprimmer la variable recherchée
-    */
+    
+    // exemple d'implémentation de la méthode : (à priori très lent. pas possible de trouver mieux ?)
 
+     // pour chaque clause de _clauses
+      // récupérer la liste des litéraux
+       // si lit est dedant, simplement supprimer la clause (en la déliant des variables auquelle elle est liée)
+       // si lit.inert() est dedant
+         // supprimmer la clause en la déliant des variables auquelles elle était liée
+         // supprimer lit.invert() de la liste
+         // si ce qui reste est de taille 1
+           // se débrouiller pour faire un absoluteAssign sur le litéral qui reste (problèmes à gérer : il peut ne pas être libre)
+         // sinon
+           // recréer la clause avec ce qui reste (elle va se lier toute seule aux bonnes variables)
+     
+     // problèmes potentiels :
+       // cette methode est-elle compatible avec les dessins de graphes et autres trucs demandés pour le Rendu 3 ?
+       // si on fait des aboluteAssign en cascade, comment gérer le fait qu'n peut trouver des contradictions sur une même variable ?
+         // (n peut arriver à une clause de taille 0)
+    */
+    
+
+    /* idée 2 : passer la variable en tant que première assignation (elle est libre pour le moment)
+    
+    problème : on ne peut que la déduire à cet endroit solver, pas l'assigner
+    solution 1:
+      on la déduit simplement en disant qu'elle vient de la clause NULL :
+      ce qui voudrait implicitement dire qu'elle vient d'une clause de taille 1
+      on doit alors gérér le cas des getOriginClause() == NULL dans resolve()
+      et on doit modifier assignedFromDeducted() pour que si getOriginClause() == NULL
+        alors on déplace la variable en première assignation (elle ne dépend de personne)
+        ainsi, elle ne sera jamais supprimée par un backtrack
+        (parce qu'on n'a pas créé la clause de taille 1,
+        donc si la variable est prise dans un backtrack, on ne pourra plus utiliser l'info qu'on a calculé avec cete clause de taille 1)
+    solution 2:
+      on l'assigne directement ici, et on la place en tant que première déduction
+      ça nécessite de réécrire une partie (tout?) de satisfiability() car on doit appeller assignedFromDeducted(),
+      donc faire evenetuellement des nouvelles déductions, ...
+    solution 3:
+      on l'ajoute seulement aux déductions, et on modifie satisfiability() pour prendre en compte le cas getOriginClause() == NULL
+      on doit aussi pouvoir utiliser _absoluteAssigned pour repérer les assignations déjà faies et éviter les boucles infinies
+   */
 }
 
 
