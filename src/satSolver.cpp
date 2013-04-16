@@ -87,13 +87,7 @@ bool SatProblem::simplify(std::vector<Literal>& list)
     for(unsigned k = 1; k < list.size(); k++)
     {
         if (list[k-1].var() == list[k].var())
-        {
-            #if VERBOSE >= 2
-            print_debug();
-            std::cout<<"Clause trivialement vraie lue. Elle est ignorée."<<std::endl;
-            #endif
             return true;
-        }
     }
     
     return false;
@@ -223,6 +217,11 @@ bool SatProblem::satisfiability()
         Variable * newAssign = NULL;
         Clause  * conflit = NULL;
 
+        #if VERBOSE >= 4
+        print_debug();
+        std::cout << "Avant assign : ";
+        print_vars();
+        #endif
         // si pas de déduction : on doit faire un pari
         if(Variable::_endAssigned >= Variable::_endDeducted)
         {
@@ -254,7 +253,12 @@ bool SatProblem::satisfiability()
             conflit = newAssign->assignedFromDeducted();
             // si déduction depuis une clause à une seule variable, passe la variable en première assignation
             if (newAssign->getOriginClause() == NULL)
+            {
                 newAssign->moveToFirstAssign();
+                // ne pas oublier d'aumenter de 1 la position de tous les paris
+                for(unsigned i = 0; i < _stackBacktrack.size(); i++)
+                    _stackBacktrack[i] ++;
+            }
         }
         #if VERBOSE >= 4
         print_debug();
@@ -314,7 +318,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
 {
     #if VERBOSE >= 5
         print_debug();
-        std::cout << "Resolve " << conflictClause->clauseNumber << " : ";
+        std::cout << "Resolve sur la clause " << conflictClause->clauseNumber << " : ";
         print_vars();
     #endif
 
@@ -333,7 +337,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
             {
                 #if VERBOSE >= 8
                 print_debug();
-                std::cout << "resolve : variable du pari courrant trouvée : " << it->var()->varNumber << std::endl;
+                std::cout << "resolve : variable du pari courant trouvée : " << it->var()->varNumber << std::endl;
                 #endif
                 nbFromCurBet++;
                 if (youngest.var()->isOlder(it->var()))
@@ -352,10 +356,15 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
 
         
         Clause *deductedFrom = youngest.var()->getOriginClause();
-        std::vector<Literal> toMerge = (deductedFrom == NULL) ? std::vector<Literal>(1,youngest) : deductedFrom->getLiterals();
+        std::vector<Literal> toMerge((deductedFrom == NULL) ? std::vector<Literal>(1,youngest) : deductedFrom->getLiterals());
         #if VERBOSE >= 7
         print_debug();
-        std::cout << "resolve : merge la clause " << deductedFrom->clauseNumber << " qui a permis de déduire la variable " << youngest.var()->varNumber << std::endl;
+        std::cout << "resolve : merge la clause ";
+        if (deductedFrom == NULL)
+            std::cout << "de taille 1";
+        else
+            std::cout << deductedFrom->clauseNumber;
+        std::cout << " qui a permis de déduire la variable " << youngest.var()->varNumber << std::endl;
         #endif
         sort(toMerge.begin(), toMerge.end(), litCompVar);
         

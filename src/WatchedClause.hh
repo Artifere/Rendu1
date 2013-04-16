@@ -8,7 +8,10 @@
 class WatchedClause
 {
 public:
-    WatchedClause(const CONSTR_ARGS(list), Variable *firstTrue);
+    // constructeur initial : doit marcher lorsque aucun litéral n'est assignée (certaines variables peuvent être déduites, mais aucune assignée)
+    WatchedClause(const std::vector<Literal>& list, const unsigned number);
+    // constructeur d'apprentissage : les litéraux sont soit libres, soit assignés à faux (pas de déduits, pas de litéraux vrais)
+    WatchedClause(const std::vector<Literal>& list, const unsigned number, Variable * lastAssigned);
 
     bool setLitFalse(const Literal& l);
     bool setLitTrue(const Literal& l);
@@ -24,7 +27,7 @@ public:
 
     ~WatchedClause();
 
-    const unsigned _number;
+    const unsigned clauseNumber;
 protected:
     /* Les watched literals sont les deux premiers de ce tableau.
        Après un setLitFalse, on doit avoir :
@@ -47,31 +50,50 @@ protected:
 // TODO: affichage de debug pour ajout de clause en cours de route
 
 // Quand on initialise une clause, on définit les watched litérals
-inline WatchedClause::WatchedClause(const CONSTR_ARGS(list), Variable *firstTrue)
-    : INIT_FOR_VERBOSE() _lits(list)
+inline WatchedClause::WatchedClause(const std::vector<Literal>& list, const unsigned int number)
+    : clauseNumber(number), _lits(list)
 {
-    if (firstTrue)
-    {
-        if (list[0].var() != firstTrue)
-        {
-            std::vector<Literal>::iterator it;
-            for (it = _lits.begin(); it->var() != firstTrue; ++it);
-            std::iter_swap(it, _lits.begin());
-        }
-        _lits[0].var()->linkToClause(_lits[0].pos(), (Clause*)this);
-        _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
-    }
-
-    else
-    {
-        list[0].var()->linkToClause(list[0].pos(), (Clause*)this);
-        _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
-        #if VERBOSE > 5
-        std::cout << "Watched Lit (" << _number << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
-                  << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
-        #endif
-    }
+    _lits[0].var()->linkToClause(_lits[0].pos(), (Clause*)this);
+    _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
+    #if VERBOSE > 5
+    std::cout << "Watched Lit (" << clauseNumber << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
+              << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
+    #endif
 }
+
+
+
+
+
+inline WatchedClause::WatchedClause(const std::vector<Literal>& list, const unsigned int number, Variable * lastAssigned)
+    : clauseNumber(number), _lits(list)
+{
+    std::vector<Literal>::iterator it;
+    // cherche à mettre un litéral libre en _lits[0]
+    for (it = _lits.begin()+1; it != _lits.end(); ++it)
+    {
+        if (it->var()->isFree())
+        {
+            std::iter_swap(it, _lits.begin());
+            // cherche à mettre un litéral libre en _lits[1]
+            // on n'a une chance que si on a effectivement trouvé un litéral vrai à la première boucle
+            for (it = _lits.begin()+2; it != _lits.end(); ++it)
+                if (it->var()->isFree())
+                {
+                    std::iter_swap(it, _lits.begin()+1);
+                    break;
+                }
+            break;
+        }
+    }
+    _lits[0].var()->linkToClause(_lits[0].pos(), (Clause*)this);
+    _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
+    #if VERBOSE > 5
+    std::cout << "Watched Lit (" << clauseNumber << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
+              << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
+    #endif
+}
+
 
 
 
@@ -84,7 +106,7 @@ inline WatchedClause::WatchedClause(const CONSTR_ARGS(list), Variable *firstTrue
 inline bool WatchedClause::setLitFalse(const Literal& l)
 {
     #if VERBOSE >= 10
-    std::cout << "setLitFalse " << _number << " : " << l.var()->varNumber << "." << l.pos()
+    std::cout << "setLitFalse " << clauseNumber << " : " << l.var()->varNumber << "." << l.pos()
               << " (watched " << _lits[0].var()->varNumber<<"."<<_lits[0].pos()
               << ", " << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << ")" << std::endl;
     #endif
