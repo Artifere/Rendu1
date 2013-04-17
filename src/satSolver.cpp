@@ -288,6 +288,13 @@ bool SatProblem::satisfiability()
 #if INTERACT
             if (nbLeftBeforePrompt == 0)
             {
+                std::cout << "Conflit trouvé. La clause suivant a été apprise : ";
+                for(unsigned k = 0; k < learned.first.size(); k++) {
+                    if(learned.first[k].pos())
+                        std::cout << '-';
+                    std::cout << learned.first[k].var()->varNumber << ", ";
+                }
+                std::cout << std::endl << "Entrez l'une des options suivantes : g, r, c , s [n]" << std::endl;
                 char readCar;
                 bool goOn = true;
                 while (goOn)
@@ -296,7 +303,10 @@ bool SatProblem::satisfiability()
                     std::cin >> readCar;
                     
                     if (readCar == 'g')
+                    {
                         createConflictGraph(conflit);
+                        std::cout << "Graphe crée dans le fichier graph.dot" << std::endl;
+                    }
                     else if (readCar == 'r')
                         std::cout << "Pas encore implémenté." << std::endl;
                     else if (readCar == 'c');
