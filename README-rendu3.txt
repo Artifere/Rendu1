@@ -14,7 +14,7 @@ Alexandre :
 	- Codage de la fonction de résolution de conflits (création de la clause à apprendre)
 	- Première version de la fonction générant le fichier .dot pour le graphe de conflit
 	- Modifications de constructeurs des clauses pour intégrer l'apprentissage de clauses (un peu)
-	- Reprise des tests "moulinette" pour comparer l'apprentissage avec les anciennes versions
+	- Reprise des tests « moulinette » pour comparer l'apprentissage avec les anciennes versions
             (et adaptation des anciennes versions pour que tout soit compatible)
 Julien :
 	- Modification de la structure de donnée associée au backtrack :
@@ -63,8 +63,8 @@ Les exécutables produits sont 'debug' et 'profile'.
 Il manque certains points demandés :
  - pas de preuve par résolution dans le mode interactif
  - pas de fichier de documentation produit à la fin de l'exécution
-
-Il est certainement possible d'améliorer la fonction resolve pour gagner un peu en efficacité (la fusion de clauses est faite de manière assez naive en utiisant la bibliothèque standard, sans utiliser les informations que l'on a sur la forme des listes)
+ - nous n'avons pas réussit à faire marcher entièrement les watched literals avec l'apprentissage de clauses (un bug semble créer des dépendances circulaires lorsqu'on remonte les conséquences du pari courant)
+Il est certainement possible d'améliorer la fonction resolve pour gagner un peu en efficacité (la fusion de clauses est faite de manière assez naïve en utilisant la bibliothèque standard, sans utiliser les informations que l'on a sur la forme des listes)
 
 
 
@@ -72,7 +72,8 @@ Il est certainement possible d'améliorer la fonction resolve pour gagner un peu
 
 ===== Résultats des courbes =====
 L'apprentissage des clauses est compétitif : le surcoût (important) engendré par l'apprentissage des clause est compensé par ce que l'apprentissage apporte.
-Cependant, le gain n'est pas assez important pour que cette méthode batte les meilleurs heuristiques dont on disposait sans apprentissage.
+Cependant, le gain n'est pas assez important pour que cette méthode batte les meilleurs heuristiques dont on disposait sans apprentissage. Cependant, on peut peut-être
+passer devant les autres heuristiques si l'on optimise un peu la façon dont on fait la résolution.
 
 
 
@@ -83,26 +84,27 @@ Cependant, le gain n'est pas assez important pour que cette méthode batte les m
 Changements depuis la dernière version :
 
 	- Pour pouvoir gérer le mode interactif, le programme ne lit plus le problème sur l'entrée standard. Il faut lui passer en paramètre
-le nom du fichier d'entrée : "release test.cnf" au lieu de "release < test.cnf"
+le nom du fichier d'entrée : "release test.cnf" au lieu de "release < test.cnf". On a modifié les fichiers de scripts pour prendre cela en compte.
+Cependant, pour comparer courbes avec la version précédente du rendu, nous avons adapté l'entrée du rendu précédent. Les sources ne sont pas fournies, le but étant seulement de nous faciliter un peu la génération des courbes.
 
-	- On a ajouté quelques méthodes relatives à l'apprentissage de clause : on a besoin de savoir si une variable est plus "vieille" qu'une autre (ie si elle a été assignée avant), notamment si une variable est plus vieille que le dernier pari fait. Ces fonctions utilisent toutes leur attribut _posInTable (cf point suivant).
+	- On a ajouté quelques méthodes relatives à l'apprentissage de clause : on a besoin de savoir si une variable est plus « vieille » qu'une autre (ie si elle a été assignée avant), notamment si une variable est plus vieille que le dernier pari fait. Ces fonctions utilisent toutes leur attribut _posInTable (cf point suivant).
 
 	- On n'utilise plus ni UnassignedBuckets ni toutes les structures de piles pour maintenir les variables et la pile des assignations des variables :
 On utilise pour remplacer tout ça un unique tableau global de Variable* pour représenter la pile courante des variables, la file d'attente des assignations, l'état des variables et pour savoir si elle découlent du dernier pari fait :
 Ce tableau (un attribut statique de la classe Variable) est organisé comme il suit :
 	[variables assignées|variables déduites|variables libres]
-On retrouve donc comme dans les rendus précédents les notions de variables assignées, variables libres, et variables déduites (ie celles dont on connaît la valeur, mais en attente d'être propagée dans les clauses car plusieurs déductions ont lieu en même temps).
-La partie [variables assignées| représente la "pile" d'execution du programme : les variables s'y trouvent dans l'ordre dans lequel elle on été assignées.
-	Une autre structure, _stackBacktrack, contient des itérateurs sur variables qui ont étés assignées suite à un pari (et non une déduction)
-	De plus, chaque variable possède un itérateur _posInTable qui permet de savoir rapidement ou se trouve une variable dans le tableau (pour pouvoir déduire une variable libre quelconque en O(1)), mais aussi qui permet de comparer la position de la variable par rapport aux autres, notamment à _stackBacktrack.back() (et donc savoir si la variable est une conséquence du dernier pari ou non).
+On retrouve donc comme dans les rendus précédents les notions de variables assignées, variables libres, et variables déduites (ie celles dont on connaît la valeur, mais en attente d'être propagées dans les clauses car plusieurs déductions ont lieu en même temps).
+La partie [variables assignées| représente la « pile » d'exécution du programme : les variables s'y trouvent dans l'ordre dans lequel elle on été assignées.
+	Une autre structure, _stackBacktrack, contient des itérateurs sur les variables qui ont été assignées suite à un pari (et non une déduction).
+	De plus, chaque variable possède un itérateur _posInTable qui permet de savoir rapidement ou se trouve cette variable dans le tableau (pour pouvoir déduire une variable libre quelconque en O(1)), mais aussi qui permet de comparer la position de la variable par rapport aux autres, notamment à _stackBacktrack.back() (et donc de savoir si la variable est une conséquence du dernier pari ou non).
 	Les séparations entre ces parties sont indiquées par des itérateurs (eux aussi statiques dans Variable) _endAssigned et _endDeducted.
-Lorsque une variable n'est pas dans la partie libre, sa valeur est donnée par son attribut _varState
+Lorsque une variable n'est pas dans la partie libre, sa valeur est donnée par son attribut _varState.
 Cette organisation permet de passer rapidement une variable d'une zone à une autre, simplement en incrémentant/décrémentant _endAssigned et endDeducted (sauf pour passer de libre à déduit, où on doit échanger les positions de deux variables, mais cela reste en temps constant).
 
-	- On a un peu modifié les variables pour qu'elles retiennent de quelle clause leur valeur provient. L'apprentissage des clauses de taille 1 à posé problème (pour les watched literals, mais aussi à cause de détails de fonctionnement du moteur), et un soin particulier à du être apporté pour le faire marcher sans problème (notamment : on ne crée jamais de clause de taille 1, mais on simule leur existence lorsqu'on en a besoin).
+	- On a un peu modifié les variables pour qu'elles retiennent de quelle clause leur valeur provient. L'apprentissage des clauses de taille 1 à posé problème (pour les watched literals, mais aussi à cause de détails de fonctionnement du moteur), et un soin particulier a dû être apporté pour le faire marcher sans problème (notamment : on ne crée jamais de clause de taille 1, mais on simule leur existence lorsqu'on en a besoin).
 
 	- on a ajouté deux fonctions resolve et createConflictGraph pour chercher l'origine des conflits. Ces deux fonctions fonctionnent de manière différente :
 resolve à une approche ascendante : elle cherche jusqu'où elle doit remonter dans les clauses en partant d'un conflit pour apprendre une nouvelle variable.
-createConflictGraph à une approche globale : elle parcours toutes les variables qui sont conséquence du dernier pari, et crée les arêtes du graphe dans le désordre.
+createConflictGraph à une approche globale : elle parcourt toutes les variables qui sont conséquence du dernier pari, et crée les arêtes du graphe dans le désordre.
 
 
