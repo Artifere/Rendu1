@@ -14,44 +14,14 @@ Alexandre :
 	- Codage de la fonction de résolution de conflits (création de la clause à apprendre)
 	- Première version de la fonction générant le fichier .dot pour le graphe de conflit
 	- Modifications de constructeurs des clauses pour intégrer l'apprentissage de clauses (un peu)
-
-
+	- Reprise des tests "moulinette" pour comparer l'apprentissage avec les anciennes versions
+            (et adaptation des anciennes versions pour que tout soit compatible)
 Julien :
-	- Modification de la structure de donnée associée au backtrack : on a une pile de variables (assignées, puis déduites, puis libres) au lieu de 3 tableaux
+	- Modification de la structure de donnée associée au backtrack :
+            on a une pile de variables (assignées, puis déduites, puis libres) au lieu de 3 tableaux
+            on se débarrasse aussi de UnassignedBucket pour simplifier un peu le code
 	- Version finale de la fonction générant le graphe de conflit
 	- Modifications de constructeurs des clauses pour intégrer l'apprentissage de clauses (majeure partie)
-	- Intégration du module UnassignedBucket dans le module Variable
-
-
-
-===== Fonctionnement du programme =====
-
-Changements depuis la dernière version :
-
-	- pour pouvoir gérer le mode interactif, le programme ne lit plus le problème sur l'entrée standard. Il faut lui passer en paramètre
-le nom du fichier d'entrée : "release test.cnf".
-
-	- 
-
-	- ajout d'une structure UnassignedBucket, qui gère la liste des variables libres.
-C'est cet objet qui sert d'interface pour les heuristiques de choix de variable non assignée.
-Il contient une liste des variables libres (non assignées), et un tableau d'indirection pour 
-trouver la position d'une variable dans la liste en temps constant. 
-
-	- ajout des implémentations de clause SmartClause et SmartWatchedClause :
-Ces deux implémentations fonctionnent de la même manière que ConstAssignClause et WatchedClause,
-mais évitent de propager les litéraux dans les clauses déjà satisfaites.
-On repère au moment d'assigner un litéral dans une clause que celle-ci est déjà satisfaite,
-et dans ce cas, on « délie » la variable et la clause (on ne surveille plus la clause à travers cette variable).
-Lorsque la variable qui rendait la clause vraie est libérée, on lie à nouveau toutes les variables qu'on avait délié à la clause.
-
-	- Les fonctions setLitTrue et setLitFalse renvoient un booléen :
-True indique que le litéral passé en paramêtre ne doit plus être surveillé pour la clause.
-Ceci sert pour délier efficacement une variable et une clause (dans Watched et Smart); et résoud un problème d'implémentation qui était présent dans Variable::propagateVariable, et qui obligeait à dupliquer la listes des clauses dans laquelle la variable était présente. 
-
-	- Les implémentations des clauses sont maintenant dans le .hh où elles sont définies au lieu d'un .inline.hh séparé.
-Les implémentations sont toutes assez courtes, et le code est plus clair/maintenable (pas besoin de chercher dans deux fichiers différents pour une même implémentation)
-
 
 
 
@@ -64,7 +34,7 @@ Il est préférable de faire un `make clean` avant (surtout lorsque plusieurs co
 On précise au moment de la compilation l'implémentation des clauses voulue, et l'heuristique choisie :
 	make CLAUSE=[clause] CHOOSE=[heuristique] INIT_SORT=[val_sort] VERBOSE=[verbose_mode] INTERACT=[val_interact]
 avec:
-[clause]       = BasicClause, ConstAssignClause, SmartClause, WatchedClause, SmartWatchedClause
+[clause]       = SmartClause, WatchedClause
 [heuristique]  = BASIC, RAND, DLIS
 [val_sort]     = 0 ou 1  (si on doit ou non faire un tri des variables suivant leur nombre d'occurence)
 [verbose_mode] = entier entre 0 et 10, précise le détail de ce qu'affiche le programme :
@@ -73,7 +43,7 @@ avec:
     2 : quelques warnings sur les erreurs d'entrées/sorties
     3 : affiche la pile des assignations/déductions
 	>3 : de plus en plus de détails sur le déroulement du programme
-[val_interact] = 0 ou 1 (interaction ou non)
+[val_interact] = 0 ou 1 (mode interactif ou non)
 Les options peuvent être omises ou précisées dans n'importe quel ordre.
 Les valeurs par défaut sont [clause]=SmartClause, [heuristique]=BASIC, [val_sort]=0, [verbose_mode]=1 et [val_interact] = 0
 
@@ -88,62 +58,51 @@ Les exécutables produits sont 'debug' et 'profile'.
 
 
 
-
-===== Fonctionnement/utilisation du générateur de tests =====
-
-On compile le fichier gen en un exécutable gen avec :
-	cd ./GenTest
-	gcc -Wall -Wextra -O2 -s -o gen gen.c
-
-On lance alors ./gen v c k n. Ceci a pour effet de créer :
-	- Un dossier tests-v-c-k-n contenant n fichiers à v variables, c clauses, toutes de taille k.
-	  Les fichiers d'entrés sont générés aléatoirement.
-	- Un script batch-v-c-k-n.sh, par exemple :
-	   #!/bin/bash
-	   for i in tests-v-c-k-n/*.cnf
-	   do
-	      $* $i
-	   done
-	   exit 0
-	Ce script lance l'exécutable passé en paramètre sur tous les tests du dossier associé.
-	Il suffit alors de mesurer de temps d'exécution du script.
-
-
-
-
-
-
-===== Fonctionnement/utilisation de la moulinette =====
-
-On utilise les tests créés par le générateur de tests.
-
-Le dossier Moulinette contient tout ce qui concerne les benchmarks :
-	- Un dossier Executables qui contient les différentes versions du solveur
-	- Un dossier par courbe, contenant :
-		- des dossiers tests-v-c-k-n (générés par le générateur de tests)
-		- sript-plot.p (informations sur le nombre de courbes à tracer, le nom des graduations de l'axe des abscisses, le style de tracé, et la sortie de gnuplot)
-		- run-tests.sh (éxécute chacun des éxécutables spécifiés dans le script sur chacun des batch-v-c-k-n.sh, et écrit le temps pris dans comparaison.dat)
-		- comparaison.dat (le résultat des temps d'exécutions des solveurs)
-
-Dans le dossier d'une courbe :
-	./run-tests.sh    (pour lancer les calculs (temps d'exécution) d'une courbe)
-	gnuplot -persist script-plot.p  (pour tracer/visualiser la courbe)
-NOTE :
-	Pour que gnuplot affiche la courbe directement à l'éxécution de la commande,
-	il est nécessaire que le packet gnuplot-x11 soit installé sur la machine (et non pas gnuplot-nox)
-
-
-	
-
-
 ===== Points négatifs =====
 
+Il manque certains points demandés :
+ - pas de preuve par résolution dans le mode interactif
+ - pas de fichier de documentation produit à la fin de l'exécution
+
+Il est certainement possible d'améliorer la fonction resolve pour gagner un peu en efficacité (la fusion de clauses est faite de manière assez naive en utiisant la bibliothèque standard, sans utiliser les informations que l'on a sur la forme des listes)
 
 
 
 
 
+===== Résultats des courbes =====
+L'apprentissage des clauses est compétitif : le surcoût (important) engendré par l'apprentissage des clause est compensé par ce que l'apprentissage apporte.
+Cependant, le gain n'est pas assez important pour que cette méthode batte les meilleurs heuristiques dont on disposait sans apprentissage.
 
 
-===== Résulats des courbes =====
+
+
+
+===== Fonctionnement du programme =====
+
+Changements depuis la dernière version :
+
+	- Pour pouvoir gérer le mode interactif, le programme ne lit plus le problème sur l'entrée standard. Il faut lui passer en paramètre
+le nom du fichier d'entrée : "release test.cnf" au lieu de "release < test.cnf"
+
+	- On a ajouté quelques méthodes relatives à l'apprentissage de clause : on a besoin de savoir si une variable est plus "vieille" qu'une autre (ie si elle a été assignée avant), notamment si une variable est plus vieille que le dernier pari fait. Ces fonctions utilisent toutes leur attribut _posInTable (cf point suivant).
+
+	- On n'utilise plus ni UnassignedBuckets ni toutes les structures de piles pour maintenir les variables et la pile des assignations des variables :
+On utilise pour remplacer tout ça un unique tableau global de Variable* pour représenter la pile courante des variables, la file d'attente des assignations, l'état des variables et pour savoir si elle découlent du dernier pari fait :
+Ce tableau (un attribut statique de la classe Variable) est organisé comme il suit :
+	[variables assignées|variables déduites|variables libres]
+On retrouve donc comme dans les rendus précédents les notions de variables assignées, variables libres, et variables déduites (ie celles dont on connaît la valeur, mais en attente d'être propagée dans les clauses car plusieurs déductions ont lieu en même temps).
+La partie [variables assignées| représente la "pile" d'execution du programme : les variables s'y trouvent dans l'ordre dans lequel elle on été assignées.
+	Une autre structure, _stackBacktrack, contient des itérateurs sur variables qui ont étés assignées suite à un pari (et non une déduction)
+	De plus, chaque variable possède un itérateur _posInTable qui permet de savoir rapidement ou se trouve une variable dans le tableau (pour pouvoir déduire une variable libre quelconque en O(1)), mais aussi qui permet de comparer la position de la variable par rapport aux autres, notamment à _stackBacktrack.back() (et donc savoir si la variable est une conséquence du dernier pari ou non).
+	Les séparations entre ces parties sont indiquées par des itérateurs (eux aussi statiques dans Variable) _endAssigned et _endDeducted.
+Lorsque une variable n'est pas dans la partie libre, sa valeur est donnée par son attribut _varState
+Cette organisation permet de passer rapidement une variable d'une zone à une autre, simplement en incrémentant/décrémentant _endAssigned et endDeducted (sauf pour passer de libre à déduit, où on doit échanger les positions de deux variables, mais cela reste en temps constant).
+
+	- On a un peu modifié les variables pour qu'elles retiennent de quelle clause leur valeur provient. L'apprentissage des clauses de taille 1 à posé problème (pour les watched literals, mais aussi à cause de détails de fonctionnement du moteur), et un soin particulier à du être apporté pour le faire marcher sans problème (notamment : on ne crée jamais de clause de taille 1, mais on simule leur existence lorsqu'on en a besoin).
+
+	- on a ajouté deux fonctions resolve et createConflictGraph pour chercher l'origine des conflits. Ces deux fonctions fonctionnent de manière différente :
+resolve à une approche ascendante : elle cherche jusqu'où elle doit remonter dans les clauses en partant d'un conflit pour apprendre une nouvelle variable.
+createConflictGraph à une approche globale : elle parcours toutes les variables qui sont conséquence du dernier pari, et crée les arêtes du graphe dans le désordre.
+
 
