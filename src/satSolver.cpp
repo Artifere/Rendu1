@@ -81,14 +81,15 @@ int main(int argc, char *argv[])
 // modifie la liste en entrée pour enlever les doublons, repérer si trivialement fausse ou vraie :
 // renvoie true ssi trivialement vraie
 // sinon, list est sans doublons (vide si clause trivialement fausse)
-bool SatProblem::simplify(std::vector<Literal>& list)
+bool SatProblem::simplify(std::vector<Literal>& list) const
 {
     // supprime les doublons (O(n.log n))
     std::sort(list.begin(), list.end());
     list.resize(std::unique(list.begin(), list.end()) - list.begin());
 
+    const unsigned listSize = list.size();
     // teste si la clause est trivialement vraie
-    for(unsigned k = 1; k < list.size(); k++)
+    for(unsigned k = 1; k < listSize; k++)
     {
         if (list[k-1].var() == list[k].var())
             return true;
@@ -394,7 +395,8 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
     {
         unsigned nbFromCurBet = 0;
         youngest = * mergedLits.begin();
-        for (std::vector<Literal>::const_iterator it = mergedLits.begin();it != mergedLits.end(); ++it)
+        const std::vector<Literal>::const_iterator mergedEnd = mergedLits.end();
+        for (std::vector<Literal>::const_iterator it = mergedLits.begin();it != mergedEnd; ++it)
         {
             if (it->var()->isFromCurBet(_stackBacktrack.back()))
             {

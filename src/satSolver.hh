@@ -8,7 +8,6 @@
 
 #include "Clause.hh"
 #include "Literal.hh"
-//#include "UnassignedBucket.hh"
 
 
 
@@ -33,7 +32,7 @@ public:
     
     void addClause(const std::vector<Literal>& litsList, Literal lit = Literal(NULL,true));
 
-    bool satisfiability();
+    bool satisfiability(void);
 
     void createConflictGraph(const Clause *conflictClause) const;
 };
