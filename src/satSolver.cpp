@@ -161,13 +161,15 @@ SatProblem::~SatProblem()
 
 
 
-void SatProblem::addClause(const std::vector<Literal>& listeLits, Literal lit)
+void SatProblem::addClause(const std::vector<Literal>& litsList, Literal lit)
 {
     static unsigned number = 0;
     number ++;
     Clause * newC = NULL;
+
+    const unsigned litsListSize = litsList.size();
     // clause triialement fausse
-    if(listeLits.size() == 0)
+    if(litsListSize == 0)
     {
         #if VERBOSE > 0
         std::cout<<"c Clause trivialement fausse lue (clause vide)."<<std::endl;
@@ -176,16 +178,16 @@ void SatProblem::addClause(const std::vector<Literal>& listeLits, Literal lit)
         exit(0);
     }
     // clause de taille 1 : on ne la crée pas, mais on déduit la valeur de la variable
-    else if(listeLits.size() == 1)
+    else if(litsListSize == 1)
     {
         #if VERBOSE > 3
-        std::cout << "c Clause à déduction immédiate lue : " << listeLits[0].var()->varNumber << '.' << listeLits[0].pos() << std::endl;
+        std::cout << "c Clause à déduction immédiate lue : " << litsList[0].var()->varNumber << '.' << litsList[0].pos() << std::endl;
         #endif
-        if (listeLits[0].var()->isFree())
+        if (litsList[0].var()->isFree())
         {
-            listeLits[0].var()->deductedFromFree(listeLits[0].pos(), NULL);            
+            litsList[0].var()->deductedFromFree(litsList[0].pos(), NULL);            
         }
-        if(!listeLits[0].var()->isFree() && listeLits[0].var()->_varState != listeLits[0].pos())
+        if(!litsList[0].var()->isFree() && litsList[0].var()->_varState != litsList[0].pos())
         {
             #if VERBOSE > 0
             std::cout<<"s UNSATISFIABLE"<<std::endl;
@@ -196,12 +198,12 @@ void SatProblem::addClause(const std::vector<Literal>& listeLits, Literal lit)
     // sinon : ajout réel de la clause, dans ce cas on on déduit un litéral de la clause, et l'autre
     else if(lit.var() == NULL)
     {
-        newC = new Clause(listeLits, number);
+        newC = new Clause(litsList, number);
         _clauses.push_back(newC);
     }
     else
     {
-        newC = new Clause(listeLits, number, lit.var());
+        newC = new Clause(litsList, number, lit.var());
         _clauses.push_back(newC);
         lit.var()->deductedFromFree(lit.pos(), newC);            
     }

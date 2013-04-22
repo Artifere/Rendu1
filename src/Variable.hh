@@ -1,6 +1,8 @@
 #ifndef VARIABLE_HH
 #define VARIABLE_HH
 
+#include <cstdlib>
+#include <ctime>
 #include <vector>
 #include <stack>
 #include <algorithm>
@@ -101,7 +103,7 @@ inline void Variable::deductedFromFree(bool value, Clause * fromClause)
 
 inline void Variable::chooseFromFree_BASIC(void)
 {
-    _endDeducted ++;
+    ++_endDeducted;
 }
 
 
@@ -112,17 +114,15 @@ inline void Variable::chooseFromFree_DLIS(void)
     it = std::max_element(_endDeducted, _vars.end(), DLISvarCompr);
     std::swap((*_endDeducted)->_posInTable, (*it)->_posInTable);
     std::iter_swap(_endDeducted, it);
-    _endDeducted ++;
+    ++_endDeducted;
 }
 
 
 
-#include <cstdlib>
-#include <ctime>
 inline void Variable::chooseFromFree_RAND(void)
 {
     static bool isInit = false;
-    if (! isInit)
+    if (!isInit)
     {
         isInit = true;
         srandom(time(NULL));
@@ -132,7 +132,7 @@ inline void Variable::chooseFromFree_RAND(void)
     it = _endDeducted + ret;
     std::swap((*_endDeducted)->_posInTable, (*it)->_posInTable);
     std::iter_swap(_endDeducted, it);
-    _endDeducted ++;
+    ++_endDeducted;
 }
 
 
@@ -143,7 +143,7 @@ inline void Variable::sortFreeVars(void)
     std::sort(_endDeducted, _vars.end(), DLISvarCompr);
     // on repositionne les itérateurs _posInTable vers _vars
     std::vector<Variable*>::iterator it;
-    for(it = _endDeducted; it != _vars.end(); it++)
+    for(it = _endDeducted; it != _vars.end(); ++it)
         (*it)->_posInTable = it;
 }
 
@@ -165,7 +165,7 @@ inline void Variable::moveToFirstAssign(void)
     {
         *_posInTable = *(_posInTable - 1);
         (*_posInTable)->_posInTable = _posInTable;
-        _posInTable --;
+        --_posInTable;
     }
     *_posInTable = this;
 }

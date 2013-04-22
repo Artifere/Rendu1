@@ -19,7 +19,7 @@ struct compare
 
 
 
-void SatProblem::createConflictGraph(const Clause *conflictClause)
+void SatProblem::createConflictGraph(const Clause *conflictClause) const
 {
    
     ofstream output;

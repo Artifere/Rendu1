@@ -29,13 +29,13 @@ public:
     
     std::pair<std::vector<Literal>,Literal> resolve(const Clause *conflictClause) const;
 
-    bool simplify(std::vector<Literal>& list);
+    bool simplify(std::vector<Literal>& list) const;
     
-    void addClause(const std::vector<Literal>& listLit, Literal lit = Literal(NULL,true));
+    void addClause(const std::vector<Literal>& litsList, Literal lit = Literal(NULL,true));
 
     bool satisfiability();
 
-    void createConflictGraph(const Clause *conflictClause);
+    void createConflictGraph(const Clause *conflictClause) const;
 };
 
 
@@ -44,11 +44,11 @@ public:
 // Appelée à la fin du programme dans le cas où le problème est satisfiable
 inline const std::vector<std::pair<unsigned, bool> > SatProblem::getAssign(void) const
 {
-    typedef std::pair<unsigned,bool> return_type;
-    std::vector<return_type> res(_nbrVars);
+    typedef std::pair<unsigned,bool> returnType;
+    std::vector<returnType> res(_nbrVars);
 
     for (unsigned k = 0; k < _nbrVars; k++)
-        res[k] = return_type(Variable::_vars[k]->varNumber, Variable::_vars[k]->_varState);
+        res[k] = returnType(Variable::_vars[k]->varNumber, Variable::_vars[k]->_varState);
     return res;
 }
         
