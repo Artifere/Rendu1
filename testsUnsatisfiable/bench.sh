@@ -2,6 +2,7 @@
 
 for i in *.cnf
 do
-  ./bench < $i
+  ./exe  $i > /dev/null
+  echo $i
 done
 

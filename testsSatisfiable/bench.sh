@@ -2,6 +2,7 @@
 
 for i in *.cnf
 do
-  minisat -verb=0 < $i
+  ./exe  $i > /dev/null
+  echo $i
 done
 
