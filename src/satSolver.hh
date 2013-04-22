@@ -27,7 +27,7 @@ public:
     inline const std::vector<Variable*>::iterator getLastBetIterator(void) const {return _stackBacktrack.back();}
     inline const std::vector<std::pair<unsigned,bool> > getAssign(void) const;
     
-    std::pair<std::vector<Literal>,Literal> resolve(const Clause *conflictClause);
+    std::pair<std::vector<Literal>,Literal> resolve(const Clause *conflictClause) const;
 
     bool simplify(std::vector<Literal>& list);
     

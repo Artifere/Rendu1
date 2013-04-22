@@ -375,7 +375,7 @@ inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 
 
 
-std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *conflictClause)
+std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *conflictClause) const
 {
     #if VERBOSE >= 5
         print_debug();
@@ -392,7 +392,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
     {
         unsigned nbFromCurBet = 0;
         youngest = * mergedLits.begin();
-        for (std::vector<Literal>::iterator it = mergedLits.begin();it != mergedLits.end(); ++it)
+        for (std::vector<Literal>::const_iterator it = mergedLits.begin();it != mergedLits.end(); ++it)
         {
             if (it->var()->isFromCurBet(_stackBacktrack.back()))
             {
@@ -406,12 +406,12 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
             }
         }
         
-        if(nbFromCurBet == 0 || youngest.var() == NULL) {
             #if VERBOSE > 1
+        if(nbFromCurBet == 0 || youngest.var() == NULL) {
             std::cout << "c ATTENTION : ceci ne devrait pas arriver" << std::endl;
-            #endif
             break;
         }
+            #endif
         if(nbFromCurBet == 1)
             break;
 
