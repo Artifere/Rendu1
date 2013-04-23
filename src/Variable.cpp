@@ -29,10 +29,9 @@ void Variable::chooseFromFree_DLIS(void)
 
 void Variable::chooseFromFree_MOMS(void)
 {
-    std::vector<Variable*>::iterator freeVarIt = _endDeducted+1, bestVarIt;
-    unsigned minSize = _vars.size(), maxNbr;
+    std::vector<Variable*>::iterator freeVarIt = _endDeducted, bestVarIt;
+    unsigned minSize = _vars.size()+1, maxNbr;
     bool bestPol;
-
 
     while (freeVarIt != _vars.end())
     {

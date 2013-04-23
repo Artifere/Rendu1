@@ -2,7 +2,7 @@
 CLAUSE    = SmartClause
 # heuristique utilisée pour le programme pour choisir une variable non affectée
 # (est remplacée avec  make CHOOSE=[choix de l'heuristique])
-CHOOSE    = DLIS
+CHOOSE    = MOMS
 # faire ou non un tri à l'initialisation (approximation de DLIS pour BASIC)
 INIT_SORT = 0
 # niveau de verbose par défaut du release (est remplacé avec make VERBOSE=n)
