@@ -20,7 +20,6 @@ class Literal;
 class CLAUSE;
 typedef CLAUSE Clause;
 
-
 #ifndef CHOOSE
     #define CHOOSE BASIC
 #endif
@@ -69,6 +68,7 @@ public:
     
     static void chooseFromFree_BASIC(void);
     static void chooseFromFree_DLIS(void);
+    void chooseFromFree_MOMS(void);
     static void chooseFromFree_RAND(void);
     static void sortFreeVars(void); 
     
@@ -117,6 +117,79 @@ inline void Variable::chooseFromFree_DLIS(void)
     ++_endDeducted;
 }
 
+
+inline void Variable::chooseFromFree_MOMS(void)
+{
+    std::vector<Variable*>::iterator freeVarIt = _endDeducted+1;
+    Variable *bestVar = NULL;
+    unsigned minSize = _vars.size(), maxNbr;
+    bool bestPol;
+
+
+    while (freeVarIt != _vars.end())
+    {
+        unsigned curMinSize = _vars.size(), curNbrMinSize = 0;
+
+        for (std::vector<Clause*>::const_iterator trueIt = (*freeVarIt)->_litTrue.begin(); trueIt != (*freeVarIt)->_litTrue.end(); ++trueIt)
+        {
+            if (!(*trueIt)->satisfied())
+            {
+                if ((*trueIt)->freeSize() < curMinSize)
+                {
+                    curMinSize = (*trueIt)->freesize();
+                    curNbrMinSize = 1;
+                }
+                else if ((*trueIt)->freeSize() == curMinSize)
+                {
+                    curNbrMinSize++;
+                }
+            }
+        }
+
+        if (curMinSize < minSize || (curMinSize == minSize && curNbrMinSize < maxNbr))
+        {
+            bestVar = *freeVarIt;
+            bestPol = true;
+            minSize = curMinSize;
+            maxNbr = curNbrMinSize;
+        }
+
+
+        for (std::vector<Clause*>::const_iterator falseIt = (*freeVarIt)->_litFalse.begin(); falseIt != (*freeVarIt)->_litFalse.end(); ++falseIt)
+        {
+            if (!(*falseIt)->satisfied())
+            {
+                if ((*falseIt)->freeSize() < curMinSize)
+                {
+                    curMinSize = (*falseIt)->freesize();
+                    curNbrMinSize = 1;
+                }
+                else if ((*falseIt)->freeSize() == curMinSize)
+                {
+                    curNbrMinSize++;
+                }
+            }
+        }
+
+        if (curMinSize < minSize || (curMinSize == minSize && curNbrMinSize < maxNbr))
+        {
+            bestVar = *freeVarIt;
+            bestPol = false;
+            minSize = curMinSize;
+            maxNbr = curNbrMinSize;
+        }
+
+
+
+        ++freeVarIt;
+    }
+
+    //J'ai copié collé un code du dessus pour là, ça marche tu penses ?^^
+    std::swap((*_endDeducted)->_posInTable, (*bestVar)->_posInTable);
+    std::iter_swap(_endDeducted, bestVar);
+    _varState = bestPol;
+    ++_endDeducted;
+}
 
 
 inline void Variable::chooseFromFree_RAND(void)
