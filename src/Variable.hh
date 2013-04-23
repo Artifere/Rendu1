@@ -81,12 +81,14 @@ public:
     #endif
     
 };
+
 /* v1 < v2 si le maximum de clauses que permet de satisfaire v1 < au même nombre pour v2
    On utilise cette comparaison pour l'heuristique statique dans le cas de choose=basic et choose = DLIS */
 static inline bool DLISvarCompr(const Variable* v1, const Variable* v2)
 {
     return std::max(v1->sizeLitTrue(), v1->sizeLitFalse()) < std::max(v2->sizeLitTrue(), v2->sizeLitFalse());
 }
+
 
 
 
@@ -99,114 +101,6 @@ inline void Variable::deductedFromFree(bool value, Clause * fromClause)
     _varState = value;
 }
 
-
-
-inline void Variable::chooseFromFree_BASIC(void)
-{
-    ++_endDeducted;
-}
-
-
-
-inline void Variable::chooseFromFree_DLIS(void)
-{
-    std::vector<Variable*>::iterator it;
-    it = std::max_element(_endDeducted, _vars.end(), DLISvarCompr);
-    std::swap((*_endDeducted)->_posInTable, (*it)->_posInTable);
-    std::iter_swap(_endDeducted, it);
-    ++_endDeducted;
-}
-
-
-inline void Variable::chooseFromFree_MOMS(void)
-{
-    std::vector<Variable*>::iterator freeVarIt = _endDeducted+1;
-    Variable *bestVar = NULL;
-    unsigned minSize = _vars.size(), maxNbr;
-    bool bestPol;
-
-
-    while (freeVarIt != _vars.end())
-    {
-        unsigned curMinSize = _vars.size(), curNbrMinSize = 0;
-
-        for (std::vector<Clause*>::const_iterator trueIt = (*freeVarIt)->_litTrue.begin(); trueIt != (*freeVarIt)->_litTrue.end(); ++trueIt)
-        {
-            if (!(*trueIt)->satisfied())
-            {
-                if ((*trueIt)->freeSize() < curMinSize)
-                {
-                    curMinSize = (*trueIt)->freesize();
-                    curNbrMinSize = 1;
-                }
-                else if ((*trueIt)->freeSize() == curMinSize)
-                {
-                    curNbrMinSize++;
-                }
-            }
-        }
-
-        if (curMinSize < minSize || (curMinSize == minSize && curNbrMinSize < maxNbr))
-        {
-            bestVar = *freeVarIt;
-            bestPol = true;
-            minSize = curMinSize;
-            maxNbr = curNbrMinSize;
-        }
-
-
-        for (std::vector<Clause*>::const_iterator falseIt = (*freeVarIt)->_litFalse.begin(); falseIt != (*freeVarIt)->_litFalse.end(); ++falseIt)
-        {
-            if (!(*falseIt)->satisfied())
-            {
-                if ((*falseIt)->freeSize() < curMinSize)
-                {
-                    curMinSize = (*falseIt)->freesize();
-                    curNbrMinSize = 1;
-                }
-                else if ((*falseIt)->freeSize() == curMinSize)
-                {
-                    curNbrMinSize++;
-                }
-            }
-        }
-
-        if (curMinSize < minSize || (curMinSize == minSize && curNbrMinSize < maxNbr))
-        {
-            bestVar = *freeVarIt;
-            bestPol = false;
-            minSize = curMinSize;
-            maxNbr = curNbrMinSize;
-        }
-
-
-
-        ++freeVarIt;
-    }
-
-    //J'ai copié collé un code du dessus pour là, ça marche tu penses ?^^
-    std::swap((*_endDeducted)->_posInTable, (*bestVar)->_posInTable);
-    std::iter_swap(_endDeducted, bestVar);
-    _varState = bestPol;
-    ++_endDeducted;
-}
-
-
-inline void Variable::chooseFromFree_RAND(void)
-{
-    static bool isInit = false;
-    if (!isInit)
-    {
-        isInit = true;
-        srandom(time(NULL));
-    }
-    unsigned int ret = random() % (_vars.end() - _endDeducted);
-    std::vector<Variable*>::iterator it;
-    it = _endDeducted + ret;
-    std::swap((*_endDeducted)->_posInTable, (*it)->_posInTable);
-    std::iter_swap(_endDeducted, it);
-    ++_endDeducted;
-}
 
 
 
