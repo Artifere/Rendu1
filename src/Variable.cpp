@@ -10,14 +10,14 @@ std::vector<Variable*>::iterator Variable::_endDeducted = _vars.begin();
 
 
 
-inline void Variable::chooseFromFree_BASIC(void)
+void Variable::chooseFromFree_BASIC(void)
 {
     ++_endDeducted;
 }
 
 
 
-inline void Variable::chooseFromFree_DLIS(void)
+void Variable::chooseFromFree_DLIS(void)
 {
     std::vector<Variable*>::iterator it;
     it = std::max_element(_endDeducted, _vars.end(), DLISvarCompr);
@@ -27,7 +27,7 @@ inline void Variable::chooseFromFree_DLIS(void)
 }
 
 
-inline void Variable::chooseFromFree_MOMS(void)
+void Variable::chooseFromFree_MOMS(void)
 {
     std::vector<Variable*>::iterator freeVarIt = _endDeducted+1, bestVarIt;
     unsigned minSize = _vars.size(), maxNbr;
@@ -100,7 +100,7 @@ inline void Variable::chooseFromFree_MOMS(void)
 }
 
 
-inline void Variable::chooseFromFree_RAND(void)
+void Variable::chooseFromFree_RAND(void)
 {
     static bool isInit = false;
     if (!isInit)
