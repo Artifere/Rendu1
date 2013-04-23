@@ -68,7 +68,7 @@ public:
     
     static void chooseFromFree_BASIC(void);
     static void chooseFromFree_DLIS(void);
-    void chooseFromFree_MOMS(void);
+    static void chooseFromFree_MOMS(void);
     static void chooseFromFree_RAND(void);
     static void sortFreeVars(void); 
     
