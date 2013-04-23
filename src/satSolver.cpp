@@ -11,7 +11,6 @@
 #include "Literal.hh"
 #include "Clause.hh"
 #include "parser.hh"
-#include <algorithm>
 
 
 #if VERBOSE > 1
@@ -37,7 +36,6 @@
     } \
     std::cout << std::endl
 #endif
-
 
 
 int main(int argc, char *argv[])
