@@ -123,7 +123,7 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
         if (simplify(listClause))
         {
             #if VERBOSE > 3
-            std::cout << "c Clause trivialement vraie lue (" << k << "eme lue). Elle est ignorée." << std::endl;
+            std::cout << "c Clause trivialement vraie lue (" << k+1 << "eme lue). Elle est ignorée." << std::endl;
             #endif
         }
         else 
