@@ -29,15 +29,17 @@ void Variable::chooseFromFree_DLIS(void)
 
 void Variable::chooseFromFree_MOMS(void)
 {
-    std::vector<Variable*>::iterator freeVarIt = _endDeducted, bestVarIt;
+    std::vector<Variable*>::iterator  bestVarIt;
+    const std::vector<Variable*>::iterator endVar = _vars.end();
     unsigned minSize = _vars.size()+1, maxNbr;
     bool bestPol;
 
-    while (freeVarIt != _vars.end())
+    for (std::vector<Variable*>::iterator freeVarIt= _endDeducted; freeVarIt != endVar; ++freeVarIt)
     {
         unsigned curMinSize = _vars.size(), curNbrMinSize = 0;
 
-        for (std::vector<Clause*>::const_iterator trueIt = (*freeVarIt)->_litTrue.begin(); trueIt != (*freeVarIt)->_litTrue.end(); ++trueIt)
+        const std::vector<Clause*>::const_iterator endTrue = (*freeVarIt)->_litTrue.end();
+        for (std::vector<Clause*>::const_iterator trueIt = (*freeVarIt)->_litTrue.begin(); trueIt != endTrue; ++trueIt)
         {
             // attention, dans le cas des watched literals, isSatisfied et freeSize renvoie un résultat invalide
             // ils ne renvoie un réultat valide que si on vient de mettre un litéral de la clause à false, et qu'on a fait aucune assignation ou deduction de litéral depuis.
@@ -72,7 +74,9 @@ void Variable::chooseFromFree_MOMS(void)
         //==> en revance, faut que je mette à 0 curNbrMinSize, sinon si on a une taille identique après, il va croise que c'est le même truc :s
         //==> ah, je crois que je commence à comprendre, je réfléchis...
         //======> le problème je crois que c'est maxNbr, des fois il faut le mettre à jour. Si tu veux y réfléchir plus, libre à toi, pour l'instant je laisse comme ça
-        for (std::vector<Clause*>::const_iterator falseIt = (*freeVarIt)->_litFalse.begin(); falseIt != (*freeVarIt)->_litFalse.end(); ++falseIt)
+
+        const std::vector<Clause*>::const_iterator endFalse = (*freeVarIt)->_litFalse.end();
+        for (std::vector<Clause*>::const_iterator falseIt = (*freeVarIt)->_litFalse.begin(); falseIt != endFalse; ++falseIt)
         {
             if (!(*falseIt)->isSatisfied())
             {
@@ -98,7 +102,6 @@ void Variable::chooseFromFree_MOMS(void)
 
 
 
-        ++freeVarIt;
     }
 
     //J'ai copié collé un code du dessus pour là, ça marche tu penses ?^^
