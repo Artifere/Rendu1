@@ -15,26 +15,30 @@
 
 #if VERBOSE > 1
 #define print_debug()  \
-    std::cout<<"c "; \
-    {  \
+    do { \
+      std::cout<<"c "; \
         for(unsigned k = 0; k < _stackBacktrack.size(); k++) \
             std::cout << "| ";  \
-    }
+    } while(0)
 #else
-#define print_debug()
+#define print_debug()  do { } while(0)
 #endif
 
 
 #if VERBOSE > 0
 #define print_vars() \
+  do { \
     for (std::vector<Variable*>::const_iterator itDebug = Variable::_vars.begin(); itDebug != Variable::_vars.end(); ++ itDebug) \
     { \
         if (itDebug == Variable::_endAssigned || itDebug == Variable::_endDeducted) \
-            std::cout << " | "; \
-        else std::cout << "   "; \
+            std::cout << " | ";  \
+        else std::cout << "   ";  \
         (*itDebug)->print_state(); \
     } \
-    std::cout << std::endl
+    std::cout << std::endl; \
+  } while(false)
+#else
+#define print_vars()  do {std::cout << std::endl; } while(0)
 #endif
 
 
@@ -408,14 +412,9 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
             }
         }
         
-            #if VERBOSE > 1
-        if(nbFromCurBet == 0 || youngest.var() == NULL) {
-            std::cout << "c ATTENTION : ceci ne devrait pas arriver" << std::endl;
+        if(nbFromCurBet <= 1) {
             break;
         }
-            #endif
-        if(nbFromCurBet == 1)
-            break;
 
         
         Clause *deductedFrom = youngest.var()->getOriginClause();
