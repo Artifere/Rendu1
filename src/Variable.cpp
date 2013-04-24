@@ -39,6 +39,9 @@ void Variable::chooseFromFree_MOMS(void)
 
         for (std::vector<Clause*>::const_iterator trueIt = (*freeVarIt)->_litTrue.begin(); trueIt != (*freeVarIt)->_litTrue.end(); ++trueIt)
         {
+            // attention, dans le cas des watched literals, isSatisfied et freeSize renvoie un résultat invalide
+            // ils ne renvoie un réultat valide que si on vient de mettre un litéral de la clause à false, et qu'on a fait aucune assignation ou deduction de litéral depuis.
+            // mais même si le résultat est faux, ça ne devrait pas partir an boucle infinie à cause de ça (c'est juste qu'on a pas MOMS, mais un truc un peu bizare)
             if (!(*trueIt)->isSatisfied())
             {
                 if ((*trueIt)->freeSize() < curMinSize)
@@ -61,7 +64,8 @@ void Variable::chooseFromFree_MOMS(void)
             maxNbr = curNbrMinSize;
         }
 
-
+        // tu ne remet pas à 0 (enfin à _vars.size()) curMinSize ?
+        // si non, pourquoi le bloc précédent ? il ne suffit pas de le mettre une fois pur tout à la fin de la fonction ?
         for (std::vector<Clause*>::const_iterator falseIt = (*freeVarIt)->_litFalse.begin(); falseIt != (*freeVarIt)->_litFalse.end(); ++falseIt)
         {
             if (!(*falseIt)->isSatisfied())
@@ -92,9 +96,9 @@ void Variable::chooseFromFree_MOMS(void)
     }
 
     //J'ai copié collé un code du dessus pour là, ça marche tu penses ?^^
+    (*bestVarIt)->_varState = bestPol; // normalment cette ligne doit être avant iter_swap (sinon tu déréfrence pas la bonne valeur)
     std::swap((*_endDeducted)->_posInTable, (*bestVarIt)->_posInTable);
     std::iter_swap(_endDeducted, bestVarIt);
-    (*bestVarIt)->_varState = bestPol;
     ++_endDeducted;
 }
 
