@@ -63,9 +63,15 @@ void Variable::chooseFromFree_MOMS(void)
             minSize = curMinSize;
             maxNbr = curNbrMinSize;
         }
+        curNbrMinSize = 0;
 
         // tu ne remet pas à 0 (enfin à _vars.size()) curMinSize ?
         // si non, pourquoi le bloc précédent ? il ne suffit pas de le mettre une fois pur tout à la fin de la fonction ?
+
+        //==> je ne comprends pas tout. Mais je ne remets pas curMinSize à _var.size, parce que si on trouve pas plus petit que ce qu'on avait, ça sert à rien
+        //==> en revance, faut que je mette à 0 curNbrMinSize, sinon si on a une taille identique après, il va croise que c'est le même truc :s
+        //==> ah, je crois que je commence à comprendre, je réfléchis...
+        //======> le problème je crois que c'est maxNbr, des fois il faut le mettre à jour. Si tu veux y réfléchir plus, libre à toi, pour l'instant je laisse comme ça
         for (std::vector<Clause*>::const_iterator falseIt = (*freeVarIt)->_litFalse.begin(); falseIt != (*freeVarIt)->_litFalse.end(); ++falseIt)
         {
             if (!(*falseIt)->isSatisfied())
