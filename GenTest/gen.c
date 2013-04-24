@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
     printf("#!/bin/bash\n");
     printf("for i in %s", dirname);
     printf("*.cnf\ndo\n");
-    printf("  $* $i\ndone\nexit 0");
+    printf(" echo $i\n$* $i\ndone\nexit 0");
     
     chmod(filename, S_IRWXU);
     mkdir(dirname, S_IRWXU); 
