@@ -1,0 +1,20 @@
+parseur style C, lecture en deux bouts :(
+main dans fichier séparé
+options à passer au programme plutôt qu'à la compilation
+	=> template ?
+		(déclaration dans .hh, définition dans un autre .hh, .cpp qui inclue le header de définition et instancie le template
+fichiers mode exécutables ?!
+fonctions pour code de DEBUG (inline... pour ifdef)
+if
+{
+	a
+}
+else
+{
+	a
+	b
+}
+accolades toujours pareil
+
+vérifier dans les clauses que bonnes clauses incluses
+légendes dans courbes gnuplot
