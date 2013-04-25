@@ -293,7 +293,9 @@ bool SatProblem::satisfiability()
             // sinon :
             
             // on revient avant le pari qui à causé l'erreur
-            while(conflit->isFromCurBet(_stackBacktrack.back()))
+            
+            //tu regarderas, mais on avait des problèmes à des momments parce que _stackbacktrack était vide apparemment.
+            while(!_stackBacktrack.empty() && conflit->isFromCurBet(_stackBacktrack.back()))
                 _stackBacktrack.pop_back();
             
             // on apprend de nos erreurs
@@ -343,7 +345,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
     Literal conflit(conflictVar, true);
     unsigned nbFromCurBet = 2;
 
-    std::vector<Literal> result(getOriginClause(conflit), litCompVar);
+    std::vector<Literal> result(getOriginClause(conflit));
     std::sort(result.begin(), result.end());
 
     // applique la résolution entre getOriginClause(result) et getOriginClause(conflit.invert)
@@ -370,7 +372,8 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
         // et met la variable la plus jeune dans conflit
         for(resIt = result.begin(); resIt != result.end(); resIt++)
         {
-            if (resIt->var()->isFromCurBet(_stackBacktrack.back()))
+            // tu regarderas aussi ici : même problème :s
+            if (!_stackBacktrack.empty() && resIt->var()->isFromCurBet(_stackBacktrack.back()))
             {
                 #if VERBOSE >= 8
                 print_debug();
