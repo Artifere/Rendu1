@@ -26,7 +26,7 @@ public:
     inline const std::vector<Variable*>::iterator getLastBetIterator(void) const {return _stackBacktrack.back();}
     inline const std::vector<std::pair<unsigned,bool> > getAssign(void) const;
     
-    std::pair<std::vector<Literal>,Literal> resolve(const Clause *conflictClause) const;
+    std::pair<std::vector<Literal>,Literal> resolve(Variable *conflictVar) const;
 
     bool simplify(std::vector<Literal>& list) const;
     
@@ -34,9 +34,9 @@ public:
 
     bool satisfiability(void);
 
-    void interact(const std::pair<std::vector<Literal>,Literal>& learned, Clause* conflit);
+    void interact(const std::pair<std::vector<Literal>,Literal>& learned, Variable* conflit);
 
-    void createConflictGraph(const Clause *conflictClause) const;
+    void createConflictGraph(Variable *conflictClause) const;
 };
 
 
