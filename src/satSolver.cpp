@@ -343,14 +343,14 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
     Literal conflit(conflictVar, true);
     unsigned nbFromCurBet = 2;
 
-    std::vector<Literal> result(getOriginClause(conflit));
+    std::vector<Literal> result(getOriginClause(conflit), litCompVar);
     std::sort(result.begin(), result.end());
 
     // applique la résolution entre getOriginClause(result) et getOriginClause(conflit.invert)
     std::vector<Literal>::iterator resIt;
     do {
         std::vector<Literal> toMerge(getOriginClause(conflit.invert()));
-        std::sort(toMerge.begin(), toMerge.end());
+        std::sort(toMerge.begin(), toMerge.end(), litCompVar);
 
         // deplace result dans otherToMerge, et met assez de place dans result pour la fusion
         std::vector<Literal> otherToMerge;
@@ -358,12 +358,12 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
         result.reserve(toMerge.size() + otherToMerge.size());
         
         // enlève l'occurence de conflit dans toMerge
-        toMerge.erase(std::lower_bound(toMerge.begin(), toMerge.end(), conflit.invert()));
+        toMerge.erase(std::lower_bound(toMerge.begin(), toMerge.end(), conflit.invert(), litCompVar));
         // et l'occurence de conflit.invert dans otherToMerge
-        otherToMerge.erase(std::lower_bound(otherToMerge.begin(), otherToMerge.end(), conflit));
+        otherToMerge.erase(std::lower_bound(otherToMerge.begin(), otherToMerge.end(), conflit, litCompVar));
 
         // fusionne les deux listes et enleve les doublons
-        resIt = std::set_union(toMerge.begin(), toMerge.end(), otherToMerge.begin(), otherToMerge.end(), result.begin());
+        resIt = std::set_union(toMerge.begin(), toMerge.end(), otherToMerge.begin(), otherToMerge.end(), result.begin(), litCompVar);
         result.resize(resIt - result.begin());
         
         // compte le nombre de litéraux du pari courant
