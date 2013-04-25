@@ -292,12 +292,16 @@ bool SatProblem::satisfiability()
             
             // sinon :
             
-            // on revient avant le pari qui à causé l'erreur
+            // on revient avant le pari qui a causé l'erreur
             
             //tu regarderas, mais on avait des problèmes à des momments parce que _stackbacktrack était vide apparemment.
             while(!_stackBacktrack.empty() && conflit->isFromCurBet(_stackBacktrack.back()))
                 _stackBacktrack.pop_back();
-            
+            if (_stackBacktrack.empty())
+            {
+                std::cout << "stackBackTrack vide quand on revient avant le pari qui a causé l'erreur" << std::endl;
+            }
+
             // on apprend de nos erreurs
             std::pair<std::vector<Literal>,Literal> learned(resolve(conflit));
             
