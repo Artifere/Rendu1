@@ -219,9 +219,6 @@ void SatProblem::addClause(const std::vector<Literal>& litsList, Literal lit)
 // Le coeur du solveur
 bool SatProblem::satisfiability()
 {
-    #if INTERACT
-        static int nbLeftBeforePrompt = 0;
-    #endif
     // On continue l'exécution tant qu'on n'a pas assigné toutes les variables (ou que l'on a quitté la boucle à cause d'une contradiction)
     while (Variable::_endAssigned != Variable::_vars.end())
     {
@@ -290,60 +287,9 @@ bool SatProblem::satisfiability()
             // sinon : on apprend de nos erreurs
             std::pair<std::vector<Literal>,Literal> learned(resolve(conflit));
             
-#if INTERACT
-            if (nbLeftBeforePrompt == 0)
-            {
-                std::cout << "Conflit trouvé. La clause suivant a été apprise : ";
-                for(unsigned k = 0; k < learned.first.size(); k++) {
-                    if(learned.first[k].pos())
-                        std::cout << '-';
-                    std::cout << learned.first[k].var()->varNumber << ", ";
-                }
-                std::cout << std::endl << "Entrez l'une des options suivantes : g, r, c , s [n]" << std::endl;
-                char readCar;
-                bool goOn = true;
-                while (goOn)
-                {
-                    goOn = false;
-                    std::cin >> readCar;
-                    
-                    if (readCar == 'g')
-                    {
-                        createConflictGraph(conflit);
-                        std::cout << "Graphe crée dans le fichier graph.dot" << std::endl;
-                    }
-                    else if (readCar == 'r')
-                        std::cout << "Pas encore implémenté." << std::endl;
-                    else if (readCar == 'c');
-                    else if (readCar == 's')
-                    {
-                        int readInt=0;
-                        if (std::cin.peek() == '\n')
-                        {
-                            std::string foo;
-                            std::getline(std::cin, foo);
-                        }
-                        while (std::cin.peek() < '1' || std::cin.peek() > '9')
-                        {
-                            std::string foo;
-                            std::getline(std::cin, foo);
-                            std::cout<< "Veuillez entrer un nombre entier plus grand que 1." << std::endl;
-                        }
-                        std::cin >> readInt;
-                        nbLeftBeforePrompt = readInt-1;
-                    }
-                    else if (readCar == 't')
-                        nbLeftBeforePrompt = -1;
-                    else
-                    {
-                        std::cout << "Veuillez entrer une option valide (g,r,c,s,t)." << std::endl;
-                        goOn = true;
-                    }
-                }
-            }
-            else if (nbLeftBeforePrompt > 0)
-                nbLeftBeforePrompt--;
-#endif
+            #if INTERACT
+            interact(learned);
+            #endif
 
             // On revient au dernier choix libre fait
             std::vector<Variable*>::iterator it, lastChoice = _stackBacktrack.back();
@@ -450,5 +396,72 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
 }
 
 
+
+void SatProblem::interact(const std::pair<std::vector<Literal>,Literal>& learned)
+{
+    static int nbLeftBeforePrompt = 0;
+    
+    if (nbLeftBeforePrompt == 0)
+    {
+        std::cout << "Conflit trouvé. La clause suivant a été apprise : ";
+        for(unsigned k = 0; k < learned.first.size(); k++) {
+            if(learned.first[k].pos())
+                std::cout << '-';
+            std::cout << learned.first[k].var()->varNumber << ", ";
+        }
+        std::cout << std::endl << "Entrez l'une des options suivantes : g, r, c , s [n]" << std::endl;
+        bool goOn = true;
+        while (goOn)
+        {
+            char readCar;
+            goOn = false;
+            std::cin >> readCar;
+            switch(readChar)
+            {
+            case 'g':
+                createConflictGraph(conflit);
+                std::cout << "Graphe crée dans le fichier graph.dot" << std::endl;
+                break;
+
+            case 'r':
+                std::cout << "Pas encore implémenté." << std::endl;
+                break;
+
+            case 'c':
+                break;
+
+            case 's':
+                int readInt;
+                if (std::cin.peek() == '\n')
+                {
+                    std::string foo;
+                    std::getline(std::cin, foo);
+                }
+                while (std::cin.peek() < '1' || std::cin.peek() > '9')
+                {
+                    std::string foo;
+                    std::getline(std::cin, foo);
+                    std::cout<< "Veuillez entrer un nombre entier plus grand que 1." << std::endl;
+                }
+                std::cin >> readInt;
+                nbLeftBeforePrompt = readInt-1;
+                break;
+
+            case 't':
+                nbLeftBeforePrompt = -1;
+                break;
+
+            default:
+                std::cout << "Veuillez entrer une option valide (g,r,c,s,t)." << std::endl;
+                goOn = true;
+
+            }
+        }
+    }
+    else if (nbLeftBeforePrompt > 0)
+    {
+        nbLeftBeforePrompt--;
+    }
+}
 
 
