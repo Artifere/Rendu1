@@ -138,9 +138,9 @@ void Variable::chooseFromFree_RAND(void)
 
 /* Propage l'assignation d'une variable dans toutes les clauses dans lesquelles elle apparaît
    et arrête de surveiller une clause si setLitTrue/False renvoie true */
-Clause* Variable::assignedFromDeducted(void)
+Variable* Variable::assignedFromDeducted(void)
 {
-    Clause* isError = NULL;
+    Variable* isError = NULL;
     const Literal lit = Literal(this, _varState);
     
     #if VERBOSE >= 5
@@ -186,10 +186,14 @@ Clause* Variable::assignedFromDeducted(void)
             if (fs == 0)
             {
                 #if VERBOSE > 4
-                std::cout << "c Contradiction (clause " <<target->clauseNumber<< ")" << std::endl;
+                std::cout << "c Contradiction (clause " <<target->clauseNumber<< ", variable " << varNumber << ")" << std::endl;
                 #endif
-                //std::cout << "bobo" << std::endl;
-                isError = target;
+                // l'ereur vient de la variable qu'on est en train d'assigned
+                isError = this; 
+                if (!_varState)
+                    _deductedTrueFromClause = target;
+                else
+                    _deductedFalseFromClause = target;
                 break;
             }
             // Sinon, s'il n'y a pas déduction, ne rien faire. S'il y a une déduction on teste si elle est contradictoire
@@ -206,7 +210,11 @@ Clause* Variable::assignedFromDeducted(void)
                    Sinon, si on a déjà fait une déduction contraire, on a une contraduction. */
                 else if(deduct.pos() != deduct.var()->_varState)
                 {
-                    isError = target;
+                    isError = deduct.var();
+                    if(deduct.pos())
+                        deduct.var()->_deductedTrueFromClause = target;
+                    else
+                        deduct.var()->_deductedFalseFromClause = target;
                     break;
                 }
             }

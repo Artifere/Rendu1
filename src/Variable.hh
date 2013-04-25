@@ -53,7 +53,7 @@ public:
     bool _varState;
     const unsigned int varNumber;
     
-    inline Variable(unsigned int varNum) : _posInTable(_vars.end()), _deductedFromClause(NULL), _varState(false), varNumber(varNum) { _vars.push_back(this); };
+    inline Variable(unsigned int varNum) : _posInTable(_vars.end()), _deductedTrueFromClause(NULL), _deductedFalseFromClause(NULL), _varState(false), varNumber(varNum) { _vars.push_back(this); };
     
     inline unsigned sizeLitTrue() const { return _litTrue.size(); };
     inline unsigned sizeLitFalse() const { return _litFalse.size(); };
@@ -68,7 +68,7 @@ public:
     }
 
     void deductedFromFree(bool value, Clause* fromClause);
-    Clause* assignedFromDeducted(void);
+    Variable* assignedFromDeducted(void);
     void deductedFromAssigned(void);
     
     static void chooseFromFree_BASIC(void);
