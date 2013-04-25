@@ -41,7 +41,9 @@ protected:
     // clause qui a permit de déduire la valeur de la variable
     // ou NULL si on a assigné cette valeur parce qu'on a fait le choix contraire avant et qu'on est arrivé à une contradiction
     // TODO : remplacer le cas NULL par la nouvelle clause déduite de l'erreur lorsqu'on est arrivé à une contradiction
-    Clause* _deductedFromClause;
+    
+    Clause* _deductedTrueFromClause;
+    Clause* _deductedFalseFromClause;
 
 public:
     static std::vector<Variable*> _vars;
@@ -60,7 +62,10 @@ public:
     inline bool isOlder(Variable* var) const { return _posInTable <= var->_posInTable; };
     inline bool isFromCurBet(std::vector<Variable*>::iterator curBetIterator) const     {return _posInTable >= curBetIterator;}
 
-    inline Clause* getOriginClause(void) const { return _deductedFromClause; }
+    inline Clause* getOriginClause(bool value) const
+    {
+        return (value ? _deductedTrueFromClause:_deductedFalseFromClause);
+    }
 
     void deductedFromFree(bool value, Clause* fromClause);
     Clause* assignedFromDeducted(void);
@@ -97,7 +102,11 @@ inline void Variable::deductedFromFree(bool value, Clause * fromClause)
     Variable * var = * (_endDeducted ++);
     std::swap(_posInTable, var->_posInTable);
     std::iter_swap(_posInTable, var->_posInTable);
-    _deductedFromClause = fromClause;
+    
+    if (value)
+        _deductedTrueFromClause = fromClause;
+    else
+        _deductedFalseFromClause = fromClause;
     _varState = value;
 }
 
