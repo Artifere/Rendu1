@@ -34,7 +34,7 @@ public:
 
     bool satisfiability(void);
 
-    void SatProblem::interact(const std::pair<std::vector<Literal>,Literal>& learned);
+    void interact(const std::pair<std::vector<Literal>,Literal>& learned, Clause* learned);
 
     void createConflictGraph(const Clause *conflictClause) const;
 };

@@ -288,7 +288,7 @@ bool SatProblem::satisfiability()
             std::pair<std::vector<Literal>,Literal> learned(resolve(conflit));
             
             #if INTERACT
-            interact(learned);
+            interact(learned, conflit);
             #endif
 
             // On revient au dernier choix libre fait
@@ -397,7 +397,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(const Clause *confli
 
 
 
-void SatProblem::interact(const std::pair<std::vector<Literal>,Literal>& learned)
+void SatProblem::interact(const std::pair<std::vector<Literal>,Literal>& learned, Clause* conflit)
 {
     static int nbLeftBeforePrompt = 0;
     
@@ -416,7 +416,7 @@ void SatProblem::interact(const std::pair<std::vector<Literal>,Literal>& learned
             char readCar;
             goOn = false;
             std::cin >> readCar;
-            switch(readChar)
+            switch(readCar)
             {
             case 'g':
                 createConflictGraph(conflit);
