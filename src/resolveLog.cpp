@@ -19,9 +19,9 @@ struct compare
 
 
 
-void SatProblem::createConflictGraph(const Clause *conflictClause) const
+void SatProblem::createConflictGraph(Variable *conflictVar) const
 {
-   
+   #if 0
     ofstream output;
     output.open ("graph.dot", ios::out);
     output << "digraph G {\n";
@@ -78,7 +78,7 @@ void SatProblem::createConflictGraph(const Clause *conflictClause) const
     
     output << "}\n";
     output.close();
-    
+    #endif
 }    
 
    

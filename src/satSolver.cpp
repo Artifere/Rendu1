@@ -25,6 +25,16 @@
 #endif
 
 
+#define SP_DEBUG(v, str) \
+  do { \
+    if (VERBOSE >= v) { \
+      std::cout << "c "; \
+      for(unsigned k = 0; k < _stackBacktrack.size(); k++) \
+        std::cout << "| ";  \
+      std::cout << msg << std::endl; \
+  } while(0)
+
+
 #if VERBOSE > 0
 #define print_vars() \
   do { \
@@ -286,25 +296,27 @@ bool SatProblem::satisfiability()
             #if VERBOSE >= 4
             print_debug(); std::cout<<"Backtrack"<<std::endl;
             #endif
+
+            // on revient au niveau du pari qui a causé l'erreur            
+            while(!_stackBacktrack.empty() && !conflit->isFromCurBet(_stackBacktrack.back()))
+                _stackBacktrack.pop_back();
+
+
             // Si on n'a aucun choix libre, on renvoie faux (UNSAT)
             if (_stackBacktrack.empty())
                 return false;
             
             // sinon :
             
-            // on revient avant le pari qui a causé l'erreur
-            
             //tu regarderas, mais on avait des problèmes à des momments parce que _stackbacktrack était vide apparemment.
-            while(!_stackBacktrack.empty() && conflit->isFromCurBet(_stackBacktrack.back()))
-                _stackBacktrack.pop_back();
-            if (_stackBacktrack.empty())
+            /*if (_stackBacktrack.empty())
             {
                 std::cout << "stackBackTrack vide quand on revient avant le pari qui a causé l'erreur" << std::endl;
-            }
+            }*/
 
             // on apprend de nos erreurs
             std::pair<std::vector<Literal>,Literal> learned(resolve(conflit));
-            
+
             #if INTERACT
             interact(learned, conflit);
             #endif
@@ -350,46 +362,72 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
     unsigned nbFromCurBet = 2;
 
     std::vector<Literal> result(getOriginClause(conflit));
-    std::sort(result.begin(), result.end());
+    std::sort(result.begin(), result.end(), litCompVar);
+
 
     // applique la résolution entre getOriginClause(result) et getOriginClause(conflit.invert)
     std::vector<Literal>::iterator resIt;
     do {
+        #if VERBOSE >= 8
+        std::cout << "fusionne la clause ";
+        if (conflit.var()->getOriginClause(!conflit.pos()))
+            std::cout << conflit.var()->getOriginClause(!conflit.pos())->clauseNumber;
+        else
+            std::cout << "de taille 1";
+        std::cout << " qui à permis de déduire " << conflit.var()->varNumber << '.' << !conflit.pos() << std::endl;
+        #endif
+
         std::vector<Literal> toMerge(getOriginClause(conflit.invert()));
+
+
         std::sort(toMerge.begin(), toMerge.end(), litCompVar);
+
 
         // deplace result dans otherToMerge, et met assez de place dans result pour la fusion
         std::vector<Literal> otherToMerge;
         std::swap(otherToMerge, result);
-        result.reserve(toMerge.size() + otherToMerge.size());
+
+        result.resize(toMerge.size() + otherToMerge.size());
         
         // enlève l'occurence de conflit dans toMerge
         toMerge.erase(std::lower_bound(toMerge.begin(), toMerge.end(), conflit.invert(), litCompVar));
+
         // et l'occurence de conflit.invert dans otherToMerge
         otherToMerge.erase(std::lower_bound(otherToMerge.begin(), otherToMerge.end(), conflit, litCompVar));
 
+
         // fusionne les deux listes et enleve les doublons
         resIt = std::set_union(toMerge.begin(), toMerge.end(), otherToMerge.begin(), otherToMerge.end(), result.begin(), litCompVar);
+ 
         result.resize(resIt - result.begin());
         
+#if VERBOSE >= 8
+std::cout << "result : ";
+for(unsigned j = 0; j < result.size(); j ++) {
+  std::cout << result[j].var()->varNumber << '.' << result[j].pos() << ", ";
+}
+std::cout << std::endl; 
+#endif
+
         // compte le nombre de litéraux du pari courant
         // et met la variable la plus jeune dans conflit
+        nbFromCurBet = 0;
         for(resIt = result.begin(); resIt != result.end(); resIt++)
         {
-            // tu regarderas aussi ici : même problème :s
             if (!_stackBacktrack.empty() && resIt->var()->isFromCurBet(_stackBacktrack.back()))
             {
                 #if VERBOSE >= 8
                 print_debug();
                 std::cout << "resolve : variable du pari courant trouvée : " << resIt->var()->varNumber << std::endl;
                 #endif
-                nbFromCurBet++;
-                if (conflit.var()->isOlder(resIt->var()))
+                if (nbFromCurBet == 0 || conflit.var()->isOlder(resIt->var()))
                     conflit = * resIt;
+                nbFromCurBet++;
             }
         }
-            
+
     } while(nbFromCurBet >= 2);
+
     return std::pair<std::vector<Literal>,Literal>(result, conflit);
 #if 0
     #if VERBOSE >= 5
