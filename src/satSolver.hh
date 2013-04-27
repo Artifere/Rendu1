@@ -11,7 +11,6 @@
 
 
 
-
 class SatProblem
 {
 protected:
@@ -19,6 +18,7 @@ protected:
     std::vector<Clause*> _clauses;
     // pile des indices des choix contraints
     std::vector<std::vector<Variable*>::iterator> _stackBacktrack;
+    
     
 public:
     SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses);
@@ -37,21 +37,15 @@ public:
     void interact(const std::pair<std::vector<Literal>,Literal>& learned, Variable* conflit);
 
     void createConflictGraph(Variable *conflictClause) const;
+    
+    friend std::ostream& operator<< (std::ostream& out, const SatProblem&);
 };
 
 
 
 
-// Appelée à la fin du programme dans le cas où le problème est satisfiable
-inline const std::vector<std::pair<unsigned, bool> > SatProblem::getAssign(void) const
-{
-    typedef std::pair<unsigned,bool> returnType;
-    std::vector<returnType> res(_nbrVars);
 
-    for (unsigned k = 0; k < _nbrVars; k++)
-        res[k] = returnType(Variable::_vars[k]->varNumber, Variable::_vars[k]->_varState);
-    return res;
-}
+
         
 
 

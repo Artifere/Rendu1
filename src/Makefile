@@ -10,7 +10,7 @@ VERBOSE  = 1
 #interaction avec l'utilisateur ou non
 INTERACT = 0
 
-SRC= parser.cpp Variable.cpp satSolver.cpp resolveLog.cpp
+SRC= parser.cpp Variable.cpp satSolver.cpp resolveLog.cpp Debug.cpp
 OBJ= ${SRC:.cpp=.o}
 d_OBJ= ${SRC:.cpp=_d.o}
 p_OBJ= ${SRC:.cpp=_p.o}

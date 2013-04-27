@@ -6,6 +6,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
+#include <iostream>
 
 
 // Besoin de forward declaration pour Literal et Clause  pour éviter une dépendance circulaire
@@ -13,12 +14,12 @@
 
 class Literal;
 
-
 #ifndef CLAUSE
-    #define CLAUSE BasicClause
+    #define CLAUSE Clause
 #endif
 class CLAUSE;
 typedef CLAUSE Clause;
+
 
 #ifndef CHOOSE
     #define CHOOSE BASIC
@@ -80,11 +81,8 @@ public:
     void linkToClause(bool,Clause*);
     
     void moveToFirstAssign(void);
-    
-    #if VERBOSE > 0
-    void print_state(void) const;
-    #endif
-    
+
+    friend std::ostream& operator<< (std::ostream& out, const Variable&);
 };
 
 /* v1 < v2 si le maximum de clauses que permet de satisfaire v1 < au même nombre pour v2

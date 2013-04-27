@@ -35,6 +35,8 @@ protected:
            sinon, le nombre de FREE watched correspond au nombre de variables dans l'état FREE de la clause
            (ou 2 si il y a plus de 2 variables dans l'état FREE dans la clause au total)  */
     std::vector<Literal> _lits;
+
+    friend std::ostream& operator<< (std::ostream& out, const WatchedClause*);
 };
 
 

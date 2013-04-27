@@ -2,7 +2,7 @@
 #define LITERAL_HH
 
 #include "Variable.hh"
-#include <stdlib.h>
+#include <iostream>
 
 
 
@@ -49,8 +49,8 @@ public:
         return (! _var->isFree()) && (_pos == _var->_varState);
     };
 
+    friend std::ostream& operator<< (std::ostream& out, const Literal&);
 };
-
 
 
 

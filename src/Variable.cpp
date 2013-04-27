@@ -1,8 +1,7 @@
 #include "Variable.hh"
 #include "Clause.hh"
-#if VERBOSE > 0
-#include <iostream>
-#endif
+
+#include "Debug.hh"
 
 std::vector<Variable*> Variable::_vars;
 std::vector<Variable*>::iterator Variable::_endAssigned = _vars.begin();
@@ -143,11 +142,7 @@ Variable* Variable::assignedFromDeducted(void)
     Variable* isError = NULL;
     const Literal lit = Literal(this, _varState);
     
-    #if VERBOSE >= 5
-    std::cout << "Propagation du litéral :";
-    this->print_state();
-    std::cout << std::endl;
-    #endif
+    DEBUG(6) << "Propagation du litéral : " << *this << std::endl;
 
     std::vector<Clause*>& cTrue  = _varState ? _litTrue : _litFalse;
     std::vector<Clause*>& cFalse = _varState ? _litFalse : _litTrue;
@@ -185,10 +180,9 @@ Variable* Variable::assignedFromDeducted(void)
             const unsigned int fs = target->freeSize();
             if (fs == 0)
             {
-                #if VERBOSE > 4
-                std::cout << "c Contradiction (clause " <<target->clauseNumber<< ", variable " << varNumber << ")" << std::endl;
-                #endif
-                // l'ereur vient de la variable qu'on est en train d'assigned
+                DEBUG(5) << "Contradiction (clause " << target << ", variable " << varNumber << ")" << std::endl;
+
+                // l'ereur vient de la variable qu'on est en train d'assigner
                 isError = this; 
                 if (!_varState)
                     _deductedTrueFromClause = target;
@@ -200,22 +194,29 @@ Variable* Variable::assignedFromDeducted(void)
             else if(fs == 1)
             {
                 const Literal deduct = target->getRemaining();
-                #if VERBOSE > 4
-                std::cout << "c Déduction trouvée (clause " <<target->clauseNumber<< ") :  " << deduct.var()->varNumber << "." << deduct.pos() << std::endl;
-                #endif
+
+
                 // Si la déduction concerne une nouvelle variable, on l'ajoute
                 if(deduct.var()->isFree())
+                {
+                    DEBUG(5) << "Nouvelle déduction trouvée (clause " << target << ") :  " << deduct << std::endl;
                     deduct.var()->deductedFromFree(deduct.pos(), target);
                 /* Sinon, si la déduction a déjà été faite, on ne fait rien.
                    Sinon, si on a déjà fait une déduction contraire, on a une contraduction. */
+                }
                 else if(deduct.pos() != deduct.var()->_varState)
                 {
+                    DEBUG(4) << "Déduction contradictoire trouvée (clause " << target << ") :  " << deduct << std::endl;
                     isError = deduct.var();
                     if(deduct.pos())
                         deduct.var()->_deductedTrueFromClause = target;
                     else
                         deduct.var()->_deductedFalseFromClause = target;
                     break;
+                }
+                else
+                {
+                    DEBUG(5) << "Déduction (re-)trouvée (clause " << target << ") :  " << deduct << std::endl;
                 }
             }
         }
@@ -254,33 +255,6 @@ void Variable::deductedFromAssigned(void)
         (*it)->freeLitFalse(lit);
 }
 
-
-
-
-#if VERBOSE > 0
-#include <iostream>
-#include <iomanip>
-void Variable::print_state(void) const
-{
-    if (isFree())
-        std::cout << "?";
-    else if (_varState)
-        std::cout << "+";
-    else
-        std::cout << "-";
-    std::cout << std::setw(2) << std::setfill('_') << varNumber << std::setw(1);
-    //std::cout << '|' << (_posInTable - _vars.begin());
-    #if VERBOSE > 10
-    std::cout << '(';
-    for(unsigned j = 0; j < _litTrue.size(); j++)
-      std::cout << _litTrue[j]->clauseNumber << ".";
-    std::cout << ", ";
-    for(unsigned j = 0; j < _litFalse.size(); j++)
-      std::cout << _litFalse[j]->clauseNumber << ".";
-    std::cout << ')';
-    #endif
-}
-#endif
 
 
 
