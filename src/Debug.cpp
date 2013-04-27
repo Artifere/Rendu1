@@ -80,7 +80,12 @@ std::ostream& operator<< (std::ostream& out, const Clause* c)
     if (c == NULL)
         out << "de taille 1";
     else
+    {
         out << c->clauseNumber;
+        #if VERBOSE > 10
+        out << "(" << c->getLiterals() << ")";
+        #endif
+    }
     return out;
 }
 

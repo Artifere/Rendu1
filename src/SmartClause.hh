@@ -79,7 +79,7 @@ inline SmartClause::SmartClause(const std::vector<Literal>& list, const unsigned
     std::vector<Literal>::const_iterator it;
     for(it = _literals.begin(); it != _literals.end(); ++it)
     {
-        if(it->var()->isFree())
+        if(it->var()->isFree())// || it->isTrue())
         {
             _numOfFree ++;
             _currentHash += (intptr_t)it->var();
