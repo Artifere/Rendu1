@@ -301,6 +301,8 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
     Literal conflit(conflictVar, true);
     unsigned nbFromCurBet = 2;
 
+    DEBUG(5) << "Resolve sur " << *conflictVar << " déduite à vrai par la clause " << conflictVar->getOriginClause(true) << " et à faux par la clause " << conflictVar->getOriginClause(false) << std::endl;
+    
     std::vector<Literal> result(getOriginClause(conflit));
     std::sort(result.begin(), result.end(), litCompVar);
 
@@ -308,7 +310,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
     // applique la résolution entre getOriginClause(result) et getOriginClause(conflit.invert)
     std::vector<Literal>::iterator resIt;
     do {
-        DEBUG(8) << "fusionne la clause " << conflit.var()->getOriginClause(!conflit.pos()) << " qui à permis de déduire " << conflit << std::endl;
+        DEBUG(8) << "fusionne la clause " << conflit.var()->getOriginClause(!conflit.pos()) << " qui à permis de déduire " << conflit.invert() << std::endl;
 
         std::vector<Literal> toMerge(getOriginClause(conflit.invert()));
 
