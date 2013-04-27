@@ -23,7 +23,7 @@ public:
     Literal getRemaining(void) const;
     bool isSatisfied(void) const;
 
-    std::vector<Literal> getLiterals(void) const;
+    const std::vector<Literal>& getLiterals(void) const;
 
     ~WatchedClause();
 
@@ -203,7 +203,7 @@ inline WatchedClause::~WatchedClause()
 
 
 
-inline std::vector<Literal> WatchedClause::getLiterals(void) const
+inline const std::vector<Literal>& WatchedClause::getLiterals(void) const
 {
     return _lits;
 }

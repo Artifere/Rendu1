@@ -15,6 +15,7 @@
 #include "Debug.hh"
 
 
+
 const std::vector<std::pair<unsigned, bool> > SatProblem::getAssign(void) const
 {
     typedef std::pair<unsigned,bool> returnType;
@@ -25,12 +26,6 @@ const std::vector<std::pair<unsigned, bool> > SatProblem::getAssign(void) const
     return res;
 }
 
-
-static inline std::vector<Literal> getOriginClause(const Literal& lit)
-{
-    Clause* origin = lit.var()->getOriginClause(lit.pos());
-    return origin ? origin->getLiterals() : std::vector<Literal>(1,lit);
-}
 
 int main(int argc, char *argv[])
 {
@@ -214,24 +209,22 @@ bool SatProblem::satisfiability()
         if(Variable::_endAssigned >= Variable::_endDeducted)
         {
             // choisit une variable libre, qu'on ajoute aux déductions
+            // et on notifie le fait que ce choix était libre
             Variable::chooseFromFree();
-            // ajoute un choix libre pour le backtrack
             _stackBacktrack.push_back(Variable::_endAssigned);
+            DEBUG(5) << "Assigne un pari : " << *(*Variable::_endAssigned) << std::endl;
+
             // assigne la variable
             newAssign = * (Variable::_endAssigned ++);
-
-            DEBUG(5) << "Assigne un pari : " << *newAssign << std::endl;
-
             conflit = newAssign->assignedFromDeducted();
         }
         // sinon : on doit faire attention si la variable vient d'une clause de taille 1
         else
         {
+            DEBUG(5) << "Assigne deduction : " << *(*Variable::_endAssigned) << std::endl;
+
             // assigne la variable
             newAssign = * (Variable::_endAssigned ++);
-
-            DEBUG(5) << "Assigne deduction : " << *newAssign << std::endl;
-
             conflit = newAssign->assignedFromDeducted();
 
             // si déduction depuis une clause à une seule variable, passe la variable en première assignation
@@ -289,9 +282,15 @@ bool SatProblem::satisfiability()
 
 
 
-inline bool litCompVar(const Literal& lit1, const Literal& lit2)
+static inline bool litCompVar(const Literal& lit1, const Literal& lit2)
 {
     return lit1.var() < lit2.var();
+}
+
+static inline std::vector<Literal> getOriginClause(const Literal& lit)
+{
+    Clause* origin = lit.var()->getOriginClause(lit.pos());
+    return origin ? origin->getLiterals() : std::vector<Literal>(1,lit);
 }
 
 
@@ -306,15 +305,12 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
     std::vector<Literal> result(getOriginClause(conflit));
     std::sort(result.begin(), result.end(), litCompVar);
 
-
     // applique la résolution entre getOriginClause(result) et getOriginClause(conflit.invert)
     std::vector<Literal>::iterator resIt;
     do {
         DEBUG(8) << "fusionne la clause " << conflit.var()->getOriginClause(!conflit.pos()) << " qui à permis de déduire " << conflit.invert() << std::endl;
 
         std::vector<Literal> toMerge(getOriginClause(conflit.invert()));
-
-
         std::sort(toMerge.begin(), toMerge.end(), litCompVar);
 
 

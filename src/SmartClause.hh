@@ -27,7 +27,7 @@ public:
 
     ~SmartClause();
 
-    std::vector<Literal> getLiterals(void) const;
+    const std::vector<Literal>& getLiterals(void) const;
 
     const unsigned clauseNumber;
 protected:
@@ -185,7 +185,7 @@ inline SmartClause::~SmartClause(void)
 
 
 
-inline std::vector<Literal> SmartClause::getLiterals(void) const
+inline const std::vector<Literal>& SmartClause::getLiterals(void) const
 {
     return _literals;
 }
