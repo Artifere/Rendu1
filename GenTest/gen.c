@@ -6,7 +6,7 @@
 int main(int argc, char* argv[])
 {
     int nbVar, nbClause, clauseSize, nbFiles, i, k, f;
-    char filename[1000], dirname[1000];
+    char filename[1000], testFilename[1000], dirname[1000];
     if (argc < 5)
     {
         printf("Pas assez d'arguments\n");
@@ -22,7 +22,6 @@ int main(int argc, char* argv[])
     sprintf(dirname, "tests-%d-%d-%d-%d/", nbVar, nbClause, clauseSize, nbFiles);
 
     sprintf(filename, "batch-%d-%d-%d-%d.sh", nbVar, nbClause, clauseSize, nbFiles);
-    //printf("%s\n%s\n", dirname, filename);
     freopen(filename, "w+", stdout);
     printf("#!/bin/bash\n");
     printf("for i in %s", dirname);
@@ -30,6 +29,19 @@ int main(int argc, char* argv[])
     printf(" echo $i\n$* $i\ndone\nexit 0");
     
     chmod(filename, S_IRWXU);
+    
+    sprintf(testFilename, "tests-%d-%d-%d-%d.sh", nbVar, nbClause, clauseSize, nbFiles);
+    freopen(testFilename, "w+", stdout);
+    printf("#!/bin/bash\n");
+    printf("for i in %s", dirname);
+    printf("*.cnf\ndo\n");
+    printf("minisatOutput= minisat $i > /dev/null\n");
+    printf("exeOutput= $* $i > /dev/null\n");
+    printf("if [$minisatOutput -ne $exeOutput]\nthen\necho \"ERREUR: SAT/UNSAT\"\nelif [$minisatOutput -e 10]\nthen\n");
+    printf("$* $i > $i$\".out\"\ncat $i $i$\".out\" | ./verif\nrm $i$\".out\"\nfi\ndone\nexit 0");
+    chmod(testFilename, S_IRWXU);    
+
+
     mkdir(dirname, S_IRWXU); 
     for (f = 0; f < nbFiles; f++)
     {
