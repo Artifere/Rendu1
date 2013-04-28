@@ -57,10 +57,13 @@ int main(int argc, char *argv[])
                 std::cout << "-";
             std::cout << assign[k].first << '\n';
         }
+        return 10;
     }
     else
         std::cout << "s UNSATISFIABLE\n";
     #endif
+
+    return 20;
 }
 
 
