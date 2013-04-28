@@ -35,9 +35,10 @@ int main(int argc, char* argv[])
     printf("#!/bin/bash\n");
     printf("for i in %s", dirname);
     printf("*.cnf\ndo\n");
-    printf("minisatOutput= minisat $i > /dev/null\n");
-    printf("exeOutput= $* $i > /dev/null\n");
-    printf("if [$minisatOutput -ne $exeOutput]\nthen\necho \"ERREUR: SAT/UNSAT\"\nelif [$minisatOutput -e 10]\nthen\n");
+    printf("minisat -verb=0 $i > /dev/null\nminisatOutput=$?\n");
+    printf("$* $i > /dev/null\nexeOutput=$?\n");
+    printf("if [ $minisatOutput -gt $exeOutput ]\nthen\necho $i\necho \"ERREUR : il fallait renvoyer UNSAT\"\n");
+    printf("elif [ $minisatOutput -lt $exeOutput ]\n then\n echo $i\n echo \"ERREUR : il fallait renvoyer SAT\"\nelif [ $minisatOutput -eq 10 ]\nthen\n");
     printf("$* $i > $i$\".out\"\ncat $i $i$\".out\" | ./verif\nrm $i$\".out\"\nfi\ndone\nexit 0");
     chmod(testFilename, S_IRWXU);    
 
