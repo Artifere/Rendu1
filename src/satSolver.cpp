@@ -44,7 +44,10 @@ int main(int argc, char *argv[])
     input.close();
     // Résoud le problème puis affiche la sortie correspondante
     #if VERBOSE == 0
-    problem.satisfiability();
+    if (problem.satisfiability())
+        return 10;
+    else
+        return 20;
     #else
     if(problem.satisfiability())
     {
@@ -60,10 +63,12 @@ int main(int argc, char *argv[])
         return 10;
     }
     else
+    {
         std::cout << "s UNSATISFIABLE\n";
+        return 20;
+    }
     #endif
 
-    return 20;
 }
 
 
