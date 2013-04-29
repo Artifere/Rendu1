@@ -174,7 +174,7 @@ void SatProblem::addClause(const std::vector<Literal>& litsList, Literal lit)
         std::cout<<"c Clause trivialement fausse lue (clause vide)."<<std::endl;
         std::cout<<"s UNSATISFIABLE"<<std::endl;
         #endif
-        exit(0);
+        exit(20);
     }
     // clause de taille 1 : on ne la crée pas, mais on déduit la valeur de la variable
     else if(litsListSize == 1)
@@ -191,7 +191,7 @@ void SatProblem::addClause(const std::vector<Literal>& litsList, Literal lit)
             #if VERBOSE > 0
             std::cout<<"s UNSATISFIABLE"<<std::endl;
             #endif
-            exit(0);
+            exit(20);
         }
     }
     // sinon : ajout réel de la clause, dans ce cas on on déduit un litéral de la clause, et l'autre
