@@ -20,6 +20,7 @@ void Variable::chooseFromFree_DLIS(void)
 {
     std::vector<Variable*>::iterator it;
     it = std::max_element(_endDeducted, _vars.end(), DLISvarCompr);
+    (*it)->_varState = (*it)->sizeLitTrue() > (*it)->sizeLitFalse();
     std::swap((*_endDeducted)->_posInTable, (*it)->_posInTable);
     std::iter_swap(_endDeducted, it);
     ++_endDeducted;
