@@ -213,47 +213,38 @@ bool SatProblem::satisfiability()
     // On continue l'exécution tant qu'on n'a pas assigné toutes les variables (ou que l'on a quitté la boucle à cause d'une contradiction)
     while (Variable::_endAssigned != Variable::_vars.end())
     {
-        Variable * newAssign = NULL;
-        Variable * conflit = NULL;
-
         DEBUG(5) << "Avant assign : " << *this << std::endl;
 
+        bool choixLibre = false;
+
         // si pas de déduction : on doit faire un pari
+        // (passe une variable de libre à deduite,
+        //  et retient que ce choix était libre)
         if(Variable::_endAssigned >= Variable::_endDeducted)
         {
-            // choisit une variable libre, qu'on ajoute aux déductions
-            // et on notifie le fait que ce choix était libre
+            choixLibre = true;
+            DEBUG(5) <<"Fait un pari: "<<*(*Variable::_endAssigned)<<std::endl;
             Variable::chooseFromFree();
             _stackBacktrack.push_back(Variable::_endAssigned);
-            DEBUG(5) << "Assigne un pari : " << *(*Variable::_endAssigned) << std::endl;
-
-            // assigne la variable
-            newAssign = * (Variable::_endAssigned ++);
-            conflit = newAssign->assignedFromDeducted();
-
-            // cas particulier traitable immédiatement :
-            // une clause qu'on avait pas vue permettait d'assigner newAssign à sa valeur contraire
-            // on ne veut même pas que ça soit concidéré comme un backtrack : on fait son assignation contraire à la place
-            if (conflit == newAssign)
-            {
-                DEBUG(6) << "M'enfin la clause " << newAssign->getOriginClause(! newAssign->_varState) << " permet de déduire " << Literal(newAssign, ! newAssign->_varState) << std::endl;
-                // des-assigne la variable, et réassigne-là à sa valeur contraire
-                // note : pas besoin de modifier deduct(True|False)FromClause de newAssign
-                //        (il à déjà été placé à la bonne valeur dans deductFromAssigned)
-                Variable::_endDeducted = Variable::_endAssigned; // on enlève les eventuelles déductions qu'aurait fait l'assignation
-                newAssign->deductedFromAssigned();
-                newAssign->_varState = ! newAssign->_varState;
-                _stackBacktrack.pop_back(); // ne pas oublier d'enlever l'info sur le choix contraint
-                conflit = newAssign->assignedFromDeducted();
-            }
         }
-        // sinon : on doit faire attention si la variable vient d'une clause de taille 1
-        else
-        {
-            DEBUG(5) << "Assigne deduction : " << *(*Variable::_endAssigned) << std::endl;
 
-            // assigne la variable
-            newAssign = * (Variable::_endAssigned ++);
+        // assigne la variable
+        Variable * newAssign = * (Variable::_endAssigned ++);
+        Variable * conflit = newAssign->assignedFromDeducted();
+        
+        // cas particulier qu'on traite imédiatement (sans backtrack) :
+        // si le pari qu'on vient de faire est lui-même contradictoire
+        // (on pouvait déduire son contraire d'une clause)
+        if (choixLibre && conflit == newAssign)
+        {
+            DEBUG(6) << "M'enfin la clause " << newAssign->getOriginClause(! newAssign->_varState) << " permet de déduire " << Literal(newAssign, ! newAssign->_varState) << std::endl;
+            //desassigne la variable, et réassigne-là à sa valeur contraire
+            //nb:pas besoin de modifier deduct(True|False)FromClause de newAssign
+            //   (il à déjà été placé à la bonne valeur dans deductFromAssigned)
+            Variable::_endDeducted = Variable::_endAssigned; // on enlève les eventuelles déductions qu'aurait fait l'assignation
+            newAssign->deductedFromAssigned();
+            newAssign->_varState = ! newAssign->_varState; // inverse le choix
+            _stackBacktrack.pop_back(); // enlever l'info sur le choix libre
             conflit = newAssign->assignedFromDeducted();
         }
 
@@ -263,14 +254,6 @@ bool SatProblem::satisfiability()
         if(conflit != NULL)
         {
             DEBUG(4) << "Backtrack sur " << *conflit << std::endl;
-
-            
-            // on revient au niveau du pari qui a causé l'erreur            
-            while(!_stackBacktrack.empty() && !conflit->isFromCurBet(_stackBacktrack.back()))
-            {
-                DEBUG(6) << "\033[1;31mWTF DUDE ?\nBIG ERROR CATA-CATA PAS BIEN" << std::endl;
-                _stackBacktrack.pop_back();
-            }
 
             // Si on n'a aucun choix libre, on renvoie faux (UNSAT)
             if (_stackBacktrack.empty())
@@ -284,7 +267,8 @@ bool SatProblem::satisfiability()
             interact(learned, conflit);
             #endif
 
-            // On revient au dernier choix libre fait (passe les variables de assignées à déduites)
+            // On revient au dernier choix libre fait
+            // (passe les variables de assignées à déduites)
             std::vector<Variable*>::iterator it, lastChoice = _stackBacktrack.back();
             _stackBacktrack.pop_back();
             do {
