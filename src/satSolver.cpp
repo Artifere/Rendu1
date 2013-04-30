@@ -170,7 +170,10 @@ void SatProblem::addClause(const std::vector<Literal>& litsList, Literal lit)
     // clause de taille 1 : on ne la crée pas, mais on déduit la valeur de la variable
     else if(litsListSize == 1)
     {
-        DEBUG(3) << "Clause à déduction immédiate lue : " << litsList[0] << std::endl;
+        if (lit.var() == NULL)
+            DEBUG(3) << "Clause à déduction immédiate lue : " << litsList[0] << std::endl;
+        else
+            DEBUG(3) << "Clause à déduction immédiate lue : " << litsList[0] << " avec apprentissge de " << lit << std::endl;
 
         if (litsList[0].var()->isFree())
         {
@@ -408,6 +411,13 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
 
     } while(nbFromCurBet >= 2);
 
+    if (nbFromCurBet == 0)
+    {
+        Variable * var = * _stackBacktrack.back();
+        conflit = Literal(var, ! var->_varState);
+        result.push_back(conflit);
+        DEBUG(7) << "Aucune variable du pari courant restant. Affaiblissement de la clause apprise avec " << conflit << std::endl;
+    }
     return std::pair<std::vector<Literal>,Literal>(result, conflit);
 #if 0
     #if VERBOSE >= 5
