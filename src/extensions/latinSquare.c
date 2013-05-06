@@ -21,11 +21,12 @@ int main(int argc, char *argv[])
     {
         for (col = 0; col < k; col++)
         {
+            putchar('(');
             for (nb = 0; nb < k-1; nb++)
             {
                 printf("x_%d_%d_%d \\/", lin, col, nb);
             }
-            printf("x_%d_%d_%d\n", lin, col, k-1);
+            printf("x_%d_%d_%d) /\\\n", lin, col, k-1);
         }
     }
 
@@ -37,11 +38,12 @@ int main(int argc, char *argv[])
     {
         for (nb = 0; nb < k; nb++)
         {
+            putchar('(');
             for (col = 0; col < k-1; col++)
             {
                 printf("x_%d_%d_%d \\/", lin, col, nb);
             }
-            printf("x_%d_%d_%d\n", lin, k-1, nb);
+            printf("x_%d_%d_%d) /\\\n", lin, k-1, nb);
         }
     }
 
@@ -53,11 +55,12 @@ int main(int argc, char *argv[])
     {
         for (nb = 0; nb < k; nb++)
         {
+            putchar('(');
             for (lin = 0; lin < k-1; lin++)
             {
                 printf("x_%d_%d_%d \\/", lin, col, nb);
             }
-            printf("x_%d_%d_%d\n", k-1, col, nb);
+            printf("x_%d_%d_%d) /\\\n", k-1, col, nb);
         }
     }
 
@@ -73,7 +76,10 @@ int main(int argc, char *argv[])
             {
                 for (nb2 = nb+1; nb2 < k; nb2++)
                 {
-                    printf("~x_%d_%d_%d \\/ ~x_%d_%d_%d\n", lin, col, nb, lin, col, nb2);
+                    printf("(~x_%d_%d_%d \\/ ~x_%d_%d_%d)", lin, col, nb, lin, col, nb2);
+                    if (!(lin == k-1 && col == k-1 && nb == k-2))
+                        printf("/\\");
+                    putchar('\n');
                 }
             }
         }
