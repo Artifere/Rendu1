@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
     unsigned lin, col, nb, nb2;
-    if (argc != 1)
+    if (argc != 2)
     {
         fprintf(stderr, "Nombre d'arguments invalide\n");
         exit(1);
@@ -71,9 +71,9 @@ int main(int argc, char *argv[])
         {
             for (nb = 0; nb < k-1; nb++)
             {
-                for (nb2 = nb+1; nb2 < k-1; nb2++)
+                for (nb2 = nb+1; nb2 < k; nb2++)
                 {
-                    printf("~x_%d_%d_%d \\/ ~x_%d_%d_%d", lin, col, nb, lin, col, nb2);
+                    printf("~x_%d_%d_%d \\/ ~x_%d_%d_%d\n", lin, col, nb, lin, col, nb2);
                 }
             }
         }
