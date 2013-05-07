@@ -21,16 +21,16 @@ int main(int argc, char *argv[])
         square[lin] = malloc(k*sizeof(*square[lin]));
 
 
-    char c;
+    char c, c2;
     do
     {
         c = getchar();
         if (c == '-')
             getchar();
-        getchar();
+        c2 = getchar();
         scanf("_%d_%d_%d\n", &lin, &col, &nb);
         
-        if (c != '-')
+        if (c2 != 'a' && c != '-')
             square[lin][col] = nb;
     } while (c != EOF);
 
