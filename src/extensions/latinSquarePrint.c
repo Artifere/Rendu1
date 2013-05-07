@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
         c = getchar();
         if (c == '-')
             getchar();
-        
-        scanf("x_%d_%d_%d\n", &lin, &col, &nb);
+        getchar();
+        scanf("_%d_%d_%d\n", &lin, &col, &nb);
         
         if (c != '-')
             square[lin][col] = nb;
