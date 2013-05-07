@@ -31,24 +31,26 @@ int main(int argc, char *argv[])
 
     char satState[9];
     scanf("%s\n", satState);
+    printf("%s\n", satState);
     if (satState == "UNSATISFIABLE")
     {
         printf("Aucune solution\n");
         return 0;
     }
 
+    getchar();
     do
     {
         getchar();
-        getchar();
         c = getchar();
-        if (c == '-')
-            getchar();
+        getchar();
         getchar();
         scanf("_%d_%d_%d\n", &lin, &col, &nb);
         
         if (c != '-')
             square[lin][col] = nb;
+
+        c = getchar();
     } while (c != EOF);
 
 
