@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     }
 
     char satState[9];
-    scanf("%s", satState);
+    scanf("%s\n", satState);
     if (satState == "UNSATISFIABLE")
     {
         printf("Aucune solution\n");
@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
 
     do
     {
+        getchar();
+        getchar();
         c = getchar();
         if (c == '-')
             getchar();
