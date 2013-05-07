@@ -22,6 +22,21 @@ int main(int argc, char *argv[])
 
 
     char c;
+    c = getchar();
+    if (c != 's')
+    {
+        fprintf(stderr, "Erreur, fichier d'assignation incorrect\n");
+        exit(1);
+    }
+
+    char satState[9];
+    scanf("%s", satState);
+    if (satState == "UNSATISFIABLE")
+    {
+        printf("Aucune solution\n");
+        return 0;
+    }
+
     do
     {
         c = getchar();
