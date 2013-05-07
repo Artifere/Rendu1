@@ -25,9 +25,9 @@ int main(int argc, char *argv[])
             putchar('(');
             for (nb = 0; nb < kCarre-1; nb++)
             {
-                printf("x_%d_%d_%d \\/", lin, col, nb);
+                printf("ms_%d_%d_%d \\/", lin, col, nb);
             }
-            printf("x_%d_%d_%d) /\\\n", lin, col, kCarre);
+            printf("ms_%d_%d_%d) /\\\n", lin, col, kCarre);
         }
     }
 
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
             {
                 for (nb2 = nb+1; nb2 < kCarre; nb2++)
                 {
-                    printf("(~x_%d_%d_%d \\/ ~x_%d_%d_%d)", lin, col, nb, lin, col, nb2);
+                    printf("(~ms_%d_%d_%d \\/ ~ms_%d_%d_%d)", lin, col, nb, lin, col, nb2);
                     if (!(lin == k-1 && col == kCarre-1 && nb == kCarre-2))
                         printf("/\\");
                     putchar('\n');
