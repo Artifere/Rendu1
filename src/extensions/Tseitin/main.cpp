@@ -106,7 +106,7 @@ int main(int argc, char * argv[])
         const vector<pair<string,unsigned> > assoc(writeProbleme(cin, write));
 
         // appelle le solver
-        string callee("../../release ");
+        string callee("../../.././release ");
         callee += argv[2];
         FILE* sortieSolver = popen(callee.c_str(), "r");
 
