@@ -16,8 +16,6 @@ typedef std::vector<literal> clause;
 
 
 
-
-
 unsigned ClauseTseitin(std::istream& in, std::vector<clause>& listClause, std::vector<std::pair<std::string,unsigned> >& varNumbers);
 
 
