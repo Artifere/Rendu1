@@ -14,7 +14,7 @@ isIdentLetter(char c)
 }
 
 
-Token Parser::getToken()
+Token Token::getToken(std::istream& read)
 {
     read >> std::ws;
     if (read.eof()) {
@@ -61,19 +61,7 @@ Token Parser::getToken()
             read >> c;
             var += c;
         }
-        // cherche si le nom de la variable à déjà été rencontré
-        unsigned num;
-        const std::map<std::string,unsigned>::const_iterator numIt = _varsNumbers.find(var);
-        if (numIt != _varsNumbers.end())
-        {
-            num = numIt->second;
-        }
-        else
-        {
-            num = _varsNumbers.size() + 1;
-            _varsNumbers.insert(std::pair<std::string,unsigned>(var,num));
-        }
-        return Token(num);
+        return Token(var);
     }
     // tente de lire BRACE_LEFT
     else if (c == '(')

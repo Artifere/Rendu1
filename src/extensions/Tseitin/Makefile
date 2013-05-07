@@ -7,7 +7,7 @@ CXXFLAGS = -Wall -Wextra -s -O2
 
 all : release
 
-release: $(OBJ) $(HDR) 
+release: $(OBJ) $(HDR)
 	${CXX} $(CXXFLAGS) -o $(OUT) $(OBJ) $(LFLAGS)  $(LIB);
 
 clean: 

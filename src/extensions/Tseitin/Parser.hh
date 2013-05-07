@@ -19,48 +19,18 @@ public:
 
 protected:
     // only usefull if type == VAR
-    const unsigned _varNumber;
+    const std::string _varName;
 
 public:
     const token_type type;
     
-    inline Token(token_type t) : _varNumber(0U), type(t) { assert(t != VAR); };
-    inline Token(unsigned var) : _varNumber(var), type(VAR) { };
+    inline Token(token_type t) : _varName(), type(t) { assert(t != VAR); };
+    inline Token(const std::string& var) : _varName(var), type(VAR) { };
     
-    unsigned varNumber(void) const { assert(type == VAR); return _varNumber; }
+    std::string varName(void) const { assert(type == VAR); return _varName; }
+    
+    static Token getToken(std::istream& read);
 };
-
-
-
-// objet qui parser (tokenise) l'entrée,
-// et transforme les noms de variables en numéro
-
-class Parser
-{
-protected:
-    std::istream& read;
-    std::map<std::string, unsigned> _varsNumbers;
-    
-    //Token next;
-    
-public:
-    Token getToken();
-
-    inline const std::map<std::string, unsigned>& vars() const { return _varsNumbers; };
-
-    inline Parser(std::istream& in) : read(in) { };
-    
-    /*inline Token nextToken() {
-        if(next.type == END_FILE) {
-            return next;
-        } else {
-            Token ret = next;
-            next = getToken();
-            return ret;
-        }
-    }*/
-};
-
 
 
 #endif//TRANSFORM_PARSER_HH
