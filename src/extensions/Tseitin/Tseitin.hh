@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "Parser.hh"
 
@@ -16,7 +17,8 @@ typedef std::vector<literal> clause;
 
 
 
-unsigned ClauseTseitin(Parser & parser, std::vector<clause>& listClause);
+
+unsigned ClauseTseitin(std::istream& in, std::vector<clause>& listClause, std::vector<std::pair<std::string,unsigned> >& varNumbers);
 
 
 
