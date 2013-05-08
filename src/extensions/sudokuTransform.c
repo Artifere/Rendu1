@@ -32,13 +32,11 @@ int main(int argc, char *argv[])
         for (col = 0; col < 9; col++)
         {
             c = fgetc(input);
-            putchar(c);
             if (c != '.')
                 grid[lin][col] = c - '0';
             else
                 grid[lin][col] = -1;
-            c=fgetc(input);
-            putchar(c);
+            fgetc(input);
         }
         
     }
@@ -63,7 +61,7 @@ int main(int argc, char *argv[])
         }
     }
 
-
+    printf("\n\n");
 
     /* On s'occupe de vérifier que chaque ligne a tous les nombres */
     for (lin = 0; lin < 9; lin++)
@@ -96,11 +94,13 @@ int main(int argc, char *argv[])
         }
     }
 
+    printf("\n");
+
 
     unsigned linBloc, colBloc;
 
 
-    /* Maintenant on s'occupe de vérifier que chaque colonne a tous les nombres */
+    /* Maintenant on s'occupe de vérifier que chaque bloc a tous les nombres */
     for (linBloc = 0; linBloc < 3; linBloc++)
     {
         for (colBloc = 0; colBloc < 3; colBloc++)
@@ -115,11 +115,11 @@ int main(int argc, char *argv[])
                         printf("s_%d_%d_%d \\/ ", lin, col, nb);
                      }
                  }
-                printf("s_%d_%d_%d \\/ s_%d_%d_%d \\/ s_%d_%d_%d)", lin, col, nb, lin+1, col, nb, lin+2, col, nb);
+                printf("s_%d_%d_%d \\/ s_%d_%d_%d \\/ s_%d_%d_%d)/\\\n", lin, col, nb, lin+1, col, nb, lin+2, col, nb);
             }
-            if (!(linBloc == 2 && colBloc == 2 && nb == 9))
-                printf(" /\\");
-            putchar('\n');
+//            if (!(linBloc == 2 && colBloc == 2 && nb == 9))
+  //              printf(" /\\");
+    //        putchar('\n');
         }
     }
 

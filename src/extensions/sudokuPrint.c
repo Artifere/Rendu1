@@ -3,13 +3,13 @@
 
 
 
-int main(int argc, char *argv[])
+int main(void)
 {
     unsigned **grid = NULL;
-    grid = malloc(10*sizeof(*grid));
+    grid = malloc(9*sizeof(*grid));
     unsigned lin, col, nb;
-    for (lin = 0; lin < 10; lin++)
-        grid[lin] = malloc(10*sizeof(*grid[lin]));
+    for (lin = 0; lin < 9; lin++)
+        grid[lin] = malloc(9*sizeof(*grid[lin]));
 
 
     char c;
@@ -27,18 +27,18 @@ int main(int argc, char *argv[])
 
 
 
-    for (lin = 0; lin < 10; lin++)
+    for (lin = 0; lin < 9; lin++)
     {
         for (col = 0; col < 9; col++)
         {
             printf("%d\t", grid[lin][col]);
         }
-        printf("%d\n", grid[lin][9]);
+        printf("%d\n", grid[lin][8]);
     }
 
 
 
-    for (lin = 0; lin < 10; lin++)
+    for (lin = 0; lin < 9; lin++)
         free(grid[lin]);
     free(grid);
 
