@@ -29,9 +29,8 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    char satState[9];
+    char satState[14];
     scanf("%s\n", satState);
-    printf("%s\n", satState);
     if (satState == "UNSATISFIABLE")
     {
         printf("Aucune solution\n");

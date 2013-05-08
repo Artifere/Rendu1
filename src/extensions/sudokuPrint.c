@@ -12,16 +12,31 @@ int main(void)
         grid[lin] = malloc(9*sizeof(*grid[lin]));
 
 
-    char c;
+
+	char satState[14];
+	char c;
+	getchar();
+	getchar();
+    scanf("%s\n", satState);
+    if (satState == "UNSATISFIABLE")
+    {
+        printf("Aucune solution\n");
+        return 0;
+    }
+
+
+    
+    getchar();
     do
     {
+        getchar();
         c = getchar();
-        if (c == '-')
-            getchar();
+        getchar();
         scanf("_%d_%d_%d\n", &lin, &col, &nb);
         
         if (c != '-')
             grid[lin][col] = nb;
+        c = getchar();
     } while (c != EOF);
 
 
@@ -29,7 +44,7 @@ int main(void)
 
     for (lin = 0; lin < 9; lin++)
     {
-        for (col = 0; col < 9; col++)
+        for (col = 0; col < 8; col++)
         {
             printf("%d\t", grid[lin][col]);
         }

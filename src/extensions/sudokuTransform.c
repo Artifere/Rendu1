@@ -41,7 +41,6 @@ int main(int argc, char *argv[])
         
     }
 
-
     fclose(input);
 
     /* On fixe les contraintes dues à la grille lue */
@@ -51,12 +50,10 @@ int main(int argc, char *argv[])
         {
             if (grid[lin][col] != -1)
             {
+                printf("s_%d_%d_%d /\\\n", lin, col, grid[lin][col]);
                 for (nb = 1; nb <= 9; nb++)
-                {
-                    if (nb != grid[lin][col])
-                        putchar('~');
-                    printf("s_%d_%d_%d /\\\n", lin, col, nb);
-                }
+                    if (grid[lin][col] != nb)
+                        printf("~s_%d_%d_%d /\\\n", lin, col, nb);
             }
         }
     }
@@ -83,7 +80,7 @@ int main(int argc, char *argv[])
     /* Maintenant on s'occupe de vérifier que chaque colonne a tous les nombres */
     for (col = 0; col < 9; col++)
     {
-        for (nb = 0; nb < 9; nb++)
+        for (nb = 1; nb <= 9; nb++)
         {
             putchar('(');
             for (lin = 0; lin < 8; lin++)
@@ -108,18 +105,19 @@ int main(int argc, char *argv[])
             for (nb = 1; nb <= 9; nb++)
             {
                 putchar('(');
-                for (lin = 3*linBloc; lin < 3*linBloc; lin++)
+                for (lin = 3*linBloc; lin < 3*linBloc+2; lin++)
                 {
-                    for (col = 3*colBloc; col < 4*colBloc; col++)
+                    for (col = 3*colBloc; col < 3*colBloc+3; col++)
                     {
                         printf("s_%d_%d_%d \\/ ", lin, col, nb);
-                     }
+                    }
                  }
-                printf("s_%d_%d_%d \\/ s_%d_%d_%d \\/ s_%d_%d_%d)/\\\n", lin, col, nb, lin+1, col, nb, lin+2, col, nb);
+                col = 3*colBloc;
+                printf("s_%d_%d_%d \\/ s_%d_%d_%d \\/ s_%d_%d_%d)/\\\n", lin, col, nb, lin, col+1, nb, lin, col+2, nb);
             }
 //            if (!(linBloc == 2 && colBloc == 2 && nb == 9))
   //              printf(" /\\");
-    //        putchar('\n');
+            putchar('\n');
         }
     }
 
