@@ -1,4 +1,4 @@
-SRC= Parser.cpp Tseitin.cpp main.cpp
+SRC= Parser.cpp ExprTree.cpp main.cpp
 OUT= tseitin
 OBJ= ${SRC:.cpp=.o}
 CXX	 = g++

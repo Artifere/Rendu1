@@ -44,6 +44,8 @@ static unsigned TseitinVar(std::vector<clause>& res, std::list<Token>& tokens, u
 
 
 
+
+
 unsigned ClauseTseitin(std::istream & in, std::vector<clause>& listClause, std::vector<std::pair<std::string,unsigned> >& varNumbers)
 {
     // on parse les tokens :

@@ -1,5 +1,6 @@
 #include "Parser.hh"
 
+Token Token::next(Token::END_FILE);
 
 static inline bool
 isLetter(char c)

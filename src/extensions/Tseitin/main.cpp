@@ -1,5 +1,6 @@
 #include <iostream>
-#include "Tseitin.hh"
+//#include "Tseitin.hh"
+#include "ExprTree.hh"
 
 #include <iostream>
 #include <map>
@@ -101,7 +102,7 @@ int main(int argc, char * argv[])
 {
     if (argc == 3 && string(argv[1]) == "-r")
     {
-        //cout << "c Écriture du problème cnf dans " << argv[2] << endl;
+        cerr << "c Écriture du problème cnf dans " << argv[2] << endl;
         fstream write(argv[2], ios_base::out | ios_base::trunc);
         const vector<pair<string,unsigned> > assoc(writeProbleme(cin, write));
 

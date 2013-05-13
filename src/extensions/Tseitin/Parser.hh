@@ -19,10 +19,10 @@ public:
 
 protected:
     // only usefull if type == VAR
-    const std::string _varName;
+    std::string _varName;
 
 public:
-    const token_type type;
+    token_type type;
     
     inline Token(token_type t) : _varName(), type(t) { assert(t != VAR); };
     inline Token(const std::string& var) : _varName(var), type(VAR) { };
@@ -30,6 +30,11 @@ public:
     std::string varName(void) const { assert(type == VAR); return _varName; }
     
     static Token getToken(std::istream& read);
+    static Token next;
+    static inline void nextToken(std::istream& read)
+    {
+        next = getToken(read);
+    }
 };
 
 
