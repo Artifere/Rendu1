@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 		
 		neighbors.push_back(std::make_pair(n1,n2));
 
-        for (unsigned color = 0; color < k-1; color++)
+        for (unsigned color = 0; color < k; color++)
             std::cout << "~(c_" << n1  << "_" << color << "/\\c_" << n2 << "_" << color << ") /\\\n";
         skipComment(std::cin);
     }
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 		{
 			std::cout << "c_" << node << "_" << color << "\\/";
 		}
-		std::cout << "c_" << node << "_" << k << ')';
+		std::cout << "c_" << node << "_" << k-1 << ')';
 		if (node < nbNodes)
 			std::cout << "/\\";
 		std::cout << "\n";
