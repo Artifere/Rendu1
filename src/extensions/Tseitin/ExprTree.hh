@@ -80,28 +80,6 @@ public:
 };
 
 
-/*
-class Not : public ExprTree
-{
-public:
-    ExprTree * c1;
-
-    inline Not(ExprTree * a1) : c1(a1) { };
-
-    inline ~Not() { delete c1; };
-
-    unsigned getCNF(std::vector<clause>& cnf) const;
-    literal getSmallCNF(std::vector<clause>& cnf) const;
-
-    ExprTree* invert() const;
-    
-    void addCNF(std::vector<clause>& cnf);
-    void addCNF_readClause(std::vector<clause>& cnf, clause& cl);
-    void addCNF_readLiteral(std::vector<clause>& cnf, clause& cl, literal& lit);
-};
-*/
-
-
 class Val : public ExprTree
 {
 public:
