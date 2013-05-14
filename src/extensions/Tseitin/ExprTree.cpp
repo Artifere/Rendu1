@@ -57,8 +57,11 @@ unsigned ClauseTseitin(std::istream& in, std::vector<clause>& listClause, std::v
     // ajoute la dernière clause : celle qui dit que la formule est vraie
     ADD_CLAUSE1(listClause, (lastNode,true));
     */
+    /*
     literal lastNode = res->getSmallCNF(listClause);
     addClause(listClause, lastNode);
+    */
+    res->addCNF(listClause);
     
     std::swap(ExprTree::varNumbers, varNumbers);
     std::swap(lastUsedId, ExprTree::lastUsedId);
@@ -93,7 +96,7 @@ unsigned And::getCNF(std::vector<clause>& cnf) const
     ADD_CLAUSE2(cnf, (self,false), (right,true));
     return self;
 }
-
+/*
 unsigned Not::getCNF(std::vector<clause>& cnf) const
 {
     unsigned fils = c1->getCNF(cnf);
@@ -102,7 +105,7 @@ unsigned Not::getCNF(std::vector<clause>& cnf) const
     ADD_CLAUSE2(cnf, (self,true), (fils,true));
     return self;
 }
-
+*/
 unsigned Val::getCNF(std::vector<clause>& cnf) const
 {
     (void)cnf; // ignore l'argument sans causer de warning
@@ -127,6 +130,115 @@ unsigned Val::getCNF(std::vector<clause>& cnf) const
 
 
 
+
+ExprTree* Or::inversion() const
+{
+    ExprTree* nc1 = c1->inversion();
+    ExprTree* nc2 = c2->inversion();
+    return new And(nc1, nc2);
+}
+ExprTree* And::inversion() const
+{
+    ExprTree* nc1 = c1->inversion();
+    ExprTree* nc2 = c2->inversion();
+    return new Or(nc1, nc2);
+}
+ExprTree* Val::inversion() const
+{
+    return new Val(_name, !_val);
+}
+
+
+
+
+unsigned Val::getVarId() const
+{
+    unsigned id;
+    // cherche si la variable à déjà un numéro attribué
+    // et lui attribue un numéro si non
+    std::vector<std::pair<std::string,unsigned> >::const_iterator it;
+    for(it = ExprTree::varNumbers.begin(); it != ExprTree::varNumbers.end(); ++it)
+    {
+        if (it->first == _name)
+            break;
+    }
+    if (it == ExprTree::varNumbers.end()) {
+        id = ++ ExprTree::lastUsedId;
+        ExprTree::varNumbers.push_back(std::pair<std::string,unsigned>(_name,id));
+    } else {
+        id = it->second;
+    }
+    return id;
+}
+
+
+    
+void Or::addCNF(std::vector<clause>& cnf) const
+{
+    clause cl;
+    c1->addCNF_readClause(cnf, cl);
+    c2->addCNF_readClause(cnf, cl);
+    cnf.push_back(cl);
+}
+void And::addCNF(std::vector<clause>& cnf) const
+{
+    c1->addCNF(cnf);
+    c2->addCNF(cnf);
+}
+void Val::addCNF(std::vector<clause>& cnf) const
+{
+    literal lit(getVarId(), _val);
+    clause cl;
+    cl.push_back(lit);
+    cnf.push_back(cl);
+}
+
+
+
+void And::addCNF_readClause(std::vector<clause>& cnf, clause& cl) const
+{
+    cl.push_back(addCNF_readLiteral(cnf));
+}
+void Or::addCNF_readClause(std::vector<clause>& cnf, clause& cl) const
+{
+    c1->addCNF_readClause(cnf, cl);
+    c2->addCNF_readClause(cnf, cl);
+}
+void Val::addCNF_readClause(std::vector<clause>& cnf, clause& cl) const
+{
+    cl.push_back(addCNF_readLiteral(cnf));
+}
+
+
+literal And::addCNF_readLiteral(std::vector<clause>& cnf) const
+{
+    literal left = c1->addCNF_readLiteral(cnf);
+    literal right = c2->addCNF_readLiteral(cnf);
+    literal self = literal(++lastUsedId, true);
+    addClause(cnf, self, invert(left), invert(right));
+    addClause(cnf, invert(self), left);
+    addClause(cnf, invert(self), right);
+    
+    return self;
+}
+literal Or::addCNF_readLiteral(std::vector<clause>& cnf) const
+{
+    // ici, optimisation possible (en appellant readClause au lieu de readLiteral)
+    // on a alors potentiellement plus que 3-sat, et moins de variables
+    literal left = c1->addCNF_readLiteral(cnf);
+    literal right = c2->addCNF_readLiteral(cnf);
+    literal self = literal(++lastUsedId, true);
+    addClause(cnf, invert(self), left, right);
+    addClause(cnf, self, invert(left));
+    addClause(cnf, self, invert(right));
+    
+    return self;
+}
+literal Val::addCNF_readLiteral(std::vector<clause>& cnf) const
+{
+    (void)cnf; // évite de générer un warning 'Unused argument' à la compilation
+    return literal(getVarId(), _val);
+}
 
 
 
@@ -157,13 +269,13 @@ literal And::getSmallCNF(std::vector<clause>& cnf) const
     addClause(cnf, invert(self), right);
     return self;
 }
-
+/*
 literal Not::getSmallCNF(std::vector<clause>& cnf) const
 {
     literal fils = c1->getSmallCNF(cnf);
     return invert(fils);
 }
-
+*/
 literal Val::getSmallCNF(std::vector<clause>& cnf) const
 {
     (void)cnf; // ignore l'argument sans causer de warning

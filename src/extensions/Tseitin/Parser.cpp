@@ -92,68 +92,72 @@ void Token::readNext()
 
 ExprTree* ParserExprTree::parseExpr()
 {
-    ExprTree* res = parseImply();
+    ExprTree* res = parseImply(false);
     if(tok.type() != Token::END_FILE) {
         throw std::invalid_argument("titi formulae ended before the end of the file");
     }
     return res;
 }
 
-ExprTree* ParserExprTree::parseImply()
+ExprTree* ParserExprTree::parseImply(bool invert)
 {
-    ExprTree* res = parseOr();
+    ExprTree* res = parseOr(invert);
+    // on remplace une implication par non(arg1)|arg2
     if (tok.type() == Token::IMPLY) {
         tok.readNext();
-        ExprTree * arg2 = parseImply();
-        // on remplace une implication par non(arg1)|arg2
-        //res = new Imply(res, arg2);
-        res = new Or(new Not(res), arg2);
+        ExprTree * arg2 = parseImply(invert);
+        // on a déjà parsé arg1. il faut l'inverser maintenant
+        ExprTree * arg1 = res->inversion();
+        delete res;
+        res = new Or(arg1, arg2);
     }
     return res;
 }
 
-ExprTree* ParserExprTree::parseOr()
+ExprTree* ParserExprTree::parseOr(bool invert)
 {
-    ExprTree* res = parseAnd();
+    ExprTree* res = parseAnd(invert);
     if (tok.type() == Token::OR) {
         tok.readNext();
-        ExprTree * arg2 = parseOr();
-        res = new Or(res, arg2);
+        ExprTree * arg2 = parseOr(invert);
+        if (invert)
+            res = new And(res, arg2);
+        else
+            res = new Or(res, arg2);
     }
     return res;
 }
 
-ExprTree* ParserExprTree::parseAnd()
+ExprTree* ParserExprTree::parseAnd(bool invert)
 {
-    ExprTree* res = parseNot();
+    ExprTree* res = parseNot(invert);
     if (tok.type() == Token::AND) {
         tok.readNext();
-        ExprTree * arg2 = parseAnd();
-        res = new And(res, arg2);
+        ExprTree * arg2 = parseAnd(invert);
+        if (invert)
+            res = new Or(res, arg2);
+        else
+            res = new And(res, arg2);
     }
     return res;
 }
 
-ExprTree* ParserExprTree::parseNot()
+ExprTree* ParserExprTree::parseNot(bool invert)
 {
-    bool inverse = false;
     while (tok.type() == Token::NOT)
     {
         tok.readNext();
-        inverse = !inverse;
+        invert = !invert;
     }
-    ExprTree* res = parseVal();
-    if (inverse)
-        res = new Not(res);
-    return res;
+    return parseVal(invert);
 }
 
-ExprTree* ParserExprTree::parseVal()
+ExprTree* ParserExprTree::parseVal(bool invert)
 {
     if (tok.type() == Token::BRACE_LEFT)
     {
         tok.readNext();
-        ExprTree * res = parseImply();
+        ExprTree * res = parseImply(invert);
         if (tok.type() != Token::BRACE_RIGHT) {
             throw std::invalid_argument("expected right brace here");
         }
@@ -164,7 +168,7 @@ ExprTree* ParserExprTree::parseVal()
     {
         std::string var = tok.varName();
         tok.readNext();
-        return new Val(var);
+        return new Val(var, !invert);
     }
     else
     {

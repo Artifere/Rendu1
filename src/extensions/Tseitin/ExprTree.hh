@@ -25,6 +25,11 @@ public:
    
     virtual unsigned getCNF(std::vector<clause>& cnf) const = 0;
     virtual literal getSmallCNF(std::vector<clause>& cnf) const = 0;
+    virtual ExprTree* inversion() const = 0;
+    
+    virtual void addCNF(std::vector<clause>& cnf) const = 0;
+    virtual void addCNF_readClause(std::vector<clause>& cnf, clause& cl) const = 0;
+    virtual literal addCNF_readLiteral(std::vector<clause>& cnf) const = 0;
 };
 
 
@@ -42,8 +47,14 @@ public:
 
     inline ~And() { delete c1; delete c2; };
 
-    virtual unsigned getCNF(std::vector<clause>& cnf) const;
-    virtual literal getSmallCNF(std::vector<clause>& cnf) const;
+    unsigned getCNF(std::vector<clause>& cnf) const;
+    literal getSmallCNF(std::vector<clause>& cnf) const;
+    
+    ExprTree* inversion() const;
+    
+    void addCNF(std::vector<clause>& cnf) const;
+    void addCNF_readClause(std::vector<clause>& cnf, clause& cl) const;
+    literal addCNF_readLiteral(std::vector<clause>& cnf) const;
 };
 
 
@@ -58,12 +69,18 @@ public:
 
     inline ~Or() { delete c1; delete c2; };
 
-    virtual unsigned getCNF(std::vector<clause>& cnf) const;
-    virtual literal getSmallCNF(std::vector<clause>& cnf) const;
+    unsigned getCNF(std::vector<clause>& cnf) const;
+    literal getSmallCNF(std::vector<clause>& cnf) const;
+
+    ExprTree* inversion() const;
+    
+    void addCNF(std::vector<clause>& cnf) const;
+    void addCNF_readClause(std::vector<clause>& cnf, clause& cl) const;
+    literal addCNF_readLiteral(std::vector<clause>& cnf) const;
 };
 
 
-
+/*
 class Not : public ExprTree
 {
 public:
@@ -73,23 +90,38 @@ public:
 
     inline ~Not() { delete c1; };
 
-    virtual unsigned getCNF(std::vector<clause>& cnf) const;
-    virtual literal getSmallCNF(std::vector<clause>& cnf) const;
-};
+    unsigned getCNF(std::vector<clause>& cnf) const;
+    literal getSmallCNF(std::vector<clause>& cnf) const;
 
+    ExprTree* invert() const;
+    
+    void addCNF(std::vector<clause>& cnf);
+    void addCNF_readClause(std::vector<clause>& cnf, clause& cl);
+    void addCNF_readLiteral(std::vector<clause>& cnf, clause& cl, literal& lit);
+};
+*/
 
 
 class Val : public ExprTree
 {
 public:
     std::string _name;
+    bool _val;
 
-    inline Val(const std::string& name) : _name(name) { }
+    inline Val(const std::string& name, bool val) : _name(name), _val(val) { }
     
     inline ~Val() { }
 
-    virtual unsigned getCNF(std::vector<clause>& cnf) const;
-    virtual literal getSmallCNF(std::vector<clause>& cnf) const;
+    unsigned getCNF(std::vector<clause>& cnf) const;
+    literal getSmallCNF(std::vector<clause>& cnf) const;
+
+    ExprTree* inversion() const;
+    
+    void addCNF(std::vector<clause>& cnf) const;
+    void addCNF_readClause(std::vector<clause>& cnf, clause& cl) const;
+    literal addCNF_readLiteral(std::vector<clause>& cnf) const;
+    
+    unsigned getVarId() const;
 };
 
 

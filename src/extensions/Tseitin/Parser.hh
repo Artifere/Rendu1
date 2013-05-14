@@ -40,11 +40,11 @@ class ParserExprTree
 protected:    
     Token tok;
     
-    ExprTree* parseImply();
-    ExprTree* parseOr();
-    ExprTree* parseAnd();
-    ExprTree* parseNot();
-    ExprTree* parseVal();
+    ExprTree* parseImply(bool invert);
+    ExprTree* parseOr(bool invert);
+    ExprTree* parseAnd(bool invert);
+    ExprTree* parseNot(bool invert);
+    ExprTree* parseVal(bool invert);
 
 public:
     inline ParserExprTree(std::istream& in) : tok(in) { }
