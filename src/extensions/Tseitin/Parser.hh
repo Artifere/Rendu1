@@ -7,6 +7,7 @@
 #include <string>
 #include <cassert>
 #include <map>
+#include "ExprTree.hh"
 
 
 class Token
@@ -18,24 +19,36 @@ public:
     } token_type;
 
 protected:
-    // only usefull if type == VAR
-    std::string _varName;
+    std::string _varName; // only usefull if type == VAR
+    std::istream& _read;
+    token_type _type;
 
 public:
-    token_type type;
     
-    inline Token(token_type t) : _varName(), type(t) { assert(t != VAR); };
-    inline Token(const std::string& var) : _varName(var), type(VAR) { };
+    inline Token(std::istream& read) : _varName(), _read(read), _type(END_FILE) { readNext(); };
     
-    std::string varName(void) const { assert(type == VAR); return _varName; }
+    inline token_type type() const { return _type; }
+    inline std::string varName(void) const { assert(_type == VAR); return _varName; }
     
-    static Token getToken(std::istream& read);
-    static Token next;
-    static inline void nextToken(std::istream& read)
-    {
-        next = getToken(read);
-    }
+    void readNext();
 };
 
 
+
+class ParserExprTree
+{
+protected:    
+    Token tok;
+    
+    ExprTree* parseImply();
+    ExprTree* parseOr();
+    ExprTree* parseAnd();
+    ExprTree* parseNot();
+    ExprTree* parseVal();
+
+public:
+    inline ParserExprTree(std::istream& in) : tok(in) { }
+    ExprTree* parseExpr();
+
+};
 #endif//TRANSFORM_PARSER_HH

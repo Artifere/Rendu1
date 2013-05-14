@@ -1,5 +1,6 @@
 #include "ExprTree.hh"
 #include <iostream>
+#include "Parser.hh"
 
 static inline clause
 doClause(const literal& l1)
@@ -30,20 +31,16 @@ doClause(const literal& l1, const literal& l2, const literal& l3)
 #define CLAUSE2(a,b) doClause(literal a, literal b)
 #define CLAUSE3(a,b,c) doClause(literal a, literal b, literal c)
 
+static inline literal invert(literal lit)
+{
+    lit.second = ! lit.second;
+    return lit;
+}
+
 
 
 unsigned ExprTree::lastUsedId;
 std::vector<std::pair<std::string,unsigned> > ExprTree::varNumbers;
-
-
-
-ExprTree* parseImply(std::istream& in);
-ExprTree* parseOr(std::istream& in);
-ExprTree* parseAnd(std::istream& in);
-ExprTree* parseNot(std::istream& in);
-ExprTree* parseVal(std::istream& in);
-ExprTree* parseExpr(std::istream& in);
-
 
 
 unsigned ClauseTseitin(std::istream& in, std::vector<clause>& listClause, std::vector<std::pair<std::string,unsigned> >& varNumbers)
@@ -52,12 +49,12 @@ unsigned ClauseTseitin(std::istream& in, std::vector<clause>& listClause, std::v
     ExprTree::lastUsedId = 0;
     std::swap(ExprTree::varNumbers, varNumbers);
 
-    Token::nextToken(in);
-    ExprTree * res = parseExpr(in);
+    ParserExprTree parser(in);
+    ExprTree * res = parser.parseExpr();
     
-    unsigned lastNode = res->getCNF(listClause);
+    literal lastNode = res->getCNF(listClause);
     // ajoute la dernière clause : celle qui dit que la formule est vraie
-    listClause.push_back(CLAUSE1((lastNode,true)));
+    listClause.push_back(doClause(lastNode));
     
     std::swap(ExprTree::varNumbers, varNumbers);
     std::swap(lastUsedId, ExprTree::lastUsedId);
@@ -68,164 +65,111 @@ unsigned ClauseTseitin(std::istream& in, std::vector<clause>& listClause, std::v
 
 
 
-ExprTree* parseExpr(std::istream& in)
+#if 0
+literal Imply::getCNF(std::vector<clause>& cnf) const
 {
-      /* while (! in.eof()) {
-            char c; in >> c; std::cout << c;
-        }*/
-    ExprTree* res = parseImply(in);
-    if(Token::next.type != Token::END_FILE) {
-        /*while (! in.eof()) {
-            std::string str;
-            in >> str;
-            std::cout << "|" << str << std::endl;
-        }*/
-        throw std::invalid_argument("titi formulae ended before the end of the file");
-    }
-    return res;
-}
-
-ExprTree* parseImply(std::istream& in)
-{
-    ExprTree* res = parseOr(in);
-    if (Token::next.type == Token::IMPLY) {
-        Token::nextToken(in);
-        ExprTree * arg2 = parseImply(in);
-        res = new Imply(res, arg2);
-    }
-    return res;
-}
-
-ExprTree* parseOr(std::istream& in)
-{
-    ExprTree* res = parseAnd(in);
-    if (Token::next.type == Token::OR) {
-        Token::nextToken(in);
-        ExprTree * arg2 = parseOr(in);
-        res = new Or(res, arg2);
-    }
-    return res;
-}
-
-ExprTree* parseAnd(std::istream& in)
-{
-    ExprTree* res = parseNot(in);
-    if (Token::next.type == Token::AND) {
-        Token::nextToken(in);
-        ExprTree * arg2 = parseAnd(in);
-        res = new And(res, arg2);
-    }
-    return res;
-}
-
-ExprTree* parseNot(std::istream& in)
-{
-    bool inverse = false;
-    while (Token::next.type == Token::NOT)
-    {
-        Token::nextToken(in);
-        inverse = !inverse;
-    }
-    ExprTree* res = parseVal(in);
-    if (inverse) {
-        res = new Not(res);
-    }
-    return res;
-}
-
-ExprTree* parseVal(std::istream& in)
-{
-    if (Token::next.type == Token::BRACE_LEFT)
-    {
-        Token::nextToken(in);
-        ExprTree * res = parseImply(in);
-        if (Token::next.type != Token::BRACE_RIGHT) {
-            in >> std::noskipws;
-            while(!in.eof()) {
-                char c; in >> c; std::cout << c;
-            }
-            throw std::invalid_argument("expected right brace here");
-        }
-        Token::nextToken(in);
-        return res;
-    }
-    else if(Token::next.type == Token::VAR)
-    {
-        std::string var = Token::next.varName();
-        Token::nextToken(in);
-        // cherche si la variable à déjà un numéro attribué
-        // et lui attribue un numéro si non
-        unsigned id;
-        std::vector<std::pair<std::string,unsigned> >::const_iterator it;
-        for(it = ExprTree::varNumbers.begin(); it != ExprTree::varNumbers.end(); ++it)
-        {
-            if (it->first == var)
-                break;
-        }
-        if (it == ExprTree::varNumbers.end()) {
-            id = ++ ExprTree::lastUsedId;
-            ExprTree::varNumbers.push_back(std::pair<std::string,unsigned>(var,id));
-        } else {
-            id = it->second;
-        }
-        return new Val(id, true);
-    }
-    else
-    {
-        throw std::invalid_argument("expected open brace or variable here");
-    }
-}
-
-
-
-
-
-unsigned Imply::getCNF(std::vector<clause>& cnf) const
-{
-    unsigned left = c1->getCNF(cnf);
-    unsigned right = c2->getCNF(cnf);
-    unsigned self = ++lastUsedId;
+    literal left = c1->getCNF(cnf);
+    literal right = c2->getCNF(cnf);
+    literal self = literal(++lastUsedId, true);
+    cnf.push_back(doClause(invert(self), invert(left), right));
+    cnf.push_back(doClause(self, left));
+    cnf.push_back(doClause(self, invert(right)));
+    /*
     cnf.push_back(CLAUSE3((self,false), (left,false), (right,true)));
     cnf.push_back(CLAUSE2((self,true),  (left,true)));
     cnf.push_back(CLAUSE2((self,true),  (right,false)));
+    */
     return self;
 }
+#endif
 
-unsigned Or::getCNF(std::vector<clause>& cnf) const
+literal Or::getCNF(std::vector<clause>& cnf) const
 {
-    unsigned left = c1->getCNF(cnf);
-    unsigned right = c2->getCNF(cnf);
-    unsigned self = ++lastUsedId;
+    literal left = c1->getCNF(cnf);
+    literal right = c2->getCNF(cnf);
+    literal self = literal(++lastUsedId, true);
+    cnf.push_back(doClause(invert(self), left, right));
+    cnf.push_back(doClause(self, invert(left)));
+    cnf.push_back(doClause(self, invert(right)));
+    /*
     cnf.push_back(CLAUSE3((self,false), (left,true), (right,true)));
     cnf.push_back(CLAUSE2((self,true), (left,false)));
     cnf.push_back(CLAUSE2((self,true), (right,false)));
+    */
     return self;
 }
 
-unsigned And::getCNF(std::vector<clause>& cnf) const
+literal And::getCNF(std::vector<clause>& cnf) const
 {
-    unsigned left = c1->getCNF(cnf);
-    unsigned right = c2->getCNF(cnf);
-    unsigned self = ++lastUsedId;
+    literal left = c1->getCNF(cnf);
+    literal right = c2->getCNF(cnf);
+    literal self = literal(++lastUsedId, true);
+    cnf.push_back(doClause(self, invert(left), invert(right)));
+    cnf.push_back(doClause(invert(self), left));
+    cnf.push_back(doClause(invert(self), right));
+    /*
     cnf.push_back(CLAUSE3((self,true), (left,false), (right,false)));
     cnf.push_back(CLAUSE2((self,false), (left,true)));
     cnf.push_back(CLAUSE2((self,false), (right,true)));
+    */
     return self;
 }
 
-unsigned Not::getCNF(std::vector<clause>& cnf) const
+literal Not::getCNF(std::vector<clause>& cnf) const
 {
-    unsigned fils = c1->getCNF(cnf);
-    unsigned self = ++lastUsedId;
+    literal fils = c1->getCNF(cnf);
+    literal self = literal(++lastUsedId, true);
+    cnf.push_back(doClause(invert(self), invert(fils)));
+    cnf.push_back(doClause(self, fils));
+    /*
     cnf.push_back(CLAUSE2((self,false), (fils,false)));
     cnf.push_back(CLAUSE2((self,true), (fils,true)));
+    */
     return self;
 }
 
-unsigned Val::getCNF(std::vector<clause>& cnf) const
+literal Val::getCNF(std::vector<clause>& cnf) const
 {
-    cnf;
-    return number;
+    (void)cnf; // ignore l'argument sans causer de warning
+    unsigned id;
+    // cherche si la variable à déjà un numéro attribué
+    // et lui attribue un numéro si non
+    std::vector<std::pair<std::string,unsigned> >::const_iterator it;
+    for(it = ExprTree::varNumbers.begin(); it != ExprTree::varNumbers.end(); ++it)
+    {
+        if (it->first == _name)
+            break;
+    }
+    if (it == ExprTree::varNumbers.end()) {
+        id = ++ ExprTree::lastUsedId;
+        ExprTree::varNumbers.push_back(std::pair<std::string,unsigned>(_name,id));
+    } else {
+        id = it->second;
+    }
+    return literal(id, true);
+}
+
+/*
+literal Imply::getSmallCNF(std::vector<clause>& cnf) const
+{
+    return literal(0,true);
+}
+*/
+literal Or::getSmallCNF(std::vector<clause>& cnf) const
+{
+    return literal(0,true);
+}
+literal And::getSmallCNF(std::vector<clause>& cnf) const
+{
+    return literal(0,true);
+}
+literal Not::getSmallCNF(std::vector<clause>& cnf) const
+{
+    return literal(0,true);
+}
+literal Val::getSmallCNF(std::vector<clause>& cnf) const
+{
+    return literal(0,true);
 }
 
 

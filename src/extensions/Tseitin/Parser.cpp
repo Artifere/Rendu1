@@ -1,6 +1,6 @@
 #include "Parser.hh"
 
-Token Token::next(Token::END_FILE);
+
 
 static inline bool
 isLetter(char c)
@@ -15,64 +15,66 @@ isIdentLetter(char c)
 }
 
 
-Token Token::getToken(std::istream& read)
+void Token::readNext()
 {
-    read >> std::ws;
-    if (read.eof()) {
-        return Token(Token::END_FILE);
+    _read >> std::ws;
+    if (_read.eof()) {
+        _type = END_FILE;
+        return;
     }
     char c;
-    read >> c;
+    _read >> c;
 
     // tente de lire AND
     if (c == '/')
     {
-        if (read.eof() || read.peek() != '\\')
+        if (_read.eof() || _read.peek() != '\\')
             throw std::invalid_argument("bad token : '\\' expected");
-        read >> c;
-        return Token(Token::AND);
+        _read >> c;
+        _type = AND;
     }
     // tente de lire OR
     else if (c == '\\')
     {
-        if (read.eof() || read.peek() != '/')
+        if (_read.eof() || _read.peek() != '/')
             throw std::invalid_argument("bad token : '/' expected");
-        read >> c;
-        return Token(Token::OR);
+        _read >> c;
+        _type = OR;
     }
     // tente de lire NOT
     else if (c == '~')
     {
-        return Token(Token::NOT);
+        _type = NOT;
     }
     // tente de lire IMPLY
     else if (c == '=')
     {
-        if (read.eof() || read.peek() != '>')
+        if (_read.eof() || _read.peek() != '>')
             throw std::invalid_argument("bad token : '>' expected");
-        read >> c;
-        return Token(Token::IMPLY);
+        _read >> c;
+        _type = IMPLY;
     }
     // tente de lire VAR
     else if (isLetter(c))
     {
         std::string var(1,c);
-        while (!read.eof() && isIdentLetter(read.peek()))
+        while (!_read.eof() && isIdentLetter(_read.peek()))
         {
-            read >> c;
+            _read >> c;
             var += c;
         }
-        return Token(var);
+        _type = VAR;
+        _varName = var;
     }
     // tente de lire BRACE_LEFT
     else if (c == '(')
     {
-        return Token(Token::BRACE_LEFT);
+        _type = BRACE_LEFT;
     }
     // tente de lire BRACE_RIGTH
     else if (c == ')')
     {
-        return Token(Token::BRACE_RIGHT);
+        _type = BRACE_RIGHT;
     }
     // sinon : erreur de format d'entrée
     else
@@ -80,4 +82,96 @@ Token Token::getToken(std::istream& read)
         throw std::invalid_argument("unrecognized token");
     }
 }
+
+
+
+
+
+
+
+
+ExprTree* ParserExprTree::parseExpr()
+{
+    ExprTree* res = parseImply();
+    if(tok.type() != Token::END_FILE) {
+        throw std::invalid_argument("titi formulae ended before the end of the file");
+    }
+    return res;
+}
+
+ExprTree* ParserExprTree::parseImply()
+{
+    ExprTree* res = parseOr();
+    if (tok.type() == Token::IMPLY) {
+        tok.readNext();
+        ExprTree * arg2 = parseImply();
+        // on remplace une implication par non(arg1)|arg2
+        //res = new Imply(res, arg2);
+        res = new Or(new Not(res), arg2);
+    }
+    return res;
+}
+
+ExprTree* ParserExprTree::parseOr()
+{
+    ExprTree* res = parseAnd();
+    if (tok.type() == Token::OR) {
+        tok.readNext();
+        ExprTree * arg2 = parseOr();
+        res = new Or(res, arg2);
+    }
+    return res;
+}
+
+ExprTree* ParserExprTree::parseAnd()
+{
+    ExprTree* res = parseNot();
+    if (tok.type() == Token::AND) {
+        tok.readNext();
+        ExprTree * arg2 = parseAnd();
+        res = new And(res, arg2);
+    }
+    return res;
+}
+
+ExprTree* ParserExprTree::parseNot()
+{
+    bool inverse = false;
+    while (tok.type() == Token::NOT)
+    {
+        tok.readNext();
+        inverse = !inverse;
+    }
+    ExprTree* res = parseVal();
+    if (inverse)
+        res = new Not(res);
+    return res;
+}
+
+ExprTree* ParserExprTree::parseVal()
+{
+    if (tok.type() == Token::BRACE_LEFT)
+    {
+        tok.readNext();
+        ExprTree * res = parseImply();
+        if (tok.type() != Token::BRACE_RIGHT) {
+            throw std::invalid_argument("expected right brace here");
+        }
+        tok.readNext();
+        return res;
+    }
+    else if(tok.type() == Token::VAR)
+    {
+        std::string var = tok.varName();
+        tok.readNext();
+        return new Val(var);
+    }
+    else
+    {
+        throw std::invalid_argument("expected open brace or variable here");
+    }
+}
+
+
+
 
