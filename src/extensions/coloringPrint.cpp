@@ -89,12 +89,12 @@ int main(int argc, char *argv[])
 
     int nbNodes, nbEdges;
     int n1, n2;
-    scanf("%d %d", &nbNodes, &nbEdges);
+    scanf("%d %d\n", &nbNodes, &nbEdges);
 
 
     for (int i = 0; i < nbEdges; i++)
     {
-        scanf("%c %d %d", &c, &n1, &n2);
+        scanf("%c %d %d\n", &c, &n1, &n2);
         printf("%d--%d;\n", n1, n2);
     }
 

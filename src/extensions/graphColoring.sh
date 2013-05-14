@@ -6,6 +6,7 @@ file=$2
 Tseitin/./tseitin -r foo.out < fooS.out > result.txt
 cat result.txt
 ./coloringPrint $k $file result.txt > test.out
+dot -Tpdf test.out -o test.pdf
 #rm foo.out
 #rm result.txt
 
