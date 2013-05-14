@@ -223,15 +223,19 @@ literal And::addCNF_readLiteral(std::vector<clause>& cnf) const
 }
 literal Or::addCNF_readLiteral(std::vector<clause>& cnf) const
 {
-    // ici, optimisation possible (en appellant readClause au lieu de readLiteral)
-    // on a alors potentiellement plus que 3-sat, et moins de variables
-    literal left = c1->addCNF_readLiteral(cnf);
-    literal right = c2->addCNF_readLiteral(cnf);
-    literal self = literal(++lastUsedId, true);
-    addClause(cnf, invert(self), left, right);
-    addClause(cnf, self, invert(left));
-    addClause(cnf, self, invert(right));
-    
+    clause cl;
+    c1->addCNF_readClause(cnf, cl);
+    c2->addCNF_readClause(cnf, cl);
+    literal self(++ lastUsedId, true);
+    // ajoute l'équivalent de (invert(self), left, right)
+    cl.push_back(invert(self));
+    cnf.push_back(cl);
+    cl.pop_back();
+    // ajoute les équivalents de (self, invert(left)) et (self, invert(right))
+    clause::const_iterator it;
+    for (it = cl.begin(); it != cl.end(); ++it)
+        addClause(cnf, self, invert(*it));
+    // renvoie le littéral correspondant au noeud
     return self;
 }
 literal Val::addCNF_readLiteral(std::vector<clause>& cnf) const
