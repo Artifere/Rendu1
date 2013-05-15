@@ -29,7 +29,7 @@ void Token::readNext()
     if (c == '/')
     {
         if (_read.eof() || _read.peek() != '\\')
-            throw std::invalid_argument("bad token : '\\' expected");
+            throw std::invalid_argument("bad token : do you mean '\\' ?");
         _read >> c;
         _type = AND;
     }
@@ -37,7 +37,7 @@ void Token::readNext()
     else if (c == '\\')
     {
         if (_read.eof() || _read.peek() != '/')
-            throw std::invalid_argument("bad token : '/' expected");
+            throw std::invalid_argument("bad token : do yu mean '/' ?");
         _read >> c;
         _type = OR;
     }
@@ -50,9 +50,20 @@ void Token::readNext()
     else if (c == '=')
     {
         if (_read.eof() || _read.peek() != '>')
-            throw std::invalid_argument("bad token : '>' expected");
+            throw std::invalid_argument("bad token : do you mean '>' ?");
         _read >> c;
         _type = IMPLY;
+    }
+    // tente de lire EQUIV
+    else if (c == '<')
+    {
+        if (_read.eof() || _read.peek() != '=')
+            throw std::invalid_argument("bad token : do you mean '<=>' ?");
+        _read >> c;
+        if (_read.eof() || _read.peek() != '>')
+            throw std::invalid_argument("bad token : do you mean '<=>' ?");
+        _read >> c;
+        _type = EQUIV;
     }
     // tente de lire VAR
     else if (isLetter(c))
@@ -88,36 +99,73 @@ void Token::readNext()
 
 
 
-
+#include <iostream>
 
 ExprTree* ParserExprTree::parseExpr()
 {
-    ExprTree* res = parseImply(false);
+    ExprTree* res = parseEquiv(false);
     if(tok.type() != Token::END_FILE) {
-        throw std::invalid_argument("titi formulae ended before the end of the file");
+        std::cout<< std::endl << std::endl << tok.type() << std::endl<< std::endl;
+        while (!std::cin.eof()) {
+            std::string str;
+            std::cin >> str;
+            std::cout << str << std::endl;
+        }
+        throw std::invalid_argument("formulae ended before the end of the file");
     }
+    return res;
+}
+
+ExprTree* ParserExprTree::parseEquiv(bool invert)
+{
+    //std::cout << "parse equiv " << invert  << std::endl;
+    ExprTree* res = parseImply(invert);
+    // on remplace une équivalence par arg1&arg2 | non(arg1)&non(arg2)
+    // ie par arg1|non(arg2) && non(arg1)|arg2
+    if (tok.type() == Token::EQUIV) {
+        //std::cout << "milieu equiv" << std::endl;
+        tok.readNext();
+        ExprTree * arg1 = res;
+        ExprTree * arg2 = parseEquiv(invert);
+        ExprTree * n_arg1 = arg1->inversion();
+        ExprTree * n_arg2 = arg2->inversion();
+        //res = new And(new Or(n_arg1, arg2), new Or(arg1, n_arg2));
+        if (invert)
+            res = new And(new Or(arg1, arg2), new And(n_arg1, n_arg2));
+        else
+            res = new Or(new And(arg1, arg2), new And(n_arg1, n_arg2));
+    }
+    //std::cout << "fin equiv : " << res << std::endl;
     return res;
 }
 
 ExprTree* ParserExprTree::parseImply(bool invert)
 {
+    //std::cout << "parse imply " << invert  << std::endl;
     ExprTree* res = parseOr(invert);
-    // on remplace une implication par non(arg1)|arg2
+   // on remplace une implication par non(arg1)|arg2
     if (tok.type() == Token::IMPLY) {
+        //std::cout << "milieu imply" << std::endl;
         tok.readNext();
+        ExprTree * arg1 = res;
         ExprTree * arg2 = parseImply(invert);
-        // on a déjà parsé arg1. il faut l'inverser maintenant
-        ExprTree * arg1 = res->inversion();
-        delete res;
-        res = new Or(arg1, arg2);
+        ExprTree * n_arg1 = arg1->inversion();
+        if (invert)
+            res = new And(n_arg1, arg2);
+        else
+            res = new Or(n_arg1, arg2);
+        delete arg1; // on n'utilise plus arg1
     }
+    //std::cout << "fin imply : " << res << std::endl;
     return res;
 }
 
 ExprTree* ParserExprTree::parseOr(bool invert)
 {
+    //std::cout << "parse or " << invert  << std::endl;
     ExprTree* res = parseAnd(invert);
     if (tok.type() == Token::OR) {
+        //std::cout << "milieu or" << std::endl;
         tok.readNext();
         ExprTree * arg2 = parseOr(invert);
         if (invert)
@@ -125,13 +173,16 @@ ExprTree* ParserExprTree::parseOr(bool invert)
         else
             res = new Or(res, arg2);
     }
+    //std::cout << "fin or : " << res << std::endl;
     return res;
 }
 
 ExprTree* ParserExprTree::parseAnd(bool invert)
 {
+    //std::cout << "parse and " << invert << std::endl;
     ExprTree* res = parseNot(invert);
     if (tok.type() == Token::AND) {
+        //std::cout << "milieu and " << std::endl;
         tok.readNext();
         ExprTree * arg2 = parseAnd(invert);
         if (invert)
@@ -139,16 +190,20 @@ ExprTree* ParserExprTree::parseAnd(bool invert)
         else
             res = new And(res, arg2);
     }
+    //std::cout << "fin and : " << res << std::endl;
     return res;
 }
 
 ExprTree* ParserExprTree::parseNot(bool invert)
 {
+    //std::cout << "parse not";
     while (tok.type() == Token::NOT)
     {
+        //std::cout << " "<<invert<<" ";
         tok.readNext();
         invert = !invert;
     }
+    //std::cout << std::endl;
     return parseVal(invert);
 }
 
@@ -156,16 +211,19 @@ ExprTree* ParserExprTree::parseVal(bool invert)
 {
     if (tok.type() == Token::BRACE_LEFT)
     {
+        //std::cout << "parse braces  " << invert << std::endl;
         tok.readNext();
-        ExprTree * res = parseImply(invert);
+        ExprTree * res = parseEquiv(invert);
         if (tok.type() != Token::BRACE_RIGHT) {
             throw std::invalid_argument("expected right brace here");
         }
+        //std::cout << "fin braces : " << res << std::endl;
         tok.readNext();
         return res;
     }
     else if(tok.type() == Token::VAR)
     {
+        //std::cout << "parse var " << invert  << std::endl;
         std::string var = tok.varName();
         tok.readNext();
         return new Val(var, !invert);

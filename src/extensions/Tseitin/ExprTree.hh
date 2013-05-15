@@ -26,12 +26,18 @@ public:
     virtual unsigned getCNF(std::vector<clause>& cnf) const = 0;
     virtual literal getSmallCNF(std::vector<clause>& cnf) const = 0;
     virtual ExprTree* inversion() const = 0;
+    virtual void print(std::ostream& out) const = 0;
     
     virtual void addCNF(std::vector<clause>& cnf) const = 0;
     virtual void addCNF_readClause(std::vector<clause>& cnf, clause& cl) const = 0;
     virtual literal addCNF_readLiteral(std::vector<clause>& cnf) const = 0;
 };
 
+inline std::ostream& operator<<(std::ostream& out, ExprTree* e)
+{
+    e->print(out);
+    return out;
+}
 
 unsigned ClauseTseitin(std::istream& in, std::vector<clause>& listClause, std::vector<std::pair<std::string,unsigned> >& varNumbers);
 
@@ -51,11 +57,15 @@ public:
     literal getSmallCNF(std::vector<clause>& cnf) const;
     
     ExprTree* inversion() const;
+    void print(std::ostream& out) const;    
     
     void addCNF(std::vector<clause>& cnf) const;
     void addCNF_readClause(std::vector<clause>& cnf, clause& cl) const;
     literal addCNF_readLiteral(std::vector<clause>& cnf) const;
 };
+
+
+
 
 
 
@@ -73,6 +83,7 @@ public:
     literal getSmallCNF(std::vector<clause>& cnf) const;
 
     ExprTree* inversion() const;
+    void print(std::ostream& out) const;
     
     void addCNF(std::vector<clause>& cnf) const;
     void addCNF_readClause(std::vector<clause>& cnf, clause& cl) const;
@@ -94,6 +105,7 @@ public:
     literal getSmallCNF(std::vector<clause>& cnf) const;
 
     ExprTree* inversion() const;
+    void print(std::ostream& out) const;
     
     void addCNF(std::vector<clause>& cnf) const;
     void addCNF_readClause(std::vector<clause>& cnf, clause& cl) const;

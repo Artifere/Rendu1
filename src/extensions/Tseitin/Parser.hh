@@ -15,7 +15,7 @@ class Token
 public:
     typedef enum
     {
-        END_FILE, AND, OR, NOT, IMPLY, VAR, BRACE_LEFT, BRACE_RIGHT
+        END_FILE, AND, OR, NOT, IMPLY, EQUIV, VAR, BRACE_LEFT, BRACE_RIGHT
     } token_type;
 
 protected:
@@ -40,6 +40,7 @@ class ParserExprTree
 protected:    
     Token tok;
     
+    ExprTree* parseEquiv(bool invert);  // invert indique si on doit à inverser ce qu'on lit ou non
     ExprTree* parseImply(bool invert);
     ExprTree* parseOr(bool invert);
     ExprTree* parseAnd(bool invert);

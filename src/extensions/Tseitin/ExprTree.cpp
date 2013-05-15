@@ -52,11 +52,12 @@ unsigned ClauseTseitin(std::istream& in, std::vector<clause>& listClause, std::v
     ParserExprTree parser(in);
     ExprTree * res = parser.parseExpr();
     
-    /*
-    unsigned lastNode = res->getCNF(listClause);
+    //res->print(std::cout); std::cout << std::endl;
+    
+    //unsigned lastNode = res->getCNF(listClause);
     // ajoute la dernière clause : celle qui dit que la formule est vraie
-    ADD_CLAUSE1(listClause, (lastNode,true));
-    */
+    //ADD_CLAUSE1(listClause, (lastNode,true));
+    // 
     /*
     literal lastNode = res->getSmallCNF(listClause);
     addClause(listClause, lastNode);
@@ -124,7 +125,17 @@ unsigned Val::getCNF(std::vector<clause>& cnf) const
     } else {
         id = it->second;
     }
-    return id;
+    if (_val)
+    {
+        return id;
+    }
+    else
+    {
+        unsigned notid = ++lastUsedId;
+        ADD_CLAUSE2(cnf, (id,false), (notid,false));
+        ADD_CLAUSE2(cnf, (id,true), (notid,true));
+        return notid;
+    }
 }
 
 
@@ -148,7 +159,26 @@ ExprTree* Val::inversion() const
     return new Val(_name, !_val);
 }
 
-
+void Or::print(std::ostream& out) const
+{
+    out << "(";
+    c1->print(out);
+    out << " \\/ ";
+    c2->print(out);
+    out << ")";
+}
+void And::print(std::ostream& out) const
+{
+    out << "(";
+    c1->print(out);
+    out << " /\\ ";
+    c2->print(out);
+    out << ")";
+}
+void Val::print(std::ostream& out) const
+{
+    out << (_val ? ' ' : '~') << _name;
+}
 
 
 unsigned Val::getVarId() const
