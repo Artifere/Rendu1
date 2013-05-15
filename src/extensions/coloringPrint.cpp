@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     if (satState == "UNSATISFIABLE")
     {
         cout << "Aucune solution" << endl;
-        return 0;
+        return 1;
     }
 
     input >> fooC;
