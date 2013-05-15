@@ -5,6 +5,9 @@
 #include <vector>
 
 
+//TODO: un set avec les aretes : a < b ssi min(a1, a2) < min(b1, b2), max....
+
+
 // Ignore les commentaires
 void skipComment(std::istream& input)
 {
