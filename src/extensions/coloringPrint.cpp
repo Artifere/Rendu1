@@ -1,106 +1,92 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
 
-void skipComments(void)
+
+using namespace std;
+
+//Ignore les commentaires
+void skipComments(std::istream& input)
 {
-    int c = getchar();
-    while (c == 'c')
-    {
-        while (c != '\n')
-            c = getchar();
-        c = getchar();
-    }
-
-    ungetc(c, stdin);
+    string read;
+    while((input >> std::ws) && (input.peek()=='c'))
+        getline(input, read);
 }
-
 
 
 int main(int argc, char *argv[])
 {
     if (argc != 4)
     {
-        fprintf(stderr, "Nombre incorrect d'arguments\n");
-        exit(0);
+        cerr << "Nombre incorrect d'arguments" << endl;
+        return -1;
     }
 
     const unsigned k = atoi(argv[1]);
-    char colorNames[20][50] = {"blue", "red", "green", "yellow", "purple", "brown", "orange",
+    string colorNames[20] = {"blue", "red", "green", "yellow", "purple", "brown", "orange",
                            "grey", "cyan", "chartreuse", "pink", "violet", "marron",
                            "navy", "peachpuff", "darkolivegreen", "teal", "oranged2",
                            "plum", "seagreen"};
 
-    //FILE *graphDescription, *nodesColors; 
-    printf("strict graph G {\n");    
-    freopen(argv[3], "r", stdin);
+    cout << "strict graph G {" << endl;
+    ifstream input;
+    input.open(argv[3]);
     
-    char c;
     int node, col;
-    
-    c = getchar();
-    if (c != 's')
-    {
-        fprintf(stderr, "Erreur, fichier d'assignation incorrect\n");
-        exit(1);
-    }
 
-    char satState[14];
-    scanf("%s\n", satState);
+	string satState;
+    char c, fooC;
+    
+    input >> fooC >> satState;
+
     if (satState == "UNSATISFIABLE")
     {
-        printf("Aucune solution\n");
+        cout << "Aucune solution" << endl;
         return 0;
     }
 
-    getchar();
+    input >> fooC;
     do
     {
-        getchar();
-        c = getchar();
-        getchar();
-        getchar();
-        scanf("%d_%d\n", &node, &col);
-        
+        input >> c;
+        if (c == '-')
+            input >> fooC;
+        input >> fooC >> node >> fooC >> col;
         if (c != '-')
-            printf("%d[color=%s];\n", node, colorNames[col]);
-        c = getchar();
-    } while (c != EOF);
- 
+            cout << node << "[style=filled, color =" << colorNames[col] << "];" << endl;
+        input >> fooC;
+    } while (!input.eof());
+
+    input.close();
 
 
-    freopen(argv[2], "r", stdin);
-    skipComments();
-    c = getchar();
-    if (c != 'p')
+    input.open(argv[2]);
+    skipComments(input);
+
+
+    string fooS;
+    input >> c >> fooS;
+    if (c != 'p' || fooS != "edge")
     {
-        fprintf(stderr, "ATTENTION 3 : %c\n", c);
-        exit(3);
-    }
-    c = getchar();
-
-    char foo[20];
-    scanf("%s", foo);
-    if (strcmp(foo, "edge") != 0)
-    {
-        fprintf(stderr, "ATTENTION 4 : %s\n", foo);
-        exit(4);
+        cerr << "Attention, fichier de description de graphe invalide" << endl;
+        return -1;
     }
 
     int nbNodes, nbEdges;
     int n1, n2;
-    scanf("%d %d\n", &nbNodes, &nbEdges);
-
+    input  >> nbNodes >> nbEdges;
 
     for (int i = 0; i < nbEdges; i++)
     {
-        scanf("%c %d %d\n", &c, &n1, &n2);
-        printf("%d--%d;\n", n1, n2);
+        input >> c >> n1 >> n2;
+        cout << n1 << "--" << n2 << ";" << endl;
     }
 
-    printf("}\n");
+    cout << "}" << endl;
+    input.close();
     
-    return EXIT_SUCCESS;
+    return 0;
 }
 
 
