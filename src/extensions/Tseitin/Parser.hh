@@ -37,12 +37,12 @@ public:
 
 class ParserExprTree
 {
-protected:    
+protected:
     Token tok;
     
     ExprTree* parseEquiv(bool invert);  // invert indique si on doit à inverser ce qu'on lit ou non
-    ExprTree* parseImply(bool invert);
-    ExprTree* parseOr(bool invert);
+    ExprTree* parseImply(bool invert);  // le but étant de parser les ~, mais de ne les prendre en compte que au niveau des litéraux
+    ExprTree* parseOr(bool invert);     // comme ça, on n'a pas besoin d'une transformation de Tseitin pour l'opération NOT
     ExprTree* parseAnd(bool invert);
     ExprTree* parseNot(bool invert);
     ExprTree* parseVal(bool invert);
@@ -50,6 +50,8 @@ protected:
 public:
     inline ParserExprTree(std::istream& in) : tok(in) { }
     ExprTree* parseExpr();
-
 };
+
+
+
 #endif//TRANSFORM_PARSER_HH

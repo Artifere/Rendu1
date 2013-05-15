@@ -1,5 +1,4 @@
 #include <iostream>
-//#include "Tseitin.hh"
 #include "ExprTree.hh"
 
 #include <iostream>

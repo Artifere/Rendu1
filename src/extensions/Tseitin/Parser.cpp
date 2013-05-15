@@ -1,4 +1,5 @@
 #include "Parser.hh"
+#include <iostream>
 
 
 
@@ -98,8 +99,6 @@ void Token::readNext()
 
 
 
-
-#include <iostream>
 
 ExprTree* ParserExprTree::parseExpr()
 {
