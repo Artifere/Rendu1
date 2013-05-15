@@ -4,15 +4,15 @@ k=$1
 file=$2
 ./coloringTransform $k < $file > fooS.out
 Tseitin/./tseitin -r foo.out < fooS.out > result.txt
-./coloringPrint $k $file result.txt > test.out
+./coloringPrint $k $file result.txt > colored.dot
 res=$?
 if [ $res -eq 0 ]
     then
-    dot -Tpdf test.out -o test.pdf
-    evince test.pdf&
+    dot -Tpdf colored.dot -o colored.pdf
 else
     echo -e "Le graphe n'est pas ${k}-coloriable."
 fi
-#rm foo.out
-#rm result.txt
 
+rm foo.out
+rm colored.dot
+rm result.txt
