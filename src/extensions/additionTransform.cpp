@@ -34,14 +34,14 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    const unsigned nbr1 = atoi(argv[1]);
-    const unsigned nbr2 = atoi(argv[2]);
+    const int nbr1 = atoi(argv[1]);
+    const int nbr2 = atoi(argv[2]);
     //std::cout << "c addition de " << nbr1 << " et " << nbr2 << std::endl;
     bool nbrBin1[NBR_BITS];
     bool nbrBin2[NBR_BITS];
     
-    writeBinary(nbrBin1, nbr1);
-    writeBinary(nbrBin2, nbr2);
+    writeBinary(nbrBin1, nbr1); // les nombres sont convertis silencieusement en non signés pour l'addition
+    writeBinary(nbrBin2, nbr2); // (le complement à 2 est fait automatiquement)
     
     // génère le problème correspondant au calcul (sans rien connaître de l'entrée)
     std::cout << "(~ r_0)" << std::endl; 
@@ -64,7 +64,6 @@ int main(int argc, char* argv[])
 }
 
 
-
 void writeBinary(bool * bits, unsigned nbr)
 {
     for(unsigned b = 0; b < NBR_BITS; b++)
@@ -73,56 +72,4 @@ void writeBinary(bool * bits, unsigned nbr)
         nbr >>= 1;
     }
 }
-
-/*
-std::string parseNumber(std::istream& read)
-{
-    std::string nbr;
-    if (read.eof() || !isDigit(read.peek()))
-        throw std::invalid_argument("format d'entrée invalide : '0' '1' ou '.' attendus");
-    do {
-        char c;
-        read >> c;
-        nbr += c;
-    } while(!read.eof() && isDigit(read.peek()));
-    return nbr;
-}
-
-
-std::vector<std::string> parseAddition(std::istream& read)
-{
-    // lit une entrée au format arg1+arg2=res
-    std:string arg1, arg2, res;
-    char tmp;
-
-    arg1 = parseNumber(read);
-
-    read >> ws;
-    if (read.eof() || read.peek() != '+')
-        throw std::invalid_argument("format d'entrée invalide : '+' attendu");
-    read >> tmp; // lit le '+'
-
-    arg2 = parseNumber(read);
-
-    read >> ws;
-    if (read.eof() || read.peek() != '=')
-        throw std::invalid_argument("format d'entrée invalide : '=' attendu");
-    read >> tmp; // lit le '='
-
-    res = parseNumber(read);
-    
-    // vérifie que les trois nombres sont bien sur le même nombre de bit
-    if (res.size() != arg1.size() || res.size() != arg2.size())
-    {
-        throw std::invalid_argument("format d'entrée invalide : les entiers n'ont pas tous le même nombre de bits");
-    }
-    
-    std::vector<std::string> op;
-    op.push_back(arg1);
-    op.push_back(arg2);
-    op.push_back(res);
-    return op;
-}
-*/
-
 
