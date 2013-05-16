@@ -13,7 +13,7 @@
 // lit une assignation renvoyée par un solveur sat (au format cnf)
 // renvoit un vecteur vide si le problème n'est pas satisfiable
 // sinon renvoit un vecteur de taille au moins 1 (même si la 1ere valeur n'est jamais utilisée, car aucune variable ne correspond à ce numéro)
-std::vector<bool> readAssignation(std::istream& read, unsigned nbrVars);
+std::vector<bool> readAssignation(std::istream& read);
 
 
 class Token

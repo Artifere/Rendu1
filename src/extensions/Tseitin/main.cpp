@@ -17,7 +17,8 @@ using namespace std;
 
 // écrit dans write le problème cnf obtenu par transformation de Tseitin depuis le flux read
 // renvoie l'assignation nom/numéro des variables
-vector<pair<string,unsigned> > writeProbleme(istream& read, ostream& write);
+// useBasic indique si on doit utiliser la version basique de Tseitin, ou une version plus optimisée
+vector<pair<string,unsigned> > writeProbleme(istream& read, ostream& write, bool useBasic = false);
 
 
 // execute la commande call
@@ -40,7 +41,7 @@ int main(int argc, char * argv[])
    
         // parse la sortie du solver pour récupérer l'assignation
         istringstream fluxSortieSolver(sortieSolver, ios_base::in);
-        vector<bool> assign(readAssignation(fluxSortieSolver, assoc.size()));
+        vector<bool> assign(readAssignation(fluxSortieSolver));
         
         // affiche l'assignation lue
         if (assign.empty()) {
@@ -67,23 +68,33 @@ int main(int argc, char * argv[])
 
 
 
-vector<pair<string,unsigned> > writeProbleme(istream& read, ostream& write)
+vector<pair<string,unsigned> > writeProbleme(istream& read, ostream& write, bool useBasic)
 {
     vector<clause> clauses;
-    std::vector<pair<std::string,unsigned> > varNumbers;
-
-    // transforme la formule lue
     write << "c Fichier obtenu par transformation de Tseitin" << endl;
-    unsigned varNbr = ClauseTseitin(read, clauses, varNumbers);
+    // reinitialise la liste des variables
+    ExprTree::lastUsedId = 0;
+    ExprTree::varNumbers.clear();
+
+    // lit la formule
+    ExprTree * res = ParserExprTree(read).parseExpr();
+    //std::cout << "c formule : " << res << std::endl; // affiche la formule
     
+    // applique la transformation de Tseitin (version basique ou non)
+    if(useBasic) {
+        unsigned lastNode = res->getCNF(clauses);
+        clauses.push_back(clause(1,literal(lastNode,true))); //ajoute la dernière clause : celle qui dit que la formule est vraie
+    } else
+        res->addCNF(clauses);
+
     // écrit en commentaire l'associations nom/numéro des variables
     write << "c Association noms de variables / numéro de variables :" <<endl;
-    for(vector<pair<string,unsigned> >::const_iterator it=varNumbers.begin(); it!=varNumbers.end(); ++it) {
+    for(vector<pair<string,unsigned> >::const_iterator it=ExprTree::varNumbers.begin(); it!=ExprTree::varNumbers.end(); ++it) {
         write << "c\t" << it->first << " :\t" << it->second << endl;
     }
     
     // écrit le problème proprement dit
-    write << "p cnf " << varNbr << ' ' << clauses.size() << endl;
+    write << "p cnf " << ExprTree::lastUsedId << ' ' << clauses.size() << endl;
     for(vector<clause>::const_iterator it=clauses.begin(); it != clauses.end(); ++it) {
         for(clause::const_iterator lit = it->begin(); lit != it->end(); ++lit) {
             write << (lit->second ? ' ' : '-') << lit->first << ' ';
@@ -92,7 +103,7 @@ vector<pair<string,unsigned> > writeProbleme(istream& read, ostream& write)
     }
     
     // renvoie l'association nom/numéro des variables
-    return varNumbers;
+    return ExprTree::varNumbers;
 }
 
 

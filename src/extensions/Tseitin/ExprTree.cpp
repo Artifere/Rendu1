@@ -38,34 +38,6 @@ unsigned ExprTree::lastUsedId;
 std::vector<std::pair<std::string,unsigned> > ExprTree::varNumbers;
 
 
-unsigned ClauseTseitin(std::istream& in, std::vector<clause>& listClause, std::vector<std::pair<std::string,unsigned> >& varNumbers)
-{
-    unsigned lastUsedId = ExprTree::lastUsedId;
-    ExprTree::lastUsedId = 0;
-    std::swap(ExprTree::varNumbers, varNumbers);
-
-    ParserExprTree parser(in);
-    ExprTree * res = parser.parseExpr();
-    
-    //res->print(std::cout); std::cout << std::endl;
-    
-    /* // version de base de la transformation de Tseitin :
-    unsigned lastNode = res->getCNF(listClause);
-    //ajoute la dernière clause : celle qui dit que la formule est vraie
-    ADD_CLAUSE1(listClause, (lastNode,true));
-    */
-    // version un peu plus optimisée de teitin 
-    res->addCNF(listClause);
-    
-    std::swap(ExprTree::varNumbers, varNumbers);
-    std::swap(lastUsedId, ExprTree::lastUsedId);
-    
-    return lastUsedId;
-}
-
-
-
-
 
 
 
@@ -206,11 +178,10 @@ void Val::addCNF(std::vector<clause>& cnf) const
 
 
 
-void And::addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+literal And::addCNF_readLiteral(std::vector<clause>& cnf) const
 {
     // crée un litéral à ajouter à listLit
     literal self = literal(++lastUsedId, true);
-    listLit.push_back(self);
     
     // lie self à la valeur logique du noeud par transformation se Tseitin :
 
@@ -231,33 +202,14 @@ void And::addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit)
         it->second = ! it->second; // inverse les litéraux
     subLit.push_back(self);
     cnf.push_back(subLit);
+    
+    return self;
 }
 
-void Or::addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const
-{
-    c1->addCNF_readOr(cnf, listLit);
-    c2->addCNF_readOr(cnf, listLit);
-}
-
-void Val::addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const
-{
-    (void)cnf; // évite de générer un 'warning : unused parameter' à la compilation
-    listLit.push_back(literal(getVarId(), _val));
-}
-
-
-
-void And::addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const
-{
-    c1->addCNF_readAnd(cnf, listLit);
-    c2->addCNF_readAnd(cnf, listLit);
-}
-
-void Or::addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+literal Or::addCNF_readLiteral(std::vector<clause>& cnf) const
 {
     // crée un litéral à ajouter à listLit
     literal self = literal(++lastUsedId, true);
-    listLit.push_back(self);
     
     // lie self à la valeur logique du noeud par transformation se Tseitin :
 
@@ -276,14 +228,15 @@ void Or::addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit)
     // ajoute l'équivalent de (invert(self), left, right) avec une arité >= 2
     subLit.push_back(invert(self));
     cnf.push_back(subLit);
+    
+    return self;
 }
 
-void Val::addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+literal Val::addCNF_readLiteral(std::vector<clause>& cnf) const
 {
     (void)cnf; // évite de générer un 'warning : unused parameter' à la compilation
-    listLit.push_back(literal(getVarId(), _val));
+    return literal(getVarId(), _val);
 }
-
 
 
 

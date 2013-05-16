@@ -17,7 +17,7 @@ isIdentLetter(char c)
 
 
 
-std::vector<bool> readAssignation(std::istream& read, unsigned nbrVars) 
+std::vector<bool> readAssignation(std::istream& read) 
 {
     //std::cout << "nombre de variables : " << nbrVars << std::endl;
     std::vector<bool> assign(1);

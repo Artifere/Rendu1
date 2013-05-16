@@ -12,14 +12,13 @@
 typedef std::pair<unsigned, bool> literal;
 typedef std::vector<literal> clause;
 
+
 static inline literal invert(literal lit)
 {
     lit.second = ! lit.second;
     return lit;
 }
 
-
-unsigned ClauseTseitin(std::istream& in, std::vector<clause>& listClause, std::vector<std::pair<std::string,unsigned> >& varNumbers);
 
 
 class ExprTree
@@ -38,8 +37,17 @@ public:
     
     // version un peu plus intelligente de Tseitin
     virtual void addCNF(std::vector<clause>& cnf) const = 0;
-    virtual void addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const = 0;
-    virtual void addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const = 0;
+    virtual literal addCNF_readLiteral(std::vector<clause>& cnf) const = 0;
+    // ces deux fonctions sont à la base de l'optimisation faie par cette version :
+    // on cherche à augmenter l'arité des noeuds And et OR pour éviter d'avoir à rajouter des variables
+    virtual inline void addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+    {
+        listLit.push_back(addCNF_readLiteral(cnf));
+    }
+    virtual inline void addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+    {
+        listLit.push_back(addCNF_readLiteral(cnf));
+    }
 };
 
 // permet d'afficher une ExprTree directment dans un flux
@@ -73,8 +81,13 @@ public:
     unsigned getCNF(std::vector<clause>& cnf) const;
     
     void addCNF(std::vector<clause>& cnf) const;
-    void addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const;
-    void addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const;
+    literal addCNF_readLiteral(std::vector<clause>& cnf) const;
+    // on ne spécialise que cette fonction : readOR est identique à celle par défaut
+    void addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+    {
+        c1->addCNF_readAnd(cnf,listLit);
+        c2->addCNF_readAnd(cnf,listLit);
+    }
 };
 
 
@@ -101,8 +114,13 @@ public:
     unsigned getCNF(std::vector<clause>& cnf) const;
     
     void addCNF(std::vector<clause>& cnf) const;
-    void addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const;
-    void addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const;
+    literal addCNF_readLiteral(std::vector<clause>& cnf) const;
+    // on ne spécialise que cette fonction : readAnd est identique à celle par défaut
+    inline void addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+    {
+        c1->addCNF_readOr(cnf,listLit);
+        c2->addCNF_readOr(cnf,listLit);
+    }
 };
 
 
@@ -131,8 +149,7 @@ public:
     unsigned getCNF(std::vector<clause>& cnf) const;
     
     void addCNF(std::vector<clause>& cnf) const;
-    void addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const;
-    void addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const;
+    literal addCNF_readLiteral(std::vector<clause>& cnf) const;
 };
 
 
