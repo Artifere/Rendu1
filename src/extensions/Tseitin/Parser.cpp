@@ -1,8 +1,6 @@
 #include "Parser.hh"
 #include <iostream>
 
-
-
 static inline bool
 isLetter(char c)
 {
@@ -14,6 +12,60 @@ isIdentLetter(char c)
 {
     return isLetter(c) || c == '_' || (c >= '0' && c <= '9');
 }
+
+
+
+
+
+std::vector<bool> readAssignation(std::istream& read, unsigned nbrVars) 
+{
+    //std::cout << "nombre de variables : " << nbrVars << std::endl;
+    std::vector<bool> assign(1);
+    std::string str;
+    char c;
+    
+    // skip initials comments
+    while ((read >> std::ws) && (! read.eof()) && read.peek() == 'c')
+    {
+        getline(read, str); // skip the line
+        //std::cout << "skip the line " << str << std::endl;
+    }
+    
+    read >> std::ws >> c >> str;
+    if ((c != 's') || (str != "SATISFIABLE")) {
+        //std::cout << "quit : unkown out " << c << '|' << str << std::endl;
+        assign.clear();
+        return assign;
+    }
+
+    while (! read.eof())
+    {
+        read >> std::ws >> c >> std::ws;
+        while (c == 'c') {
+            getline(read,str);
+            read >> std::ws >> c;
+            //std::cout << "skip the line " << str << std::endl;
+        }
+        if (c != 'v') {
+            assign.clear();
+            return assign;
+        }
+        int var = 0;
+        //if(! (read >> var)) {
+        //    std::cout << "ecture de int impossible. prochain caractère : " <<  (char)read.peek() < std::endl;
+        //}
+        read >> var >> std::ws;
+        //std::cout << "lecture variable : " << var << std::endl;
+        literal lit = (var < 0) ? literal(-var, false) : literal(var, true);
+        if (assign.size() <= lit.first)
+            assign.resize(lit.first+1);
+        assign[lit.first] = lit.second;
+    }
+    return assign;
+}
+
+
+
 
 
 void Token::readNext()

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ExprTree.hh"
+#include "Parser.hh"
 
 #include <iostream>
 #include <map>
@@ -16,6 +17,56 @@ using namespace std;
 
 // écrit dans write le problème cnf obtenu par transformation de Tseitin depuis le flux read
 // renvoie l'assignation nom/numéro des variables
+vector<pair<string,unsigned> > writeProbleme(istream& read, ostream& write);
+
+
+// execute la commande call
+// renvoie ce que le programme affiche sur sa sortie standard
+string executeProg(const char* call);
+
+
+int main(int argc, char * argv[])
+{
+    if (argc == 3 && string(argv[1]) == "-r")
+    {
+        //cerr << "c Écriture du problème cnf dans " << argv[2] << endl;
+        fstream write(argv[2], ios_base::out | ios_base::trunc);
+        const vector<pair<string,unsigned> > assoc(writeProbleme(cin, write));
+
+        // appelle le solver
+        string call = string("../.././release ")+argv[2];
+        string sortieSolver = executeProg(call.c_str());
+        //cout << "sortie du solver :" << out << endl << endl;     
+   
+        // parse la sortie du solver pour récupérer l'assignation
+        istringstream fluxSortieSolver(sortieSolver, ios_base::in);
+        vector<bool> assign(readAssignation(fluxSortieSolver, assoc.size()));
+        
+        // affiche l'assignation lue
+        if (assign.empty()) {
+            cout << "s UNSATISFIABLE" << endl;
+        } else {
+            cout << "s SATISFIABLE" << endl;
+            for(vector<pair<string,unsigned> >::const_iterator it=assoc.begin(); it!=assoc.end(); ++it)
+                cout << "v " << (assign[it->second] ? ' ' : '-') << it->first << endl;
+        }
+    }
+    else if (argc == 1)
+    {
+        writeProbleme(cin,cout);
+    }
+    else
+    {
+        cerr << "Arguments invalides.\nLes arguments attendus sont :" << endl;
+        cerr << "soit rien : le problème cnf correspondant à la formule est renvoyé." << endl;
+        cerr << "soit -r <nom de fichier> : le problème cnf est écrit dans <nom de fichier>,"
+             << "le sat solver est appellé sur ce problème, et l'assignation des variables est renvoyée (ou \"s UNSATISFIABLE\" si le problème est unsat)" << endl;
+    }
+    return 0;
+}
+
+
+
 vector<pair<string,unsigned> > writeProbleme(istream& read, ostream& write)
 {
     vector<clause> clauses;
@@ -46,102 +97,17 @@ vector<pair<string,unsigned> > writeProbleme(istream& read, ostream& write)
 
 
 
-
-vector<bool> readAssignation(istream& read, unsigned nbrVars) 
+string executeProg(const char* call)
 {
-    //cout << "nombre de variables : " << nbrVars << endl;
-    vector<bool> assign(200000);
-    string str;
-    char c;
-    
-    // skip initials comments
-    while ((read >> ws) && (! read.eof()) && read.peek() == 'c')
+    FILE* sortieProg = popen(call, "r");
+    // lit la sortie du programme
+    string out;
+    char buf[128];
+    while (!feof(sortieProg))
     {
-        getline(read, str); // skip the line
-        //cout << "skip the line " << str << endl;
+        if (fgets(buf, 128, sortieProg) != NULL)
+            out += (char*)buf;
     }
-    
-    read >> ws >> c >> str;
-    if ((c != 's') || (str != "SATISFIABLE")) {
-        //cout << "quit : unkown out " << c << '|' << str << endl;
-        assign.clear();
-        return assign;
-    }
-
-    while (! read.eof())
-    {
-        read >> ws >> c >> ws;
-        while (c == 'c') {
-            getline(read,str);
-            read >> ws >> c;
-            //cout << "skip the line " << str << endl;
-        }
-        if (c != 'v') {
-            assign.clear();
-            return assign;
-        }
-        //cout << "début de lecture de variable :" << (char)read.peek() << ", " << read.eof() << endl;
-        int var = 0;
-        //if(! (read >> var)) {
-        //    cout << "ecture de int impossible. prochain caractère : " <<  (char)read.peek() < endl;
-        //}
-        read >> var >> ws;
-        //cout << "lecture variable : " << var << endl;
-        if (var < 0)
-            assign.at(-var) = false;
-        else
-            assign.at(var) = true;
-    }
-    return assign;
+    pclose(sortieProg);
+    return out;
 }
-
-
-
-int main(int argc, char * argv[])
-{
-    if (argc == 3 && string(argv[1]) == "-r")
-    {
-        //cerr << "c Écriture du problème cnf dans " << argv[2] << endl;
-        fstream write(argv[2], ios_base::out | ios_base::trunc);
-        const vector<pair<string,unsigned> > assoc(writeProbleme(cin, write));
-
-        // appelle le solver
-        string callee("../.././release ");
-        callee += argv[2];
-        FILE* sortieSolver = popen(callee.c_str(), "r");
-
-        // lit la sortie du programme
-        string out;
-        char* buf = new char[128];
-        while (!feof(sortieSolver))
-        {
-            if (fgets(buf, 128, sortieSolver) != NULL)
-                out += buf;
-        }
-        pclose(sortieSolver);
-        
-        // parse la sortie du solver pour récupérer l'assignation
-        istringstream outStream(out, ios_base::in);
-        //cout << "sortie du solver :" << out << endl << endl;
-        
-        vector<bool> assign(readAssignation(outStream, assoc.size()));
-        
-        // affiche l'assignation
-        if (assign.empty()) {
-            cout << "s UNSATISFIABLE" << endl;
-        } else {
-            cout << "s SATISFIABLE" << endl;
-            for(vector<pair<string,unsigned> >::const_iterator it=assoc.begin(); it!=assoc.end(); ++it) {
-                bool val = assign[it->second];
-                cout << "v " << (val ? ' ' : '-') << it->first << endl;
-            }
-        }
-    } else {
-        writeProbleme(cin,cout);
-    }
-    return 0;
-}
-
-
-
-

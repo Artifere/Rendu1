@@ -10,6 +10,12 @@
 #include "ExprTree.hh"
 
 
+// lit une assignation renvoyée par un solveur sat (au format cnf)
+// renvoit un vecteur vide si le problème n'est pas satisfiable
+// sinon renvoit un vecteur de taille au moins 1 (même si la 1ere valeur n'est jamais utilisée, car aucune variable ne correspond à ce numéro)
+std::vector<bool> readAssignation(std::istream& read, unsigned nbrVars);
+
+
 class Token
 {
 public:
@@ -34,7 +40,6 @@ public:
 };
 
 
-
 class ParserExprTree
 {
 protected:
@@ -51,7 +56,6 @@ public:
     inline ParserExprTree(std::istream& in) : tok(in) { }
     ExprTree* parseExpr();
 };
-
 
 
 #endif//TRANSFORM_PARSER_HH
