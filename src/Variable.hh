@@ -61,7 +61,7 @@ public:
     
     inline bool isFree(void) const           { return _posInTable >= _endDeducted; };
     inline bool isOlder(Variable* var) const { return _posInTable <= var->_posInTable; };
-    inline bool isFromCurBet(std::vector<Variable*>::iterator curBetIterator) const     {return _posInTable >= curBetIterator;}
+    inline bool isOlderIter(std::vector<Variable*>::iterator iter) const     {return _posInTable >= iter;}
 
     inline Clause* getOriginClause(bool value) const
     {

@@ -198,10 +198,12 @@ Variable* Variable::assignedFromDeducted(void)
 
 
                 // Si la déduction concerne une nouvelle variable, on l'ajoute
-                if(deduct.var()->isFree())
+                
+                if(deduct.var()->isFree()) // arrive forcement à priori
                 {
                     DEBUG(5) << "Nouvelle déduction trouvée (clause " << target << ") :  " << deduct << std::endl;
                     deduct.var()->deductedFromFree(deduct.pos(), target);
+                    DEBUG(5) << "Nouvelle déduction trouvée (clause " << target << ") :  " << deduct << std::endl;
                 /* Sinon, si la déduction a déjà été faite, on ne fait rien.
                    Sinon, si on a déjà fait une déduction contraire, on a une contraduction. */
                 }

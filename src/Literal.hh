@@ -46,8 +46,12 @@ public:
     // Renvoie si le litéral est vrai ou non étant donné l'assignation en cours
     inline bool isTrue(void) const
     {
-        return (! _var->isFree()) && (_pos == _var->_varState);
-    };
+        return (! isFree()) && (_pos == _var->_varState);
+    }
+    inline bool isFree(void) const
+    {
+        return _var->isOlderIter(Variable::_endDeducted);
+    }
 
     friend std::ostream& operator<< (std::ostream& out, const Literal&);
 };

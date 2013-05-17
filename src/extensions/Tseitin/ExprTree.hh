@@ -150,8 +150,8 @@ public:
     
     void addCNF(std::vector<clause>& cnf) const;
     literal addCNF_readLiteral(std::vector<clause>& cnf) const;
+    // on ne spécialise  ni readOr ni readAnd, qui sont identiques à celles par défaut
 };
-
 
 
 #endif//EXPRTREE_HH

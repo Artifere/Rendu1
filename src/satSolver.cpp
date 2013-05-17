@@ -223,8 +223,8 @@ bool SatProblem::satisfiability()
         if(Variable::_endAssigned >= Variable::_endDeducted)
         {
             choixLibre = true;
-            DEBUG(5) <<"Fait un pari: "<<*(*Variable::_endAssigned)<<std::endl;
             Variable::chooseFromFree();
+            DEBUG(5) <<"Fait un pari: "<<*(*Variable::_endAssigned)<<std::endl;
             _stackBacktrack.push_back(Variable::_endAssigned);
         }
 
@@ -383,7 +383,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
         for(resIt = result.begin(); resIt != result.end(); resIt++)
         {
             Variable * var = resIt->var();
-            if (!_stackBacktrack.empty() && var->isFromCurBet(_stackBacktrack.back()))// && !(var->getOriginClause(var->_varState) == NULL && var->isFromCurBet(_stackBacktrack.back()+1)))
+            if (!_stackBacktrack.empty() && var->isOlderIter(_stackBacktrack.back()))// && !(var->getOriginClause(var->_varState) == NULL && var->isOlderIter(_stackBacktrack.back()+1)))
             {
                 DEBUG(8) << "resolve : variable du pari courant trouvée : " << * resIt << std::endl;
 
@@ -422,7 +422,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
         const std::vector<Literal>::const_iterator mergedEnd = mergedLits.end();
         for (std::vector<Literal>::const_iterator it = mergedLits.begin();it != mergedEnd; ++it)
         {
-            if (it->var()->isFromCurBet(_stackBacktrack.back()))
+            if (it->var()->isOlderIter(_stackBacktrack.back()))
             {
                 #if VERBOSE >= 8
                 print_debug();
