@@ -1,8 +1,9 @@
 #include "parser.hh"
 #include <string>
+#include <fstream>
 
 
-//Ignore les commentaires
+/* Ignore les commentaires */
 void skipComment(std::istream& input)
 {
     std::string read;
@@ -11,7 +12,7 @@ void skipComment(std::istream& input)
 }
 
 
-// Parse l'en-tête du fichier d'entrée, et signale s'il y a une erreur de format
+/* Parse l'en-tête du fichier d'entrée, et signale s'il y a une erreur de format*/
 void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrClauses)
 {
     std::string read;
@@ -28,19 +29,19 @@ void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrCl
 }
 
 
-// Parse le reste du fichier
+/* Parse le reste du fichier */
 void parserListLit(std::istream& input, std::vector<Literal>& ans, const std::vector<Variable*>& addr)
 {
     int n;
     skipComment(input);
     while( (input >> n) && n )
     {
-        // trouve la variable numero abs_s
-        unsigned int abs_n = (n < 0) ? -n : n;
+        /* trouve la variable numero absN */
+        unsigned int absN = (n < 0) ? -n : n;
         std::vector<Variable*>::const_iterator it = addr.begin();
         while (it != addr.end())
         {
-            if ((*it)->varNumber == abs_n)
+            if ((*it)->varNumber == absN)
                 break;
             it ++;
         }
@@ -50,10 +51,10 @@ void parserListLit(std::istream& input, std::vector<Literal>& ans, const std::ve
         {
             #if VERBOSE > 0
             std::cout <<"c Erreur de syntaxe dans l'entrée: "
-                      <<"variable d'indice "<<abs_n<<" invalide "
+                      <<"variable d'indice "<<absN<<" invalide "
                       <<"(l'indice doit être compris entre 1 et "<<addr.size()<<")."
                       <<std::endl;
-            // le programme continue en ignorant la variable
+            /* le programme continue en ignorant la variable */
             std::cout <<"c La variable est ignorée." << std::endl;
             #endif
         }

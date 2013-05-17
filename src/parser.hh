@@ -6,7 +6,8 @@
 #include "Literal.hh"
 #include "Variable.hh"
 #include <istream>
-#include <fstream>
+
+
 void skipComment(std::istream& input);
 
 void parserHeader(std::istream& input, unsigned int& nbrVar, unsigned int& nbrClauses);
