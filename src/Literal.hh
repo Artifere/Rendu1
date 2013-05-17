@@ -43,11 +43,12 @@ public:
         return (_var == lit._var) && (_pos == lit._pos);
     }
 
-    // Renvoie si le litéral est vrai ou non étant donné l'assignation en cours
+    /* Renvoie si le litéral est vrai ou non étant donné l'assignation en cours */
     inline bool isTrue(void) const
     {
         return (! isFree()) && (_pos == _var->_varState);
     }
+    /* Renvoie si le litéral concerne une variable non encore assignée */
     inline bool isFree(void) const
     {
         return _var->isOlderIter(Variable::_endDeducted);
