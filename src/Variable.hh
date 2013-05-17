@@ -9,8 +9,7 @@
 #include <iostream>
 
 
-// Besoin de forward declaration pour Literal et Clause  pour éviter une dépendance circulaire
-   
+// On a besoin de forward declaration pour Literal et Clause pour éviter une dépendance circulaire
 
 class Literal;
 
@@ -24,7 +23,7 @@ typedef CLAUSE Clause;
 #ifndef CHOOSE
     #define CHOOSE BASIC
 #endif
-// Un peu de vaudou préprocesseur
+// Un peu de vaudou préprocesseur...
 #define FNC_CHOIX(u) chooseFromFree_ ## u
 #define FNC_CHOIX_E(u) FNC_CHOIX(u)
 
@@ -39,10 +38,9 @@ protected:
     
     std::vector<Variable*>::iterator _posInTable;
     
-    // clause qui a permit de déduire la valeur de la variable
-    // ou NULL si on a assigné cette valeur parce qu'on a fait le choix contraire avant et qu'on est arrivé à une contradiction
+    // Contiennent les clauses qui ont permis de déduire la valeur (vrai ou faux) de la variable
+    //* ou NULL si on a assigné cette valeur parce qu'on a fait le choix contraire avant et qu'on est arrivé à une contradiction */
     // TODO : remplacer le cas NULL par la nouvelle clause déduite de l'erreur lorsqu'on est arrivé à une contradiction
-    
     Clause* _deductedTrueFromClause;
     Clause* _deductedFalseFromClause;
 
@@ -86,7 +84,7 @@ public:
 };
 
 /* v1 < v2 si le maximum de clauses que permet de satisfaire v1 < au même nombre pour v2
-   On utilise cette comparaison pour l'heuristique statique dans le cas de choose=basic et choose = DLIS */
+   On utilise cette comparaison pour l'heuristique statique dans le cas de choose=basic et choose=DLIS */
 static inline bool DLISvarCompr(const Variable* v1, const Variable* v2)
 {
     return std::max(v1->sizeLitTrue(), v1->sizeLitFalse()) < std::max(v2->sizeLitTrue(), v2->sizeLitFalse());
@@ -94,7 +92,8 @@ static inline bool DLISvarCompr(const Variable* v1, const Variable* v2)
 
 
 
-
+/* Remplit la variable de la classe Variable concernant la clause de déduction de cette variable,
+   et met à jour les potitions de fin de variables dont la valeur est fixée et des variables inconnues ou à déduire */
 inline void Variable::deductedFromFree(bool value, Clause * fromClause)
 {
     Variable * var = * (_endDeducted ++);
@@ -111,6 +110,8 @@ inline void Variable::deductedFromFree(bool value, Clause * fromClause)
 
 
 
+
+/* Fonction de tri pour l'option SORT de tri des variables juste avant le début de résolution */
 inline void Variable::sortFreeVars(void)
 {
     // on trie sans se soucier des itérateurs _posInTable
@@ -123,7 +124,8 @@ inline void Variable::sortFreeVars(void)
 
 
 
-// Associe une clause à une variable
+/* Associe une clause à une variable, quand on crée la clause, ou bien quand on avait déliée la variable
+   de la clause parce que la variable était assignée */
 inline void Variable::linkToClause(bool val, Clause* c)
 {
     if (val)
@@ -131,20 +133,6 @@ inline void Variable::linkToClause(bool val, Clause* c)
     else
         _litFalse.push_back(c);
 }
-
-
-inline void Variable::moveToFirstAssign(void)
-{
-    while (_posInTable != _vars.begin())
-    {
-        *_posInTable = *(_posInTable - 1);
-        (*_posInTable)->_posInTable = _posInTable;
-        --_posInTable;
-    }
-    *_posInTable = this;
-}
-
-
 
 
 

@@ -3,12 +3,15 @@
 
 #include "Debug.hh"
 
+
+/* What??? */
 std::vector<Variable*> Variable::_vars;
 std::vector<Variable*>::iterator Variable::_endAssigned = _vars.begin();
 std::vector<Variable*>::iterator Variable::_endDeducted = _vars.begin();
 
 
 
+/* Fonction de choix de variable basique : on prend la première du tableau */
 void Variable::chooseFromFree_BASIC(void)
 {
     ++_endDeducted;
@@ -16,6 +19,7 @@ void Variable::chooseFromFree_BASIC(void)
 
 
 
+/* Choix de variable selon DLIS */
 void Variable::chooseFromFree_DLIS(void)
 {
     std::vector<Variable*>::iterator it;
@@ -27,6 +31,9 @@ void Variable::chooseFromFree_DLIS(void)
 }
 
 
+
+
+/* Choix de variable avec MOMS. Attention : implémentation naïve donc lente, et n'est pas réellement MOMS avec les watched */
 void Variable::chooseFromFree_MOMS(void)
 {
     std::vector<Variable*>::iterator  bestVarIt;
@@ -104,14 +111,15 @@ void Variable::chooseFromFree_MOMS(void)
 
     }
 
-    //J'ai copié collé un code du dessus pour là, ça marche tu penses ?^^
-    (*bestVarIt)->_varState = bestPol; // normalment cette ligne doit être avant iter_swap (sinon tu déréfrence pas la bonne valeur)
+    (*bestVarIt)->_varState = bestPol;
     std::swap((*_endDeducted)->_posInTable, (*bestVarIt)->_posInTable);
     std::iter_swap(_endDeducted, bestVarIt);
     ++_endDeducted;
 }
 
 
+
+/* Choix aléatoire ==> vraiment pas efficace... */
 void Variable::chooseFromFree_RAND(void)
 {
     static bool isInit = false;
@@ -131,11 +139,6 @@ void Variable::chooseFromFree_RAND(void)
 
 
 
-
-
-
-
-
 /* Propage l'assignation d'une variable dans toutes les clauses dans lesquelles elle apparaît
    et arrête de surveiller une clause si setLitTrue/False renvoie true */
 Variable* Variable::assignedFromDeducted(void)
@@ -149,7 +152,7 @@ Variable* Variable::assignedFromDeducted(void)
     std::vector<Clause*>& cFalse = _varState ? _litFalse : _litTrue;
     std::vector<Clause*>::iterator it;
 
-    // On propage les litéraux qui deviennent satisfaits
+    /* On propage les litéraux qui deviennent satisfaits */
     it = cTrue.begin();
     while (it != cTrue.end())
     {
@@ -162,7 +165,7 @@ Variable* Variable::assignedFromDeducted(void)
             ++it;
     }
 
-    // On sépare en deux pour faire quelques tests de moins s'il y a une erreur
+    /* On sépare en deux pour faire quelques tests de moins s'il y a une erreur */
     it = cFalse.begin();
     while (it != cFalse.end())
     {
@@ -177,13 +180,13 @@ Variable* Variable::assignedFromDeducted(void)
 
         if(!target->isSatisfied())
         {
-            // Si une clause est contradictoire : on renvoie une erreur
+            /* Si une clause est contradictoire : on renvoie une erreur */
             const unsigned int fs = target->freeSize();
             if (fs == 0)
             {
                 DEBUG(5) << "Contradiction (clause " << target << ", variable " << varNumber << ")" << std::endl;
 
-                // l'ereur vient de la variable qu'on est en train d'assigner
+                /* L'ereur vient de la variable qu'on est en train d'assigner */
                 isError = this; 
                 if (!_varState)
                     _deductedTrueFromClause = target;
@@ -191,15 +194,16 @@ Variable* Variable::assignedFromDeducted(void)
                     _deductedFalseFromClause = target;
                 break;
             }
-            // Sinon, s'il n'y a pas déduction, ne rien faire. S'il y a une déduction on teste si elle est contradictoire
+
+            /* Sinon, s'il n'y a pas déduction, ne rien faire. S'il y a une déduction on teste si elle est contradictoire */
             else if(fs == 1)
             {
                 const Literal deduct = target->getRemaining();
 
 
-                // Si la déduction concerne une nouvelle variable, on l'ajoute
+                /* Si la déduction concerne une nouvelle variable, on l'ajoute */
                 
-                if(deduct.var()->isFree()) // arrive forcement à priori
+                if(deduct.var()->isFree()) /* arrive forcement a priori */
                 {
                     DEBUG(5) << "Nouvelle déduction trouvée (clause " << target << ") :  " << deduct << std::endl;
                     deduct.var()->deductedFromFree(deduct.pos(), target);
@@ -225,7 +229,7 @@ Variable* Variable::assignedFromDeducted(void)
         }
     }
 
-    // On finit la propagation (n'arrive que s'il y a eu une erreur)
+    /*  On finit la propagation (n'arrive que s'il y a eu une erreur) */
     while (it != cFalse.end())
     {
         if((*it)->setLitFalse(lit))
