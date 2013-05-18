@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    unsigned lin, col, nb, nb2;
+    unsigned lin, col, nb, nb2, col2, lin2;
     if (argc != 2)
     {
         cerr << "Nombre d'arguments invalide" << endl;
@@ -78,13 +78,59 @@ int main(int argc, char *argv[])
                 {
                     cout << "(~ls_" << lin << "_" << col << "_" << nb << " \\/ ";
                     cout << "~ls_" << lin << "_" << col << "_" << nb2 << ")";
-                    if (!(lin == k-1 && col == k-1 && nb == k-2))
+                    cout << " /\\";
+                    cout << endl;
+                }
+            }
+        }
+    }
+
+
+
+    /* Conditions superflues mais accélérant grandement la résolution */
+
+
+    /* Pas deux fois le même nombre sur une ligne */
+
+    for (lin = 0; lin < k; lin++)
+    {
+        for (nb = 0; nb < k; nb++)
+        {
+            for (col = 0; col < k-1; col++)
+            {
+                for (col2 = col+1; col2 < k; col2++)
+                {
+                    cout << "(~ls_" << lin << "_" << col << "_" << nb << " \\/ ";
+                    cout << "~ls_" << lin << "_" << col2 << "_" << nb << ")";
+                    cout << " /\\";
+                    cout << endl;
+                }
+            }
+        }
+    }
+
+    /* Pas deux fois le même nombre sur une colonne */
+
+    for (col = 0; col < k; col++)
+    {
+        for (nb = 0; nb < k; nb++)
+        {
+            for (lin = 0; lin < k-1; lin++)
+            {
+                for (lin2 = lin+1; lin2 < k; lin2++)
+                {
+                    cout << "(~ls_" << lin << "_" << col << "_" << nb << " \\/ ";
+                    cout << "~ls_" << lin2 << "_" << col << "_" << nb << ")";
+
+                    
+                    if (!(col == k-1 && nb == k-1 && lin == k-2))
                         cout << " /\\";
                     cout << endl;
                 }
             }
         }
     }
+
 
     return 0;
 }
