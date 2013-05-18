@@ -35,12 +35,12 @@ int main(int argc, char * argv[])
         const vector<pair<string,unsigned> > assoc(writeProbleme(cin, write));
 
         // appelle le solver
-        string call = string("../.././release ")+argv[2];
-        string sortieSolver = executeProg(call.c_str());
+        string call = string("../.././release ")+argv[2] + " > tmp.cnf";
+        executeProg(call.c_str());
         //cout << "sortie du solver :" << out << endl << endl;     
-   
+        ifstream fluxSortieSolver;
+        fluxSortieSolver.open("tmp.cnf");
         // parse la sortie du solver pour récupérer l'assignation
-        istringstream fluxSortieSolver(sortieSolver, ios_base::in);
         vector<bool> assign(readAssignation(fluxSortieSolver));
         
         // affiche l'assignation lue
