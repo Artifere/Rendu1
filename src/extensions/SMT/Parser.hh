@@ -74,11 +74,11 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
                 posBegin = parPos.front().first;
                 parPos.pop();
             }
-            while (posBegin > 0 && isalpha(formulaS[posBegin-1]))
+            while (posBegin > 0 && isalnum(formulaS[posBegin-1]))
                 posBegin--;
             
             pos++;
-            while (pos < formulaS.size()-1 && isalpha(formulaS[pos+1]))
+            while (pos < formulaS.size()-1 && isalnum(formulaS[pos+1]))
                 pos++;
             posEnd = pos;
 
