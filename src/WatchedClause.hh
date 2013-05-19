@@ -107,14 +107,15 @@ inline bool WatchedClause::setLitFalse(const Literal& l)
     if (isSatisfied())
         return false;
     /* Si l'un des litéraux est vrai, newWatched pointe sur ce litéral
-       sinon il pointe sur le litéral FREE le plus jeune (ou sur end() s'il n'y en a pas) */
+       sinon il pointe une litéral FREE (le plus jeune?) ou sur end() s'il n'y en a pas */
     const std::vector<Literal>::iterator end = _lits.end();
     std::vector<Literal>::iterator it, newWatched = end;
     for (it = _lits.begin()+2; it != end; ++it)
     {
         if (it->var()->isFree())
         {
-            if(it == end || newWatched->var()->isOlder(it->var()))
+            // à décommenter pour prendre la variable la plus jeune. vraiment utile ?
+            //if(newWatched == end || newWatched->var()->isOlder(it->var()))
                 newWatched = it;
         }
         else if(it->pos() == it->var()->_varState)
