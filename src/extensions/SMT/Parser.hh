@@ -57,14 +57,20 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
     /* À présent, pour chaque (dis)égalité, on cherche la zone coranspondant
        à cette (dis)égalité, pour la supprimer de la chaîne finale */
     std::queue<std::pair<int, int> > posOfEqualities;
+    std::queue<bool> isDisequality;
     for (unsigned pos = 0; pos < formulaS.size(); pos++)
     {
         const char c = formulaS[pos];
         if (c == '=')
         {
             const int posPrev = (formulaS[pos-1] == '!' ? (pos-2):(pos-1));
-            int posBegin = posPrev, posEnd;
+            if (posPrev == pos-2)
+                isDisequality.push(true);
+            else
+                isDisequality.push(false);
 
+            int posBegin = posPrev, posEnd;
+            
             /* À gauche du signe égal */
             /* Il s'agit d'un symbole de fonction */
             if (formulaS[posPrev] == ')')
@@ -109,7 +115,11 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
 
         std::stringstream foo;
         foo << curNbVar;
-        ans = ans + formulaS.substr(prevPos+1, posDeb - prevPos-1) + "c_" + foo.str();
+        ans += formulaS.substr(prevPos+1, posDeb - prevPos-1);
+        if (isDisequality.front())
+            ans += "~";
+        isDisequality.pop();
+        ans += ("c_" + foo.str());
         curNbVar++;
         prevPos = posEnd;
     }
