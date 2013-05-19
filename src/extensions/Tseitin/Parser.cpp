@@ -215,10 +215,10 @@ ExprTree* ParserExprTree::parseOr(bool invert)
 {
     //std::cout << "parse or " << invert  << std::endl;
     ExprTree* res = parseAnd(invert);
-    if (tok.type() == Token::OR) {
-        //std::cout << "milieu or" << std::endl;
+    while (tok.type() == Token::OR)
+    {
         tok.readNext();
-        ExprTree * arg2 = parseOr(invert);
+        ExprTree* arg2 = parseAnd(invert);
         if (invert)
             res = new And(res, arg2);
         else
@@ -232,10 +232,10 @@ ExprTree* ParserExprTree::parseAnd(bool invert)
 {
     //std::cout << "parse and " << invert << std::endl;
     ExprTree* res = parseNot(invert);
-    if (tok.type() == Token::AND) {
-        //std::cout << "milieu and " << std::endl;
+    while (tok.type() == Token::AND)
+    {
         tok.readNext();
-        ExprTree * arg2 = parseAnd(invert);
+        ExprTree * arg2 = parseNot(invert);
         if (invert)
             res = new Or(res, arg2);
         else

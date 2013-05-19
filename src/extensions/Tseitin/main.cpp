@@ -28,6 +28,8 @@ string executeProg(const char* call);
 
 int main(int argc, char * argv[])
 {
+    ios::sync_with_stdio(false);
+    
     if (argc == 3 && string(argv[1]) == "-r")
     {
         //cerr << "c Écriture du problème cnf dans " << argv[2] << endl;
