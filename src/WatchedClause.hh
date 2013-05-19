@@ -82,26 +82,11 @@ inline WatchedClause::WatchedClause(const std::vector<Literal>& list, const unsi
     {
         if (_lits[1].var()->isOlder(it->var()))
             std::iter_swap(it, _lits.begin()+1);
-    }/*
-        {
-            std::iter_swap(it, _lits.begin());
-            // cherche à mettre un litéral libre en _lits[1]
-            // on n'a une chance que si on a effectivement trouvé un litéral vrai à la première boucle
-            for (it = _lits.begin()+2; it != _lits.end(); ++it)
-                if (it->var()->isFree())
-                {
-                    std::iter_swap(it, _lits.begin()+1);
-                    break;
-                }
-            break;
-        }
-    }*/
+    }
+    // surveille les deux premiers litéraux
     _lits[0].var()->linkToClause(_lits[0].pos(), (Clause*)this);
     _lits[1].var()->linkToClause(_lits[1].pos(), (Clause*)this);
-    #if VERBOSE > 7
-    std::cout << "Watched Lit (" << clauseNumber << ") : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos() << ", "
-              << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
-    #endif
+    DEBUG(8) << "Watched Lit (" << clauseNumber << ") : " << _lits[0] << ", " << _lits[1] << std::endl;
 }
 
 
@@ -115,24 +100,23 @@ inline WatchedClause::WatchedClause(const std::vector<Literal>& list, const unsi
      Si aucun des litéraux ne vérifie ces conditions, on ne change pas le watched literal*/
 inline bool WatchedClause::setLitFalse(const Literal& l)
 {
-    #if VERBOSE >= 10
-    std::cout << "setLitFalse " << clauseNumber << " : " << l.var()->varNumber << "." << l.pos()
-              << " (watched " << _lits[0].var()->varNumber<<"."<<_lits[0].pos()
-              << ", " << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << ")" << std::endl;
-    #endif
+    DEBUG(10) << "set  false(" << this << "):" << l << std::endl;
     /* Ne tester qu'un seul des litéraux améliore les performances :o
        C'est un compromis entre tester les deux et ne rien tester
        (comme on appelle setLitFalse, ça signifie qu'au moins un des deux watched est faux) */ 
     if (isSatisfied())
         return false;
     /* Si l'un des litéraux est vrai, newWatched pointe sur ce litéral
-       sinon il pointe sur un litéral FREE (ou sur end() s'il n'y en a pas) */
+       sinon il pointe sur le litéral FREE le plus jeune (ou sur end() s'il n'y en a pas) */
     const std::vector<Literal>::iterator end = _lits.end();
     std::vector<Literal>::iterator it, newWatched = end;
     for (it = _lits.begin()+2; it != end; ++it)
     {
         if (it->var()->isFree())
-            newWatched = it;
+        {
+            if(it == end || newWatched->var()->isOlder(it->var()))
+                newWatched = it;
+        }
         else if(it->pos() == it->var()->_varState)
         {
             newWatched = it;
@@ -145,10 +129,7 @@ inline bool WatchedClause::setLitFalse(const Literal& l)
         newWatched->var()->linkToClause(newWatched->pos(), (Clause*)this);
         _lits[l.var() == _lits[1].var()] = *newWatched; // utilise la conversion true->1, false->0
         *newWatched = l.invert();
-        #if VERBOSE > 7
-        std::cout << "new watched : " << _lits[0].var()->varNumber<<"."<<_lits[0].pos()
-                  << ", " << _lits[1].var()->varNumber<<"."<<_lits[1].pos() << std::endl;
-        #endif
+        DEBUG(8) << "new watched : " << _lits[0] << ", " << _lits[1] << std::endl;
     }
     return (newWatched != end);
 }
@@ -157,6 +138,7 @@ inline bool WatchedClause::setLitFalse(const Literal& l)
 // On ne fait rien : le litéral passe à vrai, et reste surveillé
 inline bool WatchedClause::setLitTrue(const Literal& l)
 {
+    DEBUG(10) << "set  true (" << clauseNumber << "):" << l << std::endl;
     return false;
 }
 
@@ -165,11 +147,13 @@ inline bool WatchedClause::setLitTrue(const Literal& l)
 // Pas de backtrack pour les watched literals
 inline void WatchedClause::freeLitTrue(const Literal& l)
 {
+    DEBUG(10) << "free true (" << clauseNumber << "):" << l << std::endl;
 }
 
 // Pas de backtrack pour les watched literals
 inline void WatchedClause::freeLitFalse(const Literal& l)
 {
+    DEBUG(10) << "free false(" << clauseNumber << "):" << l << std::endl;
 }
 
 

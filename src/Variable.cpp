@@ -143,7 +143,7 @@ void Variable::chooseFromFree_RAND(void)
    et arrête de surveiller une clause si setLitTrue/False renvoie true */
 Variable* Variable::assignedFromDeducted(void)
 {
-    Variable* isError = NULL;
+    Variable* error = NULL;
     const Literal lit = Literal(this, _varState);
     
     DEBUG(6) << "Propagation du litéral : " << *this << std::endl;
@@ -180,14 +180,13 @@ Variable* Variable::assignedFromDeducted(void)
 
         if(!target->isSatisfied())
         {
-            /* Si une clause est contradictoire : on renvoie une erreur */
             const unsigned int fs = target->freeSize();
+            /* Si une clause est contradictoire : on renvoie une erreur */
             if (fs == 0)
             {
                 DEBUG(5) << "Contradiction (clause " << target << ", variable " << varNumber << ")" << std::endl;
-
                 /* L'ereur vient de la variable qu'on est en train d'assigner */
-                isError = this; 
+                error = this;
                 if (!_varState)
                     _deductedTrueFromClause = target;
                 else
@@ -200,27 +199,25 @@ Variable* Variable::assignedFromDeducted(void)
             {
                 const Literal deduct = target->getRemaining();
 
-
                 /* Si la déduction concerne une nouvelle variable, on l'ajoute */
-                
-                if(deduct.var()->isFree()) /* arrive forcement a priori */
+                if(deduct.var()->isOlderIter(_endDeducted))
                 {
                     DEBUG(5) << "Nouvelle déduction trouvée (clause " << target << ") :  " << deduct << std::endl;
                     deduct.var()->deductedFromFree(deduct.pos(), target);
                     DEBUG(5) << "Nouvelle déduction trouvée (clause " << target << ") :  " << deduct << std::endl;
-                /* Sinon, si la déduction a déjà été faite, on ne fait rien.
-                   Sinon, si on a déjà fait une déduction contraire, on a une contraduction. */
                 }
+                /* Sinon, si on a déjà fait une déduction contraire, on a une contraduction. */
                 else if(deduct.pos() != deduct.var()->_varState)
                 {
                     DEBUG(4) << "Déduction contradictoire trouvée (clause " << target << ") :  " << deduct << std::endl;
-                    isError = deduct.var();
+                    error = deduct.var();
                     if(deduct.pos())
                         deduct.var()->_deductedTrueFromClause = target;
                     else
                         deduct.var()->_deductedFalseFromClause = target;
                     break;
                 }
+                /* Sinon, si on a déjà fait la même déduction, on ne fait rien. */
                 else
                 {
                     DEBUG(5) << "Déduction (re-)trouvée (clause " << target << ") :  " << deduct << std::endl;
@@ -240,7 +237,7 @@ Variable* Variable::assignedFromDeducted(void)
         else
             ++it;
     }
-    return isError;
+    return error;
 }
 
 

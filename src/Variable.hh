@@ -57,9 +57,9 @@ public:
     inline unsigned sizeLitTrue() const { return _litTrue.size(); };
     inline unsigned sizeLitFalse() const { return _litFalse.size(); };
     
-    inline bool isFree(void) const           { return _posInTable >= _endDeducted; };
     inline bool isOlder(Variable* var) const { return _posInTable <= var->_posInTable; };
-    inline bool isOlderIter(std::vector<Variable*>::iterator iter) const     {return _posInTable >= iter;}
+    inline bool isOlderIter(const std::vector<Variable*>::iterator& iter) const     {return _posInTable >= iter;}
+    inline bool isFree(void) const           { return isOlderIter(_endAssigned); };
 
     inline Clause* getOriginClause(bool value) const
     {
