@@ -12,7 +12,7 @@
    variables de la forme c_nombre. On peut ensuite passer cette chaîne à
    Tseitin pour avoir un cnf. */
 
-inline std::string convertToBasicLogic(std::istream& formula, void* corans)
+inline std::string convertToBasicLogic(std::istream& formula, void* corres)
 {
     std::string formulaS;
     while ((formula >> std::ws) && !formula.eof())
@@ -109,7 +109,7 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corans)
 
         std::stringstream foo;
         foo << curNbVar;
-        ans = res + formulaS.substr(prevPos+1, posDeb - prevPos-1) + "c_" + foo.str();
+        ans = ans + formulaS.substr(prevPos+1, posDeb - prevPos-1) + "c_" + foo.str();
         curNbVar++;
         prevPos = posEnd;
     }
