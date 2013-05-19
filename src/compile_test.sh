@@ -10,8 +10,7 @@ do (
         echo "***** Génération de $newName *****" ;
         make CLAUSE=${clause}Clause CHOOSE=$heur VERBOSE=1 INIT_SORT=1 ;
         mv release $newName ;
-        cp $newName testsSatisfiable/ ;
-        cp $newName testsUnsatisfiable/ ;
+        cp $newName ../bin/ ;
         rm $newName ;
         make clean ;
         # sans tri
@@ -19,8 +18,7 @@ do (
         echo "***** Génération de $newName *****" ;
         make CLAUSE=${clause}Clause CHOOSE=$heur VERBOSE=1 INIT_SORT=0 ;
         mv release $newName ;
-        cp $newName testsSatisfiable/ ;
-        cp $newName testsUnsatisfiable/ ;
+        cp $newName ../bin/ ;
         rm $newName ;
         make clean ;
     ) done ;
