@@ -1,9 +1,9 @@
 SRC= main.cpp
-OUT= tseitin
+OUT= smt
 OBJ= ${SRC:.cpp=.o}
 CXX	 = g++
 LFLAGS   = -lm
-CXXFLAGS = -Wall -Wextra
+CXXFLAGS = -Wall -Wextra -g
 
 all : release
 

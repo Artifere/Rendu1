@@ -49,7 +49,6 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
         pos++;
     }
 
-    
 
     std::queue<std::pair<int, int> > posOfEqualities;
     for (unsigned pos = 0; pos < formulaS.size(); pos++)
@@ -58,21 +57,41 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
         if (c == '=')
         {
             const int posPrev = (formulaS[pos-1] == '!' ? (pos-2):(pos-1));
-            while (parPos.front().second != posPrev)
+            int posBegin, posEnd;
+            if (formulaS[posPrev] == ')')
+            {
+
+                while (parPos.front().second != posPrev)
+                    parPos.pop();
+                posBegin = parPos.front().first;
                 parPos.pop();
-            int posBegin = parPos.front().first;
-            parPos.pop();
-            while (posBegin > 0 && isalpha(formulaS[posBegin-1]))
-                posBegin--;
+                while (posBegin > 0 && isalpha(formulaS[posBegin-1]))
+                    posBegin--;
+            }
+            else
+            {
+                posBegin = posPrev;
+                while (posBegin > 0 && isalpha(formulaS[posBegin-1]))
+                    posBegin--;
+            }
 
 
-            while (parPos.front().first <= pos+1)
+            if (formulaS[pos+1] == '(')
+            {
+                while (parPos.front().first <= pos+1)
+                    parPos.pop();
+                posEnd = parPos.front().second;
                 parPos.pop();
-            int posEnd = parPos.front().second;
-            parPos.pop();
-            
+            }
+            else
+            {
+                posEnd = pos+1;
+                while (posEnd < formulaS.size()-1 && isalpha(formulaS[posEnd+1]))
+                    posEnd++;
+            }
             posOfEqualities.push(std::make_pair(posBegin, posEnd));
         }
+
     }
 
     std::string res;
@@ -93,7 +112,7 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
     }
 
     res += formulaS.substr(prevPos+1, formulaS.size()-prevPos-1);
-
+    res += "\n";
     return res;
 }
         
