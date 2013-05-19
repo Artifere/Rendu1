@@ -1,4 +1,5 @@
-
+#ifndef UNION_FIND_HH
+#define UNION_FIND_HH
 
 
 
@@ -15,7 +16,7 @@ class UnionFind
             _size = size;
             _classes = new int[size];
 
-            for (int i = 0; i < size; i++)
+            for (unsigned i = 0; i < size; i++)
                 _classes[i] = i;
         }
 
@@ -50,5 +51,4 @@ class UnionFind
 
             
 
-
-
+#endif
