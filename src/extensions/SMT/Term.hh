@@ -19,7 +19,7 @@ class Term
 {
     public:
         Term() {}
-        Term(std::map<std::string, unsigned> &alreadyBuilt, unsigned *nextFreeId, const std::string term);
+        Term(std::map<std::string, unsigned> &alreadyBuilt, std::vector<Term> &termsList, const std::string term);
 
 
 
@@ -27,10 +27,16 @@ class Term
     private:
         unsigned _id;
         std::vector<unsigned> _subTerms;
-        std::string _term;
+        std::string _str;
 };
 
 
-
+inline bool isFunction(const std::string s)
+{
+    for (int i = 0; i < s.size(); i++)
+        if (s[i] == '(')
+            return true;
+    return false;
+}
 
 #endif //TERM_HH

@@ -10,33 +10,63 @@
 
 
 
-Term::Term(std::map<std::string, unsigned> &alreadyBuilt, unsigned *nextFreeId, std::string term)
+Term::Term(std::map<std::string, unsigned> &alreadyBuilt, std::vector<Term> &termsList, std::string term)
 {
-    std::queue<std::pair<int, int> > parPos;
-    getTermParenthesisPos(term, parPos);
-
-    for (unsigned pos = 0; pos < term.size(); pos++)
+    if (!isFunction(term))
     {
-        unsigned curDeb = pos;
-        while (pos < term.size()-1 && isalnum(term[pos+1]))
-            pos++;
-
-        const std::string subTermStr = term.substr(curDeb, pos-curDeb);
-        unsigned subId;
-        std::map<std::string, unsigned>::const_iterator findIt = alreadyBuilt.find(subTermStr);
-        if (findIt == alreadyBuilt.end())
-        {
-            Term *sub = new Term(alreadyBuilt, nextFreeId, subTermStr);
-            subId = sub->_id;
-        }
-        else
-        {
-            subId = findIt->second;
-        }
-        _subTerms.push_back(subId);
+        _str = term;
+        _id = termsList.size();
     }
 
 
-   alreadyBuilt[term] = *nextFreeId;
-   (*nextFreeId)++;
+    else
+    {
+        std::queue<std::pair<int, int> > parPos;
+        getTermParenthesisPos(term, parPos, 1);
+
+
+        unsigned endFuncName = 0;
+        while (term[endFuncName] != '(')
+            endFuncName++;
+        
+        for (unsigned pos = endFuncName+1; pos < term.size()-1; pos++)
+        {
+            while (pos < term.size() && !isalpha(term[pos]))
+                pos++;
+
+            unsigned curBeg = pos, curEnd;
+            while (!parPos.empty() && parPos.front().first <= pos)
+            {
+                parPos.pop();
+            }
+
+            if (!parPos.empty() && parPos.front().first == pos+1)
+            {
+                curEnd = parPos.front().second;
+                parPos.pop();
+            }
+            else
+            {
+                curEnd = pos;
+            }
+            pos = curEnd;
+            const std::string subTermStr = term.substr(curBeg, curEnd-curBeg+1);
+            unsigned subId;
+            std::map<std::string, unsigned>::const_iterator findIt = alreadyBuilt.find(subTermStr);
+            if (findIt == alreadyBuilt.end())
+            {
+                const Term sub = Term(alreadyBuilt, termsList, subTermStr);
+                alreadyBuilt[sub._str] = termsList.size();
+                subId = sub._id;
+                termsList.push_back(sub);
+            }
+            else
+            {
+                subId = findIt->second;
+            }
+            _subTerms.push_back(subId);
+        }
+        _id = termsList.size();
+        _str = term;
+    }
 }

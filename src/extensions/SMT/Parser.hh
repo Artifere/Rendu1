@@ -1,3 +1,7 @@
+#ifndef PARSER_HH
+#define PARSER_HH
+
+
 #include <iostream>
 #include <stack>
 #include <queue>
@@ -7,8 +11,6 @@
 #include <sstream>
 
 
-#ifndef PARSER_HH
-#define PARSER_HH
 
 
 inline void getParenthesisPos(const std::string &formula, std::queue<std::pair<int, int> > &parPos)
@@ -39,6 +41,40 @@ inline void getParenthesisPos(const std::string &formula, std::queue<std::pair<i
         }
     }
 }
+
+
+
+inline void getTermParenthesisPos(const std::string &formula, std::queue<std::pair<int, int> > &parPos, const unsigned level)
+{
+    std::stack<int> openingParPos;
+    int lastOpeningParPos = -1;
+    for (unsigned pos = 0; pos < formula.size(); pos++)
+    {
+        const char c = formula[pos];
+
+        if (c == '(')
+        {
+            openingParPos.push(pos);
+        }
+        else if (c == ')')
+        {
+            if (openingParPos.empty())
+            {
+                std::cerr << "PROBLEME" << std::endl;
+            }
+            lastOpeningParPos = openingParPos.top();
+            openingParPos.pop();
+            
+            if (openingParPos.size() == level)
+            {
+                parPos.push(std::make_pair(lastOpeningParPos, pos));
+            }
+        }
+    }
+}
+
+
+
 
 
 
@@ -91,7 +127,7 @@ inline void getEqualitiesPos(const std::string &formula, std::queue<std::pair<in
 
 
 
-std::string getPreTseitinFormula(const std::string &formula, std::queue<std::pair<int, int> > &posOfEqualities, std::queue<bool> &isDisequality)
+inline std::string convertToPreTseitinFormula(const std::string &formula, std::queue<std::pair<int, int> > &posOfEqualities, std::queue<bool> &isDisequality)
 {
     std::string ans;
     unsigned prevPos = -1;
