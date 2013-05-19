@@ -1,0 +1,10565 @@
+version: 1
+creator: callgrind-3.8.1
+pid: 7142
+cmd:  ./profile uf100-0292.cnf
+part: 1
+
+
+desc: I1 cache: 
+desc: D1 cache: 
+desc: LL cache: 
+
+desc: Timerange: Basic block 0 - 34839121
+desc: Trigger: Program termination
+
+positions: line
+events: Ir
+summary: 116769147
+
+
+ob=(5) /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+fl=(5) ???
+fn=(218) 0x0000000000000680
+0 17
+
+fn=(2116) 0x0000000000000640
+0 8
+cob=(3) /usr/lib/libc-2.17.so
+cfi=(3) ???
+cfn=(2128) __cxa_finalize
+calls=1 0 
+0 80
+cob=(1) /usr/lib/ld-2.17.so
+cfi=(1) ???
+cfn=(168) _dl_runtime_resolve
+calls=1 0 
+0 841
+0 1
+cfn=(2134) 0x00000000000005d0
+calls=1 0 
+0 9
+0 3
+
+fn=(2134)
+0 9
+
+ob=(1)
+fl=(1)
+fn=(34) memcpy
+0 992
+
+fn=(52) mempcpy
+0 251
+
+fn=(76) expand_dynamic_string_token
+0 11
+cfn=(74) index
+calls=1 0 
+0 43
+0 9
+cfn=(78) local_strdup
+calls=1 0 
+0 178
+
+fn=(84) read
+0 25
+
+fn=(212) call_init
+0 207
+cob=(2) ???
+cfi=(2) ???
+cfn=(290) 0x0000000004c7efe8
+calls=1 0 
+0 6
+cob=(2)
+cfi=(2)
+cfn=(278) 0x0000000004f2f4d0
+calls=1 0 
+0 6
+cob=(2)
+cfi=(2)
+cfn=(256) 0x000000000522a7d8
+calls=1 0 
+0 6
+cob=(3)
+cfi=(3)
+cfn=(238) _init
+calls=1 0 
+0 208
+cob=(2)
+cfi=(2)
+cfn=(214) 0x0000000004a24570
+calls=1 0 
+0 6
+0 102
+cob=(7) /usr/lib/libstdc++.so.6.0.18
+cfi=(7) ???
+cfn=(294) 0x000000000005bf90
+calls=1 0 
+0 16
+cob=(4) /usr/lib/libm-2.17.so
+cfi=(4) ???
+cfn=(282) 0x0000000000005a60
+calls=1 0 
+0 16
+cob=(6) /usr/lib/libgcc_s.so.1
+cfi=(6) ???
+cfn=(260) __cpu_indicator_init
+calls=1 0 
+0 182
+cob=(3)
+cfi=(3)
+cfn=(246) init_cacheinfo
+calls=1 0 
+0 1919
+cfn=(226) init_cacheinfo
+calls=1 0 
+0 1992
+cob=(5)
+cfi=(5)
+cfn=(218)
+calls=1 0 
+0 17
+0 32
+cob=(7)
+cfi=(7)
+cfn=(422) 0x000000000005be70
+calls=1 0 
+0 158
+cob=(7)
+cfi=(7)
+cfn=(420) 0x000000000005bc40
+calls=1 0 
+0 54
+cob=(7)
+cfi=(7)
+cfn=(394) 0x000000000005bb80
+calls=1 0 
+0 49
+cob=(7)
+cfi=(7)
+cfn=(368) 0x000000000005bac0
+calls=1 0 
+0 49
+cob=(7)
+cfi=(7)
+cfn=(342) 0x000000000005b9b0
+calls=1 0 
+0 73
+cob=(7)
+cfi=(7)
+cfn=(340) 0x000000000005b970
+calls=1 0 
+0 6
+cob=(7)
+cfi=(7)
+cfn=(302) 0x000000000005b950
+calls=1 0 
+0 4411
+cob=(6)
+cfi=(6)
+cfn=(270) 0x0000000000002fa0
+calls=1 0 
+0 16
+0 97
+
+fn=(228) __init_cpu_features
+0 70
+
+fn=(16) _dl_next_ld_env_entry
+0 248
+
+fn=(50) _dl_important_hwcaps
+0 89
+cfn=(28) malloc
+calls=1 0 
+0 33
+0 162
+cfn=(52)
+calls=1 0 
+0 22
+0 5
+cfn=(52)
+calls=1 0 
+0 22
+0 4
+
+fn=(56) _dl_debug_state
+0 2
+
+fn=(70) _dl_map_object
+0 969
+cfn=(72) _dl_name_match_p
+calls=56 0 
+0 3547
+0 270
+cfn=(74)
+calls=5 0 
+0 155
+0 16
+cfn=(76)
+calls=1 0 
+0 241
+0 11
+cfn=(80) open_verify
+calls=1 0 
+0 446
+0 88
+cfn=(86) _dl_map_object_from_fd
+calls=5 0 
+0 8210
+0 13
+cfn=(10) strlen
+calls=4 0 
+0 246
+0 164
+cfn=(104) _dl_load_cache_lookup
+calls=4 0 
+0 5036
+0 72
+cfn=(80)
+calls=4 0 
+0 2037
+0 24
+cfn=(78)
+calls=4 0 
+0 592
+0 499
+cfn=(42) strcmp
+calls=28 0 
+0 637
+0 84
+
+fn=(74)
+0 554
+
+fn=(90) mmap
+0 102
+
+fn=(108) _dl_cache_libcmp
+0 998
+cfn=(109) _dl_cache_libcmp'2
+calls=7 0 
+0 42
+0 2537
+
+fn=(109)
+0 42
+
+fn=(168)
+0 1540
+cfn=(170) _dl_fixup
+calls=140 0 
+0 141861
+0 1400
+
+fn=(170)
+0 7690
+cfn=(132) _dl_lookup_symbol_x
+calls=140 0 
+0 130189
+0 3927
+cob=(3)
+cfi=(3)
+cfn=(154) memcpy@GLIBC_2.2.5
+calls=1 0 
+0 13
+cob=(3)
+cfi=(3)
+cfn=(1268) strlen
+calls=1 0 
+0 8
+cob=(3)
+cfi=(3)
+cfn=(1104) bcmp
+calls=1 0 
+0 8
+cob=(3)
+cfi=(3)
+cfn=(1096) memcpy@@GLIBC_2.14
+calls=1 0 
+0 10
+cob=(3)
+cfi=(3)
+cfn=(722) strcmp
+calls=1 0 
+0 6
+0 10
+
+fn=(198) free
+0 12
+
+fn=(0) 0x00000000000014b0
+0 2
+cfn=(2) _dl_start
+calls=1 0 
+0 1249393
+0 14
+cfn=(210) _dl_init
+calls=1 0 
+0 9737
+0 3
+cob=(8) /home/artifere/ENS_L3/Projet2/Rendu1/profile
+cfi=(8) ???
+cfn=(432) 0x0000000000401754
+calls=1 0 
+0 115509998
+
+fn=(8) brk
+0 12
+
+fn=(12) sbrk
+0 17
+
+fn=(24) calloc
+0 136
+cfn=(28)
+calls=17 0 
+0 629
+
+fn=(28)
+0 108
+cfn=(32) __libc_memalign
+calls=36 0 
+0 1148
+
+fn=(72)
+0 2499
+cfn=(42)
+calls=357 0 
+0 2506
+0 4317
+cfn=(42)
+calls=371 0 
+0 7272
+0 2884
+
+fn=(82) open
+0 30
+
+fn=(100) _dl_map_object_deps
+0 1121
+cfn=(74)
+calls=11 0 
+0 356
+0 99
+cfn=(62) _dl_catch_error
+calls=11 0 
+0 21725
+0 218
+cfn=(28)
+calls=5 0 
+0 165
+0 50
+cfn=(34)
+calls=5 0 
+0 129
+0 25
+cfn=(34)
+calls=5 0 
+0 129
+0 237
+cfn=(28)
+calls=1 0 
+0 33
+0 121
+cfn=(94) memset
+calls=1 0 
+0 19
+0 443
+cfn=(94)
+calls=5 0 
+0 87
+0 414
+cfn=(34)
+calls=1 0 
+0 51
+0 3
+
+fn=(106) _dl_sysdep_read_whole_file
+0 11
+cfn=(82)
+calls=1 0 
+0 5
+0 7
+cfn=(88) _fxstat
+calls=1 0 
+0 10
+0 8
+cfn=(96) close
+calls=1 0 
+0 5
+0 13
+cfn=(90)
+calls=1 0 
+0 6
+0 2
+
+fn=(116) _dl_check_all_versions
+0 61
+cfn=(118) _dl_check_map_versions
+calls=7 0 
+0 11362
+0 56
+
+fn=(132)
+0 499364
+cfn=(134) do_lookup_x
+calls=1372 0 
+0 580062
+0 46410
+
+fn=(234) bsearch
+0 584
+cfn=(236) intel_02_known_compare
+calls=54 0 
+0 324
+0 318
+
+fn=(2100) _dl_fini
+0 23
+cfn=(38) rtld_lock_default_lock_recursive
+calls=1 0 
+0 2
+0 129
+cfn=(2102) _dl_sort_fini
+calls=1 0 
+0 695
+0 2
+cfn=(40) rtld_lock_default_unlock_recursive
+calls=1 0 
+0 2
+0 139
+cob=(6)
+cfi=(6)
+cfn=(2194) 0x0000000000002f60
+calls=1 0 
+0 1381
+cob=(4)
+cfi=(4)
+cfn=(2174) 0x0000000000005a20
+calls=1 0 
+0 1381
+cob=(7)
+cfi=(7)
+cfn=(2142) 0x000000000005bf50
+calls=1 0 
+0 2242
+cob=(5)
+cfi=(5)
+cfn=(2116)
+calls=1 0 
+0 942
+cob=(8)
+cfi=(8)
+cfn=(2104) 0x00000000004017f0
+calls=1 0 
+0 16
+0 45
+cob=(2)
+cfi=(2)
+cfn=(2214) 0x000000000523a128
+calls=1 0 
+0 3
+cob=(2)
+cfi=(2)
+cfn=(2192) 0x0000000004f978c8
+calls=1 0 
+0 3
+cob=(2)
+cfi=(2)
+cfn=(2172) 0x0000000004ce494c
+calls=1 0 
+0 3
+cob=(2)
+cfi=(2)
+cfn=(2140) 0x0000000004a24800
+calls=1 0 
+0 3
+cob=(2)
+cfi=(2)
+cfn=(2114) 0x0000000000408994
+calls=1 0 
+0 3
+0 93
+
+fn=(2)
+0 388
+cfn=(4) _dl_setup_hash
+calls=1 0 
+0 25
+0 17
+cfn=(6) _dl_sysdep_start
+calls=1 0 
+0 1248532
+0 431
+
+fn=(6)
+0 338
+cfn=(8)
+calls=1 0 
+0 12
+0 7
+cfn=(12)
+calls=1 0 
+0 17
+0 11
+cfn=(14) dl_main
+calls=1 0 
+0 1248078
+0 28
+cfn=(10)
+calls=1 0 
+0 39
+0 2
+
+fn=(10)
+0 1331
+
+fn=(38)
+0 116
+
+fn=(62)
+0 108
+cfn=(64) _dl_initial_error_catch_tsd
+calls=12 0 
+0 24
+0 72
+cfn=(66) __sigsetjmp
+calls=12 0 
+0 228
+0 96
+cfn=(102) openaux
+calls=11 0 
+0 21098
+cfn=(68) map_doit
+calls=1 0 
+0 2458
+0 156
+
+fn=(64)
+0 26
+
+fn=(80)
+0 95
+cfn=(82)
+calls=5 0 
+0 25
+0 60
+cfn=(84)
+calls=5 0 
+0 25
+0 70
+cfn=(18) bcmp
+calls=5 0 
+0 437
+0 45
+cfn=(18)
+calls=5 0 
+0 400
+0 566
+cfn=(18)
+calls=2 0 
+0 146
+0 20
+cfn=(18)
+calls=5 0 
+0 395
+0 109
+cfn=(18)
+calls=1 0 
+0 88
+0 2
+
+fn=(98) access
+0 9
+
+fn=(128) allocate_dtv
+0 9
+cfn=(24)
+calls=1 0 
+0 41
+0 10
+
+fn=(130) _dl_relocate_object
+0 11725
+cob=(4)
+cfi=(4)
+cfn=(194) sin
+calls=1 0 
+0 15
+cob=(4)
+cfi=(4)
+cfn=(192) __atan2_finite
+calls=1 0 
+0 15
+cob=(4)
+cfi=(4)
+cfn=(190) __asin_finite
+calls=1 0 
+0 12
+cob=(4)
+cfi=(4)
+cfn=(188) floor
+calls=1 0 
+0 11
+cob=(4)
+cfi=(4)
+cfn=(186) floorf
+calls=1 0 
+0 11
+cob=(4)
+cfi=(4)
+cfn=(184) __acos_finite
+calls=1 0 
+0 12
+cob=(4)
+cfi=(4)
+cfn=(182) rintf
+calls=1 0 
+0 11
+cob=(4)
+cfi=(4)
+cfn=(180) __log_finite
+calls=1 0 
+0 15
+cob=(4)
+cfi=(4)
+cfn=(178) __pow_finite
+calls=1 0 
+0 12
+cob=(4)
+cfi=(4)
+cfn=(176) rint
+calls=1 0 
+0 11
+cob=(4)
+cfi=(4)
+cfn=(174) cos
+calls=1 0 
+0 15
+cob=(4)
+cfi=(4)
+cfn=(160) __exp_finite
+calls=1 0 
+0 1385
+0 153
+cfn=(156) _dl_protect_relro
+calls=5 0 
+0 120
+0 109740
+cfn=(132)
+calls=16 0 
+0 10160
+0 9688
+cfn=(132)
+calls=1211 0 
+0 982170
+0 54276
+cob=(3)
+cfi=(3)
+cfn=(154)
+calls=1 0 
+0 13
+cob=(3)
+cfi=(3)
+cfn=(152) gettimeofday
+calls=1 0 
+0 68
+cob=(3)
+cfi=(3)
+cfn=(150) memset
+calls=1 0 
+0 7
+cob=(3)
+cfi=(3)
+cfn=(148) strncasecmp
+calls=1 0 
+0 6
+cob=(3)
+cfi=(3)
+cfn=(146) strnlen
+calls=1 0 
+0 6
+cob=(3)
+cfi=(3)
+cfn=(142) time
+calls=1 0 
+0 68
+cob=(3)
+cfi=(3)
+cfn=(138) strcasecmp
+calls=1 0 
+0 77
+0 301
+cfn=(34)
+calls=2 0 
+0 268
+0 305
+cfn=(132)
+calls=5 0 
+0 3317
+0 20069
+
+fn=(200) _dl_allocate_tls_init
+0 66
+cfn=(52)
+calls=2 0 
+0 37
+0 10
+cfn=(94)
+calls=2 0 
+0 47
+0 47
+
+fn=(206) munmap
+0 5
+
+fn=(232) intel_check_word
+0 188
+cfn=(234)
+calls=8 0 
+0 1226
+0 263
+
+fn=(42)
+0 13266
+cfn=(43) strcmp'2
+calls=1665 0 
+0 123499
+0 2148
+
+fn=(43)
+0 119763
+cfn=(43)
+calls=15560 0 
+0 742771
+0 3736
+
+fn=(44) _dl_discover_osversion
+0 21
+cfn=(46) uname
+calls=1 0 
+0 5
+0 59
+
+fn=(48) _dl_init_paths
+0 14
+cfn=(50)
+calls=1 0 
+0 337
+0 3
+cfn=(28)
+calls=1 0 
+0 33
+0 13
+cfn=(28)
+calls=1 0 
+0 33
+0 61
+
+fn=(68)
+0 9
+cfn=(70)
+calls=1 0 
+0 2446
+0 3
+
+fn=(88)
+0 60
+
+fn=(118)
+0 599
+cfn=(72)
+calls=55 0 
+0 3563
+0 470
+cfn=(120) match_symbol
+calls=4 0 
+0 665
+0 48
+cfn=(120)
+calls=16 0 
+0 2688
+0 1068
+cfn=(24)
+calls=6 0 
+0 246
+0 2015
+
+fn=(120)
+0 1580
+cfn=(42)
+calls=20 0 
+0 1573
+0 200
+
+fn=(122) init_tls
+0 10
+cfn=(24)
+calls=1 0 
+0 62
+0 65
+cfn=(124) _dl_determine_tlsoffset
+calls=1 0 
+0 107
+0 1
+cfn=(126) _dl_allocate_tls_storage
+calls=1 0 
+0 436
+0 16
+
+fn=(126)
+0 7
+cfn=(32)
+calls=1 0 
+0 51
+0 312
+cfn=(128)
+calls=1 0 
+0 60
+0 6
+
+fn=(202) _dl_sysdep_start_cleanup
+0 1
+
+fn=(210)
+0 70
+cfn=(212)
+calls=6 0 
+0 7502
+0 7
+cfn=(212)
+calls=1 0 
+0 2046
+0 30
+cfn=(212)
+calls=1 0 
+0 80
+0 2
+
+fn=(58) strsep
+0 914
+
+fn=(196) _dl_higher_prime_number
+0 144
+
+fn=(4)
+0 175
+
+fn=(32)
+0 778
+cfn=(90)
+calls=4 0 
+0 24
+0 397
+
+fn=(66)
+0 228
+
+fn=(78)
+0 25
+cfn=(10)
+calls=5 0 
+0 346
+0 15
+cfn=(28)
+calls=5 0 
+0 165
+0 45
+cfn=(34)
+calls=5 0 
+0 174
+
+fn=(92) mprotect
+0 50
+
+fn=(96)
+0 30
+
+fn=(102)
+0 154
+cfn=(70)
+calls=11 0 
+0 20911
+0 33
+
+fn=(104)
+0 679
+cfn=(108)
+calls=35 0 
+0 2707
+0 173
+cfn=(106)
+calls=1 0 
+0 67
+0 10
+cfn=(18)
+calls=1 0 
+0 112
+0 15
+cfn=(18)
+calls=1 0 
+0 111
+0 87
+cfn=(108)
+calls=3 0 
+0 241
+0 12
+cfn=(108)
+calls=4 0 
+0 629
+0 193
+
+fn=(226)
+0 9
+cfn=(228)
+calls=1 0 
+0 70
+0 5
+cfn=(230) handle_intel
+calls=1 0 
+0 845
+0 4
+cfn=(230)
+calls=1 0 
+0 930
+0 129
+
+fn=(236)
+0 324
+
+fn=(2102)
+0 27
+cfn=(94)
+calls=1 0 
+0 19
+0 59
+cfn=(94)
+calls=5 0 
+0 87
+0 503
+
+fn=(14)
+0 39
+cfn=(16)
+calls=1 0 
+0 242
+0 2
+cfn=(16)
+calls=1 0 
+0 6
+0 67
+cfn=(18)
+calls=1 0 
+0 26
+0 19
+cfn=(20) _dl_new_object
+calls=1 0 
+0 241
+0 12
+cfn=(36) _dl_add_to_namespace_list
+calls=1 0 
+0 34
+0 128
+cfn=(42)
+calls=1 0 
+0 7
+0 262
+cfn=(4)
+calls=1 0 
+0 25
+0 7
+cfn=(44)
+calls=1 0 
+0 85
+0 77
+cfn=(18)
+calls=1 0 
+0 80
+0 7
+cfn=(48)
+calls=1 0 
+0 494
+0 3
+cfn=(54) _dl_debug_initialize
+calls=1 0 
+0 17
+0 63
+cfn=(56)
+calls=1 0 
+0 1
+0 12
+cfn=(98)
+calls=1 0 
+0 9
+0 19
+cfn=(100)
+calls=1 0 
+0 25425
+0 148
+cfn=(112) _dl_receive_error
+calls=1 0 
+0 11519
+0 5
+cfn=(122)
+calls=1 0 
+0 697
+0 172
+cfn=(130)
+calls=6 0 
+0 1197109
+0 58
+cfn=(200)
+calls=1 0 
+0 207
+0 8
+cfn=(202)
+calls=1 0 
+0 1
+0 6
+cfn=(54)
+calls=1 0 
+0 8
+0 2
+cfn=(56)
+calls=1 0 
+0 1
+0 1
+cfn=(204) _dl_unload_cache
+calls=1 0 
+0 15
+0 12
+cfn=(158) _dl_add_to_slotinfo
+calls=2 0 
+0 40
+0 19
+cfn=(130)
+calls=1 0 
+0 6953
+0 14
+cfn=(10)
+calls=1 0 
+0 95
+0 8
+cfn=(34)
+calls=1 0 
+0 72
+0 11
+cfn=(58)
+calls=1 0 
+0 907
+0 3
+cfn=(58)
+calls=1 0 
+0 7
+0 15
+cfn=(60) do_preload
+calls=1 0 
+0 2542
+0 14
+
+fn=(20)
+0 90
+cfn=(10)
+calls=6 0 
+0 337
+0 114
+cfn=(24)
+calls=6 0 
+0 293
+0 72
+cfn=(34)
+calls=6 0 
+0 169
+0 342
+cfn=(10)
+calls=5 0 
+0 268
+0 139
+cfn=(52)
+calls=5 0 
+0 170
+0 366
+cfn=(28)
+calls=5 0 
+0 165
+0 25
+
+fn=(86)
+0 90
+cfn=(54)
+calls=5 0 
+0 40
+0 25
+cfn=(88)
+calls=5 0 
+0 50
+0 300
+cfn=(20)
+calls=5 0 
+0 2309
+0 1356
+cfn=(110) _dl_next_tls_modid
+calls=2 0 
+0 16
+0 167
+cfn=(90)
+calls=5 0 
+0 30
+0 280
+cfn=(94)
+calls=5 0 
+0 898
+0 160
+cfn=(90)
+calls=5 0 
+0 30
+0 40
+cfn=(92)
+calls=5 0 
+0 25
+0 1611
+cfn=(96)
+calls=2 0 
+0 10
+0 6
+cfn=(96)
+calls=3 0 
+0 15
+0 75
+cfn=(4)
+calls=5 0 
+0 125
+0 76
+cfn=(36)
+calls=5 0 
+0 240
+0 204
+cfn=(90)
+calls=2 0 
+0 12
+0 20
+
+fn=(94)
+0 1157
+
+fn=(110)
+0 16
+
+fn=(112)
+0 11
+cfn=(64)
+calls=1 0 
+0 2
+0 7
+cfn=(114) version_check_doit
+calls=1 0 
+0 11489
+0 10
+
+fn=(114)
+0 6
+cfn=(116)
+calls=1 0 
+0 11479
+0 4
+
+fn=(124)
+0 107
+
+fn=(134)
+0 252424
+cfn=(72)
+calls=246 0 
+0 12368
+0 39133
+cfn=(38)
+calls=50 0 
+0 100
+0 5994
+cfn=(196)
+calls=2 0 
+0 144
+0 8
+cfn=(24)
+calls=2 0 
+0 82
+0 2384
+cfn=(198)
+calls=2 0 
+0 12
+0 462
+cfn=(40)
+calls=50 0 
+0 100
+0 2421
+cfn=(24)
+calls=1 0 
+0 41
+0 62551
+cfn=(136) check_match.9346
+calls=1355 0 
+0 195054
+0 6784
+
+fn=(156)
+0 75
+cfn=(92)
+calls=5 0 
+0 25
+0 20
+
+fn=(18)
+0 1795
+
+fn=(36)
+0 42
+cfn=(38)
+calls=6 0 
+0 12
+0 193
+cfn=(40)
+calls=5 0 
+0 10
+0 13
+cfn=(40)
+calls=1 0 
+0 2
+0 2
+
+fn=(40)
+0 116
+
+fn=(46)
+0 5
+
+fn=(54)
+0 65
+
+fn=(60)
+0 17
+cfn=(62)
+calls=1 0 
+0 2515
+0 10
+
+fn=(136)
+0 28745
+cfn=(42)
+calls=75 0 
+0 9810
+0 36691
+cfn=(42)
+calls=1350 0 
+0 117108
+0 2700
+
+fn=(158)
+0 40
+
+fn=(204)
+0 7
+cfn=(206)
+calls=1 0 
+0 5
+0 3
+
+fn=(230)
+0 44
+cfn=(232)
+calls=2 0 
+0 1444
+0 14
+cfn=(232)
+calls=2 0 
+0 233
+0 40
+
+ob=(7)
+fl=(7)
+fn=(316) __cxa_guard_acquire
+0 26
+
+fn=(340)
+0 6
+
+fn=(470) std::locale::locale()
+0 156
+cfn=(472) 0x0000000000071130
+calls=26 0 
+0 56775
+0 390
+
+fn=(504) 0x000000000006f090
+0 4
+cfn=(510) std::locale::facet::_S_create_c_locale(__locale_struct*&, char const*, __locale_struct*)
+calls=1 0 
+0 1292
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1085
+
+fn=(522) std::locale::_Impl::_M_install_facet(std::locale::id const*, std::locale::facet const*)
+0 364
+cfn=(528) std::locale::id::_M_id() const
+calls=28 0 
+0 420
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 765
+0 7084
+
+fn=(546) std::moneypunct<char, false>::_M_initialize_moneypunct(__locale_struct*, char const*)
+0 112
+
+fn=(672) std::ios_base::ios_base()
+0 531
+cfn=(470)
+calls=9 0 
+0 261
+
+fn=(876) bool std::has_facet<std::codecvt<char, char, __mbstate_t> >(std::locale const&)
+0 4
+cfn=(528)
+calls=1 0 
+0 5
+0 13
+cfn=(714) __dynamic_cast
+calls=1 0 
+0 76
+0 4
+
+fn=(970) std::basic_filebuf<char, std::char_traits<char> >::_M_allocate_internal_buffer()
+0 8
+cfn=(976) operator new[](unsigned long)
+calls=1 0 
+0 2002
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 629
+0 4
+
+fn=(1032) std::codecvt<char, char, __mbstate_t>::do_always_noconv() const
+0 2
+
+fn=(1044) std::__basic_file<char>::fd()
+0 2
+cob=(3)
+cfi=(3)
+cfn=(1050) fileno
+calls=1 0 
+0 6
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1160
+
+fn=(1120) std::string::_M_mutate(unsigned long, unsigned long, unsigned long)
+0 340
+
+fn=(1144) std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long)
+0 18
+cfn=(1150) std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&)
+calls=2 0 
+0 446
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 804
+0 30
+
+fn=(1188) std::basic_istream<char, std::char_traits<char> >& std::operator>><char, std::char_traits<char> >(std::basic_istream<char, std::char_traits<char> >&, char&)
+0 9
+cfn=(1076) std::istream::sentry::sentry(std::istream&, bool)
+calls=1 0 
+0 42
+0 17
+
+fn=(1262) std::string::compare(char const*) const
+0 9
+cob=(3)
+cfi=(3)
+cfn=(1270) __strlen_sse2_pminub
+calls=1 0 
+0 14
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1163
+0 8
+cob=(3)
+cfi=(3)
+cfn=(1106) __memcmp_sse4_1
+calls=1 0 
+0 19
+0 15
+
+fn=(1400) std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char> > >::do_get(std::istreambuf_iterator<char, std::char_traits<char> >, std::istreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, std::_Ios_Iostate&, long&) const
+0 10320
+cfn=(1406) std::istreambuf_iterator<char, std::char_traits<char> > std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char> > >::_M_extract_int<long>(std::istreambuf_iterator<char, std::char_traits<char> >, std::istreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, std::_Ios_Iostate&, long&) const
+calls=1720 0 
+0 544770
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1548
+0 3440
+
+fn=(2158) std::error_category::~error_category()
+0 12
+
+fn=(310) std::future_category()
+0 5
+cfn=(316)
+calls=1 0 
+0 26
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 750
+0 4
+cfn=(322) std::error_category::error_category()
+calls=1 0 
+0 4
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 802
+0 4
+cfn=(328) __cxa_guard_release
+calls=1 0 
+0 5
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 726
+0 4
+cob=(3)
+cfi=(3)
+cfn=(334) __cxa_atexit
+calls=1 0 
+0 60
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1250
+0 3
+
+fn=(322)
+0 12
+
+fn=(678) std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)
+0 36
+cfn=(684) std::ios_base::_M_init()
+calls=6 0 
+0 1938
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 797
+0 18
+cfn=(702) std::basic_ios<char, std::char_traits<char> >::_M_cache_locale(std::locale const&)
+calls=6 0 
+0 13086
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1100
+0 78
+
+fn=(716) __cxxabiv1::__vmi_class_type_info::__do_dyncast(long, __cxxabiv1::__class_type_info::__sub_kind, __cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info::__dyncast_result&) const
+0 24805
+cob=(3)
+cfi=(3)
+cfn=(724) __strcmp_sse42
+calls=451 0 
+0 9922
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1169
+0 1353
+
+fn=(738) __cxxabiv1::__si_class_type_info::__do_dyncast(long, __cxxabiv1::__class_type_info::__sub_kind, __cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info::__dyncast_result&) const
+0 1750
+
+fn=(792) std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t> > > const& std::use_facet<std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t> > > >(std::locale const&)
+0 16
+cfn=(528)
+calls=4 0 
+0 20
+0 44
+cfn=(714)
+calls=4 0 
+0 304
+0 16
+
+fn=(870) std::__basic_file<char>::__basic_file(pthread_mutex_t*)
+0 3
+
+fn=(908) 0x000000000007bbc0
+0 9
+
+fn=(1030) std::basic_filebuf<char, std::char_traits<char> >::underflow()
+0 28
+cfn=(1032)
+calls=1 0 
+0 2
+0 26
+cfn=(1038) std::__basic_file<char>::xsgetn(char*, long)
+calls=1 0 
+0 3118
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 837
+0 4
+
+fn=(1088) std::ctype<char>::_M_widen_init() const
+0 1041
+cfn=(1090) std::ctype<char>::do_widen(char const*, char const*, char*) const
+calls=1 0 
+0 1271
+0 5
+cob=(3)
+cfi=(3)
+cfn=(1106)
+calls=1 0 
+0 111
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1198
+0 10
+
+fn=(1150)
+0 32
+cfn=(982) operator new(unsigned long)
+calls=2 0 
+0 406
+0 8
+
+fn=(1168) std::string::_Rep::_M_destroy(std::allocator<char> const&)
+0 2
+cfn=(1174) operator delete(void*)
+calls=2 0 
+0 1298
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 621
+
+fn=(1474) std::istreambuf_iterator<char, std::char_traits<char> >::operator++()
+0 8862
+
+fn=(1664) std::basic_filebuf<char, std::char_traits<char> >::_M_terminate_output()
+0 29
+
+fn=(2044) std::ios_base::~ios_base()
+0 7
+cfn=(2050) std::ios_base::_M_call_callbacks(std::ios_base::event)
+calls=1 0 
+0 12
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 947
+0 2
+cfn=(2056) std::ios_base::_M_dispose_callbacks()
+calls=1 0 
+0 12
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 883
+0 7
+cfn=(696) std::locale::~locale()
+calls=1 0 
+0 12
+
+fn=(2152) 0x00000000000b1760
+0 3
+cfn=(2158)
+calls=1 0 
+0 4
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 794
+
+fn=(368)
+0 49
+
+fn=(422)
+0 3
+cfn=(322)
+calls=1 0 
+0 4
+0 6
+cob=(3)
+cfi=(3)
+cfn=(334)
+calls=1 0 
+0 66
+0 2
+cfn=(322)
+calls=1 0 
+0 4
+0 7
+cob=(3)
+cfi=(3)
+cfn=(334)
+calls=1 0 
+0 66
+
+fn=(490) std::locale::facet::_S_get_c_name()
+0 10
+
+fn=(528)
+0 11575
+
+fn=(540) std::numpunct<char>::_M_initialize_numpunct(__locale_struct*)
+0 413
+
+fn=(552) std::moneypunct<char, true>::_M_initialize_moneypunct(__locale_struct*, char const*)
+0 112
+
+fn=(626) std::codecvt<wchar_t, char, __mbstate_t>::codecvt(unsigned long)
+0 12
+cfn=(502) std::locale::facet::_S_get_c_locale()
+calls=1 0 
+0 9
+0 5
+
+fn=(638) std::moneypunct<wchar_t, false>::_M_initialize_moneypunct(__locale_struct*, char const*)
+0 108
+
+fn=(662) std::messages<wchar_t>::messages(unsigned long)
+0 12
+cfn=(502)
+calls=1 0 
+0 9
+0 2
+cfn=(490)
+calls=1 0 
+0 2
+0 5
+
+fn=(696)
+0 5412
+
+fn=(756) std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char> > > const& std::use_facet<std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char> > > >(std::locale const&)
+0 24
+cfn=(528)
+calls=6 0 
+0 30
+0 66
+cfn=(714)
+calls=6 0 
+0 456
+0 24
+
+fn=(786) bool std::has_facet<std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t> > > >(std::locale const&)
+0 16
+cfn=(528)
+calls=4 0 
+0 20
+0 52
+cfn=(714)
+calls=4 0 
+0 304
+0 16
+
+fn=(1200) std::istream::operator>>(unsigned int&)
+0 2
+cfn=(1206) std::istream& std::istream::_M_extract<unsigned int>(unsigned int&)
+calls=2 0 
+0 3305
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 794
+
+fn=(1216) 0x000000000008a4b0
+0 13776
+cfn=(528)
+calls=1722 0 
+0 8610
+0 22386
+
+fn=(1236) 0x000000000008ad30
+0 52540
+
+fn=(1246) std::string::_Rep::_M_dispose(std::allocator<char> const&)
+0 5166
+
+fn=(1658) std::basic_filebuf<char, std::char_traits<char> >::close()
+0 16
+cfn=(900) std::__basic_file<char>::is_open() const
+calls=2 0 
+0 6
+0 7
+cfn=(1664)
+calls=1 0 
+0 29
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1076
+0 6
+cfn=(1670) std::basic_filebuf<char, std::char_traits<char> >::_M_destroy_internal_buffer()
+calls=1 0 
+0 756
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1156
+0 15
+cfn=(1682) std::__basic_file<char>::close()
+calls=1 0 
+0 2946
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 829
+0 16
+
+fn=(2032) std::basic_ifstream<char, std::char_traits<char> >::~basic_ifstream()
+0 12
+cfn=(1658)
+calls=1 0 
+0 19
+0 2
+cfn=(2038) std::__basic_file<char>::~__basic_file()
+calls=1 0 
+0 16
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 789
+0 5
+cfn=(696)
+calls=1 0 
+0 12
+0 9
+cfn=(2044)
+calls=1 0 
+0 1882
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 717
+
+fn=(342)
+0 73
+
+fn=(420)
+0 54
+
+fn=(472)
+0 4
+cfn=(484) std::locale::_Impl::_Impl(unsigned long)
+calls=1 0 
+0 55807
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 749
+0 215
+
+fn=(564) std::__timepunct<char>::_M_initialize_timepunct(__locale_struct*)
+0 10
+cfn=(502)
+calls=1 0 
+0 9
+0 97
+
+fn=(576) std::ctype<wchar_t>::ctype(unsigned long)
+0 12
+cfn=(502)
+calls=1 0 
+0 9
+0 7
+cfn=(582) std::ctype<wchar_t>::_M_initialize_ctype()
+calls=1 0 
+0 22873
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 861
+
+fn=(684)
+0 90
+cfn=(470)
+calls=10 0 
+0 290
+0 30
+cfn=(690) std::locale::operator=(std::locale const&)
+calls=10 0 
+0 170
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 757
+0 20
+cfn=(696)
+calls=10 0 
+0 120
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 725
+0 40
+
+fn=(708) bool std::has_facet<std::ctype<char> >(std::locale const&)
+0 24
+cfn=(528)
+calls=6 0 
+0 30
+0 78
+cfn=(714)
+calls=6 0 
+0 1895
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 686
+0 24
+
+fn=(730) std::ctype<char> const& std::use_facet<std::ctype<char> >(std::locale const&)
+0 1780
+cfn=(528)
+calls=445 0 
+0 2225
+0 4895
+cfn=(714)
+calls=445 0 
+0 53845
+0 1780
+
+fn=(750) bool std::has_facet<std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char> > > >(std::locale const&)
+0 24
+cfn=(528)
+calls=6 0 
+0 30
+0 78
+cfn=(714)
+calls=6 0 
+0 456
+0 24
+
+fn=(762) std::basic_ios<wchar_t, std::char_traits<wchar_t> >::init(std::basic_streambuf<wchar_t, std::char_traits<wchar_t> >*)
+0 24
+cfn=(684)
+calls=4 0 
+0 304
+0 12
+cfn=(768) std::basic_ios<wchar_t, std::char_traits<wchar_t> >::_M_cache_locale(std::locale const&)
+calls=4 0 
+0 9459
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1092
+0 52
+
+fn=(774) bool std::has_facet<std::ctype<wchar_t> >(std::locale const&)
+0 16
+cfn=(528)
+calls=4 0 
+0 20
+0 52
+cfn=(714)
+calls=4 0 
+0 304
+0 16
+
+fn=(804) std::num_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > > const& std::use_facet<std::num_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > > >(std::locale const&)
+0 16
+cfn=(528)
+calls=4 0 
+0 20
+0 44
+cfn=(714)
+calls=4 0 
+0 304
+0 16
+
+fn=(1028) 0x000000000007e094
+0 3
+cfn=(1030)
+calls=1 0 
+0 4015
+
+fn=(1082) std::basic_istream<char, std::char_traits<char> >& std::getline<char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&)
+0 132
+cfn=(1114) std::basic_istream<char, std::char_traits<char> >& std::getline<char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)
+calls=6 0 
+0 1442
+0 7
+cfn=(1114)
+calls=1 0 
+0 5442
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1245
+0 2
+cfn=(1088)
+calls=1 0 
+0 3636
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 842
+0 4
+cfn=(1108) std::ctype<char>::do_widen(char) const
+calls=1 0 
+0 2
+0 1
+
+fn=(1090)
+0 5
+cob=(3)
+cfi=(3)
+cfn=(1098) __memcpy_ssse3_back
+calls=1 0 
+0 78
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1185
+0 3
+
+fn=(1214) std::istreambuf_iterator<char, std::char_traits<char> > std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char> > >::_M_extract_int<unsigned int>(std::istreambuf_iterator<char, std::char_traits<char> >, std::istreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, std::_Ios_Iostate&, unsigned int&) const
+0 34
+cfn=(1216)
+calls=2 0 
+0 52
+0 36
+cfn=(1222) 0x000000000008ad80
+calls=2 0 
+0 56
+0 10
+cfn=(1236)
+calls=2 0 
+0 20
+0 304
+cfn=(1246)
+calls=2 0 
+0 6
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 820
+0 48
+cfn=(1236)
+calls=6 0 
+0 60
+0 70
+
+fn=(1398) std::istream::operator>>(int&)
+0 15480
+cfn=(1076)
+calls=1720 0 
+0 94170
+0 32680
+cfn=(1400)
+calls=1720 0 
+0 560078
+0 25800
+
+fn=(1670)
+0 8
+cfn=(1676) operator delete[](void*)
+calls=1 0 
+0 124
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 613
+0 11
+
+fn=(2066) std::ios_base::Init::~Init()
+0 27
+cfn=(2080) std::ostream::flush()
+calls=1 0 
+0 1220
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 676
+0 2
+cfn=(2080)
+calls=1 0 
+0 69
+0 2
+cfn=(2080)
+calls=1 0 
+0 69
+0 2
+cfn=(2096) std::basic_ostream<wchar_t, std::char_traits<wchar_t> >::flush()
+calls=1 0 
+0 69
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 964
+0 2
+cfn=(2096)
+calls=1 0 
+0 69
+0 2
+cfn=(2096)
+calls=1 0 
+0 69
+0 27
+
+fn=(2080)
+0 27
+cfn=(2082) __gnu_cxx::stdio_sync_filebuf<char, std::char_traits<char> >::sync()
+calls=3 0 
+0 1316
+0 15
+
+fn=(2082)
+0 6
+cob=(3)
+cfi=(3)
+cfn=(2088) fflush
+calls=3 0 
+0 159
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1151
+
+fn=(2096)
+0 27
+cfn=(2098) __gnu_cxx::stdio_sync_filebuf<wchar_t, std::char_traits<wchar_t> >::sync()
+calls=3 0 
+0 165
+0 15
+
+fn=(2160) 0x00000000000b1770
+0 3
+cfn=(2158)
+calls=1 0 
+0 4
+
+fn=(484)
+0 218
+cfn=(490)
+calls=1 0 
+0 2
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 867
+0 64
+cfn=(496) std::ctype<char>::ctype(unsigned short const*, bool, unsigned long)
+calls=1 0 
+0 3430
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 741
+0 4
+cfn=(522)
+calls=1 0 
+0 1046
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1061
+0 3
+cfn=(534) std::codecvt<char, char, __mbstate_t>::codecvt(unsigned long)
+calls=1 0 
+0 26
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 845
+0 4
+cfn=(522)
+calls=1 0 
+0 281
+0 23
+cfn=(540)
+calls=1 0 
+0 413
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1045
+0 5
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 5
+cfn=(502)
+calls=1 0 
+0 9
+0 5
+cfn=(522)
+calls=1 0 
+0 281
+0 35
+cfn=(546)
+calls=1 0 
+0 112
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1141
+0 5
+cfn=(522)
+calls=1 0 
+0 281
+0 35
+cfn=(552)
+calls=1 0 
+0 112
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1173
+0 5
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 56
+cfn=(558) std::__timepunct<char>::__timepunct(std::__timepunct_cache<char>*, unsigned long)
+calls=1 0 
+0 1260
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 996
+0 5
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 3
+cfn=(570) std::messages<char>::messages(unsigned long)
+calls=1 0 
+0 30
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 756
+0 4
+cfn=(522)
+calls=1 0 
+0 281
+0 3
+cfn=(576)
+calls=1 0 
+0 23762
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 709
+0 4
+cfn=(522)
+calls=1 0 
+0 281
+0 3
+cfn=(626)
+calls=1 0 
+0 26
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 837
+0 4
+cfn=(522)
+calls=1 0 
+0 281
+0 23
+cfn=(632) std::numpunct<wchar_t>::_M_initialize_numpunct(__locale_struct*)
+calls=1 0 
+0 349
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1061
+0 4
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 5
+cfn=(502)
+calls=1 0 
+0 9
+0 5
+cfn=(522)
+calls=1 0 
+0 281
+0 35
+cfn=(638)
+calls=1 0 
+0 108
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1149
+0 4
+cfn=(522)
+calls=1 0 
+0 281
+0 35
+cfn=(644) std::moneypunct<wchar_t, true>::_M_initialize_moneypunct(__locale_struct*, char const*)
+calls=1 0 
+0 108
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1173
+0 4
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 56
+cfn=(650) std::__timepunct<wchar_t>::__timepunct(std::__timepunct_cache<wchar_t>*, unsigned long)
+calls=1 0 
+0 1239
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 988
+0 4
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 8
+cfn=(522)
+calls=1 0 
+0 281
+0 3
+cfn=(662)
+calls=1 0 
+0 30
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 748
+0 4
+cfn=(522)
+calls=1 0 
+0 281
+0 3
+cfn=(528)
+calls=1 0 
+0 5
+0 5
+cfn=(528)
+calls=1 0 
+0 5
+0 5
+cfn=(528)
+calls=1 0 
+0 5
+0 5
+cfn=(528)
+calls=1 0 
+0 5
+0 5
+cfn=(528)
+calls=1 0 
+0 5
+0 5
+cfn=(528)
+calls=1 0 
+0 5
+0 5
+cfn=(528)
+calls=1 0 
+0 5
+0 5
+cfn=(528)
+calls=1 0 
+0 5
+0 10
+
+fn=(582)
+0 9
+cob=(3)
+cfi=(3)
+cfn=(588) uselocale
+calls=1 0 
+0 21
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1229
+0 770
+cob=(3)
+cfi=(3)
+cfn=(594) wctob
+calls=128 0 
+0 2432
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1153
+0 260
+cob=(3)
+cfi=(3)
+cfn=(600) btowc
+calls=1 0 
+0 19
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1136
+0 510
+cob=(3)
+cfi=(3)
+cfn=(600)
+calls=255 0 
+0 9197
+0 1067
+cfn=(610) std::ctype<wchar_t>::_M_convert_to_wmask(unsigned short) const
+calls=8 0 
+0 2884
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 877
+0 16
+cfn=(610)
+calls=4 0 
+0 1147
+0 123
+cob=(3)
+cfi=(3)
+cfn=(588)
+calls=1 0 
+0 21
+0 2
+
+fn=(744) std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > > const& std::use_facet<std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > > >(std::locale const&)
+0 24
+cfn=(528)
+calls=6 0 
+0 30
+0 66
+cfn=(714)
+calls=6 0 
+0 456
+0 24
+
+fn=(780) std::ctype<wchar_t> const& std::use_facet<std::ctype<wchar_t> >(std::locale const&)
+0 16
+cfn=(528)
+calls=4 0 
+0 20
+0 44
+cfn=(714)
+calls=4 0 
+0 304
+0 16
+
+fn=(798) bool std::has_facet<std::num_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > > >(std::locale const&)
+0 16
+cfn=(528)
+calls=4 0 
+0 20
+0 52
+cfn=(714)
+calls=4 0 
+0 304
+0 16
+
+fn=(864) std::basic_filebuf<char, std::char_traits<char> >::basic_filebuf()
+0 19
+cfn=(470)
+calls=1 0 
+0 29
+0 11
+cfn=(870)
+calls=1 0 
+0 3
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 917
+0 23
+cfn=(876)
+calls=1 0 
+0 102
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1036
+0 4
+cfn=(882) std::codecvt<char, char, __mbstate_t> const& std::use_facet<std::codecvt<char, char, __mbstate_t> >(std::locale const&)
+calls=1 0 
+0 100
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1052
+0 7
+
+fn=(906) std::__basic_file<char>::open(char const*, std::_Ios_Openmode, int)
+0 7
+cfn=(908)
+calls=1 0 
+0 9
+0 5
+cfn=(900)
+calls=1 0 
+0 3
+0 5
+cob=(3)
+cfi=(3)
+cfn=(918) fopen@@GLIBC_2.2.5
+calls=1 0 
+0 57705
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1174
+0 9
+
+fn=(976)
+0 2
+cfn=(982)
+calls=1 0 
+0 1393
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 605
+0 2
+
+fn=(982)
+0 152289
+cob=(3)
+cfi=(3)
+cfn=(924) malloc
+calls=16921 0 
+0 2831526
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1211
+0 101526
+
+fn=(1108)
+0 2
+
+fn=(1132) std::string::append(char const*, unsigned long)
+0 148
+cfn=(1138) std::string::reserve(unsigned long)
+calls=2 0 
+0 2152
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 692
+0 144
+cob=(3)
+cfi=(3)
+cfn=(1098)
+calls=6 0 
+0 90
+0 38
+
+fn=(1194) std::basic_istream<char, std::char_traits<char> >& std::operator>><char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&)
+0 14
+cfn=(1076)
+calls=1 0 
+0 59
+0 17
+cfn=(1120)
+calls=1 0 
+0 38
+0 12
+cfn=(1026) std::locale::locale(std::locale const&)
+calls=1 0 
+0 6
+0 2
+cfn=(730)
+calls=1 0 
+0 145
+0 3
+cfn=(696)
+calls=1 0 
+0 12
+0 46
+cfn=(1132)
+calls=1 0 
+0 332
+0 24
+
+fn=(1406)
+0 30960
+cfn=(1216)
+calls=1720 0 
+0 44720
+0 27520
+cfn=(1222)
+calls=1720 0 
+0 48160
+0 8600
+cfn=(1236)
+calls=1720 0 
+0 17200
+0 11311
+cfn=(1474)
+calls=633 0 
+0 8862
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1456
+0 1899
+cfn=(1222)
+calls=633 0 
+0 17724
+0 170540
+cfn=(1246)
+calls=1720 0 
+0 5160
+0 35886
+cfn=(1236)
+calls=2463 0 
+0 24630
+0 22580
+cfn=(1236)
+calls=633 0 
+0 6330
+0 27926
+cfn=(1222)
+calls=430 0 
+0 12040
+0 7310
+cfn=(1236)
+calls=430 0 
+0 4300
+0 9656
+
+fn=(1676)
+0 1
+cfn=(1174)
+calls=1 0 
+0 123
+
+fn=(1682)
+0 10
+cfn=(900)
+calls=2 0 
+0 6
+0 7
+cob=(3)
+cfi=(3)
+cfn=(1688) __errno_location
+calls=1 0 
+0 3
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1326
+0 5
+cob=(3)
+cfi=(3)
+cfn=(1694) fclose@@GLIBC_2.2.5
+calls=1 0 
+0 407
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1184
+0 13
+
+fn=(294)
+0 16
+
+fn=(302)
+0 2
+cfn=(310)
+calls=1 0 
+0 3643
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 762
+0 4
+
+fn=(558)
+0 14
+cfn=(490)
+calls=1 0 
+0 2
+0 4
+cfn=(564)
+calls=1 0 
+0 116
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1120
+0 4
+
+fn=(632)
+0 349
+
+fn=(644)
+0 108
+
+fn=(656) std::__timepunct<wchar_t>::_M_initialize_timepunct(__locale_struct*)
+0 9
+cfn=(502)
+calls=1 0 
+0 9
+0 96
+
+fn=(690)
+0 170
+
+fn=(882)
+0 4
+cfn=(528)
+calls=1 0 
+0 5
+0 11
+cfn=(714)
+calls=1 0 
+0 76
+0 4
+
+fn=(992) std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)
+0 6
+
+fn=(1020) std::basic_istream<char, std::char_traits<char> >& std::ws<char, std::char_traits<char> >(std::basic_istream<char, std::char_traits<char> >&)
+0 5256
+cfn=(1026)
+calls=438 0 
+0 2628
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 717
+0 876
+cfn=(730)
+calls=438 0 
+0 63510
+0 1314
+cfn=(696)
+calls=438 0 
+0 5256
+0 13493
+cfn=(1028)
+calls=1 0 
+0 4018
+0 3
+
+fn=(1026)
+0 2634
+
+fn=(1070) std::istream::peek()
+0 3504
+cfn=(1076)
+calls=438 0 
+0 11388
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 740
+0 5256
+
+fn=(1114)
+0 105
+cfn=(1076)
+calls=7 0 
+0 182
+0 126
+cfn=(1120)
+calls=7 0 
+0 302
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 732
+0 217
+cob=(3)
+cfi=(3)
+cfn=(1126) memchr
+calls=7 0 
+0 215
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1160
+0 56
+cfn=(1132)
+calls=7 0 
+0 2932
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 724
+0 133
+
+fn=(1138)
+0 32
+cfn=(1144)
+calls=2 0 
+0 1298
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 804
+0 18
+
+fn=(1156) std::basic_string<char, std::char_traits<char>, std::allocator<char> >::~basic_string()
+0 2164
+cfn=(1158) 0x00000000000ba3e6
+calls=2 0 
+0 2743
+0 4
+
+fn=(1174)
+0 50763
+cob=(3)
+cfi=(3)
+cfn=(1180) free
+calls=16921 0 
+0 1810275
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1130
+
+fn=(1252) std::basic_ios<char, std::char_traits<char> >::operator!() const
+0 3
+
+fn=(2038)
+0 1
+cfn=(1682)
+calls=1 0 
+0 15
+
+fn=(2142)
+0 8
+cob=(3)
+cfi=(3)
+cfn=(2128)
+calls=1 0 
+0 941
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1280
+0 1
+cfn=(2166) 0x000000000005bee0
+calls=1 0 
+0 9
+0 3
+
+fn=(502)
+0 91
+cfn=(504)
+calls=1 0 
+0 2381
+0 1
+
+fn=(650)
+0 14
+cfn=(490)
+calls=1 0 
+0 2
+0 4
+cfn=(656)
+calls=1 0 
+0 114
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1101
+0 4
+
+fn=(702)
+0 42
+cfn=(708)
+calls=6 0 
+0 2737
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 892
+0 24
+cfn=(730)
+calls=6 0 
+0 870
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 927
+0 18
+cfn=(736) bool std::has_facet<std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > > >(std::locale const&)
+calls=6 0 
+0 612
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1276
+0 24
+cfn=(744)
+calls=6 0 
+0 600
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1268
+0 18
+cfn=(750)
+calls=6 0 
+0 612
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1244
+0 24
+cfn=(756)
+calls=6 0 
+0 600
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1268
+0 30
+
+fn=(736)
+0 24
+cfn=(528)
+calls=6 0 
+0 30
+0 78
+cfn=(714)
+calls=6 0 
+0 456
+0 24
+
+fn=(768)
+0 28
+cfn=(774)
+calls=4 0 
+0 408
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 884
+0 16
+cfn=(780)
+calls=4 0 
+0 400
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 900
+0 12
+cfn=(786)
+calls=4 0 
+0 408
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1244
+0 16
+cfn=(792)
+calls=4 0 
+0 400
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1335
+0 12
+cfn=(798)
+calls=4 0 
+0 408
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1252
+0 16
+cfn=(804)
+calls=4 0 
+0 400
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1300
+0 20
+
+fn=(900)
+0 24
+
+fn=(1014) std::istream::operator>>(std::istream& (*)(std::istream&))
+0 438
+cfn=(1020)
+calls=438 0 
+0 97071
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1596
+
+fn=(1158)
+0 18
+cfn=(1168)
+calls=2 0 
+0 1921
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 804
+
+fn=(1206)
+0 18
+cfn=(1076)
+calls=2 0 
+0 131
+0 36
+cfn=(1208) std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char> > >::do_get(std::istreambuf_iterator<char, std::char_traits<char> >, std::istreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, std::_Ios_Iostate&, unsigned int&) const
+calls=2 0 
+0 3104
+0 16
+
+fn=(2050)
+0 12
+
+fn=(2098)
+0 6
+cob=(3)
+cfi=(3)
+cfn=(2088)
+calls=3 0 
+0 159
+
+fn=(2162) 0x00000000000b0a90
+0 3
+cfn=(2158)
+calls=1 0 
+0 4
+
+fn=(328)
+0 5
+
+fn=(464) std::ios_base::Init::Init()
+0 115
+cfn=(470)
+calls=1 0 
+0 56596
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 709
+0 16
+cfn=(470)
+calls=1 0 
+0 29
+0 14
+cfn=(470)
+calls=1 0 
+0 29
+0 6
+cfn=(672)
+calls=1 0 
+0 88
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 717
+0 15
+cfn=(678)
+calls=1 0 
+0 12933
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1116
+0 3
+cfn=(672)
+calls=1 0 
+0 88
+0 16
+cfn=(678)
+calls=1 0 
+0 824
+0 3
+cfn=(672)
+calls=1 0 
+0 88
+0 14
+cfn=(678)
+calls=1 0 
+0 824
+0 3
+cfn=(672)
+calls=1 0 
+0 88
+0 14
+cfn=(678)
+calls=1 0 
+0 824
+0 16
+cfn=(470)
+calls=1 0 
+0 29
+0 16
+cfn=(470)
+calls=1 0 
+0 29
+0 14
+cfn=(470)
+calls=1 0 
+0 29
+0 6
+cfn=(672)
+calls=1 0 
+0 88
+0 15
+cfn=(762)
+calls=1 0 
+0 8741
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1132
+0 3
+cfn=(672)
+calls=1 0 
+0 88
+0 16
+cfn=(762)
+calls=1 0 
+0 734
+0 3
+cfn=(672)
+calls=1 0 
+0 88
+0 14
+cfn=(762)
+calls=1 0 
+0 734
+0 3
+cfn=(672)
+calls=1 0 
+0 88
+0 14
+cfn=(762)
+calls=1 0 
+0 734
+0 27
+
+fn=(610)
+0 64
+cob=(3)
+cfi=(3)
+cfn=(616) wctype_l
+calls=1 0 
+0 187
+0 24
+cob=(3)
+cfi=(3)
+cfn=(616)
+calls=1 0 
+0 375
+0 17
+cob=(3)
+cfi=(3)
+cfn=(616)
+calls=1 0 
+0 583
+0 3
+cob=(3)
+cfi=(3)
+cfn=(616)
+calls=1 0 
+0 93
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1236
+0 3
+cob=(3)
+cfi=(3)
+cfn=(616)
+calls=1 0 
+0 328
+0 9
+cob=(3)
+cfi=(3)
+cfn=(616)
+calls=1 0 
+0 516
+0 3
+cob=(3)
+cfi=(3)
+cfn=(616)
+calls=1 0 
+0 244
+0 3
+cob=(3)
+cfi=(3)
+cfn=(616)
+calls=1 0 
+0 140
+0 3
+cob=(3)
+cfi=(3)
+cfn=(616)
+calls=1 0 
+0 200
+
+fn=(714)
+0 13527
+cfn=(738)
+calls=50 0 
+0 1750
+cfn=(716)
+calls=451 0 
+0 37249
+0 7014
+
+fn=(888) std::basic_ifstream<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode)
+0 5
+cfn=(894) std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode)
+calls=1 0 
+0 64554
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1124
+0 8
+cfn=(992)
+calls=1 0 
+0 6
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1036
+
+fn=(1064) std::basic_ios<char, std::char_traits<char> >::operator void*() const
+0 8632
+
+fn=(1076)
+0 105972
+
+fn=(1208)
+0 12
+cfn=(1214)
+calls=2 0 
+0 1516
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1572
+0 4
+
+fn=(1652) std::basic_ifstream<char, std::char_traits<char> >::close()
+0 4
+cfn=(1658)
+calls=1 0 
+0 6839
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 988
+0 4
+
+fn=(394)
+0 49
+
+fn=(496)
+0 14
+cfn=(502)
+calls=1 0 
+0 2392
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 877
+0 147
+
+fn=(510)
+0 4
+cob=(3)
+cfi=(3)
+cfn=(516) newlocale
+calls=1 0 
+0 40
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1243
+0 5
+
+fn=(534)
+0 12
+cfn=(502)
+calls=1 0 
+0 9
+0 5
+
+fn=(570)
+0 12
+cfn=(502)
+calls=1 0 
+0 9
+0 2
+cfn=(490)
+calls=1 0 
+0 2
+0 5
+
+fn=(858) std::basic_ifstream<char, std::char_traits<char> >::basic_ifstream()
+0 9
+cfn=(672)
+calls=1 0 
+0 88
+0 15
+cfn=(678)
+calls=1 0 
+0 824
+0 8
+cfn=(864)
+calls=1 0 
+0 3303
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 924
+0 3
+cfn=(678)
+calls=1 0 
+0 824
+0 6
+
+fn=(894)
+0 11
+cfn=(900)
+calls=1 0 
+0 3
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 845
+0 7
+cfn=(906)
+calls=1 0 
+0 58917
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 957
+0 2
+cfn=(900)
+calls=1 0 
+0 3
+0 4
+cfn=(970)
+calls=1 0 
+0 2643
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1140
+0 22
+
+fn=(998) std::basic_ifstream<char, std::char_traits<char> >::is_open()
+0 2
+cfn=(900)
+calls=1 0 
+0 3
+
+fn=(1006) std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string()
+0 1728
+
+fn=(1038)
+0 11
+cfn=(1044)
+calls=1 0 
+0 1168
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 789
+0 4
+cob=(3)
+cfi=(3)
+cfn=(1056) read
+calls=1 0 
+0 7
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1129
+0 10
+
+fn=(1222)
+0 77980
+
+fn=(2056)
+0 12
+
+fn=(2166)
+0 9
+
+ob=(8)
+fl=(23) /usr/include/c++/4.8.0/bits/stl_iterator_base_types.h
+fn=(1318) std::_Iter_base<Variable**, false>::_S_base(Variable**)
+212 5
++1 5
+
+fn=(1358) std::_Iter_base<WatchedClause**, false>::_S_base(WatchedClause**)
+212 9555
++1 9555
+
+fn=(1512) std::_Iter_base<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, false>::_S_base(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+212 59612
++1 59612
+
+fn=(1518) std::_Iter_base<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, true>::_S_base(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+220 178836
++1 178836
+cfi=(13) /usr/include/c++/4.8.0/bits/stl_iterator.h
+cfn=(1448) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::base() const
+calls=89418 790 
+* 178836
+* 268254
+
+fl=(25) /usr/include/c++/4.8.0/new
+fn=(1380) operator new(unsigned long, void*) [clone .isra.1]
+109 111629
++1 111629
+-1 783
++1 783
+
+fn=(1624) operator new(unsigned long, void*) [clone .isra.0]
+109 33707
++1 33707
+
+fl=(29) /usr/include/c++/4.8.0/bits/stl_algo.h
+fn=(1874) void std::sort<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&))
+5497 27476
++13 6869
+-13 6869
++13 13738
+cfi=(13)
+cfn=(1490) bool __gnu_cxx::operator!=<Literal*, std::vector<Literal, std::allocator<Literal> > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > const&, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > const&)
+calls=6869 823 
+* 130511
+* 13738
++3 20607
+cfi=(13)
+cfn=(1446) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::difference_type __gnu_cxx::operator-<Literal*, std::vector<Literal, std::allocator<Literal> > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > const&, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > const&)
+calls=6869 896 
+* 137380
+* 13738
+cfi=(22) /usr/include/c++/4.8.0/bits/stl_algobase.h
+cfn=(1492) std::__lg(long)
+calls=6869 989 
+* 41214
+-1 13738
++1 6869
+-1 13738
+cfn=(1876) void std::__introsort_loop<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, long, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, long, bool (*)(Literal const&, Literal const&))
+calls=6869 2347 
+* 270650
++2 27476
+cfn=(1878) void std::__final_insertion_sort<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&))
+calls=6869 2245 
+* 4255882
++2 20607
+
+fn=(1488) void std::sort<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+5461 860
++11 430
+-11 430
++11 860
+cfi=(13)
+cfn=(1490)
+calls=430 823 
+* 8170
+* 860
++3 1290
+cfi=(13)
+cfn=(1446)
+calls=430 896 
+* 8600
+* 860
+cfi=(22)
+cfn=(1492)
+calls=430 989 
+* 2580
+-1 860
++1 430
+-1 430
+cfn=(1494) void std::__introsort_loop<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, long>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, long)
+calls=430 2325 
+* 15480
++2 1290
+cfn=(1496) void std::__final_insertion_sort<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+calls=430 2230 
+* 173946
++2 860
+
+fn=(1496)
+2230 860
++3 430
+-3 430
++3 860
+cfi=(13)
+cfn=(1446)
+calls=430 896 
+* 8600
+* 860
++6 1290
+cfn=(1498) void std::__insertion_sort<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+calls=430 -86 
+* 159756
++1 860
+
+fn=(1878)
+2245 27476
++3 6869
+-3 6869
++3 13738
+cfi=(13)
+cfn=(1446)
+calls=6869 896 
+* 137380
+* 13738
++7 27464
+cfn=(1880) void std::__insertion_sort<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&))
+calls=6866 -79 
+* 3993229
++1 20598
+-6 9
+cfi=(13)
+cfn=(1502) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::operator+(long const&) const [clone .isra.15]
+calls=3 778 
+* 39
+* 12
+cfn=(1880)
+calls=3 -74 
+* 7818
++2 9
+cfi=(13)
+cfn=(1502)
+calls=3 778 
+* 39
+-1 12
+cfn=(2002) void std::__unguarded_insertion_sort<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&))
+calls=3 -40 
+* 574
++5 9
+
+fn=(1494)
+2325 2580
++4 1720
+cfi=(13)
+cfn=(1446)
+calls=430 896 
+* 8600
+* 860
++13 1720
+
+fn=(1876)
+2347 54952
++4 6869
++2 6
++7 9
+-2 3
++2 3
+cfn=(1992) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > std::__unguarded_partition_pivot<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&))
+calls=3 -46 
+* 2525
++1 3
+-1 3
++1 12
+cfn=(1877) void std::__introsort_loop<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, long, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, long, bool (*)(Literal const&, Literal const&))'2
+calls=3 -14 
+* 117
++1 3
+-11 9
+cfi=(13)
+cfn=(1446)
+calls=3 896 
+* 60
+* 20607
+cfi=(13)
+cfn=(1446)
+calls=6869 896 
+* 137380
+* 13744
++13 34345
+
+fn=(1877)
+2347 24
++4 12
+cfi=(13)
+cfn=(1446)
+calls=3 896 
+* 60
+* 6
++13 15
+
+fn=(1526) void std::__unguarded_linear_insert<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+2116 1539
++3 1026
+cfi=(13)
+cfn=(1504) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::operator*() const
+calls=513 739 
+* 1026
+* 1539
+cfi=(26) /home/artifere/ENS_L3/Projet2/Rendu1/src/Literal.hh
+cfn=(1458) Literal::Literal(Literal const&)
+calls=513 18 
+* 2565
++1 513
++1 513
+-1 513
++1 513
+cfi=(13)
+cfn=(1528) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::operator--()
+calls=513 758 
+* 1539
++1 513
++2 139
+cfi=(13)
+cfn=(1504)
+calls=139 739 
+* 278
+* 139
++2 139
+-2 417
++1 278
++1 139
+cfi=(13)
+cfn=(1528)
+calls=139 758 
+* 417
+-4 1304
+cfi=(13)
+cfn=(1504)
+calls=652 739 
+* 1304
+* 2608
+cfi=(26)
+cfn=(1506) Literal::operator<(Literal const&) const
+calls=652 38 
+* 4286
+* 652
++2 652
+-2 652
++6 513
+cfi=(13)
+cfn=(1504)
+calls=513 739 
+* 1026
+* 2052
++1 1539
+
+fn=(1534) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > std::adjacent_find<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+4581 1290
++7 430
+-7 430
++7 860
+cfi=(13)
+cfn=(1500) bool __gnu_cxx::operator==<Literal*, std::vector<Literal, std::allocator<Literal> > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > const&, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > const&)
+calls=430 811 
+* 8170
+* 860
++2 860
++1 430
++2 1720
+cfi=(13)
+cfn=(1504)
+calls=860 739 
+* 1720
+* 2580
+cfi=(13)
+cfn=(1504)
+calls=860 739 
+* 1720
+* 2580
+cfi=(26)
+cfn=(1536) Literal::operator==(Literal const&) const
+calls=860 43 
+* 4300
+* 1720
++2 1720
+-4 1720
+cfi=(13)
+cfn=(1524) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::operator++()
+calls=860 746 
+* 2580
+* 860
+cfi=(13)
+cfn=(1524)
+calls=430 746 
+* 1290
+* 3870
+cfi=(13)
+cfn=(1490)
+calls=1290 823 
+* 24510
+* 2580
++6 430
++1 1290
+
+fn=(1880)
+2176 34345
++3 6869
+-3 6869
++3 13738
+cfi=(13)
+cfn=(1500)
+calls=6869 811 
+* 130511
+* 13738
++14 27476
+-12 20607
+cfi=(13)
+cfn=(1502)
+calls=6869 778 
+* 89297
+* 13738
++5 16308
+cfi=(13)
+cfn=(1504)
+calls=8154 739 
+* 16308
+* 24462
+cfi=(26)
+cfn=(1458)
+calls=8154 18 
+* 40770
++1 24462
+cfi=(13)
+cfn=(1502)
+calls=8154 778 
+* 106002
+* 32616
+cfi=(22)
+cfn=(1508) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > std::copy_backward<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+calls=8154 619 
+* 956008
++1 16308
+cfi=(13)
+cfn=(1504)
+calls=8154 739 
+* 16308
+* 32616
+-7 16308
+cfi=(13)
+cfn=(1524)
+calls=8154 746 
+* 24462
+* 20954
+cfi=(13)
+cfn=(1524)
+calls=10477 746 
+* 31431
+* 76500
+cfi=(13)
+cfn=(1490)
+calls=25500 823 
+* 484500
+* 51000
++2 37262
+cfi=(13)
+cfn=(1504)
+calls=18631 739 
+* 37262
+* 55893
+cfi=(13)
+cfn=(1504)
+calls=18631 739 
+* 37262
+* 55893
+cfi=(14) /home/artifere/ENS_L3/Projet2/Rendu1/src/satSolver.cpp
+cfn=(1882) litCompVar(Literal const&, Literal const&)
+calls=18631 327 
+* 316727
+* 37262
++8 31431
+cfn=(1886) void std::__unguarded_linear_insert<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&))
+calls=10477 -57 
+* 1037067
+* 10477
+
+fn=(1910) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > std::lower_bound<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, Literal, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, Literal const&, bool (*)(Literal const&, Literal const&))
+2448 124820
++15 12482
+cfi=(31) /usr/include/c++/4.8.0/bits/stl_iterator_base_funcs.h
+cfn=(1912) std::iterator_traits<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >::difference_type std::distance<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+calls=12482 118 
+* 361978
++2 12482
+-2 12482
++2 91570
++2 20665
++2 20665
+-1 20665
+-1 20665
++2 41330
+cfi=(31)
+cfn=(1916) void std::advance<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, long>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >&, long)
+calls=20665 177 
+* 123990
+-2 12482
++2 12482
+-1 12482
+-1 12482
++2 24964
+cfi=(31)
+cfn=(1916)
+calls=12482 177 
+* 74892
++1 66294
+cfi=(13)
+cfn=(1504)
+calls=33147 739 
+* 66294
+* 99441
+cfi=(14)
+cfn=(1882)
+calls=33147 327 
+* 563499
+* 66294
++2 14268
++2 14268
+-1 14268
++1 14268
+-2 14268
++1 14268
+cfi=(13)
+cfn=(1524)
+calls=14268 746 
+* 42804
+-8 41018
++15 99856
+
+fn=(1998) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > std::__unguarded_partition<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, Literal, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, Literal const&, bool (*)(Literal const&, Literal const&))
+2281 24
++14 48
+cfi=(13)
+cfn=(1524)
+calls=24 746 
+* 72
+-8 54
+cfi=(13)
+cfn=(1504)
+calls=27 739 
+* 54
+* 81
+cfi=(14)
+cfn=(1882)
+calls=27 327 
+* 459
+* 54
++2 58
+cfi=(13)
+cfn=(1528)
+calls=29 758 
+* 87
++1 58
+cfi=(13)
+cfn=(1504)
+calls=29 739 
+* 58
+* 87
+cfi=(14)
+cfn=(1882)
+calls=29 327 
+* 493
+* 58
++2 15
+cfi=(13)
+cfn=(2000) bool __gnu_cxx::operator< <Literal*, std::vector<Literal, std::allocator<Literal> > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > const&, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > const&)
+calls=5 836 
+* 95
+* 10
++2 6
+cfi=(22)
+cfn=(1980) void std::iter_swap<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+calls=2 142 
+* 90
+* 2
+-1 3
++4 12
+
+fn=(2002)
+2211 12
++6 6
++1 15
+cfn=(1886)
+calls=5 -84 
+* 315
+-1 10
+cfi=(13)
+cfn=(1524)
+calls=5 746 
+* 15
+* 24
+cfi=(13)
+cfn=(1490)
+calls=8 823 
+* 152
+* 16
++2 9
+
+fn=(1532) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > std::unique<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+1198 1720
++10 430
+cfn=(1534)
+calls=430 4581 
+* 70520
++1 860
+-1 860
++1 430
+cfi=(13)
+cfn=(1500)
+calls=430 811 
+* 8170
+* 860
++1 430
++9 1290
+
+fn=(1992)
+2314 15
++3 3
+-3 3
++3 6
+cfi=(13)
+cfn=(1446)
+calls=3 896 
+* 60
+* 18
+cfi=(13)
+cfn=(1502)
+calls=3 778 
+* 39
++1 3
+-1 3
++1 3
+cfi=(13)
+cfn=(1994) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::operator-(long const&) const [clone .isra.21] [clone .constprop.116]
+calls=3 786 
+* 39
+* 15
+cfn=(1996) void std::__move_median_first<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&))
+calls=3 102 
+* 250
++1 6
+cfi=(13)
+cfn=(1504)
+calls=3 739 
+* 6
+* 12
+cfi=(13)
+cfn=(1502)
+calls=3 778 
+* 39
+* 15
+cfn=(1998)
+calls=3 -38 
+* 1978
++1 12
+
+fn=(1886)
+2134 52410
++4 20964
+cfi=(13)
+cfn=(1504)
+calls=10482 739 
+* 20964
+* 31446
+cfi=(26)
+cfn=(1458)
+calls=10482 18 
+* 52410
++1 10482
++1 10482
+-1 10482
++1 10482
+cfi=(13)
+cfn=(1528)
+calls=10482 758 
+* 31446
++1 10482
++2 8196
+cfi=(13)
+cfn=(1504)
+calls=8196 739 
+* 16392
+* 24588
+cfi=(13)
+cfn=(1504)
+calls=8196 739 
+* 16392
+* 8196
++2 8196
+-2 24588
++1 16392
++1 8196
+cfi=(13)
+cfn=(1528)
+calls=8196 758 
+* 24588
+-4 37356
+cfi=(13)
+cfn=(1504)
+calls=18678 739 
+* 37356
+* 56034
+cfi=(14)
+cfn=(1882)
+calls=18678 327 
+* 317526
+* 18678
++2 18678
+-2 18678
++6 10482
+cfi=(13)
+cfn=(1504)
+calls=10482 739 
+* 20964
+* 41928
++1 41928
+
+fn=(1498)
+2153 1720
++3 430
+-3 430
++3 860
+cfi=(13)
+cfn=(1500)
+calls=430 811 
+* 8170
+* 860
++15 1720
+-12 1290
+cfi=(13)
+cfn=(1502)
+calls=430 778 
+* 5590
+* 860
++5 1041
+cfi=(26)
+cfn=(1458)
+calls=347 18 
+* 1735
++1 1041
+cfi=(13)
+cfn=(1502)
+calls=347 778 
+* 4511
+* 1388
+cfi=(22)
+cfn=(1508)
+calls=347 619 
+* 39976
++1 694
+cfi=(13)
+cfn=(1504)
+calls=347 739 
+* 694
+* 1388
+-7 694
+cfi=(13)
+cfn=(1524)
+calls=347 746 
+* 1041
+* 1026
+cfi=(13)
+cfn=(1524)
+calls=513 746 
+* 1539
+* 3870
+cfi=(13)
+cfn=(1490)
+calls=1290 823 
+* 24510
+* 2580
++2 1720
+cfi=(13)
+cfn=(1504)
+calls=860 739 
+* 1720
+* 2580
+cfi=(13)
+cfn=(1504)
+calls=860 739 
+* 1720
+* 3440
+cfi=(26)
+cfn=(1506)
+calls=860 38 
+* 5326
+* 1720
++8 1026
+cfn=(1526)
+calls=513 -53 
+* 30333
+* 513
+
+fn=(1726) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > std::max_element<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, bool (*)(Variable const*, Variable const*)>(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, bool (*)(Variable const*, Variable const*))
+6326 3260
++10 652
+-10 652
++10 1304
+cfi=(13)
+cfn=(1728) bool __gnu_cxx::operator==<Variable**, std::vector<Variable*, std::allocator<Variable*> > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&)
+calls=652 811 
+* 12388
+* 1956
++4 4376
+-1 106376
+cfi=(13)
+cfn=(1732) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >::operator*() const
+calls=53188 739 
+* 106376
+* 159564
+cfi=(13)
+cfn=(1732)
+calls=53188 739 
+* 106376
+* 159564
+cfi=(24) /home/artifere/ENS_L3/Projet2/Rendu1/src/Variable.hh
+cfn=(1734) DLISvarCompr(Variable const*, Variable const*)
+calls=53188 89 
+* 3776348
+* 106376
+-1 107680
+cfi=(13)
+cfn=(1730) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >::operator++()
+calls=53840 746 
+* 161520
+* 161520
+cfi=(13)
+cfn=(1716) bool __gnu_cxx::operator!=<Variable**, std::vector<Variable*, std::allocator<Variable*> > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&)
+calls=53840 823 
+* 1022960
+* 107680
++3 652
++1 2608
+-2 3072
+
+fn=(1932) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > std::set_union<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&)>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, bool (*)(Literal const&, Literal const&))
+5819 56169
++23 134005
+cfi=(13)
+cfn=(1490)
+calls=42588 823 
+* 809172
+* 85176
++2 82486
+cfi=(13)
+cfn=(1504)
+calls=41243 739 
+* 82486
+* 123729
+cfi=(13)
+cfn=(1504)
+calls=41243 739 
+* 82486
+* 123729
+cfi=(14)
+cfn=(1882)
+calls=41243 327 
+* 701131
+* 82486
++2 14938
+cfi=(13)
+cfn=(1504)
+calls=7469 739 
+* 14938
+* 22407
+cfi=(13)
+cfn=(1504)
+calls=7469 739 
+* 14938
+* 7469
++1 7469
+-1 22407
++1 7469
+cfi=(13)
+cfn=(1524)
+calls=7469 746 
+* 22407
++13 82486
+cfi=(13)
+cfn=(1524)
+calls=41243 746 
+* 123729
+-18 142452
+cfi=(13)
+cfn=(1490)
+calls=47484 823 
+* 902196
+* 94968
++21 24964
+cfi=(22)
+cfn=(1924) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > std::copy<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+calls=6241 450 
+* 631879
+* 24964
+cfi=(22)
+cfn=(1924)
+calls=6241 450 
+* 709743
++1 24964
+-15 67548
+cfi=(13)
+cfn=(1504)
+calls=33774 739 
+* 67548
+* 101322
+cfi=(13)
+cfn=(1504)
+calls=33774 739 
+* 67548
+* 101322
+cfi=(14)
+cfn=(1882)
+calls=33774 327 
+* 574158
+* 33774
++2 33774
+-2 33774
++2 26037
+cfi=(13)
+cfn=(1504)
+calls=26037 739 
+* 52074
+* 78111
+cfi=(13)
+cfn=(1504)
+calls=26037 739 
+* 52074
+* 26037
++1 26037
+-1 78111
++1 26037
+cfi=(13)
+cfn=(1524)
+calls=26037 746 
+* 78111
+* 26037
++4 7737
+cfi=(13)
+cfn=(1504)
+calls=7737 739 
+* 15474
+* 23211
+cfi=(13)
+cfn=(1504)
+calls=7737 739 
+* 15474
+* 7737
++1 7737
+-1 23211
++1 7737
+cfi=(13)
+cfn=(1524)
+calls=7737 746 
+* 23211
++1 15474
+cfi=(13)
+cfn=(1524)
+calls=7737 746 
+* 23211
+* 7737
+
+fn=(1996)
+102 15
++8 3
+-8 6
++8 3
+cfi=(13)
+cfn=(1504)
+calls=3 739 
+* 6
+* 9
+cfi=(13)
+cfn=(1504)
+calls=3 739 
+* 6
+* 9
+cfi=(14)
+cfn=(1882)
+calls=3 327 
+* 51
+* 3
++2 3
+-2 3
++2 1
+cfi=(13)
+cfn=(1504)
+calls=1 739 
+* 2
+* 3
+cfi=(13)
+cfn=(1504)
+calls=1 739 
+* 2
+* 3
+cfi=(14)
+cfn=(1882)
+calls=1 327 
+* 17
+* 2
++2 2
+cfi=(13)
+cfn=(1504)
+calls=1 739 
+* 2
+* 3
+cfi=(13)
+cfn=(1504)
+calls=1 739 
+* 2
+* 3
+cfi=(14)
+cfn=(1882)
+calls=1 327 
+* 17
+* 2
++9 12
+-6 2
+cfi=(13)
+cfn=(1504)
+calls=2 739 
+* 4
+* 6
+cfi=(13)
+cfn=(1504)
+calls=2 739 
+* 4
+* 6
+cfi=(14)
+cfn=(1882)
+calls=2 327 
+* 34
+* 4
+
+fl=(30) /home/artifere/ENS_L3/Projet2/Rendu1/src/WatchedClause.hh
+fn=(1872) WatchedClause::getLiterals() const
+193 6869
++1 6869
+
+fn=(1800) WatchedClause::setLitTrue(Literal const&) [clone .isra.4]
+144 193334
+
+fn=(1808) WatchedClause::isSatisfied() const
+178 165234
++1 660936
+cfi=(12) /usr/include/c++/4.8.0/bits/stl_vector.h
+cfn=(1810) std::vector<Literal, std::allocator<Literal> >::operator[](unsigned long) const [clone .isra.9]
+calls=165234 786 
+* 495702
+* 330468
+cfi=(26)
+cfn=(1812) Literal::isTrue() const
+calls=165234 47 
+* 6606591
+* 706590
+cfi=(12)
+cfn=(1810)
+calls=125374 786 
+* 376122
++1 125374
+-1 250748
+cfi=(26)
+cfn=(1812)
+calls=125374 47 
+* 4988579
++1 119580
+
+fn=(1848) WatchedClause::getRemaining() const
+172 63380
++1 63380
+cfi=(12)
+cfn=(1810)
+calls=15845 786 
+* 47535
+* 31690
+cfi=(26)
+cfn=(1824) Literal::var() const [clone .isra.1]
+calls=15845 21 
+* 31690
+* 31690
+cfi=(24)
+cfn=(1826) Variable::isFree() const
+calls=15845 62 
+* 364435
+* 47535
+cfi=(12)
+cfn=(1810)
+calls=15845 786 
+* 47535
+* 47535
+cfi=(26)
+cfn=(1458)
+calls=15845 18 
+* 79225
++1 79225
+
+fn=(1840) WatchedClause::freeSize() const
+165 37757
++1 37757
+-1 75514
++1 113271
+cfi=(12)
+cfn=(1810)
+calls=37757 786 
+* 113271
+* 75514
+cfi=(26)
+cfn=(1824)
+calls=37757 21 
+* 75514
+* 75514
+cfi=(24)
+cfn=(1826)
+calls=37757 62 
+* 868411
++1 75514
+-1 37757
++1 37757
+cfi=(12)
+cfn=(1810)
+calls=37757 786 
+* 113271
+* 75514
+cfi=(26)
+cfn=(1824)
+calls=37757 21 
+* 75514
+* 75514
+cfi=(24)
+cfn=(1826)
+calls=37757 62 
+* 868411
++1 37757
+-1 37757
++1 37757
+-1 37757
++1 75514
+
+fn=(1548) WatchedClause::WatchedClause(std::vector<Literal, std::allocator<Literal> > const&, unsigned int)
+55 860
++1 430
+-1 1720
++1 1290
+cfi=(12)
+cfn=(1550) std::vector<Literal, std::allocator<Literal> >::vector(std::vector<Literal, std::allocator<Literal> > const&)
+calls=430 310 
+* 227040
++2 1290
+cfi=(12)
+cfn=(1542) std::vector<Literal, std::allocator<Literal> >::operator[](unsigned long) [clone .isra.7]
+calls=430 771 
+* 1290
+* 1290
+cfi=(26)
+cfn=(1588) Literal::pos() const [clone .isra.4]
+calls=430 -32 
+* 860
+* 1290
+cfi=(26)
+cfn=(1544) Literal::var() const [clone .isra.3]
+calls=430 -37 
+* 860
+* 1720
+cfi=(24)
+cfn=(1590) Variable::linkToClause(bool, WatchedClause*)
+calls=430 +72 
+* 157474
++1 1290
+cfi=(12)
+cfn=(1542)
+calls=430 771 
+* 1290
+* 1290
+cfi=(26)
+cfn=(1588)
+calls=430 -33 
+* 860
+* 1290
+cfi=(26)
+cfn=(1544)
+calls=430 -38 
+* 860
+* 1720
+cfi=(24)
+cfn=(1590)
+calls=430 +71 
+* 183096
++5 2580
+
+fn=(1806) WatchedClause::setLitFalse(Literal const&)
+102 584927
++5 83561
+cfn=(1808)
+calls=83561 +71 
+* 7618837
++1 83561
+-1 167122
++29 371175
+-25 140685
+cfi=(12)
+cfn=(1426) std::vector<Literal, std::allocator<Literal> >::end()
+calls=46895 556 
+* 468950
++1 46895
+-1 46895
++1 46895
+cfi=(13)
+cfn=(1818) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::__normal_iterator()
+calls=46895 723 
+* 93790
+* 46895
++1 46895
+-1 46895
++1 46895
+cfi=(12)
+cfn=(1444) std::vector<Literal, std::allocator<Literal> >::begin()
+calls=46895 538 
+* 468950
+* 140685
+cfi=(13)
+cfn=(1820) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::operator+(long const&) const [clone .isra.14] [clone .constprop.42]
+calls=46895 778 
+* 609635
+* 93790
++6 78238
+-6 78238
+cfi=(13)
+cfn=(1524)
+calls=39119 746 
+* 117357
+* 81692
+cfi=(13)
+cfn=(1524)
+calls=40846 746 
+* 122538
+* 380580
+cfi=(13)
+cfn=(1490)
+calls=126860 823 
+* 2410340
+* 253720
++2 174416
+cfi=(13)
+cfn=(1822) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::operator->() const
+calls=87208 743 
+* 174416
+* 261624
+cfi=(26)
+cfn=(1824)
+calls=87208 -94 
+* 174416
+* 261624
+cfi=(24)
+cfn=(1826)
+calls=87208 -53 
+* 2005784
+* 174416
++6 96178
+cfi=(26)
+cfn=(1828) Literal::pos() const [clone .isra.2]
+calls=48089 -95 
+* 96178
+* 96178
++2 14486
++4 21729
+cfi=(13)
+cfn=(1490)
+calls=7243 823 
+* 137617
+* 118956
+cfi=(13)
+cfn=(1490)
+calls=39652 823 
+* 753388
+* 140685
++3 61072
+cfi=(13)
+cfn=(1822)
+calls=30536 743 
+* 61072
+* 91608
+cfi=(26)
+cfn=(1828)
+calls=30536 26 
+* 61072
+* 91608
+cfi=(26)
+cfn=(1824)
+calls=30536 21 
+* 61072
+* 122144
+cfi=(24)
+cfn=(1590)
+calls=30536 * 
+* 1187125
++1 61072
+cfi=(26)
+cfn=(1824)
+calls=30536 21 
+* 61072
+-20 30536
++20 122144
+cfi=(12)
+cfn=(1830) std::vector<Literal, std::allocator<Literal> >::operator[](unsigned long) [clone .isra.8]
+calls=30536 771 
+* 91608
+* 61072
+cfi=(26)
+cfn=(1824)
+calls=30536 21 
+* 61072
+* 152680
+cfi=(12)
+cfn=(1830)
+calls=30536 771 
+* 91608
+* 91608
+cfi=(13)
+cfn=(1504)
+calls=30536 739 
+* 61072
+* 30536
++1 30536
+-1 91608
++1 30536
+cfi=(13)
+cfn=(1504)
+calls=30536 739 
+* 61072
+* 152680
+cfi=(26)
+cfn=(1832) Literal::invert() const [clone .isra.3]
+calls=30536 31 
+* 335896
+* 213752
+cfi=(13)
+cfn=(1490)
+calls=30536 823 
+* 580184
++4 244288
+
+fn=(1978) WatchedClause::WatchedClause(std::vector<Literal, std::allocator<Literal> > const&, unsigned int, Variable*)
+70 3135
++1 627
+-1 627
++1 1881
+cfi=(12)
+cfn=(1550)
+calls=627 310 
+* 545009
++2 1254
+cfi=(13)
+cfn=(1818)
+calls=627 723 
+* 1254
++2 1254
+cfi=(12)
+cfn=(1444)
+calls=627 538 
+* 6270
+* 2508
+cfi=(13)
+cfn=(1502)
+calls=627 778 
+* 8151
+* 10584
+cfi=(13)
+cfn=(1524)
+calls=4665 746 
+* 13995
+* 10584
+cfi=(12)
+cfn=(1426)
+calls=5292 556 
+* 52920
+* 21168
+cfi=(13)
+cfn=(1490)
+calls=5292 823 
+* 100548
+* 10584
++2 9330
+cfi=(13)
+cfn=(1822)
+calls=4665 743 
+* 9330
+* 9330
+cfi=(26)
+cfn=(1544)
+calls=4665 -56 
+* 9330
+* 18660
+cfi=(12)
+cfn=(1542)
+calls=4665 771 
+* 13995
+* 9330
+cfi=(26)
+cfn=(1544)
+calls=4665 -56 
+* 9330
+* 13995
+cfi=(24)
+cfn=(1942) Variable::isOlder(Variable*) const
+calls=4665 -17 
+* 102630
+* 9330
++1 2960
+cfi=(12)
+cfn=(1444)
+calls=1480 538 
+* 14800
+* 4440
+cfi=(22)
+cfn=(1980)
+calls=1480 +64 
+* 66600
+* 1480
++3 1254
+cfi=(12)
+cfn=(1444)
+calls=627 538 
+* 6270
+* 2508
+cfi=(13)
+cfn=(1502)
+calls=627 778 
+* 8151
+* 9330
+cfi=(13)
+cfn=(1524)
+calls=4038 746 
+* 12114
+* 9330
+cfi=(12)
+cfn=(1426)
+calls=4665 556 
+* 46650
+* 18660
+cfi=(13)
+cfn=(1490)
+calls=4665 823 
+* 88635
+* 9330
++2 8076
+cfi=(13)
+cfn=(1822)
+calls=4038 743 
+* 8076
+* 8076
+cfi=(26)
+cfn=(1544)
+calls=4038 -62 
+* 8076
+* 16152
+cfi=(12)
+cfn=(1542)
+calls=4038 771 
+* 12114
+* 8076
+cfi=(26)
+cfn=(1544)
+calls=4038 -62 
+* 8076
+* 12114
+cfi=(24)
+cfn=(1942)
+calls=4038 -23 
+* 88836
+* 8076
++1 4384
+cfi=(12)
+cfn=(1444)
+calls=2192 538 
+* 21920
+* 8768
+cfi=(13)
+cfn=(1502)
+calls=2192 778 
+* 28496
+* 6576
+cfi=(22)
+cfn=(1980)
+calls=2192 +58 
+* 98640
+* 2192
++3 1881
+cfi=(12)
+cfn=(1542)
+calls=627 771 
+* 1881
+* 1881
+cfi=(26)
+cfn=(1588)
+calls=627 -61 
+* 1254
+* 1881
+cfi=(26)
+cfn=(1544)
+calls=627 -66 
+* 1254
+* 2508
+cfi=(24)
+cfn=(1590)
+calls=627 +43 
+* 20947
++1 1881
+cfi=(12)
+cfn=(1542)
+calls=627 771 
+* 1881
+* 1881
+cfi=(26)
+cfn=(1588)
+calls=627 -62 
+* 1254
+* 1881
+cfi=(26)
+cfn=(1544)
+calls=627 -67 
+* 1254
+* 2508
+cfi=(24)
+cfn=(1590)
+calls=627 +42 
+* 19777
++2 3762
+
+fn=(2022) WatchedClause::~WatchedClause()
+184 2114
+cfi=(12)
+cfn=(1640) std::vector<Literal, std::allocator<Literal> >::~vector()
+calls=1057 416 
+* 116585
+
+fl=(32) /usr/include/c++/4.8.0/bits/stl_pair.h
+fn=(1990) std::pair<std::vector<Literal, std::allocator<Literal> >, Literal>::~pair()
+96 628
+cfi=(12)
+cfn=(1640)
+calls=628 416 
+* 77352
+
+fn=(1946) std::pair<std::vector<Literal, std::allocator<Literal> >, Literal>::pair(std::vector<Literal, std::allocator<Literal> > const&, Literal const&)
+112 3140
++1 628
+cfi=(12)
+cfn=(1550)
+calls=628 310 
+* 534481
+* 3768
+cfi=(26)
+cfn=(1458)
+calls=628 -95 
+* 3140
+
+fl=(11) /home/artifere/ENS_L3/Projet2/Rendu1/src/Variable.cpp
+fn=(814) __static_initialization_and_destruction_0(int, int) [clone .constprop.40]
+260 1
+fi=(10) /usr/include/c++/4.8.0/iostream
+74 2
+cob=(7)
+cfi=(7)
+cfn=(464)
+calls=1 -74 
+* 24
+* 4
+cob=(3)
+cfi=(3)
+cfn=(334)
+calls=1 -74 
+* 66
+fe=(11)
+-66 2
+cfi=(12)
+cfn=(818) std::vector<Variable*, std::allocator<Variable*> >::vector()
+calls=1 249 
+* 6
+* 4
+cob=(3)
+cfi=(3)
+cfn=(334)
+calls=1 -8 
+* 66
++1 2
+cfi=(12)
+cfn=(824) std::vector<Variable*, std::allocator<Variable*> >::begin()
+calls=1 538 
+* 10
++1 1
+-1 1
++1 1
+cfi=(12)
+cfn=(824)
+calls=1 538 
+* 10
+* 1
+260 2
+
+fn=(1958) Variable::deductedFromAssigned()
+249 11788
++1 11788
+-1 23576
++2 11788
+-2 11788
++1 35364
+cfi=(26)
+cfn=(1422) Literal::Literal(Variable*, bool)
+calls=11788 17 
+* 35364
++1 29765
++1 6189
++1 12378
+cfi=(13)
+cfn=(1960) __gnu_cxx::__normal_iterator<WatchedClause* const*, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::__normal_iterator()
+calls=6189 723 
+* 12378
+* 11198
+cfi=(13)
+cfn=(1960)
+calls=5599 723 
+* 11198
++2 23576
+cfi=(12)
+cfn=(1962) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::begin() const [clone .isra.16]
+calls=11788 547 
+* 129668
+* 228336
+cfi=(13)
+cfn=(1972) __gnu_cxx::__normal_iterator<WatchedClause* const*, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::operator++()
+calls=102380 746 
+* 307140
+* 228336
+cfi=(12)
+cfn=(1966) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::end() const [clone .isra.17]
+calls=114168 565 
+* 1255848
+* 456672
+cfi=(13)
+cfn=(1968) bool __gnu_cxx::operator!=<WatchedClause* const*, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >(__gnu_cxx::__normal_iterator<WatchedClause* const*, std::vector<WatchedClause*, std::allocator<WatchedClause*> > > const&, __gnu_cxx::__normal_iterator<WatchedClause* const*, std::vector<WatchedClause*, std::allocator<WatchedClause*> > > const&)
+calls=114168 823 
+* 2169192
+* 228336
++3 23576
+cfi=(12)
+cfn=(1962)
+calls=11788 547 
+* 129668
+* 129712
+cfi=(13)
+cfn=(1972)
+calls=53068 746 
+* 159204
+* 129712
+cfi=(12)
+cfn=(1966)
+calls=64856 565 
+* 713416
+* 259424
+cfi=(13)
+cfn=(1968)
+calls=64856 823 
+* 1232264
+* 129712
++2 47152
+
+fn=(1722) Variable::chooseFromFree_DLIS()
+24 1956
++1 1304
+cfi=(13)
+cfn=(1724) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >::__normal_iterator()
+calls=652 723 
+* 1304
++1 1304
+cfi=(12)
+cfn=(1372) std::vector<Variable*, std::allocator<Variable*> >::end()
+calls=652 556 
+* 6520
+* 2608
+cfi=(29)
+cfn=(1726)
+calls=652 6326 
+* 6113260
++1 652
+-1 652
++1 652
+cfi=(13)
+cfn=(1732)
+calls=652 739 
+* 1304
+* 1956
+cfi=(24)
+cfn=(1738) Variable::sizeLitTrue() const
+calls=652 +30 
+* 5216
+* 1956
+cfi=(24)
+cfn=(1736) Variable::sizeLitFalse() const
+calls=652 +31 
+* 5216
+* 652
++1 652
+-1 652
++1 652
+cfi=(13)
+cfn=(1732)
+calls=652 739 
+* 1304
+* 1956
+cfi=(13)
+cfn=(1732)
+calls=652 739 
+* 1304
+* 3260
+cfi=(27) /usr/include/c++/4.8.0/bits/move.h
+cfn=(1742) void std::swap<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >&, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >&)
+calls=652 175 
+* 3260
++1 1956
+cfi=(22)
+cfn=(1744) void std::iter_swap<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >)
+calls=652 142 
+* 16300
++1 1304
+cfi=(13)
+cfn=(1730)
+calls=652 746 
+* 1956
++1 2608
+
+fn=(1794) Variable::assignedFromDeducted()
+145 11888
++2 11888
+-2 71328
++2 35664
+cfi=(26)
+cfn=(1422)
+calls=11888 17 
+* 35664
++4 23776
++1 6241
+-1 6241
++2 18723
+cfi=(13)
+cfn=(1796) __gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::__normal_iterator()
+calls=6241 723 
+* 12482
+* 16941
+cfi=(13)
+cfn=(1796)
+calls=5647 723 
+* 11294
++3 23776
+cfi=(12)
+cfn=(1610) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::begin()
+calls=11888 538 
+* 118880
+* 23776
++1 23776
+cfi=(12)
+cfn=(1594) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::end()
+calls=11888 556 
+* 118880
+* 193334
+cfi=(12)
+cfn=(1594)
+calls=96667 556 
+* 966670
+* 434220
+cfi=(13)
+cfn=(1798) bool __gnu_cxx::operator!=<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >(__gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > > const&, __gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > > const&)
+calls=108555 823 
+* 2062545
+* 217110
++2 96667
+cfi=(30)
+cfn=(1800)
+calls=96667 -15 
+* 193334
+* 96667
++2 96667
+-2 96667
++6 96667
+cfi=(13)
+cfn=(1802) __gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::operator++()
+calls=96667 746 
+* 290001
+* 96667
++4 35664
+cfi=(12)
+cfn=(1610)
+calls=11888 538 
+* 118880
+* 11888
++1 23776
+cfi=(12)
+cfn=(1594)
+calls=11888 556 
+* 118880
+* 162082
+cfi=(12)
+cfn=(1594)
+calls=81041 556 
+* 810410
+* 371716
+cfi=(13)
+cfn=(1798)
+calls=92929 823 
+* 1765651
+* 185858
++2 163346
+cfi=(13)
+cfn=(1804) __gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::operator*() const
+calls=81673 739 
+* 163346
+* 81673
++1 245019
+cfi=(30)
+cfn=(1806)
+calls=81673 -71 
+* 23266625
+* 81673
++2 81673
+-2 81673
++2 29729
+cfi=(13)
+cfn=(1804)
+calls=29729 739 
+* 59458
+* 89187
+cfi=(12)
+cfn=(1834) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::back()
+calls=29729 855 
+* 1040515
+* 29729
++1 29729
+-1 29729
++1 29729
+cfi=(12)
+cfn=(1838) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::pop_back() [clone .isra.22]
+calls=29729 939 
+* 59458
++5 163346
+cfi=(30)
+cfn=(1808)
+calls=81673 -3 
+* 7207087
+* 163346
++2 75514
+cfi=(30)
+cfn=(1840)
+calls=37757 -18 
+* 3058317
++2 75514
++13 75378
++2 47535
+cfi=(30)
+cfn=(1848)
+calls=15845 -28 
+* 934855
++3 31690
+cfi=(26)
+cfn=(1824)
+calls=15845 21 
+* 31690
+* 63380
+cfi=(24)
+cfn=(1816) Variable::isOlderIter(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&) const
+calls=15845 61 
+* 332745
+* 15845
++3 15845
+-3 15845
++7 564
+cfi=(26)
+cfn=(1828)
+calls=564 26 
+* 1128
+* 1128
++4 1128
++1 552
+-36 51944
+cfi=(13)
+cfn=(1802)
+calls=51944 746 
+* 155832
+* 51944
+-33 33768
++84 22512
+cfi=(12)
+cfn=(1594)
+calls=11256 556 
+* 112560
+-84 1264
++84 1264
+cfi=(12)
+cfn=(1594)
+calls=632 556 
+* 6320
+* 3776
+cfi=(12)
+cfn=(1594)
+calls=1888 556 
+* 18880
+* 55104
+cfi=(13)
+cfn=(1798)
+calls=13776 823 
+* 261744
+* 27552
++2 3776
+cfi=(13)
+cfn=(1804)
+calls=1888 739 
+* 3776
+* 5664
+cfi=(30)
+cfn=(1806)
+calls=1888 102 
+* 605507
+* 1888
++2 1888
+-2 1888
++2 807
+cfi=(13)
+cfn=(1804)
+calls=807 739 
+* 1614
+* 2421
+cfi=(12)
+cfn=(1834)
+calls=807 855 
+* 28245
+* 807
++1 807
+-1 807
++1 807
+cfi=(12)
+cfn=(1838)
+calls=807 939 
+* 1614
+* 807
++3 1081
+cfi=(13)
+cfn=(1802)
+calls=1081 746 
+* 3243
+* 1081
++3 95104
+-90 5647
++1 11294
++54 15281
+cfi=(26)
+cfn=(1828)
+calls=15281 26 
+* 30562
+* 61124
+cfi=(24)
+cfn=(1850) Variable::deductedFromFree(bool, WatchedClause*)
+calls=15281 98 
+* 1146075
+* 15281
+-16 136
++1 78
++2 126
++24 576
+
+fn=(812) _GLOBAL__sub_I__ZN8Variable5_varsE
+260 1
+cfn=(814)
+calls=1 * 
+* 203
+
+fl=(22)
+fn=(1326) Variable** std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<Variable*>(Variable* const*, Variable* const*, Variable**)
+370 1
+-2 2
++2 1
+-2 1
++3 2
++2 1
++1 2
+
+fn=(1746) void std::__iter_swap<true>::iter_swap<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >)
+100 49683
++2 16561
+-2 16561
++2 16561
+cfi=(13)
+cfn=(1732)
+calls=16561 739 
+* 33122
+* 49683
+cfi=(13)
+cfn=(1732)
+calls=16561 739 
+* 33122
+* 49683
+cfi=(27)
+cfn=(1748) void std::swap<Variable*>(Variable*&, Variable*&)
+calls=16561 +73 
+* 82805
++1 49683
+
+fn=(1322) std::_Niter_base<Variable**>::iterator_type std::__niter_base<Variable**>(Variable**)
+278 3
+cfi=(23)
+cfn=(1318)
+calls=3 -66 
+* 6
+
+fn=(1516) std::_Niter_base<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >::iterator_type std::__niter_base<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+278 89418
+cfi=(23)
+cfn=(1518)
+calls=89418 -58 
+* 804762
+
+fn=(1930) Literal* std::__copy_move<false, false, std::random_access_iterator_tag>::__copy_m<Literal*, Literal*>(Literal*, Literal*, Literal*)
+333 21305
+-3 21305
++3 106278
++2 14121
++2 14121
+-1 14121
+-1 42363
+-2 28242
++2 21152
++2 21152
+-1 21152
+-1 63456
+-2 70546
++7 21305
+
+fn=(1316) std::_Miter_base<Variable**>::iterator_type std::__miter_base<Variable**>(Variable**)
+289 2
+cfi=(23)
+cfn=(1318)
+calls=2 -77 
+* 4
+
+fn=(1356) std::_Miter_base<WatchedClause**>::iterator_type std::__miter_base<WatchedClause**>(WatchedClause**)
+289 3822
+cfi=(23)
+cfn=(1358)
+calls=3822 -77 
+* 7644
+
+fn=(1360) WatchedClause** std::__copy_move_a2<false, WatchedClause**, WatchedClause**>(WatchedClause**, WatchedClause**, WatchedClause**)
+424 9555
++4 3822
+cfn=(1362) std::_Niter_base<WatchedClause**>::iterator_type std::__niter_base<WatchedClause**>(WatchedClause**)
+calls=1911 278 
+* 5733
+* 5733
+cfn=(1362)
+calls=1911 278 
+* 5733
+* 5733
+cfn=(1362)
+calls=1911 278 
+* 5733
++1 1911
+-1 5733
++1 3822
+-1 1911
+cfn=(1364) WatchedClause** std::__copy_move_a<false, WatchedClause**, WatchedClause**>(WatchedClause**, WatchedClause**, WatchedClause**)
+calls=1911 -38 
+* 41991
+
+fn=(1366) WatchedClause** std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<WatchedClause*>(WatchedClause* const*, WatchedClause* const*, WatchedClause**)
+370 1911
+-2 3822
++2 1911
+-2 1911
++3 3822
++1 3775
+cob=(3)
+cfi=(3)
+cfn=(1636) __memmove_ssse3_back
+calls=755 0 
+* 15257
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+* 1183
+* 755
++1 755
++1 1510
+-1 1156
++1 2312
+
+fn=(1744)
+142 16561
+cfn=(1746)
+calls=16561 -42 
+* 397464
+
+fn=(1320) Variable** std::__copy_move_a2<false, Variable**, Variable**>(Variable**, Variable**, Variable**)
+424 5
++4 2
+cfn=(1322)
+calls=1 278 
+* 3
+* 3
+cfn=(1322)
+calls=1 278 
+* 3
+* 3
+cfn=(1322)
+calls=1 278 
+* 3
++1 1
+-1 3
++1 2
+-1 1
+cfn=(1324) Variable** std::__copy_move_a<false, Variable**, Variable**>(Variable**, Variable**, Variable**)
+calls=1 -38 
+* 11
+
+fn=(1508)
+619 42505
++12 17002
+cfn=(1510) std::_Miter_base<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >::iterator_type std::__miter_base<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+calls=8501 288 
+* 51006
+* 25503
+cfn=(1510)
+calls=8501 288 
+* 51006
+* 34004
+cfn=(1514) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > std::__copy_move_backward_a2<false, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+calls=8501 -39 
+* 740954
++1 34004
+
+fn=(1354) WatchedClause** std::copy<WatchedClause**, WatchedClause**>(WatchedClause**, WatchedClause**, WatchedClause**)
+450 9555
++10 3822
+cfn=(1356)
+calls=1911 289 
+* 5733
+* 5733
+cfn=(1356)
+calls=1911 289 
+* 5733
++1 1911
+-1 5733
++1 3822
+-1 1911
+cfn=(1360)
+calls=1911 -36 
+* 97410
+
+fn=(1362)
+278 5733
+cfi=(23)
+cfn=(1358)
+calls=5733 -66 
+* 11466
+
+fn=(1442) unsigned long const& std::max<unsigned long>(unsigned long const&, unsigned long const&)
+221 28820
++3 7205
+
+fn=(1510)
+288 59612
++1 59612
+cfi=(23)
+cfn=(1512)
+calls=59612 -77 
+* 119224
+* 119224
+
+fn=(1514)
+592 42505
++4 8501
+-4 8501
++4 8501
+cfn=(1516)
+calls=8501 278 
+* 85010
+* 25503
+cfn=(1516)
+calls=8501 278 
+* 85010
+* 25503
+cfn=(1516)
+calls=8501 278 
+* 85010
+* 34004
+cfn=(1520) Literal* std::__copy_move_backward_a<false, Literal*, Literal*>(Literal*, Literal*, Literal*)
+calls=8501 -9 
+* 222393
+* 34004
+cfi=(13)
+cfn=(1428) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::__normal_iterator(Literal* const&)
+calls=8501 726 
+* 25503
++1 51006
+
+fn=(1924)
+450 106525
++10 42610
+cfn=(1510)
+calls=21305 288 
+* 127830
+* 63915
+cfn=(1510)
+calls=21305 288 
+* 127830
+* 85220
+cfn=(1926) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > std::__copy_move_a2<false, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+calls=21305 -36 
+* 1801529
++1 85220
+
+fn=(1926)
+424 106525
++4 21305
+-4 21305
++4 21305
+cfn=(1516)
+calls=21305 278 
+* 213050
+* 63915
+cfn=(1516)
+calls=21305 278 
+* 213050
+* 63915
+cfn=(1516)
+calls=21305 278 
+* 213050
+* 85220
+cfn=(1928) Literal* std::__copy_move_a<false, Literal*, Literal*>(Literal*, Literal*, Literal*)
+calls=21305 -38 
+* 501924
+* 85220
+cfi=(13)
+cfn=(1428)
+calls=21305 726 
+* 63915
++1 127830
+
+fn=(1982) void std::__iter_swap<true>::iter_swap<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+100 11022
++2 3674
+-2 3674
++2 3674
+cfi=(13)
+cfn=(1504)
+calls=3674 739 
+* 7348
+* 11022
+cfi=(13)
+cfn=(1504)
+calls=3674 739 
+* 7348
+* 11022
+cfi=(27)
+cfn=(1984) void std::swap<Literal>(Literal&, Literal&)
+calls=3674 +64 
+* 91850
++1 11022
+
+fn=(1364)
+390 1911
+cfn=(1366)
+calls=1911 -20 
+* 40080
+
+fn=(1980)
+142 3674
+cfn=(1982)
+calls=3674 -42 
+* 161656
+
+fn=(1928)
+390 21305
+cfn=(1930)
+calls=21305 -57 
+* 480619
+
+fn=(1324)
+390 1
+cfn=(1326)
+calls=1 -20 
+* 10
+
+fn=(1522) Literal* std::__copy_move_backward<false, false, std::random_access_iterator_tag>::__copy_move_b<Literal*, Literal*>(Literal*, Literal*, Literal*)
+536 8501
+-3 8501
++3 59507
++1 25503
+-1 8501
++1 25503
+-1 8501
++1 16452
+-1 5484
++1 16452
+-1 22486
++3 8501
+
+fn=(1740) unsigned int const& std::max<unsigned int>(unsigned int const&, unsigned int const&)
+221 425504
++3 106376
+
+fn=(1314) Variable** std::copy<Variable**, Variable**>(Variable**, Variable**, Variable**)
+450 5
++10 2
+cfn=(1316)
+calls=1 289 
+* 3
+* 3
+cfn=(1316)
+calls=1 289 
+* 3
++1 1
+-1 3
++1 2
+-1 1
+cfn=(1320)
+calls=1 -36 
+* 40
+
+fn=(1492)
+989 43794
+
+fn=(1520)
+587 8501
+cfn=(1522)
+calls=8501 -51 
+* 213892
+
+fl=(27)
+fn=(1894) void std::swap<Literal*>(Literal*&, Literal*&)
+175 18723
++1 37446
++1 37446
+
+fn=(1742)
+175 16561
++1 33122
++1 33122
+
+fn=(1984)
+166 14696
++9 3674
+-9 3674
++9 7348
+cfi=(26)
+cfn=(1458)
+calls=3674 18 
+* 18370
++1 14696
++1 14696
++1 14696
+
+fn=(1476) Literal* std::__addressof<Literal>(Literal&)
+47 110332
++4 110332
+
+fn=(1748)
+175 16561
++1 33122
++1 33122
+
+fn=(1842) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >* std::__addressof<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >&)
+47 31
++4 31
+
+fl=(12)
+fn=(1382) std::vector<Literal, std::allocator<Literal> >::vector()
+249 6870
+cfn=(1384) std::_Vector_base<Literal, std::allocator<Literal> >::_Vector_base()
+calls=6870 125 
+* 34350
+
+fn=(1412) std::vector<Variable*, std::allocator<Variable*> >::end() const [clone .isra.4]
+565 64016
++1 256064
+cfi=(13)
+cfn=(1410) __gnu_cxx::__normal_iterator<Variable* const*, std::vector<Variable*, std::allocator<Variable*> > >::__normal_iterator(Variable* const* const&)
+calls=64016 726 
+* 192048
+* 192048
+
+fn=(1440) std::vector<Literal, std::allocator<Literal> >::size() const [clone .isra.11]
+645 6244
++1 18732
+
+fn=(1540) std::vector<Literal, std::allocator<Literal> >::size() const [clone .isra.9]
+645 35436
++1 106308
+
+fn=(1556) std::_Vector_base<Literal, std::allocator<Literal> >::_Vector_base(unsigned long, std::allocator<Literal> const&)
+134 17108
++1 8554
+-1 25662
++1 8554
+cfn=(1558) std::_Vector_base<Literal, std::allocator<Literal> >::_Vector_impl::_Vector_impl(std::allocator<Literal> const&)
+calls=8554 -44 
+* 34216
++1 51324
+cfn=(1560) std::_Vector_base<Literal, std::allocator<Literal> >::_M_create_storage(unsigned long)
+calls=8554 +43 
+* 1512366
+
+fn=(1768) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::begin()
+538 12
++1 12
+cfi=(13)
+cfn=(1754) __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >::__normal_iterator(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >* const&)
+calls=6 726 
+* 18
+* 18
+
+fn=(2006) std::vector<Literal, std::allocator<Literal> >::operator[](unsigned long) const [clone .isra.8]
+786 6
+
+fn=(2024) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::~vector()
+416 1
+cfn=(2026) std::_Vector_base<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::~_Vector_base()
+calls=1 160 
+* 140
+
+fn=(1276) std::_Vector_base<WatchedClause*, std::allocator<WatchedClause*> >::_Vector_base()
+125 201
+cfn=(1278) std::_Vector_base<WatchedClause*, std::allocator<WatchedClause*> >::_Vector_impl::_Vector_impl()
+calls=201 -38 
+* 804
+
+fn=(1296) std::vector<Variable*, std::allocator<Variable*> >::size() const [clone .isra.11]
+645 102
++1 306
+
+fn=(1374) std::vector<Variable*, std::allocator<Variable*> >::push_back(Variable* const&)
+901 300
++2 300
++2 100
+cfi=(19) /usr/include/c++/4.8.0/ext/alloc_traits.h
+cfn=(1376) void __gnu_cxx::__alloc_traits<std::allocator<Variable*> >::construct<Variable*>(std::allocator<Variable*>&, Variable**, Variable* const&) [clone .isra.23]
+calls=100 216 
+* 1200
++2 100
++8 300
+
+fn=(1390) std::vector<Literal, std::allocator<Literal> >::_M_erase_at_end(Literal*) [clone .isra.60]
+1353 13342
+
+fn=(1432) std::vector<Literal, std::allocator<Literal> >::_M_check_len(unsigned long, char const*) const
+1336 56196
++2 6244
+cfn=(1434) std::vector<Literal, std::allocator<Literal> >::max_size() const [clone .isra.18]
+calls=6244 651 
+* 24976
+* 24976
+cfn=(1440)
+calls=6244 645 
+* 24976
+* 31220
++3 24976
+cfi=(22)
+cfn=(1442)
+calls=6244 221 
+* 31220
++1 6244
+-4 6244
++4 18732
++1 43708
+
+fn=(1468) std::_Vector_base<Literal, std::allocator<Literal> >::_M_deallocate(Literal*, unsigned long) [clone .isra.15]
+173 6
++1 2
+cfi=(20) /usr/include/c++/4.8.0/ext/new_allocator.h
+cfn=(1480) __gnu_cxx::new_allocator<Literal>::deallocate(Literal*, unsigned long) [clone .isra.14]
+calls=2 -64 
+* 952
+* 1
+
+fn=(1594)
+556 246751
++1 740253
+cfi=(13)
+cfn=(1596) __gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::__normal_iterator(WatchedClause** const&)
+calls=246751 726 
+* 740253
+* 740253
+
+fn=(1860) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::begin() const [clone .isra.30]
+547 53358
++1 213432
+cfi=(13)
+cfn=(1858) __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >::__normal_iterator(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const* const&)
+calls=53358 726 
+* 160074
+* 160074
+
+fn=(2016) std::_Vector_base<WatchedClause*, std::allocator<WatchedClause*> >::~_Vector_base()
+160 402
+cfn=(1368) std::_Vector_base<WatchedClause*, std::allocator<WatchedClause*> >::_M_deallocate(WatchedClause**, unsigned long) [clone .isra.35]
+calls=201 +13 
+* 22707
+
+fn=(2068) std::vector<Variable*, std::allocator<Variable*> >::~vector()
+416 1
+cfn=(2070) std::_Vector_base<Variable*, std::allocator<Variable*> >::~_Vector_base()
+calls=1 160 
+* 140
+
+fn=(824)
+538 8
++1 8
+cfi=(13)
+cfn=(826) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >::__normal_iterator(Variable** const&)
+calls=4 726 
+* 12
+* 12
+
+fn=(1274) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::vector()
+249 201
+cfn=(1276)
+calls=201 125 
+* 1005
+
+fn=(1282) std::_Vector_base<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::_Vector_base()
+125 1
+cfn=(1284) std::_Vector_base<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::_Vector_impl::_Vector_impl()
+calls=1 -38 
+* 4
+
+fn=(1284)
+87 4
+
+fn=(1408) std::vector<Variable*, std::allocator<Variable*> >::begin() const [clone .isra.2]
+547 1290
++1 5160
+cfi=(13)
+cfn=(1410)
+calls=1290 726 
+* 3870
+* 3870
+
+fn=(1542)
+771 37611
+
+fn=(1568) std::vector<Literal, std::allocator<Literal> >::end() const [clone .isra.17]
+565 9182
++1 36728
+cfi=(13)
+cfn=(1570) __gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >::__normal_iterator(Literal const* const&)
+calls=9182 726 
+* 27546
+* 27546
+
+fn=(1602) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::max_size() const [clone .isra.35]
+651 955
+cfi=(19)
+cfn=(1604) __gnu_cxx::__alloc_traits<std::allocator<WatchedClause*> >::max_size(std::allocator<WatchedClause*> const&) [clone .isra.34]
+calls=955 222 
+* 2865
+
+fn=(1608) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::size() const [clone .isra.7]
+645 215011
++1 645033
+
+fn=(1610)
+538 49462
++1 49462
+cfi=(13)
+cfn=(1596)
+calls=24731 726 
+* 74193
+* 74193
+
+fn=(1758) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::_M_check_len(unsigned long, char const*) const
+1336 54
++2 6
+cfn=(1760) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::max_size() const [clone .isra.95]
+calls=6 651 
+* 24
+* 24
+cfn=(1766) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::size() const [clone .isra.79]
+calls=6 645 
+* 24
+* 30
++3 24
+cfi=(22)
+cfn=(1442)
+calls=6 221 
+* 30
++1 6
+-4 6
++4 18
++1 42
+
+fn=(1948) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::back()
+855 628
++1 628
+cfn=(1752) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::end()
+calls=628 556 
+* 6280
+* 1884
+cfi=(13)
+cfn=(1950) __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >::operator-(long const&) const [clone .isra.38] [clone .constprop.113]
+calls=628 -70 
+* 8164
+* 1884
+cfi=(13)
+cfn=(1952) __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >::operator*() const
+calls=628 739 
+* 1256
+* 1256
+
+fn=(2026)
+160 2
+cfn=(1790) std::_Vector_base<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::_M_deallocate(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, unsigned long) [clone .isra.62]
+calls=1 +13 
+* 138
+
+fn=(2072) std::_Vector_base<Variable*, std::allocator<Variable*> >::_M_deallocate(Variable**, unsigned long) [clone .isra.29]
+173 2
++1 1
+cfi=(20)
+cfn=(2074) __gnu_cxx::new_allocator<Variable*>::deallocate(Variable**, unsigned long) [clone .isra.28]
+calls=1 -64 
+* 135
+
+fn=(820) std::_Vector_base<Variable*, std::allocator<Variable*> >::_Vector_base()
+125 1
+cfn=(822) std::_Vector_base<Variable*, std::allocator<Variable*> >::_Vector_impl::_Vector_impl()
+calls=1 -38 
+* 4
+
+fn=(1328) std::_Vector_base<Variable*, std::allocator<Variable*> >::_M_deallocate(Variable**, unsigned long) [clone .isra.33]
+173 2
++1 1
+
+fn=(1338) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::capacity() const [clone .isra.20]
+725 1
++2 3
+
+fn=(1372)
+556 12637
++1 37911
+cfi=(13)
+cfn=(826)
+calls=12637 726 
+* 37911
+* 37911
+
+fn=(1424) std::vector<Literal, std::allocator<Literal> >::push_back(Literal const&)
+901 3891
++2 3891
++2 1294
+cfi=(19)
+cfn=(1454) void __gnu_cxx::__alloc_traits<std::allocator<Literal> >::construct<Literal>(std::allocator<Literal>&, Literal*, Literal const&) [clone .isra.8]
+calls=1294 216 
+* 21998
++2 1294
++8 3882
+-2 9
+cfn=(1426)
+calls=3 556 
+* 30
+* 15
+cfi=(18) /usr/include/c++/4.8.0/bits/vector.tcc
+cfn=(1430) std::vector<Literal, std::allocator<Literal> >::_M_insert_aux(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, Literal const&)
+calls=3 318 
+* 2167
++2 9
+
+fn=(1552) std::_Vector_base<Literal, std::allocator<Literal> >::_M_get_Tp_allocator() const
+117 8554
++1 8554
+
+fn=(1560)
+179 17108
++4 8554
+-4 17108
++2 8554
+-2 8554
++2 8554
+cfn=(1562) std::_Vector_base<Literal, std::allocator<Literal> >::_M_allocate(unsigned long) [clone .isra.92]
+calls=8554 -13 
+* 1375502
+* 8554
++1 8554
++1 17108
++1 34216
+
+fn=(1630) std::_Vector_base<WatchedClause*, std::allocator<WatchedClause*> >::_M_deallocate(WatchedClause**, unsigned long) [clone .isra.24]
+173 1910
++1 755
+cfi=(20)
+cfn=(1638) __gnu_cxx::new_allocator<WatchedClause*>::deallocate(WatchedClause**, unsigned long) [clone .isra.23]
+calls=755 -64 
+* 68845
+* 200
+
+fn=(1640)
+416 15424
+cfn=(1642) std::_Vector_base<Literal, std::allocator<Literal> >::~_Vector_base()
+calls=15424 160 
+* 1758794
+
+fn=(1888) void std::swap<Literal, std::allocator<Literal> >(std::vector<Literal, std::allocator<Literal> >&, std::vector<Literal, std::allocator<Literal> >&)
+1452 6241
+cfn=(1890) std::vector<Literal, std::allocator<Literal> >::swap(std::vector<Literal, std::allocator<Literal> >&)
+calls=6241 1113 
+* 193471
+
+fn=(1934) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::back() const
+863 52737
++1 105474
+cfn=(1856) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::end() const [clone .isra.29]
+calls=52737 565 
+* 580107
+* 158211
+cfi=(13)
+cfn=(1936) __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >::operator-(long const&) const [clone .isra.31] [clone .constprop.114]
+calls=52737 -78 
+* 685581
+* 158211
+cfi=(13)
+cfn=(1938) __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >::operator*() const
+calls=52737 739 
+* 105474
+* 105474
+
+fn=(2014) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::~vector()
+416 201
+cfn=(2016)
+calls=201 160 
+* 23109
+
+fn=(822)
+87 4
+
+fn=(1368)
+173 404
++1 201
+cfi=(20)
+cfn=(2018) __gnu_cxx::new_allocator<WatchedClause*>::deallocate(WatchedClause**, unsigned long) [clone .isra.34]
+calls=201 -64 
+* 22104
+* 1
+
+fn=(1384)
+125 6870
+cfn=(1386) std::_Vector_base<Literal, std::allocator<Literal> >::_Vector_impl::_Vector_impl()
+calls=6870 -38 
+* 27480
+
+fn=(1426)
+556 176065
++1 528195
+cfi=(13)
+cfn=(1428)
+calls=176065 726 
+* 528195
+* 528195
+
+fn=(1434)
+651 6244
+cfi=(19)
+cfn=(1436) __gnu_cxx::__alloc_traits<std::allocator<Literal> >::max_size(std::allocator<Literal> const&) [clone .isra.17]
+calls=6244 222 
+* 18732
+
+fn=(1558)
+91 34216
+
+fn=(1600) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::_M_check_len(unsigned long, char const*) const
+1336 8595
++2 955
+cfn=(1602)
+calls=955 651 
+* 3820
+* 3820
+cfn=(1608)
+calls=955 645 
+* 3820
+* 4775
++3 3820
+cfi=(22)
+cfn=(1442)
+calls=955 221 
+* 4775
++1 955
+-4 955
++4 2865
++1 6685
+
+fn=(1644) std::_Vector_base<Literal, std::allocator<Literal> >::_M_deallocate(Literal*, unsigned long) [clone .isra.56]
+173 43330
++1 14796
+cfi=(20)
+cfn=(1646) __gnu_cxx::new_allocator<Literal>::deallocate(Literal*, unsigned long) [clone .isra.55]
+calls=14796 -64 
+* 1681674
+* 6869
+
+fn=(1750) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::push_back(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&)
+901 1956
++2 1956
++2 646
+cfi=(19)
+cfn=(1778) void __gnu_cxx::__alloc_traits<std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::construct<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >(std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >&, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&) [clone .isra.37]
+calls=646 216 
+* 7752
++2 646
++8 1938
+-2 18
+cfn=(1752)
+calls=6 556 
+* 60
+* 30
+cfi=(18)
+cfn=(1756) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::_M_insert_aux(__gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&)
+calls=6 318 
+* 3323
++2 18
+
+fn=(1760)
+651 6
+cfi=(19)
+cfn=(1762) __gnu_cxx::__alloc_traits<std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::max_size(std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > const&) [clone .isra.94]
+calls=6 222 
+* 18
+
+fn=(1774) std::_Vector_base<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::_M_allocate(unsigned long) [clone .isra.97]
+168 18
+cfi=(20)
+cfn=(1776) __gnu_cxx::new_allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >::allocate(unsigned long, void const*) [clone .isra.96]
+calls=6 -69 
+* 1054
+
+fn=(1890)
+1113 6241
+cfn=(1892) std::_Vector_base<Literal, std::allocator<Literal> >::_Vector_impl::_M_swap_data(std::_Vector_base<Literal, std::allocator<Literal> >::_Vector_impl&)
+calls=6241 101 
+* 187230
+
+fn=(1954) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::pop_back() [clone .isra.41]
+939 1264
+
+fn=(1966)
+565 179024
++1 716096
+cfi=(13)
+cfn=(1964) __gnu_cxx::__normal_iterator<WatchedClause* const*, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::__normal_iterator(WatchedClause* const* const&)
+calls=179024 726 
+* 537072
+* 537072
+
+fn=(1986) std::vector<Literal, std::allocator<Literal> >::empty() const
+734 1884
++1 1256
+cfn=(1568)
+calls=628 565 
+* 6908
+* 1884
+cfn=(1572) std::vector<Literal, std::allocator<Literal> >::begin() const [clone .isra.18]
+calls=628 547 
+* 6908
+* 2512
+cfi=(13)
+cfn=(1988) bool __gnu_cxx::operator==<Literal const*, std::vector<Literal, std::allocator<Literal> > >(__gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > > const&, __gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > > const&)
+calls=628 +76 
+* 11932
+* 1884
+
+fn=(2070)
+160 2
+cfn=(2072)
+calls=1 +13 
+* 138
+
+fn=(1294) std::vector<Variable*, std::allocator<Variable*> >::capacity() const [clone .isra.19]
+725 1
++2 3
+
+fn=(1344) std::_Vector_base<WatchedClause*, std::allocator<WatchedClause*> >::_M_allocate(unsigned long) [clone .isra.78]
+168 3
+cfi=(20)
+cfn=(1346) __gnu_cxx::new_allocator<WatchedClause*>::allocate(unsigned long, void const*) [clone .isra.77]
+calls=1 -69 
+* 410
+
+fn=(1386)
+87 27480
+
+fn=(1562)
+168 44385
+cfi=(20)
+cfn=(1564) __gnu_cxx::new_allocator<Literal>::allocate(unsigned long, void const*) [clone .isra.91]
+calls=14795 -69 
+* 2827728
+
+fn=(1592) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::push_back(WatchedClause* const&)
+901 101121
++2 101121
++2 32752
+cfi=(19)
+cfn=(1620) void __gnu_cxx::__alloc_traits<std::allocator<WatchedClause*> >::construct<WatchedClause*>(std::allocator<WatchedClause*>&, WatchedClause**, WatchedClause* const&) [clone .isra.19]
+calls=32752 216 
+* 393024
++2 32752
++8 98256
+-2 2865
+cfn=(1594)
+calls=955 556 
+* 9550
+* 4775
+cfi=(18)
+cfn=(1598) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >, WatchedClause* const&)
+calls=955 318 
+* 543387
++2 2865
+
+fn=(1766)
+645 6
++1 18
+
+fn=(1896) std::vector<Literal, std::allocator<Literal> >::insert(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, unsigned long, Literal const&)
+1024 6241
+cfi=(18)
+cfn=(1898) std::vector<Literal, std::allocator<Literal> >::_M_fill_insert(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, unsigned long, Literal const&)
+calls=6241 441 
+* 4604039
+
+fn=(1278)
+87 804
+
+fn=(1342) WatchedClause** std::vector<WatchedClause*, std::allocator<WatchedClause*> >::_M_allocate_and_copy<WatchedClause**>(unsigned long, WatchedClause**, WatchedClause**) [clone .isra.107]
+1135 5
++3 1
+cfn=(1344)
+calls=1 168 
+* 413
++3 1
+-3 1
++3 3
+cfi=(21) /usr/include/c++/4.8.0/bits/stl_uninitialized.h
+cfn=(1348) WatchedClause** std::__uninitialized_copy_a<WatchedClause**, WatchedClause**, WatchedClause*>(WatchedClause**, WatchedClause**, WatchedClause**, std::allocator<WatchedClause*>&) [clone .isra.106]
+calls=1 258 
+* 66
++9 5
+
+fn=(1550)
+310 34216
++2 8554
+-2 25662
++2 8554
+cfn=(1552)
+calls=8554 117 
+* 17108
+* 17108
+cfi=(19)
+cfn=(1554) __gnu_cxx::__alloc_traits<std::allocator<Literal> >::_S_select_on_copy(std::allocator<Literal> const&)
+calls=8554 -88 
+* 17108
+* 34216
+cfn=(1540)
+calls=8554 645 
+* 34216
+* 34216
+cfn=(1556)
+calls=8554 134 
+* 1657784
++4 25662
+cfn=(1568)
+calls=8554 565 
+* 94094
+* 25662
+cfn=(1572)
+calls=8554 547 
+* 94094
+* 34216
+cfi=(21)
+cfn=(1574) Literal* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >, Literal*, Literal>(__gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >, Literal*, std::allocator<Literal>&) [clone .isra.86]
+calls=8554 -58 
+* 2493092
+-3 8554
++4 51324
+
+fn=(1642)
+160 30848
+cfn=(1644)
+calls=15424 +13 
+* 1727946
+
+fn=(1752)
+556 634
++1 1902
+cfi=(13)
+cfn=(1754)
+calls=634 726 
+* 1902
+* 1902
+
+fn=(1810)
+786 1193436
+
+fn=(1834)
+855 30536
++1 30536
+cfn=(1594)
+calls=30536 556 
+* 305360
+* 91608
+cfi=(13)
+cfn=(1836) __gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::operator-(long const&) const [clone .isra.15] [clone .constprop.41]
+calls=30536 -70 
+* 396968
+* 91608
+cfi=(13)
+cfn=(1804)
+calls=30536 739 
+* 61072
+* 61072
+
+fn=(1838)
+939 61072
+
+fn=(2010) std::vector<Variable*, std::allocator<Variable*> >::operator[](unsigned long) [clone .isra.10]
+771 200
+
+fn=(1332) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::max_size() const [clone .isra.76]
+651 1
+cfi=(19)
+cfn=(1334) __gnu_cxx::__alloc_traits<std::allocator<WatchedClause*> >::max_size(std::allocator<WatchedClause*> const&) [clone .isra.75]
+calls=1 222 
+* 3
+
+fn=(1388) std::vector<Literal, std::allocator<Literal> >::clear()
+1125 860
++1 860
+cfn=(1390)
+calls=430 1353 
+* 860
+
+fn=(1450) std::_Vector_base<Literal, std::allocator<Literal> >::_M_allocate(unsigned long) [clone .isra.20]
+168 9
+cfi=(20)
+cfn=(1452) __gnu_cxx::new_allocator<Literal>::allocate(unsigned long, void const*) [clone .isra.19]
+calls=3 -69 
+* 556
+
+fn=(1830)
+771 183216
+
+fn=(1854) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::empty() const
+734 160074
++1 106716
+cfn=(1856)
+calls=53358 565 
+* 586938
+* 160074
+cfn=(1860)
+calls=53358 547 
+* 586938
+* 213432
+cfi=(13)
+cfn=(1862) bool __gnu_cxx::operator==<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >(__gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > > const&, __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > > const&)
+calls=53358 +76 
+* 1013802
+* 160074
+
+fn=(1856)
+565 106095
++1 424380
+cfi=(13)
+cfn=(1858)
+calls=106095 726 
+* 318285
+* 318285
+
+fn=(1892)
+101 31205
++2 6241
+cfi=(27)
+cfn=(1894)
+calls=6241 +72 
+* 31205
++1 18723
+cfi=(27)
+cfn=(1894)
+calls=6241 +71 
+* 31205
++2 6241
+-1 12482
++1 12482
+-1 6241
+cfi=(27)
+cfn=(1894)
+calls=6241 +70 
+* 31205
+
+fn=(1962)
+547 23576
++1 94304
+cfi=(13)
+cfn=(1964)
+calls=23576 726 
+* 70728
+* 70728
+
+fn=(2020) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::operator[](unsigned long) [clone .isra.12]
+771 2114
+
+fn=(818)
+249 1
+cfn=(820)
+calls=1 125 
+* 5
+
+fn=(1280) std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >::vector()
+249 1
+cfn=(1282)
+calls=1 125 
+* 5
+
+fn=(1288) std::vector<Variable*, std::allocator<Variable*> >::max_size() const [clone .isra.68]
+651 1
+cfi=(19)
+cfn=(1290) __gnu_cxx::__alloc_traits<std::allocator<Variable*> >::max_size(std::allocator<Variable*> const&) [clone .isra.67]
+calls=1 222 
+* 3
+
+fn=(1298) Variable** std::vector<Variable*, std::allocator<Variable*> >::_M_allocate_and_copy<Variable**>(unsigned long, Variable**, Variable**) [clone .isra.104]
+1135 5
++3 1
+cfn=(1300) std::_Vector_base<Variable*, std::allocator<Variable*> >::_M_allocate(unsigned long) [clone .isra.70]
+calls=1 168 
+* 959
++3 1
+-3 1
++3 3
+cfi=(21)
+cfn=(1308) Variable** std::__uninitialized_copy_a<Variable**, Variable**, Variable*>(Variable**, Variable**, Variable**, std::allocator<Variable*>&) [clone .isra.103]
+calls=1 258 
+* 66
++9 5
+
+fn=(1300)
+168 3
+cfi=(20)
+cfn=(1302) __gnu_cxx::new_allocator<Variable*>::allocate(unsigned long, void const*) [clone .isra.69]
+calls=1 -69 
+* 956
+
+fn=(1340) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::size() const [clone .isra.6]
+645 1059
++1 3177
+
+fn=(1444)
+538 219822
++1 219822
+cfi=(13)
+cfn=(1428)
+calls=109911 726 
+* 329733
+* 329733
+
+fn=(1538) std::vector<Literal, std::allocator<Literal> >::resize(unsigned long, Literal)
+704 116208
++2 38736
+cfn=(1540)
+calls=12912 -61 
+* 51648
+* 25824
++2 6671
++2 8821
+-1 12482
++1 6241
+-1 6241
++1 18723
+-1 6241
+cfn=(1390)
+calls=6241 1353 
+* 12482
+-2 18723
+cfn=(1426)
+calls=6241 556 
+* 62410
+* 31205
+cfn=(1896)
+calls=6241 1024 
+* 4610280
++3 37446
+
+fn=(1572)
+547 9182
++1 36728
+cfi=(13)
+cfn=(1570)
+calls=9182 726 
+* 27546
+* 27546
+
+fn=(1616) std::_Vector_base<WatchedClause*, std::allocator<WatchedClause*> >::_M_allocate(unsigned long) [clone .isra.37]
+168 2865
+cfi=(20)
+cfn=(1618) __gnu_cxx::new_allocator<WatchedClause*>::allocate(unsigned long, void const*) [clone .isra.36]
+calls=955 -69 
+* 179487
+
+fn=(1790)
+173 14
++1 6
+cfi=(20)
+cfn=(1846) __gnu_cxx::new_allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >::deallocate(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, unsigned long) [clone .isra.61]
+calls=6 -64 
+* 607
+* 1
+
+fl=(9) /home/artifere/ENS_L3/Projet2/Rendu1/src/parser.cpp
+fn=(1008) skipComment(std::istream&)
+8 1293
++1 862
+cob=(7)
+cfi=(7)
+cfn=(1006)
+calls=431 -9 
+* 1724
++1 1314
+cob=(7)
+cfi=(7)
+cfn=(1014)
+calls=438 -10 
+* 99105
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -10 
+* 923
+* 1752
+cob=(7)
+cfi=(7)
+cfn=(1064)
+calls=438 -10 
+* 1752
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -10 
+* 1352
+* 1752
+cob=(7)
+cfi=(7)
+cfn=(1070)
+calls=438 -10 
+* 20888
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -10 
+* 895
+* 876
++1 862
+cob=(7)
+cfi=(7)
+cfn=(1156)
+calls=431 -11 
+* 4808
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -11 
+* 826
++1 1293
+-1 21
+cob=(7)
+cfi=(7)
+cfn=(1082)
+calls=7 -11 
+* 12755
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -11 
+* 1899
+* 7
+
+fn=(1000) parserHeader(std::istream&, unsigned int&, unsigned int&)
+17 7
++1 2
+cob=(7)
+cfi=(7)
+cfn=(1006)
+calls=1 -18 
+* 4
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -18 
+* 826
++2 2
+cfn=(1008)
+calls=1 -12 
+* 30513
++1 3
+cob=(7)
+cfi=(7)
+cfn=(1188)
+calls=1 -21 
+* 68
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -21 
+* 1568
+* 3
+cob=(7)
+cfi=(7)
+cfn=(1194)
+calls=1 -21 
+* 710
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -21 
+* 1802
+* 3
+cob=(7)
+cfi=(7)
+cfn=(1200)
+calls=1 -21 
+* 3637
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -21 
+* 849
+* 3
+cob=(7)
+cfi=(7)
+cfn=(1200)
+calls=1 -21 
+* 464
+* 4
+cob=(7)
+cfi=(7)
+cfn=(1252)
+calls=1 -21 
+* 3
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -21 
+* 1298
+* 4
++7 2
+cob=(7)
+cfi=(7)
+cfn=(1156)
+calls=1 -28 
+* 103
++1 5
+-8 3
+cfi=(17) /usr/include/c++/4.8.0/bits/basic_string.h
+cfn=(1254) bool std::operator!=<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+calls=1 2556 
+* 2200
+* 3
+
+fn=(456) _GLOBAL__sub_I__Z11skipCommentRSi
+62 1
+cfn=(458) __static_initialization_and_destruction_0(int, int) [clone .constprop.26]
+calls=1 * 
+* 90114
+
+fn=(458)
+62 1
+fi=(10)
++12 2
+cob=(7)
+cfi=(7)
+cfn=(464)
+calls=1 -74 
+* 87737
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -74 
+* 1053
+* 3
+fe=(9)
+-12 1
+fi=(10)
++12 1
+cob=(3)
+cfi=(3)
+cfn=(334)
+calls=1 -74 
+* 66
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -74 
+* 1250
+fe=(9)
+
+fn=(1392) parserListLit(std::istream&, std::vector<Literal, std::allocator<Literal> >&, std::vector<Variable*, std::allocator<Variable*> > const&)
+34 3440
++2 430
+cfn=(1008)
+calls=430 -28 
+* 126446
+* 430
++1 1290
+cob=(7)
+cfi=(7)
+cfn=(1398)
+calls=430 -37 
+* 183040
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -37 
+* 865
+* 3870
+cob=(7)
+cfi=(7)
+cfn=(1398)
+calls=1290 -37 
+* 545168
+* 6880
+cob=(7)
+cfi=(7)
+cfn=(1064)
+calls=1720 -37 
+* 6880
+* 8600
++25 2580
+-22 1290
++1 1290
+-1 3870
++1 1290
+cfi=(12)
+cfn=(1408)
+calls=1290 547 
+* 14190
+* 2580
++3 125452
+cfi=(13)
+cfn=(1418) __gnu_cxx::__normal_iterator<Variable* const*, std::vector<Variable*, std::allocator<Variable*> > >::operator*() const
+calls=62726 739 
+* 125452
+* 188178
++2 122872
+cfi=(13)
+cfn=(1420) __gnu_cxx::__normal_iterator<Variable* const*, std::vector<Variable*, std::allocator<Variable*> > >::operator++(int) [clone .isra.3]
+calls=61436 753 
+* 860104
+-4 125452
+cfi=(12)
+cfn=(1412)
+calls=62726 565 
+* 689986
+* 250904
+cfi=(13)
+cfn=(1414) bool __gnu_cxx::operator!=<Variable* const*, std::vector<Variable*, std::allocator<Variable*> > >(__gnu_cxx::__normal_iterator<Variable* const*, std::vector<Variable*, std::allocator<Variable*> > > const&, __gnu_cxx::__normal_iterator<Variable* const*, std::vector<Variable*, std::allocator<Variable*> > > const&)
+calls=62726 823 
+* 1191794
+* 125452
++6 2580
+cfi=(12)
+cfn=(1412)
+calls=1290 565 
+* 14190
+* 5160
+cfi=(13)
+cfn=(1414)
+calls=1290 823 
+* 24510
+* 2580
++1 2580
+cfi=(13)
+cfn=(1418)
+calls=1290 739 
+* 2580
+* 9030
+cfi=(26)
+cfn=(1422)
+calls=1290 -32 
+* 3870
+* 3870
+cfi=(12)
+cfn=(1424)
+calls=1290 901 
+* 38284
+* 1290
+
+fl=(19)
+fn=(1762)
+222 6
+cfi=(20)
+cfn=(1764) __gnu_cxx::new_allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >::max_size() const [clone .isra.93]
+calls=6 114 
+* 12
+
+fn=(1604)
+222 955
+cfi=(20)
+cfn=(1606) __gnu_cxx::new_allocator<WatchedClause*>::max_size() const [clone .isra.33]
+calls=955 114 
+* 1910
+
+fn=(1376)
+216 100
+cfi=(20)
+cfn=(1378) __gnu_cxx::new_allocator<Variable*>::construct(Variable**, Variable* const&) [clone .isra.22]
+calls=100 -87 
+* 1100
+
+fn=(1554)
+224 17108
+
+fn=(1620)
+216 33707
+cfi=(20)
+cfn=(1622) __gnu_cxx::new_allocator<WatchedClause*>::construct(WatchedClause**, WatchedClause* const&) [clone .isra.18]
+calls=33707 -87 
+* 370777
+
+fn=(1290)
+222 1
+cfi=(20)
+cfn=(1292) __gnu_cxx::new_allocator<Variable*>::max_size() const [clone .isra.66]
+calls=1 114 
+* 2
+
+fn=(1436)
+222 6244
+cfi=(20)
+cfn=(1438) __gnu_cxx::new_allocator<Literal>::max_size() const [clone .isra.16]
+calls=6244 114 
+* 12488
+
+fn=(1778)
+216 652
+cfi=(20)
+cfn=(1780) __gnu_cxx::new_allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >::construct(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&) [clone .isra.36]
+calls=652 -87 
+* 7172
+
+fn=(1334)
+222 1
+cfi=(20)
+cfn=(1336) __gnu_cxx::new_allocator<WatchedClause*>::max_size() const [clone .isra.74]
+calls=1 114 
+* 2
+
+fn=(1454)
+216 1297
+cfi=(20)
+cfn=(1456) __gnu_cxx::new_allocator<Literal>::construct(Literal*, Literal const&) [clone .isra.7]
+calls=1297 -87 
+* 20752
+
+fl=(26)
+fn=(1422)
+17 207147
+
+fn=(1824)
+21 286020
++3 286020
+
+fn=(1458)
+18 759500
+
+fn=(1536)
+43 3440
++1 860
+
+fn=(1828)
+26 94470
++3 94470
+
+fn=(1506)
+38 9126
++1 486
+
+fn=(1544)
+21 390408
++3 390408
+
+fn=(1814) Literal::isFree() const [clone .isra.13]
+54 581216
+cfi=(24)
+cfn=(1816)
+calls=290608 +7 
+* 6102768
+
+fn=(1832)
+31 30536
++2 30536
+-2 30536
++2 61072
+cfn=(1422)
+calls=30536 -16 
+* 91608
++1 91608
+
+fn=(1530) Literal::Literal()
+16 38736
+
+fn=(1588)
+26 9611
++3 9611
+
+fn=(1812)
+47 1453040
++2 581216
+cfn=(1814)
+calls=290608 +5 
+* 6683984
+* 1423890
++1 1453040
+
+fn=(1884) Literal::invert() const [clone .isra.5]
+31 12482
++2 12482
+-2 12482
++2 24964
+cfn=(1422)
+calls=12482 -16 
+* 37446
++1 37446
+
+fl=(18)
+fn=(1286) std::vector<Variable*, std::allocator<Variable*> >::reserve(unsigned long)
+65 7
++3 1
+cfi=(12)
+cfn=(1288)
+calls=1 651 
+* 4
+* 2
+-2 1
++4 3
+cfi=(12)
+cfn=(1294)
+calls=1 725 
+* 4
+* 2
+-4 1
++6 3
+cfi=(12)
+cfn=(1296)
+calls=1 645 
+* 4
++3 3
+-3 1
++3 1
+cfi=(12)
+cfn=(1298)
+calls=1 1135 
+* 1041
++3 1
+-3 1
++3 1
+cfi=(12)
+cfn=(1328)
+calls=1 +95 
+* 3
++4 1
+-1 1
++1 1
++1 2
++2 6
+
+fn=(1756)
+318 48
++4 12
+-4 6
++4 6
++21 24
+cfi=(12)
+cfn=(1758)
+calls=6 1336 
+* 288
++1 6
+-1 6
++1 6
+cfi=(12)
+cfn=(1768)
+calls=6 538 
+* 60
+* 24
+cfi=(13)
+cfn=(1770) __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >::difference_type __gnu_cxx::operator-<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >(__gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > > const&, __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > > const&)
+calls=6 896 
+* 120
++1 6
+-1 6
++1 6
+cfi=(12)
+cfn=(1774)
+calls=6 168 
+* 1072
++13 6
+-5 6
+-8 6
++8 6
+cfi=(19)
+cfn=(1778)
+calls=6 216 
+* 72
++12 12
+cfi=(13)
+cfn=(1772) __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >::base() const
+calls=6 790 
+* 12
+-3 12
++3 6
+-3 12
+cfi=(21)
+cfn=(1782) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >* std::__uninitialized_move_if_noexcept_a<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >&) [clone .isra.102]
+calls=6 -81 
+* 783
++7 12
+-2 6
++2 6
+cfi=(21)
+cfn=(1782)
+calls=6 -88 
+* 96
++17 6
+-17 6
++17 6
+cfi=(12)
+cfn=(1790)
+calls=6 173 
+* 490
++5 6
+-2 6
++1 6
++1 6
++2 42
+
+fn=(1898)
+441 43687
++3 6241
+-3 6241
++3 6241
++2 37446
++35 24964
+cfi=(12)
+cfn=(1432)
+calls=6241 1336 
+* 299568
++1 6241
+-1 6241
++1 6241
+cfi=(12)
+cfn=(1444)
+calls=6241 +56 
+* 62410
+* 24964
+cfi=(13)
+cfn=(1446)
+calls=6241 896 
+* 124820
++1 6241
+-1 6241
++42 6241
+-41 6241
+cfi=(12)
+cfn=(1562)
+calls=6241 168 
+* 1496611
++5 6241
++2 6241
+-2 6241
++2 6241
+-7 6241
++15 6241
+-10 12482
+cfi=(21)
+cfn=(1900) void std::__uninitialized_fill_n_a<Literal*, unsigned long, Literal, Literal>(Literal*, unsigned long, Literal const&, std::allocator<Literal>&) [clone .isra.87]
+calls=6241 334 
+* 1990289
++8 12482
+cfi=(13)
+cfn=(1448)
+calls=6241 790 
+* 12482
+-3 12482
++3 6241
+-3 12482
+cfi=(21)
+cfn=(1906) Literal* std::__uninitialized_move_if_noexcept_a<Literal*, Literal*, std::allocator<Literal> >(Literal*, Literal*, Literal*, std::allocator<Literal>&) [clone .isra.100]
+calls=6241 281 
+* 99856
++7 12482
+-2 6241
++2 6241
+cfi=(21)
+cfn=(1906)
+calls=6241 281 
+* 99856
++19 6241
+-19 6241
++19 6241
+cfi=(12)
+cfn=(1644)
+calls=6241 173 
+* 18723
++3 6241
++2 6241
+-1 6241
++1 6241
++3 43687
+
+fn=(1922) std::vector<Literal, std::allocator<Literal> >::erase(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >)
+134 62410
++3 12482
+cfi=(12)
+cfn=(1426)
+calls=12482 556 
+* 124820
+* 49928
+cfi=(13)
+cfn=(1502)
+calls=12482 778 
+* 162266
+* 49928
+cfi=(13)
+cfn=(1490)
+calls=12482 823 
+* 237158
+* 24964
++1 17646
+cfi=(12)
+cfn=(1426)
+calls=8823 556 
+* 88230
+* 35292
+cfi=(13)
+cfn=(1502)
+calls=8823 778 
+* 114699
+* 35292
+cfi=(22)
+cfn=(1924)
+calls=8823 450 
+* 1099057
++1 12482
++3 62410
+
+fn=(1330) std::vector<WatchedClause*, std::allocator<WatchedClause*> >::reserve(unsigned long)
+65 7
++3 1
+cfi=(12)
+cfn=(1332)
+calls=1 651 
+* 4
+* 2
+-2 1
++4 3
+cfi=(12)
+cfn=(1338)
+calls=1 725 
+* 4
+* 2
+-4 1
++6 3
+cfi=(12)
+cfn=(1340)
+calls=1 645 
+* 4
++3 3
+-3 1
++3 1
+cfi=(12)
+cfn=(1342)
+calls=1 1135 
+* 495
++3 1
+-3 1
++3 1
+cfi=(12)
+cfn=(1368)
+calls=1 +95 
+* 3
++4 1
+-1 1
++1 1
++1 2
++2 6
+
+fn=(1430)
+318 24
++4 6
+-4 3
++4 3
++21 12
+cfi=(12)
+cfn=(1432)
+calls=3 1336 
+* 144
++1 3
+-1 3
++1 3
+cfi=(12)
+cfn=(1444)
+calls=3 538 
+* 30
+* 12
+cfi=(13)
+cfn=(1446)
+calls=3 896 
+* 60
+* 3
++1 3
++46 3
+-33 3
+-13 3
+cfi=(12)
+cfn=(1450)
+calls=3 168 
+* 565
++13 3
+-5 3
+-8 3
++8 3
+cfi=(19)
+cfn=(1454)
+calls=3 216 
+* 51
++12 6
+cfi=(13)
+cfn=(1448)
+calls=3 790 
+* 6
+-3 6
++3 3
+-3 6
+cfi=(21)
+cfn=(1460) Literal* std::__uninitialized_move_if_noexcept_a<Literal*, Literal*, std::allocator<Literal> >(Literal*, Literal*, Literal*, std::allocator<Literal>&) [clone .isra.25]
+calls=3 -81 
+* 131
++7 6
+-2 3
++2 3
+cfi=(21)
+cfn=(1460)
+calls=3 -88 
+* 48
++17 3
+-17 3
++17 3
+cfi=(12)
+cfn=(1468)
+calls=3 173 
+* 961
++3 3
++2 3
+-1 3
++1 3
++2 21
+
+fn=(1598)
+318 7640
++4 1910
+-4 955
++4 955
++21 3820
+cfi=(12)
+cfn=(1600)
+calls=955 1336 
+* 45840
++1 955
+-1 955
++1 955
+cfi=(12)
+cfn=(1610)
+calls=955 538 
+* 9550
+* 3820
+cfi=(13)
+cfn=(1612) __gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::difference_type __gnu_cxx::operator-<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >(__gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > > const&, __gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > > const&)
+calls=955 896 
+* 19100
++1 955
+-1 955
++1 955
+cfi=(12)
+cfn=(1616)
+calls=955 168 
+* 182352
++13 955
+-5 955
+-8 955
++8 955
+cfi=(19)
+cfn=(1620)
+calls=955 216 
+* 11460
++12 1910
+cfi=(13)
+cfn=(1614) __gnu_cxx::__normal_iterator<WatchedClause**, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::base() const
+calls=955 790 
+* 1910
+-3 1910
++3 955
+-3 1910
+cfi=(21)
+cfn=(1626) WatchedClause** std::__uninitialized_move_if_noexcept_a<WatchedClause**, WatchedClause**, std::allocator<WatchedClause*> >(WatchedClause**, WatchedClause**, WatchedClause**, std::allocator<WatchedClause*>&) [clone .isra.39]
+calls=955 -81 
+* 84955
++7 1910
+-2 955
++2 955
+cfi=(21)
+cfn=(1626)
+calls=955 -88 
+* 63985
++17 955
+-17 955
++17 955
+cfi=(12)
+cfn=(1630)
+calls=955 173 
+* 71710
++5 955
+-2 955
++1 955
++1 955
++2 6685
+
+fl=(14)
+fn=(1272) SatProblem::SatProblem(std::istream&, unsigned int, unsigned int)
+98 1
++1 1
+-1 7
++1 1
+-1 2
++1 1
+-1 1
++1 3
+cfi=(12)
+cfn=(1274)
+calls=1 249 
+* 6
+* 4
+cfi=(12)
+cfn=(1280)
+calls=1 249 
+* 6
++3 3
+cfi=(18)
+cfn=(1286)
+calls=1 -37 
+* 1095
++1 2
+cfi=(12)
+cfn=(824)
+calls=1 538 
+* 10
++1 1
+-1 1
++1 1
+cfi=(12)
+cfn=(824)
+calls=1 538 
+* 10
++2 2
+-2 1
++2 1
+cfi=(18)
+cfn=(1330)
+calls=1 -41 
+* 549
++3 4
++1 2
+cob=(7)
+cfi=(7)
+cfn=(982)
+calls=1 0 
+* 214
+* 198
+cob=(7)
+cfi=(7)
+cfn=(982)
+calls=99 0 
+* 20163
+* 400
+cfi=(24)
+cfn=(1370) Variable::Variable(unsigned int)
+calls=100 -55 
+* 7100
+-1 300
++5 1
++1 1
+-1 1
+cfi=(12)
+cfn=(1382)
+calls=1 249 
+* 6
++1 2
++2 860
+cfi=(12)
+cfn=(1388)
+calls=430 1125 
+* 2580
++1 1720
+cfi=(9)
+cfn=(1392)
+calls=430 -84 
+* 4830599
++2 1290
+cfn=(1486) SatProblem::simplify(std::vector<Literal, std::allocator<Literal> >&) const
+calls=430 -40 
+* 392386
+* 860
++7 1720
+cfi=(26)
+cfn=(1422)
+calls=430 17 
+* 1290
+* 1720
+cfn=(1546) SatProblem::addClause(std::vector<Literal, std::allocator<Literal> > const&, Literal)
+calls=430 +28 
+* 701966
+-12 1290
++20 2
+cfi=(12)
+cfn=(1640)
+calls=1 416 
+* 91
++1 8
+
+fn=(830) __static_initialization_and_destruction_0(int, int) [clone .constprop.109]
+542 1
+fi=(10)
+74 2
+cob=(7)
+cfi=(7)
+cfn=(464)
+calls=1 -74 
+* 24
+* 3
+fe=(14)
+542 1
+fi=(10)
+74 1
+cob=(3)
+cfi=(3)
+cfn=(334)
+calls=1 -74 
+* 66
+fe=(14)
+
+fn=(828) _GLOBAL__sub_I_main
+542 1
+cfn=(830)
+calls=1 * 
+* 98
+
+fn=(1866) SatProblem::resolve(Variable*) const
+340 5652
++1 628
+-1 1256
++1 1256
+cfi=(26)
+cfn=(1422)
+calls=628 17 
+* 1884
++5 1884
+cfn=(1868) getOriginClause(Literal const&)
+calls=628 -14 
+* 349971
++1 1256
+cfi=(12)
+cfn=(1426)
+calls=628 556 
+* 6280
+* 1884
+cfi=(12)
+cfn=(1444)
+calls=628 538 
+* 6280
+* 2512
+cfi=(29)
+cfn=(1874)
+calls=628 5497 
+* 464881
++3 628
++36 628
+-36 628
+cfi=(13)
+cfn=(1818)
+calls=628 723 
+* 1256
+* 628
++4 2512
+cfi=(26)
+cfn=(1884)
+calls=628 31 
+* 6908
+* 22452
+cfi=(26)
+cfn=(1884)
+calls=5613 31 
+* 61743
+* 18723
+cfn=(1868)
+calls=6241 -22 
+* 3323412
++1 12482
+cfi=(12)
+cfn=(1426)
+calls=6241 556 
+* 62410
+* 18723
+cfi=(12)
+cfn=(1444)
+calls=6241 538 
+* 62410
+* 24964
+cfi=(29)
+cfn=(1874)
+calls=6241 5497 
+* 4556219
++4 12482
+cfi=(12)
+cfn=(1382)
+calls=6241 249 
+* 37446
++1 18723
+cfi=(12)
+cfn=(1888)
+calls=6241 1452 
+* 199712
++2 12482
+cfi=(26)
+cfn=(1530)
+calls=6241 16 
+* 18723
+* 18723
+cfi=(12)
+cfn=(1540)
+calls=6241 645 
+* 24964
+* 24964
+cfi=(12)
+cfn=(1540)
+calls=6241 645 
+* 24964
+* 24964
+cfi=(12)
+cfn=(1538)
+calls=6241 704 
+* 4872402
++3 24964
+cfi=(26)
+cfn=(1884)
+calls=6241 31 
+* 68651
+* 12482
+cfi=(12)
+cfn=(1426)
+calls=6241 556 
+* 62410
+* 18723
+cfi=(12)
+cfn=(1444)
+calls=6241 538 
+* 62410
+* 31205
+cfi=(29)
+cfn=(1910)
+calls=6241 2448 
+* 930101
+* 18723
+cfi=(18)
+cfn=(1922)
+calls=6241 134 
+* 988320
++3 12482
+cfi=(12)
+cfn=(1426)
+calls=6241 556 
+* 62410
+* 18723
+cfi=(12)
+cfn=(1444)
+calls=6241 538 
+* 62410
+* 31205
+cfi=(29)
+cfn=(1910)
+calls=6241 2448 
+* 1214585
+* 18723
+cfi=(18)
+cfn=(1922)
+calls=6241 134 
+* 1200744
++4 12482
+cfi=(12)
+cfn=(1444)
+calls=6241 538 
+* 62410
+* 18723
+cfi=(12)
+cfn=(1426)
+calls=6241 556 
+* 62410
+* 18723
+cfi=(12)
+cfn=(1444)
+calls=6241 538 
+* 62410
+* 18723
+cfi=(12)
+cfn=(1426)
+calls=6241 556 
+* 62410
+* 18723
+cfi=(12)
+cfn=(1444)
+calls=6241 538 
+* 62410
+* 43687
+cfi=(29)
+cfn=(1932)
+calls=6241 5819 
+* 6987227
++2 6241
+-2 6241
++2 6241
+cfi=(26)
+cfn=(1530)
+calls=6241 16 
+* 18723
+* 12482
+cfi=(12)
+cfn=(1444)
+calls=6241 538 
+* 62410
+* 24964
+cfi=(13)
+cfn=(1446)
+calls=6241 896 
+* 124820
+* 24964
+cfi=(12)
+cfn=(1538)
+calls=6241 704 
+* 187230
++9 6241
+-1 6241
++1 6241
+cfi=(12)
+cfn=(1444)
+calls=6241 538 
+* 62410
+* 117942
+cfi=(13)
+cfn=(1940) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::operator++(int) [clone .isra.16]
+calls=52730 753 
+* 738220
+* 117942
+cfi=(12)
+cfn=(1426)
+calls=58971 556 
+* 589710
+* 235884
+cfi=(13)
+cfn=(1490)
+calls=58971 823 
+* 1120449
+* 117942
++2 105460
+cfi=(13)
+cfn=(1822)
+calls=52730 743 
+* 105460
+* 105460
+cfi=(26)
+cfn=(1544)
+calls=52730 21 
+* 105460
++1 52730
+-1 52730
++1 52730
+cfi=(12)
+cfn=(1854)
+calls=52730 734 
+* 2952880
+* 210920
+cfi=(12)
+cfn=(1934)
+calls=52730 863 
+* 1951010
+* 158190
+cfi=(24)
+cfn=(1816)
+calls=52730 61 
+* 1107330
+* 105460
++4 79712
+cfi=(26)
+cfn=(1544)
+calls=16811 21 
+* 33622
+* 50433
+cfi=(24)
+cfn=(1942)
+calls=16811 60 
+* 369842
+* 33622
++1 24690
+cfi=(13)
+cfn=(1504)
+calls=12345 739 
+* 24690
+* 49380
++1 46090
+-33 12482
+cfi=(12)
+cfn=(1640)
+calls=6241 +57 
+* 863228
++35 12482
+cfi=(12)
+cfn=(1640)
+calls=6241 +22 
+* 606379
+-43 12482
++47 1256
++2 21
+cfi=(12)
+cfn=(1934)
+calls=7 863 
+* 259
+* 14
+cfi=(13)
+cfn=(1732)
+calls=7 739 
+* 14
+* 7
++1 35
+cfi=(26)
+cfn=(1422)
+calls=7 17 
+* 21
+* 7
++1 14
+-1 21
++1 7
+cfi=(12)
+cfn=(1424)
+calls=7 901 
+* 196
++3 2512
+cfi=(32)
+cfn=(1946)
+calls=628 112 
+* 545157
+* 1256
+cfi=(12)
+cfn=(1640)
+calls=628 +11 
+* 106815
++68 5652
+
+fn=(1868)
+332 41214
++1 13738
+cfi=(26)
+cfn=(1588)
+calls=6869 26 
+* 13738
+* 20607
+cfi=(26)
+cfn=(1544)
+calls=6869 21 
+* 13738
+* 27476
+cfi=(24)
+cfn=(1870) Variable::getOriginClause(bool) const [clone .isra.2]
+calls=6869 66 
+* 30927
++1 27476
+cfi=(30)
+cfn=(1872)
+calls=6869 193 
+* 13738
+* 20607
+cfi=(12)
+cfn=(1550)
+calls=6869 -24 
+* 3408910
++1 41214
+
+fn=(1882)
+327 436608
++1 291072
+cfi=(26)
+cfn=(1544)
+calls=145536 21 
+* 291072
+* 436608
+cfi=(26)
+cfn=(1544)
+calls=145536 21 
+* 291072
+* 145536
++1 145536
+-1 145536
++1 291072
+
+fn=(2008) SatProblem::~SatProblem()
+142 8
++3 1
+-3 2
+cfi=(12)
+cfn=(1296)
+calls=1 645 
+* 4
+* 1
++3 1
++1 200
+cfi=(12)
+cfn=(2010)
+calls=100 771 
+* 200
+* 500
+cfi=(24)
+cfn=(2012) Variable::~Variable()
+calls=100 34 
+* 23867
+* 200
+cob=(7)
+cfi=(7)
+cfn=(1174)
+calls=100 0 
+* 8900
+* 400
+cfi=(12)
+cfn=(1296)
+calls=100 645 
+* 400
+* 100
+-1 408
+cfi=(12)
+cfn=(1340)
+calls=1 645 
+* 4
+* 2
++3 2114
+cfi=(12)
+cfn=(2020)
+calls=1057 771 
+* 2114
+* 5285
+cfi=(30)
+cfn=(2022)
+calls=1057 +36 
+* 118699
+* 2114
+cob=(7)
+cfi=(7)
+cfn=(1174)
+calls=1057 0 
+* 94073
+* 4228
+cfi=(12)
+cfn=(1340)
+calls=1057 645 
+* 4228
+* 1057
+-1 4231
+-5 2
+cfi=(12)
+cfn=(2024)
+calls=1 416 
+* 141
++7 2
+-7 1
++7 3
+-7 1
+cfi=(12)
+cfn=(2014)
+calls=1 416 
+* 143
+
+fn=(852) main
+31 3
++4 2
+cob=(7)
+cfi=(7)
+cfn=(858)
+calls=1 -35 
+* 6004
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -35 
+* 1397
++1 4
+cob=(7)
+cfi=(7)
+cfn=(888)
+calls=1 -36 
+* 66733
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -36 
+* 1735
++1 2
+cob=(7)
+cfi=(7)
+cfn=(998)
+calls=1 -37 
+* 5
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -37 
+* 1471
+* 2
++4 4
+cfi=(9)
+cfn=(1000)
+calls=1 -24 
+* 44089
++2 5
+cfn=(1272)
+calls=1 +55 
+* 5968483
++1 2
+cob=(7)
+cfi=(7)
+cfn=(1652)
+calls=1 -44 
+* 7835
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -44 
+* 1433
++3 2
+cfn=(1714) SatProblem::satisfiability()
+calls=1 212 
+* 109028116
+-4 1
++5 2
+-5 1
+cfn=(2008)
+calls=1 +99 
+* 273634
++7 1
+-2 2
++2 1
+cob=(7)
+cfi=(7)
+cfn=(2032)
+calls=1 -50 
+* 3463
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 -50 
+* 1381
++22 4
+
+fn=(1714)
+212 8
+312 1
+-84 1887
++4 22464
+cfi=(13)
+cfn=(1792) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >::operator++(int) [clone .isra.13]
+calls=11232 753 
+* 157248
+* 33696
+cfi=(13)
+cfn=(1732)
+calls=11232 739 
+* 22464
+* 11232
++1 11232
+cfi=(11)
+cfn=(1794)
+calls=11232 -88 
+* 46107396
+* 11232
++21 23760
+-40 23770
+cfi=(12)
+cfn=(1372)
+calls=11885 556 
+* 118850
+* 47540
+cfi=(13)
+cfn=(1716)
+calls=11885 823 
+* 225815
+* 23770
++9 35652
+cfi=(13)
+cfn=(1720) bool __gnu_cxx::operator>=<Variable**, std::vector<Variable*, std::allocator<Variable*> > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&)
+calls=11884 872 
+* 225796
+* 23768
++3 652
+cfi=(11)
+cfn=(1722)
+calls=652 24 
+* 6183676
++2 1956
+cfi=(12)
+cfn=(1750)
+calls=652 901 
+* 18343
++4 1304
+cfi=(13)
+cfn=(1792)
+calls=652 753 
+* 9128
+* 1956
+cfi=(13)
+cfn=(1732)
+calls=652 739 
+* 1304
+* 652
++1 1304
+cfi=(11)
+cfn=(1794)
+calls=652 -88 
+* 3710673
++5 652
+-5 652
++5 652
++6 4
++1 4
+-1 4
++1 4
+cfi=(11)
+cfn=(1958)
+calls=4 +4 
+* 3829
++1 4
++1 8
+cfi=(12)
+cfn=(1954)
+calls=4 939 
+* 8
++1 8
+cfi=(11)
+cfn=(1794)
+calls=4 145 
+* 24169
+* 4
++6 8
++5 1884
+cfi=(12)
+cfn=(1854)
+calls=628 734 
+* 35168
+* 1256
++5 2512
+cfn=(1866)
+calls=628 +76 
+* 40124264
++8 1256
+cfi=(13)
+cfn=(1724)
+calls=628 723 
+* 1256
+* 1256
+cfi=(12)
+cfn=(1948)
+calls=628 855 
+* 21980
+* 1884
++1 628
+cfi=(12)
+cfn=(1954)
+calls=628 939 
+* 1256
+* 628
++2 1256
+cfi=(13)
+cfn=(1956) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >::operator--()
+calls=628 758 
+* 1884
+* 22312
+cfi=(13)
+cfn=(1956)
+calls=11156 758 
+* 33468
+* 23568
+cfi=(13)
+cfn=(1732)
+calls=11784 739 
+* 23568
++3 23568
+cfi=(11)
+cfn=(1958)
+calls=11784 -29 
+* 8201677
+-4 35352
+cfi=(13)
+cfn=(1974) bool __gnu_cxx::operator><Variable**, std::vector<Variable*, std::allocator<Variable*> > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&)
+calls=11784 848 
+* 223896
+* 23568
++12 628
+-1 628
++10 628
+-9 628
+cfi=(12)
+cfn=(1382)
+calls=628 -37 
+* 3768
+* 628
++3 31648
+cfi=(13)
+cfn=(1956)
+calls=15824 758 
+* 47472
+* 31648
+cfi=(13)
+cfn=(1732)
+calls=15824 739 
+* 31648
+* 15824
++1 79120
+cfi=(24)
+cfn=(1870)
+calls=15824 66 
+* 70739
+* 31648
+-3 32904
+cfi=(13)
+cfn=(1976) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >::operator+(long const&) const [clone .isra.14] [clone .constprop.117]
+calls=16452 778 
+* 213876
+* 65808
+cfi=(13)
+cfn=(1974)
+calls=16452 848 
+* 312588
+* 32904
++11 628
++5 628
+-5 628
++5 628
++1 1884
+cfi=(26)
+cfn=(1458)
+calls=628 18 
+* 3140
+* 2512
+cfn=(1546)
+calls=628 155 
+* 1992244
+* 628
++17 1
++1 8
+-7 1256
+cfi=(12)
+cfn=(1986)
+calls=628 734 
+* 35168
+-5 628
++1 628
+-1 628
+-24 628
+cfi=(12)
+cfn=(1640)
+calls=628 416 
+* 3768
++32 1256
+cfi=(32)
+cfn=(1990)
+calls=628 96 
+* 77980
+* 628
+
+fn=(1486)
+80 430
++2 430
+-2 2150
++2 430
+cfi=(12)
+cfn=(1426)
+calls=430 556 
+* 4300
+* 1290
+cfi=(12)
+cfn=(1444)
+calls=430 538 
+* 4300
+* 1290
+cfi=(29)
+cfn=(1488)
+calls=430 5461 
+* 218236
++1 860
+cfi=(26)
+cfn=(1530)
+calls=430 -67 
+* 1290
+* 860
+cfi=(12)
+cfn=(1444)
+calls=430 538 
+* 4300
+* 1290
+cfi=(12)
+cfn=(1426)
+calls=430 556 
+* 4300
+* 1290
+cfi=(12)
+cfn=(1444)
+calls=430 538 
+* 4300
+* 1290
+cfi=(29)
+cfn=(1532)
+calls=430 1198 
+* 85570
+* 1720
+cfi=(13)
+cfn=(1446)
+calls=430 896 
+* 8600
+* 1720
+cfi=(12)
+cfn=(1538)
+calls=430 704 
+* 10750
+-4 430
++6 1290
+cfi=(12)
+cfn=(1540)
+calls=430 645 
+* 1720
++2 4300
++2 3440
+cfi=(12)
+cfn=(1542)
+calls=860 771 
+* 2580
+* 1720
+cfi=(26)
+cfn=(1544)
+calls=860 -68 
+* 1720
+* 3440
+cfi=(12)
+cfn=(1542)
+calls=860 771 
+* 2580
+* 1720
+cfi=(26)
+cfn=(1544)
+calls=860 -68 
+* 1720
+* 1720
++5 430
+-1 430
++1 2150
+
+fn=(1546)
+155 9522
+-1 1058
++6 1058
+-3 1058
++1 1058
++2 2116
+cfi=(12)
+cfn=(1540)
+calls=1058 645 
+* 4232
++2 2116
++9 2116
++20 2114
+cfi=(26)
+cfn=(1544)
+calls=1057 21 
+* 2114
+* 2114
++2 1057
+-2 1057
++8 627
+cob=(7)
+cfi=(7)
+cfn=(982)
+calls=627 0 
+* 147606
+* 3762
+cfi=(30)
+cfn=(1978)
+calls=627 70 
+* 1735745
++1 1254
+-1 627
++1 627
+cfi=(12)
+cfn=(1592)
+calls=627 901 
+* 22176
++1 1881
+cfi=(26)
+cfn=(1588)
+calls=627 26 
+* 1254
+* 1881
+cfi=(26)
+cfn=(1544)
+calls=627 21 
+* 1254
+* 2508
+cfi=(24)
+cfn=(1850)
+calls=627 98 
+* 47025
++3 4396
+-26 3
+cfi=(12)
+cfn=(2006)
+calls=1 786 
+* 3
+* 3
+cfi=(26)
+cfn=(1544)
+calls=1 21 
+* 2
+* 3
+cfi=(24)
+cfn=(1826)
+calls=1 62 
+* 23
+* 2
++2 2
+cfi=(26)
+cfn=(1588)
+calls=1 26 
+* 2
+* 4
+cfi=(24)
+cfn=(1850)
+calls=1 -82 
+* 75
++2 3
+cfi=(12)
+cfn=(2006)
+calls=1 786 
+* 3
+* 3
+cfi=(26)
+cfn=(1544)
+calls=1 21 
+* 2
+* 3
+cfi=(24)
+cfn=(1826)
+calls=1 62 
+* 23
+* 2
++11 430
+cob=(7)
+cfi=(7)
+cfn=(982)
+calls=430 0 
+* 79746
+* 2150
+cfi=(30)
+cfn=(1548)
+calls=430 55 
+* 591690
++1 860
+-1 430
++1 430
+cfi=(12)
+cfn=(1592)
+calls=430 901 
+* 9890
++10 3010
+
+fl=(20)
+fn=(1378)
+129 200
++1 100
+cfi=(25)
+cfn=(1380)
+calls=100 -21 
+* 200
+* 600
+
+fn=(2074)
+110 1
+cob=(7)
+cfi=(7)
+cfn=(1174)
+calls=1 0 
+* 134
+
+fn=(1336)
+114 4
+
+fn=(1346)
+99 2
++2 1
+cfn=(1336)
+calls=1 +13 
+* 2
+* 2
++3 1
++1 1
+-1 1
+cob=(7)
+cfi=(7)
+cfn=(982)
+calls=1 0 
+* 400
+
+fn=(1480)
+110 2
+cob=(7)
+cfi=(7)
+cfn=(1174)
+calls=2 0 
+* 168
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+* 782
+
+fn=(1564)
+99 29590
++2 14795
+cfn=(1566) __gnu_cxx::new_allocator<Literal>::max_size() const [clone .isra.88]
+calls=14795 +13 
+* 29590
+* 29590
++3 29590
++1 14795
+-1 14795
+cob=(7)
+cfi=(7)
+cfn=(982)
+calls=14795 0 
+* 2664983
+
+fn=(1638)
+110 755
+cob=(7)
+cfi=(7)
+cfn=(1174)
+calls=755 0 
+* 68090
+
+fn=(1780)
+129 1304
++1 652
+cfi=(25)
+cfn=(1380)
+calls=652 -21 
+* 1304
+* 3912
+
+fn=(2018)
+110 201
+cob=(7)
+cfi=(7)
+cfn=(1174)
+calls=201 0 
+* 21903
+
+fn=(1292)
+114 4
+
+fn=(1438)
+114 12494
+
+fn=(1452)
+99 6
++2 3
+cfn=(1438)
+calls=3 +13 
+* 6
+* 6
++3 6
++1 3
+-1 3
+cob=(7)
+cfi=(7)
+cfn=(982)
+calls=3 0 
+* 523
+
+fn=(1456)
+129 2594
++1 1297
+cfi=(25)
+cfn=(1380)
+calls=1297 -21 
+* 2594
+* 7782
+cfi=(26)
+cfn=(1458)
+calls=1297 18 
+* 6485
+
+fn=(1566)
+114 29590
+
+fn=(1302)
+99 2
++2 1
+cfn=(1292)
+calls=1 +13 
+* 2
+* 2
++3 1
++1 1
+-1 1
+cob=(7)
+cfi=(7)
+cfn=(982)
+calls=1 0 
+* 187
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+* 759
+
+fn=(1606)
+114 3820
+
+fn=(1618)
+99 1910
++2 955
+cfn=(1606)
+calls=955 +13 
+* 1910
+* 1910
++3 955
++1 955
+-1 955
+cob=(7)
+cfi=(7)
+cfn=(982)
+calls=955 0 
+* 169937
+
+fn=(1776)
+99 12
++2 6
+cfn=(1764)
+calls=6 +13 
+* 12
+* 12
++3 6
++1 6
+-1 6
+cob=(7)
+cfi=(7)
+cfn=(982)
+calls=6 0 
+* 994
+
+fn=(1764)
+114 24
+
+fn=(1846)
+110 6
+cob=(7)
+cfi=(7)
+cfn=(1174)
+calls=6 0 
+* 601
+
+fn=(1646)
+110 14796
+cob=(7)
+cfi=(7)
+cfn=(1174)
+calls=14796 0 
+* 1666878
+
+fn=(1622)
+129 67414
++1 33707
+cfi=(25)
+cfn=(1624)
+calls=33707 -21 
+* 67414
+* 202242
+
+fl=(8)
+fn=(442) __libc_csu_init
+0 16
+cob=(2)
+cfi=(2)
+cfn=(444) 0x0000000000401230
+calls=1 0 
+0 6
+0 7
+cfn=(448) 0x0000000000401810
+calls=1 0 
+0 15
+0 20
+cfi=(16) /home/artifere/ENS_L3/Projet2/Rendu1/src/Debug.cpp
+cfn=(840) _GLOBAL__sub_I__ZlsRSoRK8Variable
+calls=1 96 
+0 99
+cfi=(15) /home/artifere/ENS_L3/Projet2/Rendu1/src/resolveLog.cpp
+cfn=(834) _GLOBAL__sub_I__ZNK10SatProblem19createConflictGraphEP8Variable
+calls=1 82 
+0 99
+cfi=(14)
+cfn=(828)
+calls=1 542 
+0 99
+cfi=(11)
+cfn=(812)
+calls=1 260 
+0 204
+cfi=(9)
+cfn=(456)
+calls=1 62 
+0 90115
+0 26
+
+fn=(2108) 0x0000000000401780
+0 8
+
+fn=(432)
+0 11
+cob=(3)
+cfi=(3)
+cfn=(440) (below main)
+calls=1 0 
+0 115508670
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1317
+
+fn=(2104)
+0 5
+cfn=(2108)
+calls=1 0 
+0 8
+0 3
+
+fn=(448)
+0 15
+
+fl=(17)
+fn=(1254)
+2556 1
++2 1
+cfn=(1256) bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+calls=1 -39 
+* 2195
+* 3
+
+fn=(1256)
+2519 1
++2 1
+cob=(7)
+cfi=(7)
+cfn=(1262)
+calls=1 0 
+* 1228
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+* 961
+* 4
+
+fl=(15)
+fn=(836) __static_initialization_and_destruction_0(int, int) [clone .constprop.0]
+82 1
+fi=(10)
+-8 2
+cob=(7)
+cfi=(7)
+cfn=(464)
+calls=1 -74 
+* 24
+* 3
+fe=(15)
++8 1
+fi=(10)
+-8 1
+cob=(3)
+cfi=(3)
+cfn=(334)
+calls=1 -74 
+* 66
+fe=(15)
+
+fn=(834)
+82 1
+cfn=(836)
+calls=1 * 
+* 98
+
+fl=(13)
+fn=(1490)
+823 1644640
++2 411160
+cfn=(1448)
+calls=411160 -35 
+* 822320
+* 1233480
+cfn=(1448)
+calls=411160 -35 
+* 822320
+* 2878120
+
+fn=(1822)
+743 358354
+
+fn=(1864) __gnu_cxx::__normal_iterator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const*, std::vector<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > > > >::base() const
+790 106716
++1 106716
+
+fn=(1972)
+746 155448
++2 155448
++2 155448
+
+fn=(1502)
+778 40563
++1 243378
+cfn=(1428)
+calls=40563 -53 
+* 121689
+* 121689
+
+fn=(1798)
+823 861040
++2 215260
+cfn=(1614)
+calls=215260 -35 
+* 430520
+* 645780
+cfn=(1614)
+calls=215260 -35 
+* 430520
+* 1506820
+
+fn=(1804)
+739 289266
+
+fn=(1920) __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >::operator+=(long const&) [clone .isra.82]
+775 33147
+-1 33147
++1 66294
+
+fn=(1952)
+739 1256
+
+fn=(1956)
+758 27608
++2 27608
++2 27608
+
+fn=(1968)
+823 716096
++2 179024
+cfn=(1970) __gnu_cxx::__normal_iterator<WatchedClause* const*, std::vector<WatchedClause*, std::allocator<WatchedClause*> > >::base() const
+calls=179024 -35 
+* 358048
+* 537072
+cfn=(1970)
+calls=179024 -35 
+* 358048
+* 1253168
+
+fn=(1414)
+823 256064
++2 64016
+cfn=(1416) __gnu_cxx::__normal_iterator<Variable* const*, std::vector<Variable*, std::allocator<Variable*> > >::base() const
+calls=64016 -35 
+* 128032
+* 192048
+cfn=(1416)
+calls=64016 -35 
+* 128032
+* 448112
+
+fn=(1428)
+726 1367919
+
+fn=(1500)
+811 32636
++2 8159
+cfn=(1448)
+calls=8159 -23 
+* 16318
+* 24477
+cfn=(1448)
+calls=8159 -23 
+* 16318
+* 57113
+
+fn=(1524)
+746 213969
++2 213969
++2 213969
+
+fn=(1852) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >::operator++(int) [clone .isra.12] [clone .constprop.43]
+753 15909
++1 111363
+cfn=(826)
+calls=15909 -28 
+* 47727
+* 47727
+
+fn=(1862)
+811 213432
++2 53358
+cfn=(1864)
+calls=53358 -23 
+* 106716
+* 160074
+cfn=(1864)
+calls=53358 -23 
+* 106716
+* 373506
+
+fn=(1938)
+739 105474
+
+fn=(1596)
+726 906054
+
+fn=(1732)
+739 393724
+
+fn=(1754)
+726 3804
+
+fn=(1792)
+753 11884
++1 83188
+cfn=(826)
+calls=11884 -28 
+* 35652
+* 35652
+
+fn=(1818)
+723 96300
+
+fn=(1944) bool __gnu_cxx::operator<=<Variable**, std::vector<Variable*, std::allocator<Variable*> > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&)
+860 102056
++2 25514
+cfn=(1718) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >::base() const
+calls=25514 -72 
+* 51028
+* 76542
+cfn=(1718)
+calls=25514 -72 
+* 51028
+* 178598
+
+fn=(1960)
+723 23576
+
+fn=(2000)
+836 20
++2 5
+cfn=(1448)
+calls=5 -48 
+* 10
+* 15
+cfn=(1448)
+calls=5 -48 
+* 10
+* 35
+
+fn=(1570)
+726 55092
+
+fn=(1612)
+896 3820
++2 955
+cfn=(1614)
+calls=955 790 
+* 1910
+* 2865
+cfn=(1614)
+calls=955 790 
+* 1910
+* 7640
+
+fn=(1796)
+723 23776
+
+fn=(1940)
+753 52730
++1 369110
+cfn=(1428)
+calls=52730 -28 
+* 158190
+* 158190
+
+fn=(1964)
+726 607800
+
+fn=(1974)
+848 112944
++2 28236
+cfn=(1718)
+calls=28236 -60 
+* 56472
+* 84708
+cfn=(1718)
+calls=28236 -60 
+* 56472
+* 197652
+
+fn=(826)
+726 170658
+
+fn=(1420)
+753 61436
++1 430052
+cfn=(1410)
+calls=61436 -28 
+* 184308
+* 184308
+
+fn=(1528)
+758 19359
++2 19359
++2 19359
+
+fn=(1584) __gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >::operator*() const
+739 74760
+
+fn=(1586) __gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >::operator++()
+746 37380
++2 37380
++2 37380
+
+fn=(1716)
+823 262900
++2 65725
+cfn=(1718)
+calls=65725 -35 
+* 131450
+* 197175
+cfn=(1718)
+calls=65725 -35 
+* 131450
+* 460075
+
+fn=(1718)
+790 1339526
++1 1339526
+
+fn=(1720)
+872 2198544
++2 549636
+cfn=(1718)
+calls=549636 -84 
+* 1099272
+* 1648908
+cfn=(1718)
+calls=549636 -84 
+* 1099272
+* 3847452
+
+fn=(1728)
+811 2608
++2 652
+cfn=(1718)
+calls=652 -23 
+* 1304
+* 1956
+cfn=(1718)
+calls=652 -23 
+* 1304
+* 4564
+
+fn=(1976)
+778 16452
++1 98712
+cfn=(826)
+calls=16452 -53 
+* 49356
+* 49356
+
+fn=(1416)
+790 128032
++1 128032
+
+fn=(1446)
+896 189212
++2 47303
+cfn=(1448)
+calls=47303 790 
+* 94606
+* 141909
+cfn=(1448)
+calls=47303 790 
+* 94606
+* 378424
+
+fn=(1724)
+723 2560
+
+fn=(1770)
+896 24
++2 6
+cfn=(1772)
+calls=6 790 
+* 12
+* 18
+cfn=(1772)
+calls=6 790 
+* 12
+* 48
+
+fn=(1580) bool __gnu_cxx::operator!=<Literal const*, std::vector<Literal, std::allocator<Literal> > >(__gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > > const&, __gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > > const&)
+823 183736
++2 45934
+cfn=(1582) __gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >::base() const
+calls=45934 -35 
+* 91868
+* 137802
+cfn=(1582)
+calls=45934 -35 
+* 91868
+* 321538
+
+fn=(1582)
+790 93124
++1 93124
+
+fn=(1730)
+746 54492
++2 54492
++2 54492
+
+fn=(1772)
+790 18
++1 18
+
+fn=(1802)
+746 149692
++2 149692
++2 149692
+
+fn=(1820)
+778 46895
++1 281370
+cfn=(1428)
+calls=46895 -53 
+* 140685
+* 140685
+
+fn=(1836)
+786 30536
++1 183216
+cfn=(1596)
+calls=30536 -61 
+* 91608
+* 91608
+
+fn=(1950)
+786 628
++1 3768
+cfn=(1754)
+calls=628 -61 
+* 1884
+* 1884
+
+fn=(1410)
+726 380226
+
+fn=(1418)
+739 128032
+
+fn=(1448)
+790 1028916
++1 1028916
+
+fn=(1504)
+739 923426
+
+fn=(1614)
+790 433385
++1 433385
+
+fn=(1858)
+726 636570
+
+fn=(1936)
+786 52737
++1 316422
+cfn=(1858)
+calls=52737 -61 
+* 158211
+* 158211
+
+fn=(1970)
+790 358048
++1 358048
+
+fn=(1988)
+811 2512
++2 628
+cfn=(1582)
+calls=628 -23 
+* 1256
+* 1884
+cfn=(1582)
+calls=628 -23 
+* 1256
+* 4396
+
+fn=(1994)
+786 3
++1 18
+cfn=(1428)
+calls=3 -61 
+* 9
+* 9
+
+fl=(21)
+fn=(1462) Literal* std::__uninitialized_copy_a<Literal*, Literal*, Literal>(Literal*, Literal*, Literal*, std::allocator<Literal>&) [clone .isra.24]
+258 6
+cfn=(1464) Literal* std::uninitialized_copy<Literal*, Literal*>(Literal*, Literal*, Literal*)
+calls=6 117 
+* 167
+
+fn=(1786) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >* std::uninitialized_copy<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*>(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*)
+117 12
+cfn=(1788) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*>(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*)
+calls=12 -49 
+* 843
+
+fn=(1352) WatchedClause** std::__uninitialized_copy<true>::__uninit_copy<WatchedClause**, WatchedClause**>(WatchedClause**, WatchedClause**, WatchedClause**)
+93 1911
+cfi=(22)
+cfn=(1354)
+calls=1911 450 
+* 141363
+
+fn=(1578) Literal* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >, Literal*>(__gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >, Literal*)
+68 51324
++6 8554
++1 74760
+cfi=(13)
+cfn=(1584)
+calls=37380 739 
+* 74760
+* 74760
+-1 37380
++1 37380
+cfi=(27)
+cfn=(1476)
+calls=37380 -28 
+* 74760
+* 112140
+cfi=(28) /usr/include/c++/4.8.0/bits/stl_construct.h
+cfn=(1478) void std::_Construct<Literal, Literal>(Literal*, Literal const&)
+calls=37380 +4 
+* 598080
+-1 74760
+cfi=(13)
+cfn=(1586)
+calls=37380 746 
+* 112140
+* 137802
+cfi=(13)
+cfn=(1580)
+calls=45934 823 
+* 872746
+* 91868
++9 42770
+
+fn=(1628) WatchedClause** std::__uninitialized_copy_a<WatchedClause**, WatchedClause**, WatchedClause*>(WatchedClause**, WatchedClause**, WatchedClause**, std::allocator<WatchedClause*>&) [clone .isra.38]
+258 1910
+cfn=(1350) WatchedClause** std::uninitialized_copy<WatchedClause**, WatchedClause**>(WatchedClause**, WatchedClause**, WatchedClause**)
+calls=1910 117 
+* 145120
+
+fn=(1900)
+334 6241
+cfn=(1902) void std::uninitialized_fill_n<Literal*, unsigned long, Literal>(Literal*, unsigned long, Literal const&)
+calls=6241 223 
+* 1984048
+
+fn=(1626)
+281 1910
+cfn=(1628)
+calls=1910 -23 
+* 147030
+
+fn=(1784) __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, std::allocator<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >&) [clone .isra.101]
+258 12
+cfn=(1786)
+calls=12 117 
+* 855
+
+fn=(1908) Literal* std::__uninitialized_copy_a<Literal*, Literal*, Literal>(Literal*, Literal*, Literal*, std::allocator<Literal>&) [clone .isra.98]
+258 12482
+cfn=(1464)
+calls=12482 117 
+* 174748
+
+fn=(1904) void std::__uninitialized_fill_n<false>::__uninit_fill_n<Literal*, unsigned long, Literal>(Literal*, unsigned long, Literal const&)
+180 6241
++6 6241
+-6 31205
++6 12482
++1 6241
+-1 6241
++1 6241
+cfi=(27)
+cfn=(1476)
+calls=6241 47 
+* 12482
+* 66708
+-1 66708
++1 66708
+cfi=(27)
+cfn=(1476)
+calls=66708 47 
+* 133416
+* 218847
+cfi=(28)
+cfn=(1478)
+calls=72949 79 
+* 1167184
+-1 145898
++8 24964
+
+fn=(1308)
+258 1
+cfn=(1310) Variable** std::uninitialized_copy<Variable**, Variable**>(Variable**, Variable**, Variable**)
+calls=1 117 
+* 65
+
+fn=(1348)
+258 1
+cfn=(1350)
+calls=1 117 
+* 65
+
+fn=(1460)
+281 6
+cfn=(1462)
+calls=6 -23 
+* 173
+
+fn=(1788)
+68 12
++6 12
+-6 60
++6 17
++1 5
+-1 5
++1 5
+cfi=(27)
+cfn=(1842)
+calls=5 -28 
+* 10
+* 26
+-1 26
++1 26
+cfi=(27)
+cfn=(1842)
+calls=26 -28 
+* 52
+* 62
+-1 31
++1 31
+cfi=(28)
+cfn=(1844) void std::_Construct<__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > >(__gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > >*, __gnu_cxx::__normal_iterator<Variable**, std::vector<Variable*, std::allocator<Variable*> > > const&)
+calls=31 +4 
+* 341
+-1 62
++9 60
+
+fn=(1310)
+117 1
+cfn=(1312) Variable** std::__uninitialized_copy<true>::__uninit_copy<Variable**, Variable**>(Variable**, Variable**, Variable**)
+calls=1 -24 
+* 64
+
+fn=(1782)
+281 12
+cfn=(1784)
+calls=12 -23 
+* 867
+
+fn=(1464)
+117 12488
+cfn=(1466) Literal* std::__uninitialized_copy<false>::__uninit_copy<Literal*, Literal*>(Literal*, Literal*, Literal*)
+calls=12488 -49 
+* 162427
+
+fn=(1576) Literal* std::uninitialized_copy<__gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >, Literal*>(__gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal const*, std::vector<Literal, std::allocator<Literal> > >, Literal*)
+117 8554
+cfn=(1578)
+calls=8554 -49 
+* 2475984
+
+fn=(1902)
+223 6241
+cfn=(1904)
+calls=6241 -43 
+* 1977807
+
+fn=(1906)
+281 12482
+cfn=(1908)
+calls=12482 -23 
+* 187230
+
+fn=(1312)
+93 1
+cfi=(22)
+cfn=(1314)
+calls=1 450 
+* 63
+
+fn=(1350)
+117 1911
+cfn=(1352)
+calls=1911 -24 
+* 143274
+
+fn=(1466)
+68 12488
++6 12488
+-6 62440
++6 12490
++1 2
+-1 2
++1 2
+cfi=(27)
+cfn=(1476)
+calls=2 -28 
+* 4
+* 1
+-1 1
++1 1
+cfi=(27)
+cfn=(1476)
+calls=1 -28 
+* 2
+* 6
+-1 3
++1 3
+cfi=(28)
+cfn=(1478)
+calls=3 +4 
+* 48
+-1 6
++9 62440
+
+fn=(1574)
+258 8554
+cfn=(1576)
+calls=8554 117 
+* 2484538
+
+fl=(31)
+fn=(1916)
+177 33147
+cfn=(1918) void std::__advance<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, long>(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >&, long, std::random_access_iterator_tag) [clone .isra.83]
+calls=33147 -21 
+* 165735
+
+fn=(1914) std::iterator_traits<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >::difference_type std::__distance<__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > > >(__gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, __gnu_cxx::__normal_iterator<Literal*, std::vector<Literal, std::allocator<Literal> > >, std::random_access_iterator_tag) [clone .isra.46]
+90 24964
++6 12482
+-6 12482
++6 24964
+cfi=(13)
+cfn=(1446)
+calls=12482 896 
+* 249640
++1 24964
+
+fn=(1912)
+118 12482
+cfn=(1914)
+calls=12482 -28 
+* 349496
+
+fn=(1918)
+156 33147
+cfi=(13)
+cfn=(1920)
+calls=33147 775 
+* 132588
+
+fl=(24)
+fn=(1816)
+61 1075504
+cfi=(13)
+cfn=(1720)
+calls=537752 872 
+* 10217288
+
+fn=(1370)
+55 800
+cfi=(12)
+cfn=(1274)
+calls=100 249 
+* 600
+* 200
+cfi=(12)
+cfn=(1274)
+calls=100 249 
+* 600
+* 200
+cfi=(12)
+cfn=(1372)
+calls=100 556 
+* 1000
+* 900
+cfi=(12)
+cfn=(1374)
+calls=100 901 
+* 2300
+* 500
+
+fn=(1738)
+57 321084
+cfi=(12)
+cfn=(1608)
+calls=107028 645 
+* 428112
+* 107028
+
+fn=(1870)
+66 78973
++1 22693
+
+fn=(1826)
+62 357138
+cfn=(1816)
+calls=178569 -1 
+* 3749949
+
+fn=(1942)
+60 76542
+cfi=(13)
+cfn=(1944)
+calls=25514 860 
+* 484766
+
+fn=(2012)
+34 400
+cfi=(12)
+cfn=(2014)
+calls=100 416 
+* 11640
+* 300
+cfi=(12)
+cfn=(2014)
+calls=100 416 
+* 11527
+
+fn=(1734)
+89 265940
++1 53188
+cfn=(1736)
+calls=53188 -32 
+* 425504
+* 159564
+cfn=(1738)
+calls=53188 -33 
+* 425504
+* 212752
+cfi=(22)
+cfn=(1740)
+calls=53188 221 
+* 265940
+* 159564
+cfn=(1736)
+calls=53188 -32 
+* 425504
+* 159564
+cfn=(1738)
+calls=53188 -33 
+* 425504
+* 212752
+cfi=(22)
+cfn=(1740)
+calls=53188 221 
+* 265940
+* 106376
++1 212752
+
+fn=(1850)
+98 111363
++1 31818
+cfi=(13)
+cfn=(1852)
+calls=15909 753 
+* 222726
+* 47727
+cfi=(13)
+cfn=(1732)
+calls=15909 739 
+* 31818
+* 15909
++1 47727
+cfi=(27)
+cfn=(1742)
+calls=15909 +75 
+* 79545
++1 47727
+cfi=(22)
+cfn=(1744)
+calls=15909 +41 
+* 397725
++2 31818
++3 7479
++1 7479
++1 7479
+-1 7479
++1 29916
+-4 8430
++3 8430
++1 50580
+
+fn=(1590)
+130 32650
++1 32650
+-1 32650
++1 32650
++3 50451
+cfi=(12)
+cfn=(1592)
+calls=16817 901 
+* 655963
+* 31666
+cfi=(12)
+cfn=(1592)
+calls=15833 901 
+* 634439
++1 65300
+
+fn=(1736)
+58 321084
+cfi=(12)
+cfn=(1608)
+calls=107028 645 
+* 428112
+* 107028
+
+fl=(28)
+fn=(1844)
+79 62
++4 31
+cfi=(25)
+cfn=(1380)
+calls=31 +26 
+* 62
+* 124
++1 62
+
+fn=(1478)
+79 220664
++4 110332
+cfi=(25)
+cfn=(1380)
+calls=110332 +26 
+* 220664
+* 441328
++1 110332
+-1 110332
+cfi=(26)
+cfn=(1458)
+calls=110332 -65 
+* 551660
+
+fl=(16)
+fn=(840)
+96 1
+cfn=(842) __static_initialization_and_destruction_0(int, int) [clone .constprop.11]
+calls=1 * 
+* 98
+
+fn=(842)
+96 1
+fi=(10)
+-22 2
+cob=(7)
+cfi=(7)
+cfn=(464)
+calls=1 -74 
+* 24
+* 3
+fe=(16)
++22 1
+fi=(10)
+-22 1
+cob=(3)
+cfi=(3)
+cfn=(334)
+calls=1 -74 
+* 66
+fe=(16)
+
+ob=(3)
+fl=(3)
+fn=(172) __get_cpu_features
+0 60
+
+fn=(238)
+0 70
+cfn=(144) _dl_vdso_vsym
+calls=1 0 
+0 7
+0 8
+cfn=(144)
+calls=1 0 
+0 7
+0 10
+cfn=(240) __init_misc
+calls=1 0 
+0 75
+0 1
+cfn=(244) __ctype_init
+calls=1 0 
+0 16
+0 14
+
+fn=(250) intel_check_word
+0 188
+cfn=(252) bsearch
+calls=8 0 
+0 1226
+0 263
+
+fn=(334)
+0 80
+cfn=(336) __new_exitfn
+calls=10 0 
+0 434
+0 140
+
+fn=(336)
+0 434
+
+fn=(594)
+0 2432
+
+fn=(940) __default_morecore
+0 12
+cfn=(942) sbrk
+calls=6 0 
+0 187
+0 36
+
+fn=(1098)
+0 168
+
+fn=(1104)
+0 8
+
+fn=(1268)
+0 8
+
+fn=(152)
+0 55
+cfn=(144)
+calls=1 0 
+0 7
+0 6
+
+fn=(154)
+0 26
+
+fn=(246)
+0 11
+cfn=(248) handle_intel
+calls=1 0 
+0 845
+0 4
+cfn=(248)
+calls=1 0 
+0 930
+0 129
+
+fn=(440)
+0 21
+cfn=(334)
+calls=1 0 
+0 66
+0 13
+cob=(8)
+cfi=(8)
+cfn=(442)
+calls=1 0 
+0 90706
+0 8
+cfn=(846) _setjmp
+calls=1 0 
+0 29
+0 14
+cob=(8)
+cfi=(14)
+cfn=(852)
+calls=1 31 
+0 115405817
+0 2
+cfn=(2058) exit
+calls=1 0 
+0 11992
+0 2
+
+fn=(602) _dl_mcount_wrapper_check
+0 512
+
+fn=(848) __sigsetjmp
+0 18
+cfn=(850) __sigjmp_save
+calls=1 0 
+0 9
+
+fn=(918)
+0 2
+cfn=(920) __fopen_internal
+calls=1 0 
+0 57703
+
+fn=(1180)
+0 253830
+cfn=(1182) _int_free
+calls=16922 0 
+0 1556579
+
+fn=(1694)
+0 39
+cfn=(1708) _IO_file_finish@@GLIBC_2.2.5
+calls=1 0 
+0 32
+0 12
+cfn=(1180)
+calls=1 0 
+0 134
+0 9
+cfn=(1698) _IO_file_close_it@@GLIBC_2.2.5
+calls=1 0 
+0 89
+0 4
+cfn=(1696) _IO_un_link
+calls=1 0 
+0 79
+0 9
+
+fn=(2060) __run_exit_handlers
+0 156
+cfn=(2216) _IO_cleanup
+calls=1 0 
+0 138
+0 5
+cfn=(2220) _Exit
+calls=1 0 
+0 5
+0 42
+cob=(1)
+cfi=(1)
+cfn=(2100)
+calls=1 0 
+0 7107
+cob=(8)
+cfi=(12)
+cfn=(2068)
+calls=1 416 
+0 141
+cob=(7)
+cfi=(7)
+cfn=(2066)
+calls=5 0 
+0 3269
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1118
+0 7
+
+fn=(146)
+0 6
+
+fn=(240)
+0 12
+cfn=(242) __GI_strrchr
+calls=1 0 
+0 51
+0 12
+
+fn=(516)
+0 40
+
+fn=(620) __GI_memcmp
+0 857
+
+fn=(924)
+0 355349
+cfn=(934) _int_malloc
+calls=16921 0 
+0 2137765
+0 338425
+cfn=(926) malloc_hook_ini
+calls=1 0 
+0 57364
+
+fn=(925) malloc'2
+0 21
+cfn=(934)
+calls=1 0 
+0 1011
+0 20
+
+fn=(938) malloc_init_state
+0 648
+
+fn=(956) _IO_file_open
+0 12
+cfn=(958) open
+calls=1 0 
+0 7
+0 15
+cfn=(952) _IO_link_in
+calls=1 0 
+0 11
+0 5
+
+fn=(1096)
+0 10
+
+fn=(2128)
+0 190
+cob=(7)
+cfi=(7)
+cfn=(2162)
+calls=1 0 
+0 7
+cob=(7)
+cfi=(7)
+cfn=(2160)
+calls=1 0 
+0 7
+cob=(7)
+cfi=(7)
+cfn=(2152)
+calls=1 0 
+0 801
+0 124
+cfn=(2130) __unregister_atfork
+calls=4 0 
+0 52
+
+fn=(2216)
+0 8
+cfn=(2218) _IO_flush_all_lockp
+calls=1 0 
+0 88
+0 42
+
+fn=(148)
+0 6
+
+fn=(254) intel_02_known_compare
+0 324
+
+fn=(600)
+0 6912
+cfn=(602)
+calls=128 0 
+0 512
+0 384
+cfn=(604) __gconv_btwoc_ascii
+calls=128 0 
+0 640
+0 768
+
+fn=(618) __GI_strlen
+0 933
+
+fn=(850)
+0 9
+
+fn=(934)
+0 768790
+cfn=(936) malloc_consolidate
+calls=10 0 
+0 5802
+0 920732
+cfn=(936)
+calls=1 0 
+0 495
+0 440999
+cfn=(940)
+calls=2 0 
+0 108
+0 71
+cfn=(940)
+calls=1 0 
+0 26
+0 1753
+
+fn=(936)
+0 131955
+cfn=(938)
+calls=1 0 
+0 648
+
+fn=(944) brk
+0 52
+
+fn=(950) _IO_file_init@@GLIBC_2.2.5
+0 8
+cfn=(952)
+calls=1 0 
+0 81
+0 5
+
+fn=(952)
+0 92
+
+fn=(960) __open_nocancel
+0 5
+
+fn=(962) __GI_strstr
+0 25
+
+fn=(1270)
+0 14
+
+fn=(1636)
+0 15257
+
+fn=(1698)
+0 15
+cfn=(1700) _IO_unsave_markers
+calls=1 0 
+0 5
+0 10
+cfn=(1706) _IO_setb
+calls=1 0 
+0 19
+0 8
+cfn=(1696)
+calls=1 0 
+0 10
+0 13
+cfn=(1702) _IO_file_close
+calls=1 0 
+0 7
+0 2
+
+fn=(1702)
+0 2
+cfn=(1704) __close_nocancel
+calls=1 0 
+0 5
+
+fn=(1704)
+0 5
+
+fn=(1710) _IO_default_finish
+0 14
+cfn=(1696)
+calls=1 0 
+0 10
+
+fn=(138)
+0 3
+cfn=(140) __init_cpu_features
+calls=1 0 
+0 70
+0 4
+
+fn=(142)
+0 55
+cfn=(144)
+calls=1 0 
+0 7
+0 6
+
+fn=(150)
+0 7
+
+fn=(846)
+0 2
+cfn=(848)
+calls=1 0 
+0 27
+
+fn=(930) _dl_addr
+0 14
+cob=(1)
+cfi=(1)
+cfn=(38)
+calls=1 0 
+0 2
+0 55967
+cob=(1)
+cfi=(1)
+cfn=(40)
+calls=1 0 
+0 2
+0 14
+
+fn=(942)
+0 87
+cfn=(944)
+calls=3 0 
+0 39
+0 38
+cfn=(944)
+calls=1 0 
+0 13
+0 10
+
+fn=(948) _IO_old_init
+0 25
+
+fn=(1056)
+0 2
+cfn=(1058) __read_nocancel
+calls=1 0 
+0 5
+
+fn=(1126)
+0 215
+
+fn=(2004) systrim.isra.1
+0 185
+cfn=(940)
+calls=1 0 
+0 26
+0 97
+cfn=(940)
+calls=1 0 
+0 49
+0 6
+cfn=(940)
+calls=1 0 
+0 26
+0 11
+
+fn=(2130)
+0 52
+
+fn=(2218)
+0 88
+
+fn=(248)
+0 44
+cfn=(250)
+calls=2 0 
+0 1444
+0 14
+cfn=(250)
+calls=2 0 
+0 233
+0 40
+
+fn=(604)
+0 640
+
+fn=(946) _IO_no_init
+0 10
+cfn=(948)
+calls=1 0 
+0 25
+0 23
+
+fn=(954) _IO_file_fopen@@GLIBC_2.2.5
+0 34
+cfn=(956)
+calls=1 0 
+0 50
+0 6
+cfn=(962)
+calls=1 0 
+0 25
+0 16
+
+fn=(964) __fopen_maybe_mmap
+0 4
+
+fn=(1050)
+0 6
+
+fn=(1106)
+0 130
+
+fn=(1700)
+0 5
+
+fn=(2088)
+0 132
+cfn=(2090) _IO_file_sync@@GLIBC_2.2.5
+calls=6 0 
+0 78
+0 108
+
+fn=(244)
+0 16
+
+fn=(588)
+0 42
+
+fn=(616)
+0 99
+cfn=(618)
+calls=9 0 
+0 136
+0 276
+cfn=(618)
+calls=40 0 
+0 671
+0 18
+cfn=(618)
+calls=9 0 
+0 126
+0 311
+cfn=(620)
+calls=41 0 
+0 857
+0 172
+
+fn=(724)
+0 9922
+
+fn=(928) ptmalloc_init.part.8
+0 24
+cfn=(932) __linkin_atfork
+calls=1 0 
+0 9
+0 257
+cfn=(930)
+calls=1 0 
+0 55999
+0 12
+
+fn=(1688)
+0 3
+
+fn=(140)
+0 70
+
+fn=(722)
+0 6
+
+fn=(926)
+0 8
+cfn=(928)
+calls=1 0 
+0 56301
+0 3
+cfn=(925)
+calls=1 0 
+0 1052
+
+fn=(932)
+0 9
+
+fn=(1708)
+0 8
+cfn=(1710)
+calls=1 0 
+0 24
+
+fn=(2090)
+0 78
+
+fn=(144)
+0 28
+
+fn=(242)
+0 51
+
+fn=(252)
+0 584
+cfn=(254)
+calls=54 0 
+0 324
+0 318
+
+fn=(920)
+0 10
+cfn=(924)
+calls=1 0 
+0 57377
+0 11
+cfn=(946)
+calls=1 0 
+0 58
+0 4
+cfn=(950)
+calls=1 0 
+0 94
+0 5
+cfn=(954)
+calls=1 0 
+0 131
+0 9
+cfn=(964)
+calls=1 0 
+0 4
+
+fn=(958)
+0 2
+cfn=(960)
+calls=1 0 
+0 5
+
+fn=(1058)
+0 5
+
+fn=(1182)
+0 1389730
+cfn=(936)
+calls=831 0 
+0 126306
+0 5171
+cfn=(2004)
+calls=10 0 
+0 400
+0 34972
+
+fn=(1696)
+0 99
+
+fn=(1706)
+0 19
+
+fn=(2058)
+0 4
+cfn=(2060)
+calls=1 0 
+0 11988
+
+fn=(2220)
+0 5
+
+ob=(2)
+fl=(2)
+fn=(214)
+0 6
+
+fn=(444)
+0 6
+
+fn=(2140)
+0 3
+
+fn=(256)
+0 6
+
+fn=(278)
+0 6
+
+fn=(290)
+0 6
+
+fn=(2172)
+0 3
+
+fn=(2192)
+0 3
+
+fn=(2114)
+0 3
+
+fn=(2214)
+0 3
+
+ob=(4)
+fl=(4)
+fn=(186)
+0 1
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 5
+
+fn=(2186) 0x00000000000059b0
+0 9
+
+fn=(160)
+0 2
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1370
+0 8
+
+fn=(178)
+0 2
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 5
+
+fn=(190)
+0 2
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 5
+
+fn=(184)
+0 2
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 5
+
+fn=(174)
+0 2
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 8
+
+fn=(176)
+0 1
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 5
+
+fn=(2174)
+0 8
+cob=(3)
+cfi=(3)
+cfn=(2128)
+calls=1 0 
+0 80
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1280
+0 1
+cfn=(2186)
+calls=1 0 
+0 9
+0 3
+
+fn=(180)
+0 2
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 8
+
+fn=(188)
+0 1
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 5
+
+fn=(182)
+0 1
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 5
+
+fn=(192)
+0 2
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 8
+
+fn=(194)
+0 2
+cob=(3)
+cfi=(3)
+cfn=(172)
+calls=1 0 
+0 5
+0 8
+
+fn=(282)
+0 16
+
+ob=(6)
+fl=(6)
+fn=(270)
+0 16
+
+fn=(2194)
+0 8
+cob=(3)
+cfi=(3)
+cfn=(2128)
+calls=1 0 
+0 80
+cob=(1)
+cfi=(1)
+cfn=(168)
+calls=1 0 
+0 1280
+0 1
+cfn=(2208) 0x0000000000002ef0
+calls=1 0 
+0 9
+0 3
+
+fn=(266) 0x0000000000002b40
+0 53
+
+fn=(260)
+0 32
+cfn=(262) 0x0000000000002c10
+calls=1 0 
+0 20
+0 13
+cfn=(262)
+calls=1 0 
+0 20
+0 34
+cfn=(266)
+calls=1 0 
+0 53
+0 10
+
+fn=(262)
+0 40
+
+fn=(2208)
+0 9
+
+totals: 116769147
