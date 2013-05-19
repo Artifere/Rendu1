@@ -1,11 +1,12 @@
+#include <iostream>
 #include "UnionFind.hh"
-#include "Parser.hh"
+#include "SMT.hh"
 
 
 
 int main()
 {
-    std::cout << convertToBasicLogic(std::cin, NULL);
+    SMT foo = SMT(std::cin);
 
     return 0;
 }
