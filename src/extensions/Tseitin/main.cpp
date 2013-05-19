@@ -83,11 +83,9 @@ vector<pair<string,unsigned> > writeProbleme(istream& read, ostream& write, bool
     //std::cout << "c formule : " << res << std::endl; // affiche la formule
     
     // applique la transformation de Tseitin (version basique ou non)
-    if(useBasic) {
-        unsigned lastNode = res->getCNF(clauses);
-        clauses.push_back(clause(1,literal(lastNode,true))); //ajoute la dernière clause : celle qui dit que la formule est vraie
-    } else
-        res->addCNF(clauses);
+    if(!useBasic)
+        res->simplify();
+    res->addCNF(clauses);
 
     // écrit en commentaire l'associations nom/numéro des variables
     write << "c Association noms de variables / numéro de variables :" <<endl;

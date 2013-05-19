@@ -176,15 +176,8 @@ ExprTree* ParserExprTree::parseEquiv(bool invert)
     if (tok.type() == Token::EQUIV) {
         //std::cout << "milieu equiv" << std::endl;
         tok.readNext();
-        ExprTree * arg1 = res;
-        ExprTree * arg2 = parseEquiv(invert);
-        ExprTree * n_arg1 = arg1->inversion();
-        ExprTree * n_arg2 = arg2->inversion();
-        //res = new And(new Or(n_arg1, arg2), new Or(arg1, n_arg2));
-        if (invert)
-            res = new And(new Or(arg1, arg2), new And(n_arg1, n_arg2));
-        else
-            res = new Or(new And(arg1, arg2), new And(n_arg1, n_arg2));
+        ExprTree * arg2 = parseEquiv(true);
+        res = new NodeExpr(ExprTree::XOR, res, arg2);
     }
     //std::cout << "fin equiv : " << res << std::endl;
     return res;
@@ -196,16 +189,15 @@ ExprTree* ParserExprTree::parseImply(bool invert)
     ExprTree* res = parseOr(invert);
    // on remplace une implication par non(arg1)|arg2
     if (tok.type() == Token::IMPLY) {
+        ExprTree * n_arg1 = res;
+        n_arg1->inversion();
         //std::cout << "milieu imply" << std::endl;
         tok.readNext();
-        ExprTree * arg1 = res;
         ExprTree * arg2 = parseImply(invert);
-        ExprTree * n_arg1 = arg1->inversion();
         if (invert)
-            res = new And(n_arg1, arg2);
+            res = new NodeExpr(ExprTree::AND, n_arg1, arg2);
         else
-            res = new Or(n_arg1, arg2);
-        delete arg1; // on n'utilise plus arg1
+            res = new NodeExpr(ExprTree::OR, n_arg1, arg2);
     }
     //std::cout << "fin imply : " << res << std::endl;
     return res;
@@ -215,14 +207,17 @@ ExprTree* ParserExprTree::parseOr(bool invert)
 {
     //std::cout << "parse or " << invert  << std::endl;
     ExprTree* res = parseAnd(invert);
-    while (tok.type() == Token::OR)
+    if (tok.type() == Token::OR)
     {
-        tok.readNext();
-        ExprTree* arg2 = parseAnd(invert);
+        std::vector<ExprTree*> args(1,res);
+        do {
+            tok.readNext();
+            args.push_back(parseAnd(invert));
+        } while (tok.type() == Token::OR);
         if (invert)
-            res = new And(res, arg2);
+            res = new NodeExpr(ExprTree::AND, args);
         else
-            res = new Or(res, arg2);
+            res = new NodeExpr(ExprTree::OR, args);
     }
     //std::cout << "fin or : " << res << std::endl;
     return res;
@@ -232,14 +227,17 @@ ExprTree* ParserExprTree::parseAnd(bool invert)
 {
     //std::cout << "parse and " << invert << std::endl;
     ExprTree* res = parseNot(invert);
-    while (tok.type() == Token::AND)
+    if (tok.type() == Token::AND)
     {
-        tok.readNext();
-        ExprTree * arg2 = parseNot(invert);
+        std::vector<ExprTree*> args(1,res);
+        do {
+            tok.readNext();
+            args.push_back(parseNot(invert));
+        } while(tok.type() == Token::AND);
         if (invert)
-            res = new Or(res, arg2);
+            res = new NodeExpr(ExprTree::OR, args);
         else
-            res = new And(res, arg2);
+            res = new NodeExpr(ExprTree::AND, args);
     }
     //std::cout << "fin and : " << res << std::endl;
     return res;
@@ -277,7 +275,7 @@ ExprTree* ParserExprTree::parseVal(bool invert)
         //std::cout << "parse var " << invert  << std::endl;
         std::string var = tok.varName();
         tok.readNext();
-        return new Val(var, !invert);
+        return new ValExpr(var, !invert);
     }
     else
     {
