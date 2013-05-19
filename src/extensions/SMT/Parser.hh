@@ -6,12 +6,14 @@
 #include <cctype>
 #include <sstream>
 
-inline std::string convertToBasicLogic(std::istream& formula, void* corres)
+
+/* Transforme le flux passé en entrée en une chaîne de caractèans équivalente,
+   dans laquelle les égalités/négations d'égalités ont été remplacées par des
+   variables de la forme c_nombre. On peut ensuite passer cette chaîne à
+   Tseitin pour avoir un cnf. */
+
+inline std::string convertToBasicLogic(std::istream& formula, void* corans)
 {
-    std::stack<int> openingParPos;
-    std::queue<std::pair<int, int> > parPos;
-
-
     std::string formulaS;
     while ((formula >> std::ws) && !formula.eof())
     {
@@ -20,9 +22,13 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
         formulaS += c;
      }
 
+    
+    /* On commence par trouver tous les couples des positions des couples de
+       parenthèses ouvrantes et fermantes */
+    std::stack<int> openingParPos;
+    std::queue<std::pair<int, int> > parPos;
     int pos = 0;
     int lastOpeningParPos = -1;
-    char prevC = -1;
     for (unsigned pos = 0; pos < formulaS.size(); pos++)
     {
         const char c = formulaS[pos];
@@ -36,7 +42,6 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
             if (openingParPos.empty())
             {
                 std::cerr << "PROBLEME" << std::endl;
-                //alalala pas bien : formule invalide
             }
             else
             {
@@ -49,6 +54,8 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
     }
 
 
+    /* À présent, pour chaque (dis)égalité, on cherche la zone coranspondant
+       à cette (dis)égalité, pour la supprimer de la chaîne finale */
     std::queue<std::pair<int, int> > posOfEqualities;
     for (unsigned pos = 0; pos < formulaS.size(); pos++)
     {
@@ -57,6 +64,9 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
         {
             const int posPrev = (formulaS[pos-1] == '!' ? (pos-2):(pos-1));
             int posBegin = posPrev, posEnd;
+
+            /* À gauche du signe égal */
+            /* Il s'agit d'un symbole de fonction */
             if (formulaS[posPrev] == ')')
             {
                 while (parPos.front().second != posPrev)
@@ -72,9 +82,10 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
                 pos++;
             posEnd = pos;
 
+            /* À droite du signe égal */
+            /* Il s'agit d'un symbole de fonction */
             if (formulaS[pos+1] == '(')
             {
-                std::cout << "lol" << std::endl;
                 while (parPos.front().first != pos+1)
                     parPos.pop();
                 posEnd = parPos.front().second;
@@ -85,8 +96,9 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
 
     }
 
-    std::string res;
 
+    /* Enfin on remplace chaque (dis)égalité par une « variable » */
+    std::string ans;
     unsigned prevPos = -1;
     unsigned curNbVar = 0;
     while (!posOfEqualities.empty())
@@ -97,24 +109,14 @@ inline std::string convertToBasicLogic(std::istream& formula, void* corres)
 
         std::stringstream foo;
         foo << curNbVar;
-        res = res + formulaS.substr(prevPos+1, posDeb - prevPos-1) + "c_" + foo.str();
+        ans = res + formulaS.substr(prevPos+1, posDeb - prevPos-1) + "c_" + foo.str();
         curNbVar++;
         prevPos = posEnd;
     }
 
-    res += formulaS.substr(prevPos+1, formulaS.size()-prevPos-1);
-    res += "\n";
-    return res;
+    ans += formulaS.substr(prevPos+1, formulaS.size()-prevPos-1);
+    ans += "\n";
+    return ans;
 }
-        
-
-
-
-
-
-
-                
-
-
 
 
