@@ -1,0 +1,12 @@
+ligne 31 < pour it au lieu de != ??? (Debug.cpp)
+ligne 43 (TODO ==> fait ?) (Variable.hh)
+ligne 138 Utilité de cette fonction ? Encore utilisée ? (Variable.hh) ==> viré, cf log git)
+début : variables globales ? (Variable.cpp)
+ligne 77 : regarder sérieusement ==> checker la fonction en entier (Variable.cpp)
+ligne 206 : regarder... et lire la fonction (Variable.cpp)
+ligne 15 : what???(SmartClause.hh)
+
+
+watchedClause
+satsolver
+resolveLog
