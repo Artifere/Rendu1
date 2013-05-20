@@ -212,20 +212,44 @@ Résultats :
 ===== Coloration de graphe =====
 
 Formalisation du problème :
+    On utilise pour chaque noeud du graphe k variables, chacune indiquant si le noeud est colorié d'une certaine couleur.
+    On rajoute des conditions nécessaires et suffisantes pour que ce soit une coloration du graphe :
+    - chaque noeud est colorié par au moins une couleur
+    - chaque noeud est colorié par au plus une couleur
+    - pour chaque arête du graphe, les sommets aux extrémités de l'arête sont de couleurs différentes
 
 Compilation :
+    cd GrapheColoring
+    g++ -Wall -Wextra -s -O2 -o coloringPrint coloringPrint.cpp
+    g++ -Wall -Wextra -s -O2 -o coloringTransform coloringTransform.cpp
 
 Utilisation :
-    ./color.sh 
+    ./graphColoring.sh <k> <graphe>
+    avec :
+      <k> un entier >= 1.
+      <graph> un fichier décrivant un graphe.
+      (des exemples de graphe peuvent être trouvés dans colorTests/)
+    Si le graphe est k-coloriable, un fichier colored.pdf est crée, montrant une coloration du graphe avec k couleurs
+    Sinon, un message indiquant que le graphe n'est pas coloriable est affiché
 
 Résultats :
-
+    Le programme renvoit des résultats corrects sur de petits exemples résolus à la main.
+    Sur graphColor.col (qui est sensé avoir pour nombre chromatique 11) :
+    Le programme répond en temps raisonnable pour k=9 () et k=11 mais pas k=10
 
 
 
 ===== Transformation de Tseitin =====
 
+Compilation :
+    cd Tseitin
+    make
 
+Utilisation :
+    Il y a deux manières de l'utiliser :
+    soit sans aucun argument:
+        la formule est lue sur l'entrée standart
+        le problème 
 
 ===== SMT =====
 
