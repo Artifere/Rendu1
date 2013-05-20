@@ -1,24 +1,29 @@
 #! /bin/bash
 
 make clean ;
-for clause in "Smart"
+for clause in "Smart" "Watched"
 do (
-    for heur in "BASIC" "RAND" "DLIS"
+    # heuristiques sans tri
+    for heur in "BASIC"
     do (
-        # avec tri
-        newName=bench${clause}${heur}AvecTriLearning;
-        echo "***** Génération de $newName *****" ;
+        newName=bench${clause}${heur}AvecTri;
+        echo -e "\n***** Génération de $newName *****" ;
         make CLAUSE=${clause}Clause CHOOSE=$heur VERBOSE=0 INIT_SORT=1 ;
         mv release $newName ;
-        cp $newName Moulinette/Executables ;
+        cp $newName ../Moulinette/Executables ;
+        cp $newName ../bin/ ;
         rm $newName ;
         make clean ;
-        # sans tri
-        newName=bench${clause}${heur}Learning;
-        echo "***** Génération de $newName *****" ;
+    ) done ;
+    # heuristiques sans tri
+    for heur in "BASIC" "RAND" "DLIS" "MOMS"
+    do (
+        newName=bench${clause}${heur};
+        echo -e "\n***** Génération de $newName *****" ;
         make CLAUSE=${clause}Clause CHOOSE=$heur VERBOSE=0 INIT_SORT=0 ;
         mv release $newName ;
-        cp $newName Moulinette/Executables ;
+        cp $newName ../Moulinette/Executables ;
+        cp $newName ../bin/ ;
         rm $newName ;
         make clean ;
     ) done ;
