@@ -26,12 +26,12 @@ class Term
             return _id;
         }
 
-        inline const std::string getStr(void) const
+        inline const std::string &getStr(void) const
         {
             return _str;
         }
 
-        inline const std::vector<unsigned> getSubterms(void) const
+        inline const std::vector<unsigned> &getSubterms(void) const
         {
             return _subTerms;
         }

@@ -7,45 +7,82 @@
 #include "UnionFind.hh"
 #include "SMT.hh"
 #include "Term.hh"
+#include "Solution.hh"
+
+
 
 
 int main()
 {
-    SMT foo = SMT(std::cin);
-    
-    foo.miscTests();
-
-
-    bool encore = true;
+    SMT problem = SMT(std::cin);
 
 
 
+    bool goOn = true;
 
 
-    while (encore)
+    int returnValue;
+
+
+    while (goOn)
     {
-        encore = false; //TODO
         system("../../../release problem.cnf > result.txt");
         std::ifstream resInput;
         resInput.open("result.txt");
 
         char fooC;
-        std::string resSAT;
+        std::string resSAT, fooS;
+
+        while (resInput.peek() == 'c')
+        {
+            std::getline(resInput, fooS);
+        }
+
+
+
         resInput >> fooC >> resSAT;
+        
+        
         if (resSAT == "UNSATISFIABLE")
         {
-            std::cout << "Le problème est insatisfiable.\n";
+            std::cout << "Le problème est insatisfiable." << std::endl;
+            returnValue = 20;
+            goOn = false;
         }
         else
         {
-            foo.readSolverAssignations(resInput);
-            
-            
-            if (true/*check(blabla*/)
+            problem.readSolverAssignations(resInput);
+            Solution sol(problem);
+            if (sol.check())
             {
                 std::cout << "Le problème est satisfiable.\n";
-                foo.printResult();
-                encore = false;
+                problem.printResult();
+                goOn = false;
+                returnValue = 10;
+            }
+            else
+            {
+                std::ifstream inProblem;
+                system("cp problem.cnf problem.back"); 
+                inProblem.open("problem.back");
+                std::ofstream outProblem;
+                outProblem.open("problem.cnf", std::ofstream::trunc);
+
+                unsigned nbrVar, nbrClauses;
+                std::string fooS;
+                inProblem >> fooS >> fooS >> nbrVar >> nbrClauses;
+                outProblem << "p cnf " << nbrVar << " " << nbrClauses+1 << std::endl;
+               
+                char fooC;
+                inProblem >> std::noskipws >> fooC;
+                for (unsigned i = 0; i < nbrClauses; i++)
+                {
+                    std::getline(inProblem, fooS);
+                    outProblem << fooS << '\n';
+                }
+                inProblem.close();
+                sol.printNewClause(outProblem);
+                outProblem.close();
             }
         }
 
@@ -53,5 +90,7 @@ int main()
     }
 
 
-    return 0;
+    return returnValue;
 }
+
+
