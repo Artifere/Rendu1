@@ -21,7 +21,10 @@ class Term
         Term() {}
         Term(std::map<std::string, unsigned> &alreadyBuilt, std::vector<Term> &termsList, const std::string term);
 
-
+        inline unsigned getId(void) const
+        {
+            return _id;
+        }
 
 
     private:

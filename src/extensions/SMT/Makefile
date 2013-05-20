@@ -1,9 +1,9 @@
-SRC= main.cpp
+SRC= main.cpp Term.cpp
 OUT= smt
 OBJ= ${SRC:.cpp=.o}
 CXX	 = g++
 LFLAGS   = -lm
-CXXFLAGS = -Wall -Wextra -g
+CXXFLAGS = -Wall -Wextra -g -Wno-sign-compare
 
 all : release
 

@@ -9,17 +9,14 @@
 
 
 
-
+/* Invariant du constructeur : il n'est jamais appelé sur un terme déjà construit (ie dans alreadyBuilt)
+   Le constructeur ajoute le terme et ses sous-termes  à alreadyBuilt et à termsList */
 Term::Term(std::map<std::string, unsigned> &alreadyBuilt, std::vector<Term> &termsList, std::string term)
 {
-    if (!isFunction(term))
-    {
-        _str = term;
-        _id = termsList.size();
-    }
-
-
-    else
+    std::cout << "constructor ==> " << term << std::endl;
+    
+    /* Si on a un symbole de fonction, il faut énumérer les sous-termes */
+    if (isFunction(term))
     {
         std::queue<std::pair<int, int> > parPos;
         getTermParenthesisPos(term, parPos, 1);
@@ -49,16 +46,17 @@ Term::Term(std::map<std::string, unsigned> &alreadyBuilt, std::vector<Term> &ter
             {
                 curEnd = pos;
             }
+            
             pos = curEnd;
             const std::string subTermStr = term.substr(curBeg, curEnd-curBeg+1);
             unsigned subId;
             std::map<std::string, unsigned>::const_iterator findIt = alreadyBuilt.find(subTermStr);
+            
+            /* Le sous-terme est nouveau, on le construit */
             if (findIt == alreadyBuilt.end())
             {
                 const Term sub = Term(alreadyBuilt, termsList, subTermStr);
-                alreadyBuilt[sub._str] = termsList.size();
                 subId = sub._id;
-                termsList.push_back(sub);
             }
             else
             {
@@ -66,7 +64,10 @@ Term::Term(std::map<std::string, unsigned> &alreadyBuilt, std::vector<Term> &ter
             }
             _subTerms.push_back(subId);
         }
-        _id = termsList.size();
-        _str = term;
     }
+    _id = termsList.size();
+    _str = term;
+    
+    termsList.push_back(*this);
+    alreadyBuilt[term] = _id;
 }

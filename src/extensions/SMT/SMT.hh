@@ -1,24 +1,35 @@
+#ifndef SMT_HH
+#define SMT_HH
+
 #include <istream>
 #include <string>
 #include <vector>
 #include <queue>
 #include <utility>
 #include "Parser.hh"
+#include "Term.hh"
 
 
-#ifndef SMT_HH
-#define SMT_HH
+
 
 class SMT
 {
     public:
         inline SMT(std::istream &input);
-
-
+        inline std::string getFormula(void) const
+        {
+            return _formula;
+        }
+        inline std::string getPreTseitinFormula(void) const
+        {
+            return _preTseitinFormula;
+        }
+        
+        inline void buildTermsAndEqualitiesContent(std::queue<std::pair<int, int> > &posOfEqualities);
 
 
     private:
-        std::vector<std::string> _terms;
+        std::vector<Term> _terms;
         std::vector<std::pair<int, int> > _equalitiesContent;
         std::string _formula;
         std::string _preTseitinFormula;
@@ -33,6 +44,7 @@ class SMT
 
 inline SMT::SMT(std::istream &input)
 {
+
     while ((input >> std::ws) && !input.eof())
     {
         char c;
@@ -54,11 +66,59 @@ inline SMT::SMT(std::istream &input)
     getEqualitiesPos(_formula, parPos, posOfEqualities, isDisequality);
 
 
+    std::queue<std::pair<int, int> > posOfEqualitiesCopy = posOfEqualities;
     /* Enfin on remplace chaque (dis)égalité par une « variable » */
-    _preTseitinFormula = getPreTseitinFormula(_formula, posOfEqualities, isDisequality);
+    _preTseitinFormula = convertToPreTseitinFormula(_formula, posOfEqualities, isDisequality);
 
     //DEBUG
     std::cout << _preTseitinFormula << std::endl;
+
+
+    /* On extrait les termes et remplit les égalités */
+    
+    buildTermsAndEqualitiesContent(posOfEqualitiesCopy);
 }
+
+
+
+
+inline void SMT::buildTermsAndEqualitiesContent(std::queue<std::pair<int, int > > &posOfEqualities)
+{
+    std::map<std::string, unsigned> alreadyBuiltTerms;
+    while (!posOfEqualities.empty())
+    {
+        const unsigned begPos = posOfEqualities.front().first, endPos = posOfEqualities.front().second;
+        posOfEqualities.pop();
+        unsigned midPosBeg = begPos, midPosEnd;
+        
+
+        /* On cherche la position du signe égal, pour pouvoir séparer l'égalité en deux termes */
+        while (_formula[midPosBeg] != '=')
+            midPosBeg++;
+
+        midPosEnd = midPosBeg+1;
+        midPosBeg--;
+        if (_formula[midPosBeg] == '!')
+            midPosBeg--;
+        
+
+
+        /* On construit les termes, uniquement s'ils n'ont pas été déjà construits */
+        const std::string str1 = _formula.substr(begPos, midPosBeg-begPos+1), str2 = _formula.substr(midPosEnd, endPos-midPosEnd+1);
+        const std::map<std::string, unsigned>::iterator f1 = alreadyBuiltTerms.find(str1);
+        const unsigned t1Id = (f1 == alreadyBuiltTerms.end() ? Term(alreadyBuiltTerms, _terms, str1).getId() : f1->second);
+        
+        const std::map<std::string, unsigned>::iterator f2 = alreadyBuiltTerms.find(str2);
+        const unsigned t2Id = (f2 == alreadyBuiltTerms.end() ? Term(alreadyBuiltTerms, _terms, str2).getId() : f2->second);
+        
+        _equalitiesContent.push_back(std::make_pair(t1Id, t2Id));
+    }
+
+    for (std::map<std::string, unsigned>::iterator it = alreadyBuiltTerms.begin(); it != alreadyBuiltTerms.end(); ++it)
+        std::cout << it->first << "==>" << it->second << std::endl;
+
+
+}
+
 
 #endif //SMT_HH
