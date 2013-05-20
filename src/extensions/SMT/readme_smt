@@ -11,7 +11,7 @@ Par contre, si tu regardes main.cpp et le constructeur de Terme dans Terme.cpp, 
 Bref, il reste à faire :
    
    * coder le truc de SMT (addeqlit, closure)
-   * coder l'affichage une fois qu'on a un truc satisfaisant, venant du satsolver
+   
 
    FAIT :
 	* migrer le main.cpp dans une fonction appropriée de SMT ==> DONE!
@@ -21,6 +21,10 @@ Bref, il reste à faire :
 	* aussi, il faut avoir une fonction (tableau ?) pi, tq pour tout terme t, pi(t) = l'ensemble des termes de la forme f(t1, ..., tn) tq il existe i tq ti=t
 
 	* faire la correspondance des variables de Tseitin et des numéros d'égalités de SMT
+
+	* parsage du résultat du solveur
+	
+	* coder l'affichage une fois qu'on a un truc satisfaisant, venant du satsolver
 
 Je crois que c'est à peu près tout.
 

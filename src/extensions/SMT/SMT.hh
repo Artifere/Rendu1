@@ -25,11 +25,32 @@ class SMT
         {
             return _preTseitinFormula;
         }
+        inline unsigned getNbrEqualities(void) const
+        {
+            return _nbrEq;
+        }
+
 
         inline void buildTermsAndEqualitiesContent(std::queue<std::pair<int, int> > &posOfEqualities);
         inline void buildAppearing(void);
 
         inline void miscTests(void) const;
+
+
+        inline void readSolverAssignations(std::istream& solverRes);
+
+
+        inline void printResult(void)
+        {
+            std::cout << "Et voici le résultat !\n";
+            for (unsigned eq = 0; eq < _nbrEq; eq++)
+            {
+                std::cout << _terms[_equalitiesContent[eq].first].getStr() << " ";
+                if (!_assignations[eq])
+                    std::cout << '!';
+                std::cout << "= " << _terms[_equalitiesContent[eq].second].getStr() << std::endl;
+            }
+        }
 
     private:
         std::vector<Term> _terms;
@@ -37,9 +58,10 @@ class SMT
         std::string _originalFormula;
         std::string _preTseitinFormula;
         std::vector<std::vector<unsigned> > _termAppearsIn;
-        unsigned _nbTerms, _nbEq;
+        unsigned _nbrTerms, _nbrEq;
 
         std::map<unsigned, unsigned> _cnfVarMatch; /* Correspondance entre les variables du cnf et les c_i */
+        std::vector<bool> _assignations;
 }; 
 
 
@@ -113,13 +135,13 @@ inline SMT::SMT(std::istream &input)
 
     /* On extrait les termes et remplit les égalités */
     buildTermsAndEqualitiesContent(posOfEqualitiesCopy);
-    _nbEq = _equalitiesContent.size();
+    _nbrEq = _equalitiesContent.size();
+    _assignations.resize(_nbrEq);
 
-    _nbTerms = _terms.size();
+    _nbrTerms = _terms.size();
     /* On construit le tableau qui contient, pour tout terme t, la liste des termes de la forme
        f(t1, ..., tn) où l'un des ti est égal à t */
     buildAppearing();
-
 
 
     /* On envoie la formule à Tseitin, puis on récupère ce qu'il renvoie. On fait la correspondance entre
@@ -136,12 +158,12 @@ inline SMT::SMT(std::istream &input)
 
 
     std::string fooS;
-    std::getline(inTseitinized, fooS); std::cout << fooS << std::endl;
-    std::getline(inTseitinized, fooS); std::cout << fooS << std::endl;
+    std::getline(inTseitinized, fooS);
+    std::getline(inTseitinized, fooS);
 
 
     char fooC;
-    for (unsigned i = 0; i < _nbEq; i++)
+    for (unsigned i = 0; i < _nbrEq; i++)
     {
         unsigned n1, n2;
         inTseitinized >> fooC >> fooC >> fooC >> n1 >> fooC >> n2;
@@ -210,10 +232,10 @@ inline void SMT::buildTermsAndEqualitiesContent(std::queue<std::pair<int, int > 
        f(t1, ..., tn) où l'un des ti est égal à t */
 inline void SMT::buildAppearing(void)
 {
-    for (unsigned termId = 0; termId < _nbTerms; termId++)
+    for (unsigned termId = 0; termId < _nbrTerms; termId++)
     {
         std::vector<unsigned> curApp, curSubTermList;
-        for (unsigned term2Id = 0; term2Id < _nbTerms; term2Id++)
+        for (unsigned term2Id = 0; term2Id < _nbrTerms; term2Id++)
         {
             curSubTermList = _terms[term2Id].getSubterms();
 
@@ -224,6 +246,28 @@ inline void SMT::buildAppearing(void)
     }
 }
 
+
+
+
+inline void SMT::readSolverAssignations(std::istream& solverRes)
+{
+    char fooC;
+
+    for (unsigned i = 0; i < _nbrEq; i++)
+    {
+        unsigned var;
+        bool isNeg = false;
+        solverRes >> fooC;
+        if (solverRes.peek() == '-')
+        {
+            isNeg = true;
+            solverRes >> fooC;
+        }
+        solverRes >> var;
+        const unsigned idVarMatch = _cnfVarMatch[abs(var)];
+        _assignations[idVarMatch] = !isNeg;
+    }
+}
 
 
 #endif //SMT_HH
