@@ -3,10 +3,15 @@
 #include <time.h>
 #include <sys/stat.h>
 
+// maximun 20 chiffre dans un int, et encore je compte large (si int sur 64 bits, ...)
+// il y a quatres int dans les filename (donc 80)
+// et on rajoute moins de 20 caractères à chaque fois
+#define MAX_SIZE_FILENAME 100
+
 int main(int argc, char* argv[])
 {
     int nbVar, nbClause, clauseSize, nbFiles, i, k, f;
-    char filename[1000], testFilename[1000], dirname[1000];
+    char filename[MAX_SIZE_FILENAME], testFilename[MAX_SIZE_FILENAME], dirname[MAX_SIZE_FILENAME];
     if (argc < 5)
     {
         printf("Pas assez d'arguments\n");
@@ -23,23 +28,74 @@ int main(int argc, char* argv[])
 
     sprintf(filename, "batch-%d-%d-%d-%d.sh", nbVar, nbClause, clauseSize, nbFiles);
     freopen(filename, "w+", stdout);
-    printf("#!/bin/bash\n");
-    printf("for i in %s", dirname);
-    printf("*.cnf\ndo\n");
-    printf(" echo $i\n$* $i\ndone\nexit 0");
-    
+    printf("#!/bin/bash\n"
+           "for i in %s*.cnf\n"
+           "do\n"
+           "  echo $i\n"
+           "  $* $i\n"
+           "done\n"
+           "exit 0",
+           dirname);
     chmod(filename, S_IRWXU);
-    
+
+    sprintf(filename, "bench-%d-%d-%d-%d.sh", nbVar, nbClause, clauseSize, nbFiles);
+    freopen(filename, "w+", stdout);
+    printf("#!/bin/bash\n"
+           "TIMEFORMAT=%%Us\n"
+           "echo \"temps de minisat\"\n"
+           "time `\n"
+           "for i in %s*.cnf\n"
+           "do\n"
+           "  minisat -verb=0 $i > /dev/null\n"
+           "done `\n"
+           "for exe in $*\n"
+           "do\n"
+           "  echo \"temps de $exe\";\n"
+           "  time `\n"
+           "  for i in %s*.cnf\n"
+           "  do\n"
+           "    $exe $i > /dev/null\n"
+           "  done `\n"
+           "done\n"
+           "exit 0\n",
+           dirname, dirname);
+    chmod(filename, S_IRWXU);
+
     sprintf(testFilename, "tests-%d-%d-%d-%d.sh", nbVar, nbClause, clauseSize, nbFiles);
     freopen(testFilename, "w+", stdout);
-    printf("#!/bin/bash\n");
-    printf("for i in %s", dirname);
-    printf("*.cnf\ndo\n");
-    printf("minisat -verb=0 $i > /dev/null\nminisatOutput=$?\n");
-    printf("$* $i > /dev/null\nexeOutput=$?\n");
-    printf("if [ $minisatOutput -gt $exeOutput ]\nthen\necho $i\necho \"ERREUR : il fallait renvoyer UNSAT\"\n");
-    printf("elif [ $minisatOutput -lt $exeOutput ]\n then\n echo $i\n echo \"ERREUR : il fallait renvoyer SAT\"\nelif [ $minisatOutput -eq 10 ]\nthen\n");
-    printf("$* $i > $i$\".out\"\ncat $i $i$\".out\" | ./verif\nrm $i$\".out\"\nfi\ndone\nexit 0");
+    printf("#!/bin/bash\n"
+           "echo \"Génération des résultats de minisat\" \n"
+           "declare -a minisatOutput \n"
+           "c=0 \n"
+           "for i in %s*.cnf \n"
+           "do \n"
+           "  minisat -verb=0 $i > /dev/null \n"
+           "  minisatOutput[c++]=$? \n"
+           "done \n"
+           "for exe in $* \n"
+           "do \n"
+           "  echo \"Test de $exe\"; \n"
+           "  c=0 \n"
+           "  for i in %s*.cnf \n"
+           "  do \n"
+           "    $exe $i > $i$\".out\" \n"
+           "    exeOutput=$? \n"
+           "    if [ ${minisatOutput[$c]} -gt $exeOutput ] \n"
+           "    then \n"
+           "      echo \"ERREUR $i : il fallait renvoyer UNSAT\" \n"
+           "    elif [ ${minisatOutput[$c]} -lt $exeOutput ] \n"
+           "    then \n"
+           "      echo \"ERREUR $i : il fallait renvoyer SAT\" \n"
+           "    elif [ ${minisatOutput[$c]} -eq 10 ] \n"
+           "    then \n"
+           "      cat $i $i$\".out\" | ./verif \n"
+           "      rm $i$\".out\" \n"
+           "    fi \n"
+           "    c=$(($c+1)) \n"
+           "  done \n"
+           "done \n"
+           "exit 0 \n",
+           dirname, dirname);
     chmod(testFilename, S_IRWXU);    
 
 
