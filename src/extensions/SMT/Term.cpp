@@ -13,8 +13,6 @@
    Le constructeur ajoute le terme et ses sous-termes  à alreadyBuilt et à termsList */
 Term::Term(std::map<std::string, unsigned> &alreadyBuilt, std::vector<Term> &termsList, std::string term)
 {
-    std::cout << "constructor ==> " << term << std::endl;
-    
     /* Si on a un symbole de fonction, il faut énumérer les sous-termes */
     if (isFunction(term))
     {

@@ -12,7 +12,9 @@ int main()
 {
     SMT foo = SMT(std::cin);
     
-    std::string formula = foo.getFormula();
-    
+    foo.miscTests();
+
+
+
     return 0;
 }

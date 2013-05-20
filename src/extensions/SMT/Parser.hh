@@ -12,6 +12,14 @@
 
 
 
+inline bool isFunction(const std::string s)
+{
+    for (int i = 0; i < s.size(); i++)
+        if (s[i] == '(')
+            return true;
+    return false;
+}
+
 
 inline void getParenthesisPos(const std::string &formula, std::queue<std::pair<int, int> > &parPos)
 {

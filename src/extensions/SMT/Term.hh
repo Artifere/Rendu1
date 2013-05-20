@@ -26,6 +26,15 @@ class Term
             return _id;
         }
 
+        inline const std::string getStr(void) const
+        {
+            return _str;
+        }
+
+        inline const std::vector<unsigned> getSubterms(void) const
+        {
+            return _subTerms;
+        }
 
     private:
         unsigned _id;
@@ -34,12 +43,6 @@ class Term
 };
 
 
-inline bool isFunction(const std::string s)
-{
-    for (int i = 0; i < s.size(); i++)
-        if (s[i] == '(')
-            return true;
-    return false;
-}
+
 
 #endif //TERM_HH

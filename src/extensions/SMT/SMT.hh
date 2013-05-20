@@ -27,6 +27,7 @@ class SMT
         
         inline void buildTermsAndEqualitiesContent(std::queue<std::pair<int, int> > &posOfEqualities);
 
+        inline void miscTests(void) const;
 
     private:
         std::vector<Term> _terms;
@@ -36,12 +37,34 @@ class SMT
 }; 
 
 
+/* À des fins de debug */
+inline void SMT::miscTests(void) const
+{
+    std::cout << "Voici les termes\n";
+    for (std::vector<Term>::const_iterator it = _terms.begin(); it != _terms.end(); ++it)
+    {
+        std::cout << it->getStr() << "==>" << it->getId() << std::endl;
+        std::cout << "Les sous-termes sont :\n";
+        const std::vector<unsigned> subs = it->getSubterms();
+        for (std::vector<unsigned>::const_iterator itSub = subs.begin(); itSub != subs.end(); ++itSub)
+            std::cout << "\t" << _terms[*itSub].getStr() << std::endl;
+        std::cout << "Fin des sous-termes\n\n";
+    }
+
+
+    std::cout << "Maintenant les égalités :\n";
+    for (std::vector<std::pair<int, int> >::const_iterator itEq = _equalitiesContent.begin(); itEq != _equalitiesContent.end(); itEq++)
+        std::cout << "c_" << (itEq-_equalitiesContent.begin()) << " ==> " << _terms[itEq->first].getStr() << " =  " << _terms[itEq->second].getStr() << "\n";
+
+
+    std::cout << "\nHéhéhé :-)\n";
+}
+
+
 /* Transforme le flux passé en entrée en une chaîne de caractères équivalente,
    dans laquelle les égalités/négations d'égalités ont été remplacées par des
    variables de la forme c_nombre. On peut ensuite passer cette chaîne à
    Tseitin pour avoir un cnf. */
-
-
 inline SMT::SMT(std::istream &input)
 {
 
@@ -114,10 +137,7 @@ inline void SMT::buildTermsAndEqualitiesContent(std::queue<std::pair<int, int > 
         _equalitiesContent.push_back(std::make_pair(t1Id, t2Id));
     }
 
-    for (std::map<std::string, unsigned>::iterator it = alreadyBuiltTerms.begin(); it != alreadyBuiltTerms.end(); ++it)
-        std::cout << it->first << "==>" << it->second << std::endl;
-
-
+   
 }
 
 
