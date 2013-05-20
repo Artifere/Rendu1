@@ -64,7 +64,7 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
         // test si clause trivialement vraie
         if (simplify(listClause))
         {
-            DEBUG(3) << "Clause trivialement vraie lue (" << k+1 << "eme clause du fichier). Elle est ignorée." << std::endl;
+            DEBUG(2) << "Clause trivialement vraie lue (" << k+1 << "eme clause du fichier). Elle est ignorée." << std::endl;
         }
         else 
             addClause(listClause);
@@ -75,7 +75,7 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     Variable::sortFreeVars();
     #endif
 
-    DEBUG(6) << "Etat des variables à la fin du parsage : " << *this << std::endl;
+    DEBUG(5) << "Etat des variables à la fin du parsage : " << *this << std::endl;
 }
 
 
@@ -104,7 +104,7 @@ void SatProblem::addClause(const std::vector<Literal>& litsList, Literal lit)
     // clause triialement fausse
     if(litsListSize == 0)
     {
-        DEBUG(1) << "Clause trivialement fausse lue (clause vide)."<<std::endl;
+        DEBUG(2) << "Clause trivialement fausse lue (clause vide)."<<std::endl;
         #if VERBOSE
         std::cout<<"s UNSATISFIABLE"<<std::endl;
         #endif
@@ -114,9 +114,9 @@ void SatProblem::addClause(const std::vector<Literal>& litsList, Literal lit)
     else if(litsListSize == 1)
     {
         if (lit.var() == NULL)
-            DEBUG(3) << "Clause à déduction immédiate lue : " << litsList[0] << std::endl;
+            DEBUG(2) << "Clause à déduction immédiate lue : " << litsList[0] << std::endl;
         else
-            DEBUG(3) << "Clause à déduction immédiate lue : " << litsList[0] << " avec apprentissge de " << lit << std::endl;
+            DEBUG(2) << "Clause à déduction immédiate lue : " << litsList[0] << " avec apprentissge de " << lit << std::endl;
 
         if (litsList[0].var()->isOlderIter(Variable::_endDeducted))
         {
@@ -135,14 +135,14 @@ void SatProblem::addClause(const std::vector<Literal>& litsList, Literal lit)
     {
         newC = new Clause(litsList, number);
         _clauses.push_back(newC);
-        DEBUG(7) << "Nouvelle clause " << number << " : " << litsList << std::endl;
+        DEBUG(6) << "Nouvelle clause " << number << " : " << litsList << std::endl;
     }
     else
     {
         newC = new Clause(litsList, number, lit.var());
         _clauses.push_back(newC);
         lit.var()->deductedFromFree(lit.pos(), newC);            
-        DEBUG(7) << "Nouvelle clause " << number << " avec apprentissage de " << lit << " : " << litsList << std::endl;
+        DEBUG(6) << "Nouvelle clause " << number << " avec apprentissage de " << lit << " : " << litsList << std::endl;
     }
 }
 
@@ -156,7 +156,7 @@ bool SatProblem::satisfiability()
     // On continue l'exécution tant qu'on n'a pas assigné toutes les variables (ou que l'on a quitté la boucle à cause d'une contradiction)
     while (Variable::_endAssigned != Variable::_vars.end())
     {
-        DEBUG(5) << "Avant assign : " << *this << std::endl;
+        DEBUG(3) << "Avant assign : " << *this << std::endl;
 
         bool choixLibre = false;
 
@@ -167,7 +167,7 @@ bool SatProblem::satisfiability()
         {
             choixLibre = true;
             Variable::chooseFromFree();
-            DEBUG(5) <<"Fait un pari: "<<*(*Variable::_endAssigned)<<std::endl;
+            DEBUG(4) <<"Fait un pari: "<<*(*Variable::_endAssigned)<<std::endl;
             _stackBacktrack.push_back(Variable::_endAssigned);
         }
 
@@ -180,7 +180,7 @@ bool SatProblem::satisfiability()
         // (on pouvait déduire son contraire d'une clause)
         if (choixLibre && conflit == newAssign)
         {
-            DEBUG(6) << "M'enfin la clause " << newAssign->getOriginClause(! newAssign->_varState) << " permet de déduire " << Literal(newAssign, ! newAssign->_varState) << std::endl;
+            DEBUG(4) << "M'enfin la clause " << newAssign->getOriginClause(! newAssign->_varState) << " permet de déduire " << Literal(newAssign, ! newAssign->_varState) << std::endl;
             //desassigne la variable, et réassigne-là à sa valeur contraire
             //nb:pas besoin de modifier deduct(True|False)FromClause de newAssign
             //   (il à déjà été placé à la bonne valeur dans deductFromAssigned)
@@ -191,7 +191,7 @@ bool SatProblem::satisfiability()
             conflit = newAssign->assignedFromDeducted();
         }
 
-        DEBUG(4) << "Après propag : " << *this << std::endl;
+        DEBUG(3) << "Après propag : " << *this << std::endl;
         
         // On fait le backtrack si besoin
         if(conflit != NULL)
@@ -216,7 +216,7 @@ bool SatProblem::satisfiability()
             _stackBacktrack.pop_back();
             do {
                 Variable * var = * (-- Variable::_endAssigned);
-                DEBUG(5) << "Retour sur la valeur de la variable " << *var << std::endl;
+                DEBUG(6) << "Retour sur la valeur de la variable " << *var << std::endl;
                 // On libère la variable, des clauses où elle était surveillée
                 var->deductedFromAssigned();
             } while (Variable::_endAssigned > lastChoice);
@@ -232,7 +232,7 @@ bool SatProblem::satisfiability()
                 Variable* var = *(-- Variable::_endDeducted);
                 if (var->getOriginClause(var->_varState) == NULL)
                 {
-                    DEBUG(7) << "Sauvegarde de " << *var << std::endl;
+                    DEBUG(6) << "Sauvegarde de " << *var << std::endl;
                     oneDeducted.push_back(Literal(var, var->_varState));
                     if (var == learned.second.var())
                         isLearned = true;
@@ -249,16 +249,16 @@ bool SatProblem::satisfiability()
             // on reajoute toutes les déductions (qui viennent donc de clauses de taille 1)
             if (! oneDeducted.empty())
             {
-                DEBUG(5) << "restaure |1| : " << *this << std::endl;
+                DEBUG(6) << "restaure |1| : " << *this << std::endl;
                 do {
                     Literal& lit = oneDeducted.back();
                     oneDeducted.pop_back();
                     lit.var()->deductedFromFree(lit.pos(), NULL);
-                    DEBUG(8) << "On récupère " << lit << std::endl;
+                    DEBUG(6) << "On récupère " << lit << std::endl;
                 } while (! oneDeducted.empty());
             }
             
-            DEBUG(4) << "Fin backtrck : " << *this << std::endl;
+            DEBUG(3) << "Fin backtrck : " << *this << std::endl;
         }
     }
     return true;
@@ -284,7 +284,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
     Literal conflit(conflictVar, true);
     unsigned nbFromCurBet = 2;
 
-    DEBUG(5) << "Resolve sur " << *conflictVar << " déduite à vrai par la clause " << conflictVar->getOriginClause(true) << " et à faux par la clause " << conflictVar->getOriginClause(false) << std::endl;
+    DEBUG(4) << "Resolve sur " << *conflictVar << " déduite à vrai par la clause " << conflictVar->getOriginClause(true) << " et à faux par la clause " << conflictVar->getOriginClause(false) << std::endl;
     
     std::vector<Literal> result(getOriginClause(conflit));
     std::sort(result.begin(), result.end(), litCompVar);
@@ -292,7 +292,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
     // applique la résolution entre getOriginClause(result) et getOriginClause(conflit.invert)
     std::vector<Literal>::iterator resIt;
     do {
-        DEBUG(8) << "fusionne la clause " << conflit.var()->getOriginClause(!conflit.pos()) << " qui à permis de déduire " << conflit.invert() << std::endl;
+        DEBUG(7) << "fusionne la clause " << conflit.var()->getOriginClause(!conflit.pos()) << " qui à permis de déduire " << conflit.invert() << std::endl;
 
         std::vector<Literal> toMerge(getOriginClause(conflit.invert()));
         std::sort(toMerge.begin(), toMerge.end(), litCompVar);
@@ -316,7 +316,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
  
         result.resize(resIt - result.begin());
         
-        DEBUG(8) << "result : " << result << std::endl;
+        DEBUG(7) << "result : " << result << std::endl;
 
         // compte le nombre de litéraux du pari courant
         // et met la variable la plus jeune dans conflit
@@ -328,7 +328,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
             Variable * var = resIt->var();
             if (!_stackBacktrack.empty() && var->isOlderIter(_stackBacktrack.back()))// && !(var->getOriginClause(var->_varState) == NULL && var->isOlderIter(_stackBacktrack.back()+1)))
             {
-                DEBUG(8) << "resolve : variable du pari courant trouvée : " << * resIt << std::endl;
+                DEBUG(9) << "resolve : variable du pari courant trouvée : " << * resIt << std::endl;
 
                 if (nbFromCurBet == 0 || conflit.var()->isOlder(var))
                     conflit = * resIt;
