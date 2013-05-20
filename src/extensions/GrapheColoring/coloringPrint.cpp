@@ -24,6 +24,11 @@ int main(int argc, char *argv[])
     }
 
     const unsigned k = atoi(argv[1]);
+    if (k > 30)
+    {
+        cerr << "Seulement 30 couleurs sont disponibles pour colorier le graphe." << endl;
+        return -1;
+    }
     string colorNames[30] = {"blue", "red", "green", "yellow", "purple", "brown", "orange",
                            "grey", "cyan", "chartreuse", "pink", "violet", "marron",
                            "navy", "peachpuff", "darkolivegreen", "teal", "oranged2",
