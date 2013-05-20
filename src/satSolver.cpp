@@ -16,61 +16,6 @@
 
 
 
-const std::vector<std::pair<unsigned, bool> > SatProblem::getAssign(void) const
-{
-    typedef std::pair<unsigned,bool> returnType;
-    std::vector<returnType> res(_nbrVars);
-
-    for (unsigned k = 0; k < _nbrVars; k++)
-        res[k] = returnType(Variable::_vars[k]->varNumber, Variable::_vars[k]->_varState);
-    return res;
-}
-
-
-int main(int argc, char *argv[])
-{
-    // Pour accélérer les I/O
-    //std::ios_base::sync_with_stdio(false);
-
-    std::ifstream input;
-	input.open (argv[1], std::ios::in);
-    if (!input.is_open())
-        exit(1);
-    // Parse le header dans l'entrée standard : récupère nombre de variables et de clauses
-    unsigned int nbrVar, nbrClauses;
-    parserHeader(input, nbrVar, nbrClauses);
-    // Initialise le problème en lisant l'entrée standard
-    SatProblem problem(input, nbrVar, nbrClauses);
-    input.close();
-    // Résoud le problème puis affiche la sortie correspondante
-    #if VERBOSE == 0
-    if (problem.satisfiability())
-        return 10;
-    else
-        return 20;
-    #else
-    if(problem.satisfiability())
-    {
-        std::cout << "s SATISFIABLE\n";
-        const std::vector<std::pair<unsigned,bool> > assign = problem.getAssign();
-        for(unsigned int k = 0; k < assign.size(); k++)
-        {
-            std::cout << "v ";
-            if (! assign[k].second)
-                std::cout << "-";
-            std::cout << assign[k].first << '\n';
-        }
-        return 10;
-    }
-    else
-    {
-        std::cout << "s UNSATISFIABLE\n";
-        return 20;
-    }
-    #endif
-
-}
-
 
 
 // modifie la liste en entrée pour enlever les doublons, repérer si trivialement fausse ou vraie :
@@ -96,7 +41,7 @@ bool SatProblem::simplify(std::vector<Literal>& list) const
 
 
 SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses)
-    : _nbrVars(nbrVar)//, debug(VERBOSE)
+    : _nbrVars(nbrVar)
 {
     // nécessaire pour que les itérateurs restent valides
     Variable::_vars.reserve(nbrVar+1);
@@ -163,7 +108,7 @@ void SatProblem::addClause(const std::vector<Literal>& litsList, Literal lit)
         #if VERBOSE
         std::cout<<"s UNSATISFIABLE"<<std::endl;
         #endif
-        exit(20);
+        exit(EXIT_UNSATISFIABLE);
     }
     // clause de taille 1 : on ne la crée pas, mais on déduit la valeur de la variable
     else if(litsListSize == 1)
@@ -173,16 +118,16 @@ void SatProblem::addClause(const std::vector<Literal>& litsList, Literal lit)
         else
             DEBUG(3) << "Clause à déduction immédiate lue : " << litsList[0] << " avec apprentissge de " << lit << std::endl;
 
-        if (litsList[0].var()->isFree())
+        if (litsList[0].var()->isOlderIter(Variable::_endDeducted))
         {
             litsList[0].var()->deductedFromFree(litsList[0].pos(), NULL);            
         }
-        if(!litsList[0].var()->isFree() && litsList[0].var()->_varState != litsList[0].pos())
+        else if(litsList[0].var()->_varState != litsList[0].pos())
         {
             #if VERBOSE
             std::cout<<"s UNSATISFIABLE"<<std::endl;
             #endif
-            exit(20);
+            exit(EXIT_UNSATISFIABLE);
         }
     }
     // sinon : ajout réel de la clause, dans ce cas on on déduit un litéral de la clause, et l'autre
@@ -276,11 +221,11 @@ bool SatProblem::satisfiability()
                 var->deductedFromAssigned();
             } while (Variable::_endAssigned > lastChoice);
             
-            DEBUG(4) << "sauvegrd |1| : " << *this << std::endl;
+            DEBUG(4) << "Sauvegarde des déductions faites à partir des clauses de taille 1" << std::endl;
 
             // On annule toutes les déductions, sauf celles qui viennent d'une clause de taille 1
-            // (attention : et on ne prend pas en compte la dernière déduction parce qu'elle correspond en réalité au choix libre qu'on vient d'annuler)
-            //bool isLearned = false; // si learned.second est parmis eux, on n'ajoutera pas la clause à la fin
+            // (attention : et on ne prend pas en compte la dernière déduction parce qu'elle correspond en réalité au choix libre qu'on vient d'annuler; d'ou le lastChoice+1 dans la condition de la boucle)
+            bool isLearned = false; // si learned.second est parmis eux, on n'ajoutera pas la clause à la fin
             std::vector<Literal> oneDeducted;
             while (Variable::_endDeducted > lastChoice+1)
             {
@@ -289,8 +234,8 @@ bool SatProblem::satisfiability()
                 {
                     DEBUG(7) << "Sauvegarde de " << *var << std::endl;
                     oneDeducted.push_back(Literal(var, var->_varState));
-                    //if (var == learned.second.var())
-                        //isLearned = true;
+                    if (var == learned.second.var())
+                        isLearned = true;
                 }
             }
             Variable::_endDeducted = lastChoice;
@@ -298,13 +243,13 @@ bool SatProblem::satisfiability()
             DEBUG(4) << "fin save |1| : " << *this << std::endl;
             
             // on ajoute ce qu'on a appris comme déduction
-            //if (! isLearned)
+            if (! isLearned)
                 addClause(learned.first, learned.second);
 
             // on reajoute toutes les déductions (qui viennent donc de clauses de taille 1)
             if (! oneDeducted.empty())
             {
-                DEBUG(4) << "restaure |1| : " << *this << std::endl;
+                DEBUG(5) << "restaure |1| : " << *this << std::endl;
                 do {
                     Literal& lit = oneDeducted.back();
                     oneDeducted.pop_back();
@@ -343,7 +288,7 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
     
     std::vector<Literal> result(getOriginClause(conflit));
     std::sort(result.begin(), result.end(), litCompVar);
-
+    
     // applique la résolution entre getOriginClause(result) et getOriginClause(conflit.invert)
     std::vector<Literal>::iterator resIt;
     do {
@@ -351,21 +296,21 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
 
         std::vector<Literal> toMerge(getOriginClause(conflit.invert()));
         std::sort(toMerge.begin(), toMerge.end(), litCompVar);
-
-
+        
+        
         // deplace result dans otherToMerge, et met assez de place dans result pour la fusion
         std::vector<Literal> otherToMerge;
-        std::swap(otherToMerge, result);
-
+        std::swap(otherToMerge, result); // swap en O(1)
+        
         result.resize(toMerge.size() + otherToMerge.size());
         
-        // enlève l'occurence de conflit dans toMerge
+        // enlève l'occurence de conflit dans toMerge (qui est triée)
         toMerge.erase(std::lower_bound(toMerge.begin(), toMerge.end(), conflit.invert(), litCompVar));
-
+        
         // et l'occurence de conflit.invert dans otherToMerge
         otherToMerge.erase(std::lower_bound(otherToMerge.begin(), otherToMerge.end(), conflit, litCompVar));
-
-
+        
+        
         // fusionne les deux listes et enleve les doublons
         resIt = std::set_union(toMerge.begin(), toMerge.end(), otherToMerge.begin(), otherToMerge.end(), result.begin(), litCompVar);
  

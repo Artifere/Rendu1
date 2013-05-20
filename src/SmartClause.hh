@@ -76,6 +76,7 @@ inline SmartClause::SmartClause(const std::vector<Literal>& list, const unsigned
 inline SmartClause::SmartClause(const std::vector<Literal>& list, const unsigned int number, Variable * firstNotAssigned)
     : clauseNumber(number), _literals(list), _currentHash((intptr_t)NULL), _currentHashVal(false), _satisfied(false), _numOfFree(0), _notWatched(0)
 {
+    (void)firstNotAssigned; // permet d'éviter un 'Warning unused parameter'
     std::vector<Literal>::const_iterator it;
     for(it = _literals.begin(); it != _literals.end(); ++it)
     {

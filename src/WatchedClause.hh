@@ -70,6 +70,7 @@ inline WatchedClause::WatchedClause(const std::vector<Literal>& list, const unsi
 inline WatchedClause::WatchedClause(const std::vector<Literal>& list, const unsigned int number, Variable * lastAssigned)
     : clauseNumber(number), _lits(list)
 {
+    (void)lastAssigned; // permet d'éviter un 'Warning unused parameter'
     std::vector<Literal>::iterator it;
     // place le plus jeune literal en _lits[0]
     for (it = _lits.begin()+1; it != _lits.end(); ++it)

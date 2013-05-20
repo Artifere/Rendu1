@@ -10,6 +10,9 @@
 #include "Literal.hh"
 
 
+#define EXIT_SATISFIABLE 10
+#define EXIT_UNSATISFIABLE 20
+
 
 class SatProblem
 {
@@ -21,6 +24,7 @@ protected:
     
     
 public:
+    // input doit être un flux listant toutes les clauses : liste de nombres entre -nbrVar et nbrVar, se terminant par un 0
     SatProblem(std::istream& input, const unsigned int nbrVar, const unsigned int nbrClauses);
     ~SatProblem();
     inline const std::vector<Variable*>::iterator getLastBetIterator(void) const {return _stackBacktrack.back();}
@@ -44,6 +48,16 @@ public:
 
 
 
+
+inline const std::vector<std::pair<unsigned, bool> > SatProblem::getAssign(void) const
+{
+    typedef std::pair<unsigned,bool> returnType;
+    std::vector<returnType> res(_nbrVars);
+
+    for (unsigned k = 0; k < _nbrVars; k++)
+        res[k] = returnType(Variable::_vars[k]->varNumber, Variable::_vars[k]->_varState);
+    return res;
+}
 
 
         
