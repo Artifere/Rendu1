@@ -5,10 +5,6 @@
 
 class UnionFind
 {
-    private:
-        int* _classes;
-        unsigned _size;
-
     public:
         UnionFind() {}
         UnionFind(unsigned size)
@@ -47,6 +43,15 @@ class UnionFind
         {
             return _size;
         }
+		
+		inline ~UnionFind()
+		{
+			delete[] _classes;
+		}
+		
+	private:
+        int* _classes;
+        unsigned _size;
 };
 
             

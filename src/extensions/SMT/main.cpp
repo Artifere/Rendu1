@@ -15,9 +15,6 @@
 int main()
 {
     SMT problem = SMT(std::cin);
-
-
-
     bool goOn = true;
 
 
@@ -60,6 +57,7 @@ int main()
                 goOn = false;
                 returnValue = 10;
             }
+			/* Il faut ajouter des clauses pour préciser les conditions de congruence */
             else
             {
                 std::ifstream inProblem;
@@ -68,6 +66,7 @@ int main()
                 std::ofstream outProblem;
                 outProblem.open("problem.cnf", std::ofstream::trunc);
 
+				/* On réécrit le problème, en augmentant le nombre de clauses de 1 : on ajoute une clause expliquand le conflit */
                 unsigned nbrVar, nbrClauses;
                 std::string fooS;
                 inProblem >> fooS >> fooS >> nbrVar >> nbrClauses;
@@ -81,6 +80,8 @@ int main()
                     outProblem << fooS << '\n';
                 }
                 inProblem.close();
+				system("rm problem.back");
+				/* Ajout de la clause expliquand le conflit */
                 sol.printNewClause(outProblem);
                 outProblem.close();
             }

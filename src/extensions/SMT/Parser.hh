@@ -11,7 +11,7 @@
 #include <sstream>
 
 
-
+/* Renvoie si un terme est constitué d'un symbole de fonction ou non */
 inline bool isFunction(const std::string s)
 {
     for (int i = 0; i < s.size(); i++)
@@ -21,6 +21,7 @@ inline bool isFunction(const std::string s)
 }
 
 
+/* Calcule les positions de toutes les paires de parenthèses */
 inline void getParenthesisPos(const std::string &formula, std::queue<std::pair<int, int> > &parPos)
 {
     std::stack<int> openingParPos;
@@ -51,7 +52,7 @@ inline void getParenthesisPos(const std::string &formula, std::queue<std::pair<i
 }
 
 
-
+/* Calcule les positions des parenthèses imbriquées au niveau level. */
 inline void getTermParenthesisPos(const std::string &formula, std::queue<std::pair<int, int> > &parPos, const unsigned level)
 {
     std::stack<int> openingParPos;
@@ -85,7 +86,8 @@ inline void getTermParenthesisPos(const std::string &formula, std::queue<std::pa
 
 
 
-
+/* Calcule les potitions des zones d'égalités : début du terme avant le signe égal, fin du terme après le signe égal.
+   Repère aussi s'il s'agit d'égalités ou de diségalités. */
 inline void getEqualitiesPos(const std::string &formula, std::queue<std::pair<int, int> >&parPos, std::queue<std::pair<int, int> > &posOfEqualities, std::queue<bool> &isDisequality)
 {
     for (unsigned pos = 0; pos < formula.size(); pos++)
@@ -134,7 +136,7 @@ inline void getEqualitiesPos(const std::string &formula, std::queue<std::pair<in
 }
 
 
-
+/* Remplace les égalités par des variables de la forme c_i */
 inline std::string convertToPreTseitinFormula(const std::string &formula, std::queue<std::pair<int, int> > &posOfEqualities, std::queue<bool> &isDisequality)
 {
     std::string ans;

@@ -67,6 +67,7 @@ class SMT
     
     private:
         std::vector<Term> _terms;
+		/* Contient les identifiants des termes de chaque côté des égalités */
         std::vector<std::pair<int, int> > _equalitiesContent;
         std::string _originalFormula;
         std::string _preTseitinFormula;
@@ -188,13 +189,13 @@ inline SMT::SMT(std::istream &input)
 
     inTseitinized.close();
     outProblem.close();
-    //system("rm fooPreTseitin.out");
-    //system("rm tseitinized.cnf");
+    system("rm fooPreTseitin.out");
+    system("rm tseitinized.cnf");
 }
 
 
 
-
+/* Parse les termes et les égalités (contenu) */
 inline void SMT::buildTermsAndEqualitiesContent(std::queue<std::pair<int, int > > &posOfEqualities)
 {
     std::map<std::string, unsigned> alreadyBuiltTerms;
@@ -233,8 +234,6 @@ inline void SMT::buildTermsAndEqualitiesContent(std::queue<std::pair<int, int > 
 
 
 
-
-
 inline void SMT::readSolverAssignations(std::istream& solverRes)
 {
     char fooC;
@@ -253,6 +252,7 @@ inline void SMT::readSolverAssignations(std::istream& solverRes)
 }
 
 
+/* Affiche le résultat final, si le problème est satisfiable */
 inline void SMT::printResult(void)
 {
     std::cout << "Et voici le résultat !\n";
