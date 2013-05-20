@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <inttypes.h>
 
 using namespace std;
 
@@ -10,10 +11,10 @@ void skipline(std::istream& read)
 }
 
 
-int main(int argc, char *argv[])
+int main()
 {
 
-    unsigned long long number = 0;
+    int32_t number = 0;
     
 
     string satState;
