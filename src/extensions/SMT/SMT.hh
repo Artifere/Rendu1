@@ -6,6 +6,7 @@
 #include <vector>
 #include <queue>
 #include <utility>
+#include <algorithm>
 #include "Parser.hh"
 #include "Term.hh"
 
@@ -26,6 +27,7 @@ class SMT
         }
         
         inline void buildTermsAndEqualitiesContent(std::queue<std::pair<int, int> > &posOfEqualities);
+        inline void buildAppearing(void);
 
         inline void miscTests(void) const;
 
@@ -34,6 +36,8 @@ class SMT
         std::vector<std::pair<int, int> > _equalitiesContent;
         std::string _formula;
         std::string _preTseitinFormula;
+        std::vector<std::vector<unsigned> > _termAppearsIn;
+        unsigned _nbTerms;
 }; 
 
 
@@ -49,6 +53,11 @@ inline void SMT::miscTests(void) const
         for (std::vector<unsigned>::const_iterator itSub = subs.begin(); itSub != subs.end(); ++itSub)
             std::cout << "\t" << _terms[*itSub].getStr() << std::endl;
         std::cout << "Fin des sous-termes\n\n";
+
+        std::cout << "Ce terme apparaît dans les termes suivants :\n";
+        for (std::vector<unsigned>::const_iterator itApp = _termAppearsIn[it->getId()].begin(); itApp != _termAppearsIn[it->getId()].end(); ++itApp)
+            std::cout << "\t\t" << _terms[*itApp].getStr() << "\n";
+        std::cout << "Fin des apparitions\n\n\n";
     }
 
 
@@ -57,17 +66,20 @@ inline void SMT::miscTests(void) const
         std::cout << "c_" << (itEq-_equalitiesContent.begin()) << " ==> " << _terms[itEq->first].getStr() << " =  " << _terms[itEq->second].getStr() << "\n";
 
 
+
     std::cout << "\nHéhéhé :-)\n";
 }
+
 
 
 /* Transforme le flux passé en entrée en une chaîne de caractères équivalente,
    dans laquelle les égalités/négations d'égalités ont été remplacées par des
    variables de la forme c_nombre. On peut ensuite passer cette chaîne à
-   Tseitin pour avoir un cnf. */
+   Tseitin pour avoir un cnf.
+   De plus, remplit les différents champs utiles pour un problème SMT.
+*/
 inline SMT::SMT(std::istream &input)
 {
-
     while ((input >> std::ws) && !input.eof())
     {
         char c;
@@ -98,8 +110,13 @@ inline SMT::SMT(std::istream &input)
 
 
     /* On extrait les termes et remplit les égalités */
-    
     buildTermsAndEqualitiesContent(posOfEqualitiesCopy);
+
+
+    _nbTerms = _terms.size();
+    /* On construit le tableau qui contient, pour tout terme t, la liste des termes de la forme
+       f(t1, ..., tn) où l'un des ti est égal à t */
+    buildAppearing();
 }
 
 
@@ -141,4 +158,26 @@ inline void SMT::buildTermsAndEqualitiesContent(std::queue<std::pair<int, int > 
 }
 
 
+
+/* Construit le tableau qui contient, pour tout terme t, la liste des termes de la forme
+       f(t1, ..., tn) où l'un des ti est égal à t */
+inline void SMT::buildAppearing(void)
+{
+    for (unsigned termId = 0; termId < _nbTerms; termId++)
+    {
+        std::vector<unsigned> curApp, curSubTermList;
+        for (unsigned term2Id = 0; term2Id < _nbTerms; term2Id++)
+        {
+            curSubTermList = _terms[term2Id].getSubterms();
+
+            if (std::find(curSubTermList.begin(), curSubTermList.end(), termId) != curSubTermList.end())
+                curApp.push_back(term2Id);
+        }
+        _termAppearsIn.push_back(curApp);
+    }
+}
+
+
+
 #endif //SMT_HH
+
