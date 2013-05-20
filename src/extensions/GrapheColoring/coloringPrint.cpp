@@ -24,10 +24,12 @@ int main(int argc, char *argv[])
     }
 
     const unsigned k = atoi(argv[1]);
-    string colorNames[20] = {"blue", "red", "green", "yellow", "purple", "brown", "orange",
+    string colorNames[30] = {"blue", "red", "green", "yellow", "purple", "brown", "orange",
                            "grey", "cyan", "chartreuse", "pink", "violet", "marron",
                            "navy", "peachpuff", "darkolivegreen", "teal", "oranged2",
-                           "plum", "seagreen"};
+                           "plum", "seagreen", "gold2", "darkgoldenrod3", "burlywood2",
+                           "gray99", "palegreen2", "olivedrab2", "royalblue",
+                           "snow", "violetred", "turquoise1"};
 
     cout << "strict graph G {" << endl;
     ifstream input;
