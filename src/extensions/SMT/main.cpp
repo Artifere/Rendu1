@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <cctype>
 #include <vector>
@@ -13,8 +14,7 @@ int main()
     SMT foo = SMT(std::cin);
     
     foo.miscTests();
-
-
-
+   
+    
     return 0;
 }

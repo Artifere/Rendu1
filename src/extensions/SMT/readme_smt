@@ -9,8 +9,6 @@ Du coup il faut parser la formule de départ et en extraire les différentes ter
 Par contre, si tu regardes main.cpp et le constructeur de Terme dans Terme.cpp, ya du code en double, faudrait factoriser un peu.
 
 Bref, il reste à faire :
-
-      
    
    * coder le truc de SMT (addeqlit, closure)
    * coder l'affichage une fois qu'on a un truc satisfaisant, venant du satsolver
@@ -21,6 +19,8 @@ Bref, il reste à faire :
 	* faire la correspondance idEgalité ==> (idTerme1, idTerme2) (l'inverse inutile je pense)
 
 	* aussi, il faut avoir une fonction (tableau ?) pi, tq pour tout terme t, pi(t) = l'ensemble des termes de la forme f(t1, ..., tn) tq il existe i tq ti=t
+
+	* faire la correspondance des variables de Tseitin et des numéros d'égalités de SMT
 
 Je crois que c'est à peu près tout.
 
