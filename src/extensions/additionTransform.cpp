@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include <stdexcept>
+#include <inttypes.h>
 
 #define NBR_BITS 32
 
@@ -34,8 +35,8 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    const int nbr1 = atoi(argv[1]);
-    const int nbr2 = atoi(argv[2]);
+    const unsigned long long nbr1 = atoi(argv[1]);
+    const unsigned long long nbr2 = atoi(argv[2]);
     //std::cout << "c addition de " << nbr1 << " et " << nbr2 << std::endl;
     bool nbrBin1[NBR_BITS];
     bool nbrBin2[NBR_BITS];

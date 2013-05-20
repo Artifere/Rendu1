@@ -9,6 +9,7 @@
 #include <iostream>
 
 
+
 // On a besoin de forward declaration pour Literal et Clause pour éviter une dépendance circulaire
 
 class Literal;

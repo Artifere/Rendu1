@@ -4,7 +4,7 @@
 #include "Debug.hh"
 
 
-/* What??? */
+/* variables "globales" (doivent être déclarée dans un fichier .cpp) */
 std::vector<Variable*> Variable::_vars;
 std::vector<Variable*>::iterator Variable::_endAssigned = _vars.begin();
 std::vector<Variable*>::iterator Variable::_endDeducted = _vars.begin();
@@ -38,8 +38,8 @@ void Variable::chooseFromFree_MOMS(void)
 {
     std::vector<Variable*>::iterator  bestVarIt;
     const std::vector<Variable*>::iterator endVar = _vars.end();
-    unsigned minSize = _vars.size()+1, maxNbr;
-    bool bestPol;
+    unsigned minSize = _vars.size()+1, maxNbr = (unsigned)(-1);
+    bool bestPol = false;
 
     for (std::vector<Variable*>::iterator freeVarIt= _endDeducted; freeVarIt != endVar; ++freeVarIt)
     {
@@ -50,7 +50,7 @@ void Variable::chooseFromFree_MOMS(void)
         {
             // attention, dans le cas des watched literals, isSatisfied et freeSize renvoie un résultat invalide
             // ils ne renvoie un réultat valide que si on vient de mettre un litéral de la clause à false, et qu'on a fait aucune assignation ou deduction de litéral depuis.
-            // mais même si le résultat est faux, ça ne devrait pas partir an boucle infinie à cause de ça (c'est juste qu'on a pas MOMS, mais un truc un peu bizare)
+            // on a donc une approximation de MOMS dans le cas des watched
             if (!(*trueIt)->isSatisfied())
             {
                 if ((*trueIt)->freeSize() < curMinSize)
@@ -72,15 +72,8 @@ void Variable::chooseFromFree_MOMS(void)
             minSize = curMinSize;
             maxNbr = curNbrMinSize;
         }
+        
         curNbrMinSize = 0;
-
-        // tu ne remet pas à 0 (enfin à _vars.size()) curMinSize ?
-        // si non, pourquoi le bloc précédent ? il ne suffit pas de le mettre une fois pur tout à la fin de la fonction ?
-
-        //==> je ne comprends pas tout. Mais je ne remets pas curMinSize à _var.size, parce que si on trouve pas plus petit que ce qu'on avait, ça sert à rien
-        //==> en revance, faut que je mette à 0 curNbrMinSize, sinon si on a une taille identique après, il va croise que c'est le même truc :s
-        //==> ah, je crois que je commence à comprendre, je réfléchis...
-        //======> le problème je crois que c'est maxNbr, des fois il faut le mettre à jour. Si tu veux y réfléchir plus, libre à toi, pour l'instant je laisse comme ça
 
         const std::vector<Clause*>::const_iterator endFalse = (*freeVarIt)->_litFalse.end();
         for (std::vector<Clause*>::const_iterator falseIt = (*freeVarIt)->_litFalse.begin(); falseIt != endFalse; ++falseIt)
@@ -106,9 +99,6 @@ void Variable::chooseFromFree_MOMS(void)
             minSize = curMinSize;
             maxNbr = curNbrMinSize;
         }
-
-
-
     }
 
     (*bestVarIt)->_varState = bestPol;
@@ -119,7 +109,7 @@ void Variable::chooseFromFree_MOMS(void)
 
 
 
-/* Choix aléatoire ==> vraiment pas efficace... */
+/* Choix aléatoire ==> vraiment pas efficace comme heuristique... */
 void Variable::chooseFromFree_RAND(void)
 {
     static bool isInit = false;
