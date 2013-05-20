@@ -116,14 +116,12 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     {
         listClause.clear();
         parserListLit(input, listClause, Variable::_vars);
-        // clause trivialement vraie
+        // test si clause trivialement vraie
         if (simplify(listClause))
         {
-            DEBUG(3) << "Clause trivialement vraie lue (" << k+1 << "eme lue). Elle est ignorée." << std::endl;
+            DEBUG(3) << "Clause trivialement vraie lue (" << k+1 << "eme clause du fichier). Elle est ignorée." << std::endl;
         }
         else 
-        // on fait un push_back même si on n'a pas réelement créé de clause :
-        // cela permet d'avoir un compte réel du nombre de clauses concidérées
             addClause(listClause);
     }
 
@@ -132,7 +130,7 @@ SatProblem::SatProblem(std::istream& input, const unsigned int nbrVar, const uns
     Variable::sortFreeVars();
     #endif
 
-    DEBUG(5) << "Etat des variables à la fin du parsage : " << *this << std::endl;
+    DEBUG(6) << "Etat des variables à la fin du parsage : " << *this << std::endl;
 }
 
 
@@ -282,7 +280,7 @@ bool SatProblem::satisfiability()
 
             // On annule toutes les déductions, sauf celles qui viennent d'une clause de taille 1
             // (attention : et on ne prend pas en compte la dernière déduction parce qu'elle correspond en réalité au choix libre qu'on vient d'annuler)
-            bool isLearned = false; // si learned.second est parmis eux, on n'ajoutera pas la clause à la fin
+            //bool isLearned = false; // si learned.second est parmis eux, on n'ajoutera pas la clause à la fin
             std::vector<Literal> oneDeducted;
             while (Variable::_endDeducted > lastChoice+1)
             {
@@ -291,8 +289,8 @@ bool SatProblem::satisfiability()
                 {
                     DEBUG(7) << "Sauvegarde de " << *var << std::endl;
                     oneDeducted.push_back(Literal(var, var->_varState));
-                    if (var == learned.second.var())
-                        isLearned = true;
+                    //if (var == learned.second.var())
+                        //isLearned = true;
                 }
             }
             Variable::_endDeducted = lastChoice;
@@ -300,7 +298,7 @@ bool SatProblem::satisfiability()
             DEBUG(4) << "fin save |1| : " << *this << std::endl;
             
             // on ajoute ce qu'on a appris comme déduction
-            if (! isLearned)
+            //if (! isLearned)
                 addClause(learned.first, learned.second);
 
             // on reajoute toutes les déductions (qui viennent donc de clauses de taille 1)
@@ -403,73 +401,6 @@ std::pair<std::vector<Literal>,Literal> SatProblem::resolve(Variable *conflictVa
         DEBUG(7) << "Aucune variable du pari courant restant. Affaiblissement de la clause apprise avec " << conflit << std::endl;
     }
     return std::pair<std::vector<Literal>,Literal>(result, conflit);
-#if 0
-    #if VERBOSE >= 5
-        print_debug();
-        std::cout << "Resolve sur la clause " << conflictClause->clauseNumber << " : ";
-        print_vars();
-    #endif
-
-    std::vector<Literal> mergedLits(conflictClause->getLiterals());
-    
-    sort(mergedLits.begin(), mergedLits.end(), litCompVar);
-    
-    Literal youngest;
-    while (true)
-    {
-        unsigned nbFromCurBet = 0;
-        youngest = * mergedLits.begin();
-        const std::vector<Literal>::const_iterator mergedEnd = mergedLits.end();
-        for (std::vector<Literal>::const_iterator it = mergedLits.begin();it != mergedEnd; ++it)
-        {
-            if (it->var()->isOlderIter(_stackBacktrack.back()))
-            {
-                #if VERBOSE >= 8
-                print_debug();
-                std::cout << "resolve : variable du pari courant trouvée : " << it->var()->varNumber << std::endl;
-                #endif
-                nbFromCurBet++;
-                if (youngest.var()->isOlder(it->var()))
-                    youngest = * it;
-            }
-        }
-        
-        if(nbFromCurBet <= 1) {
-            break;
-        }
-
-        
-        Clause *deductedFrom = youngest.var()->getOriginClause();
-        std::vector<Literal> toMerge((deductedFrom == NULL) ? std::vector<Literal>(1,youngest) : deductedFrom->getLiterals());
-        #if VERBOSE >= 7
-        print_debug();
-        std::cout << "resolve : merge la clause ";
-        if (deductedFrom == NULL)
-            std::cout << "de taille 1";
-        else
-            std::cout << deductedFrom->clauseNumber;
-        std::cout << " qui a permis de déduire la variable " << youngest.var()->varNumber << std::endl;
-        #endif
-        sort(toMerge.begin(), toMerge.end(), litCompVar);
-        
-        std::vector<Literal> res(mergedLits.size()+toMerge.size());
-        std::vector<Literal>::iterator resIt;
-        resIt = std::set_union(mergedLits.begin(), mergedLits.end(), toMerge.begin(), toMerge.end(), res.begin(), litCompVar);
-        res.resize(resIt-res.begin());
-        res.erase(std::lower_bound(res.begin(), res.end(), youngest, litCompVar));
-        std::swap(mergedLits, res);
-    }
-
-    #if VERBOSE >= 5
-        print_debug();
-        std::cout << "Nouvelle clause calculée : ";
-        for(std::vector<Literal>::const_iterator it = mergedLits.begin(); it != mergedLits.end(); ++it)
-            std::cout << it->var()->varNumber << '.' << it->pos() << ", ";
-        std::cout << std::endl;
-    #endif
-
-    return std::pair<std::vector<Literal>,Literal>(mergedLits, youngest);
-#endif
 }
 
 
@@ -480,13 +411,8 @@ void SatProblem::interact(const std::pair<std::vector<Literal>,Literal>& learned
     
     if (nbLeftBeforePrompt == 0)
     {
-        std::cout << "Conflit trouvé. La clause suivant a été apprise : ";
-        for(unsigned k = 0; k < learned.first.size(); k++) {
-            if(learned.first[k].pos())
-                std::cout << '-';
-            std::cout << learned.first[k].var()->varNumber << ", ";
-        }
-        std::cout << std::endl << "Entrez l'une des options suivantes : g, r, c , s [n]" << std::endl;
+        std::cout << "Conflit trouvé. La clause suivant a été apprise : " << learned.first << std::endl;
+        std::cout << "Entrez l'une des options suivantes : g, r, c , s [n]" << std::endl;
         bool goOn = true;
         while (goOn)
         {

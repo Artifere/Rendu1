@@ -202,14 +202,13 @@ Variable* Variable::assignedFromDeducted(void)
                 /* Si la déduction concerne une nouvelle variable, on l'ajoute */
                 if(deduct.var()->isOlderIter(_endDeducted))
                 {
-                    DEBUG(5) << "Nouvelle déduction trouvée (clause " << target << ") :  " << deduct << std::endl;
                     deduct.var()->deductedFromFree(deduct.pos(), target);
                     DEBUG(5) << "Nouvelle déduction trouvée (clause " << target << ") :  " << deduct << std::endl;
                 }
                 /* Sinon, si on a déjà fait une déduction contraire, on a une contraduction. */
                 else if(deduct.pos() != deduct.var()->_varState)
                 {
-                    DEBUG(4) << "Déduction contradictoire trouvée (clause " << target << ") :  " << deduct << std::endl;
+                    DEBUG(5) << "Déduction contradictoire trouvée (clause " << target << ") :  " << deduct << std::endl;
                     error = deduct.var();
                     if(deduct.pos())
                         deduct.var()->_deductedTrueFromClause = target;
@@ -220,7 +219,7 @@ Variable* Variable::assignedFromDeducted(void)
                 /* Sinon, si on a déjà fait la même déduction, on ne fait rien. */
                 else
                 {
-                    DEBUG(5) << "Déduction (re-)trouvée (clause " << target << ") :  " << deduct << std::endl;
+                    DEBUG(6) << "Déduction (re-)trouvée (clause " << target << ") :  " << deduct << std::endl;
                 }
             }
         }

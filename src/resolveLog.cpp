@@ -1,69 +1,62 @@
 #include <fstream>
-#include <queue>
 #include <vector>
+#include <utility>
 
 #include "satSolver.hh"
-
-
-using namespace std;
-
-struct compare
-{
-    inline bool operator () (const Literal& lit1, const Literal& lit2) const
-    {
-	    return lit1.var()->isOlder(lit2.var());
-    }
-};
-
+#include "Debug.hh"
 
 
 
 
 void SatProblem::createConflictGraph(Variable *conflictVar) const
 {
-   #if 0
-    ofstream output;
-    output.open ("graph.dot", ios::out);
+
+    std::ofstream output;
+    output.open ("graph.dot", std::ios::out);
     output << "digraph G {\n";
     output << "size =\"4,4\";\n";
     output << "error[style=filled,color=red];\n";
 
     // récupère le seul noeud qui doit être coloré en jaune
-    Literal jaune = resolve(conflictClause).second.invert();
+    Literal jaune = resolve(conflictVar).second.invert();
     output << (jaune.pos() ? ' ' : '-') << jaune.var()->varNumber << "[style=filled,color=yellow];\n";
     
-    // génère tous les couples d'aretes, et colorie les sommets du pari courant en bleu
+    // liste des arêtes du graphe
     std::vector< std::pair<Literal,Literal> > couples;
 
-    // pour la clause contradictoire
-    vector<Literal> curExamined = conflictClause->getLiterals();
-    Literal conflictLiteral = curExamined.back();
-    if (conflictClause->freeSize() == 1)
-        conflictLiteral = conflictClause->getRemaining();
-    else
-        for (std::vector<Literal>::const_iterator it = curExamined.begin(); it != curExamined.end(); ++it)
-            if (conflictLiteral.var()->isOlder(it->var()))
-                conflictLiteral = *it;
-    for (std::vector<Literal>::const_iterator it = curExamined.begin(); it != curExamined.end(); ++it)
-        if (it->var() != conflictLiteral.var())
-            couples.push_back( std::pair<Literal,Literal>(it->invert(), conflictLiteral) );
-    output << (conflictLiteral.pos() ? ' ' : '-') << conflictLiteral.var()->varNumber << "[style=filled,color=blue];\n";
-    
-    // pour chaque litéral du pari courant
-    for (std::vector<Variable*>::const_iterator varIt = _stackBacktrack.back(); varIt != Variable::_endDeducted; varIt++)
+    // colorie toutes les variables du pari courant en bleu
+    // et affiche les arêtes qui ont permi de la déduire
+    for(std::vector<Variable*>::const_iterator varIt = _stackBacktrack.back(); varIt != Variable::_endDeducted; varIt++)
     {
         Literal destLit(*varIt, (*varIt)->_varState);
+        // colorie en bleu ssi ce n'est pas le littéral jaune
         if (destLit.var() != jaune.var())
             output << (destLit.pos() ? ' ' : '-') << destLit.var()->varNumber << "[style=filled,color=blue];\n";
-        Clause* Exam = (*varIt)->getOriginClause();
-        if (Exam == NULL)
+        // et ajoute les arêtes provennant les litéraux qui ont permis de le déduire
+        Clause* origin = destLit.var()->getOriginClause(destLit.pos());
+        // il n'y a pas d'arete si la clause était de taille 1
+        if (origin == NULL)
             continue;
-        vector<Literal> curExam(Exam->getLiterals());
-        for (std::vector<Literal>::const_iterator it = curExam.begin(); it != curExam.end(); ++it)
+        for (std::vector<Literal>::const_iterator it = origin->getLiterals().begin(); it != origin->getLiterals().end(); ++it)
+        {
             if (it->var() != *varIt)
                 couples.push_back( std::pair<Literal,Literal>(it->invert(), destLit) );
+        }
     }
 
+    // colorie en bleu le contraire de la variable conflictuelle (pas pris en compte dans la boucle précédente)
+    // et ajoute les arêtes provennant les litéraux qui ont permis de la déduire
+    Literal destLit(conflictVar, !conflictVar->_varState);
+    output << (conflictVar->_varState ? '-' : ' ') << conflictVar->varNumber << "[style=filled,color=blue];\n";
+    Clause* origin = conflictVar->getOriginClause(!conflictVar->_varState);
+    if (origin != NULL) // normalement c'est toujour le cas ...
+    {
+        for (std::vector<Literal>::const_iterator it = origin->getLiterals().begin(); it != origin->getLiterals().end(); ++it)
+        {
+            if (it->var() != conflictVar)
+                couples.push_back( std::pair<Literal,Literal>(it->invert(), destLit) );
+        }
+    }
     
     // affiche les arêtes
     for(unsigned i = 0; i < couples.size(); i++)
@@ -73,12 +66,11 @@ void SatProblem::createConflictGraph(Variable *conflictVar) const
                << (couples[i].second.pos() ? ' ' : '-') << couples[i].second.var()->varNumber
                << ";\n";
     }
-    output << conflictLiteral.var()->varNumber << "->error;\n";
-    output << "-" << conflictLiteral.var()->varNumber << "->error;\n";
+    output << conflictVar->varNumber << "->error;\n";
+    output << '-' << conflictVar->varNumber << "->error;\n";
     
     output << "}\n";
     output.close();
-    #endif
 }    
 
    

@@ -19,7 +19,7 @@
 /* Affiche l'état d'une variable */
 std::ostream& operator<< (std::ostream& out, const Variable& var)
 {
-    if (var.isFree())
+    if (var.isOlderIter(Variable::_endDeducted))
         out << "?";
     else if (var._varState)
         out << "+";
