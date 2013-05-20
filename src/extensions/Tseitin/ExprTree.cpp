@@ -2,15 +2,6 @@
 #include <iostream>
 #include "Parser.hh"
 
-
-// déclaration des variables globales
-unsigned ExprTree::lastUsedId;
-std::vector<std::pair<std::string,unsigned> > ExprTree::varNumbers;
-
-
-
-
-
 static inline void
 addClause(std::vector<clause>& cnf, const literal& l1)
 {
@@ -36,11 +27,113 @@ addClause(std::vector<clause>& cnf, const literal& l1, const literal& l2, const 
     cnf.push_back(tmp);
 }
 
+#define ADD_CLAUSE1(cnf, a) addClause(cnf, literal a)
+#define ADD_CLAUSE2(cnf, a,b) addClause(cnf, literal a, literal b)
+#define ADD_CLAUSE3(cnf, a,b,c) addClause(cnf, literal a, literal b, literal c)
 
 
 
 
-unsigned ValExpr::getVarId() const
+unsigned ExprTree::lastUsedId;
+std::vector<std::pair<std::string,unsigned> > ExprTree::varNumbers;
+
+
+
+
+
+unsigned Or::getCNF(std::vector<clause>& cnf) const
+{
+    unsigned left = c1->getCNF(cnf);
+    unsigned right = c2->getCNF(cnf);
+    unsigned self = ++lastUsedId;
+    ADD_CLAUSE3(cnf, (self,false), (left,true), (right,true));
+    ADD_CLAUSE2(cnf, (self,true), (left,false));
+    ADD_CLAUSE2(cnf, (self,true), (right,false));
+    return self;
+}
+
+unsigned And::getCNF(std::vector<clause>& cnf) const
+{
+    unsigned left = c1->getCNF(cnf);
+    unsigned right = c2->getCNF(cnf);
+    unsigned self = ++lastUsedId;
+    ADD_CLAUSE3(cnf, (self,true), (left,false), (right,false));
+    ADD_CLAUSE2(cnf, (self,false), (left,true));
+    ADD_CLAUSE2(cnf, (self,false), (right,true));
+    return self;
+}
+
+unsigned Val::getCNF(std::vector<clause>& cnf) const
+{
+    unsigned id = getVarId();
+    if (_val)
+    {
+        return id;
+    }
+    else
+    {
+        unsigned notid = ++ lastUsedId;
+        ADD_CLAUSE2(cnf, (id,false), (notid,false));
+        ADD_CLAUSE2(cnf, (id,true), (notid,true));
+        return notid;
+    }
+}
+
+
+
+
+
+ExprTree* Or::inversion() const
+{
+    ExprTree* nc1 = c1->inversion();
+    ExprTree* nc2 = c2->inversion();
+    return new And(nc1, nc2);
+}
+
+ExprTree* And::inversion() const
+{
+    ExprTree* nc1 = c1->inversion();
+    ExprTree* nc2 = c2->inversion();
+    return new Or(nc1, nc2);
+}
+
+ExprTree* Val::inversion() const
+{
+    return new Val(_name, !_val);
+}
+
+
+
+
+
+void Or::print(std::ostream& out) const
+{
+    out << "(";
+    c1->print(out);
+    out << " \\/ ";
+    c2->print(out);
+    out << ")";
+}
+
+void And::print(std::ostream& out) const
+{
+    out << "(";
+    c1->print(out);
+    out << " /\\ ";
+    c2->print(out);
+    out << ")";
+}
+
+void Val::print(std::ostream& out) const
+{
+    out << (_val ? ' ' : '~') << _name;
+}
+
+
+
+
+
+unsigned Val::getVarId() const
 {
     unsigned id;
     // cherche si la variable à déjà un numéro attribué
@@ -63,208 +156,83 @@ unsigned ValExpr::getVarId() const
 
 
 
-
-void NodeExpr::inversion()
-{
-    if (_type == ExprTree::XOR)
-    {
-        _args.front()->inversion();
-    }
-    else
-    {
-        _type = (_type == ExprTree::AND) ? ExprTree::OR : ExprTree::AND;
-        for(fils::iterator it = _args.begin(); it != _args.end(); ++it)
-            (*it)->inversion();
-    }
-}
-void ValExpr::inversion()
-{
-    _val = ! _val;
-}
-
-
-
-void NodeExpr::print(std::ostream& out) const
-{
-    const char* op = (_type == ExprTree::AND ? " /\\ " :
-                     (_type == ExprTree::XOR ? " XOR " : " \\/ "));
-    out << "(" << _args.front();
-    for(fils::const_iterator it = _args.begin()+1; it != _args.end(); ++it)
-        out << op << *it;
-    out << ")";
-}
-void ValExpr::print(std::ostream& out) const
-{
-    out << (_val ? '~' : ' ') << _name;
-}
-
-
-
-void NodeExpr::addCNF(std::vector<clause>& cnf) const
-{
-    if (_type == ExprTree::AND)
-    {
-        for(fils::const_iterator it = _args.begin(); it != _args.end(); ++it)
-            (*it)->addCNF(cnf);
-    }
-    else
-    {
-        addClause(cnf, this->getLiteral(cnf));
-    }
-}
-void ValExpr::addCNF(std::vector<clause>& cnf) const
-{
-    addClause(cnf, this->getLiteral(cnf));
-}
-
-
-
-void NodeExpr::simplify()
-{
-    for(fils::const_iterator it = _args.begin(); it != _args.end(); ++it)
-    {
-        if ((*it)->remonte(_args, _type))
-            delete *it;
-    }
-}
-void ValExpr::simplify()
-{
-}
-
-
-
-bool NodeExpr::remonte(std::vector<ExprTree*>& dest, ExprTree::type t)
-{
-    const bool isSameType = _type == t;
-    if (isSameType)
-    {
-        for(fils::iterator it = _args.begin(); it != _args.end(); it++)
-        {
-            // si le fils est de type t, on fait remonter ses enfants
-            // et on détruit le noeuds correspondant (qui est maintenant vide)
-            if((*it)->remonte(dest,t))
-                delete *it;
-            // sinon on fait remonter ce fils
-            else
-                dest.push_back(*it);
-        }
-        // ne pas oublier de vider _args : le noeud n'a plus de fils (ils sont tous remonté dans dest)
-        _args.clear();
-    }
-    return isSameType;
-}
-bool ValExpr::remonte(std::vector<ExprTree*>& dest, ExprTree::type t)
-{
-    (void)dest; // évite de générer un 'warning : unused parameter' à la compilation
-    (void)t;    // évite de générer un 'warning : unused parameter' à la compilation
-    return false;
-}
-
-
-
-literal NodeExpr::getLiteral(std::vector<clause>& cnf) const
-{
-    // récupère les litéraux correspondant aux fils
-    std::vector<literal> litFils;
-    litFils.reserve(_args.size());
-    for(fils::const_iterator it = _args.begin(); it != _args.end(); ++it)
-        litFils.push_back((*it)->getLiteral(cnf));
     
-    // litéral correspondant au noeud
-    literal self;
+void And::addCNF(std::vector<clause>& cnf) const
+{
+    c1->addCNF(cnf);
+    c2->addCNF(cnf);
+}
 
-    // applique la transformation de Tseitin correspondant au type de noeud
+void Or::addCNF(std::vector<clause>& cnf) const
+{
+    clause cl;
+    c1->addCNF_readOr(cnf, cl);
+    c2->addCNF_readOr(cnf, cl);
+    cnf.push_back(cl);
+}
 
-    // pour le XOR, on traite le noeud comme s'il était binaire :
-    // ça simplifie les expressions, sans rajouter enormement de variable
-    if(_type == ExprTree::XOR)
-    {
-        while (litFils.size() >= 2)
-        {
-            // fait correspondre self à fils1 xor fils2
-            self = literal(++lastUsedId, true);
-            literal fils1 = litFils[litFils.size()-1];
-            literal fils2 = litFils[litFils.size()-2];
+void Val::addCNF(std::vector<clause>& cnf) const
+{
+    addClause(cnf, literal(getVarId(), _val));
+}
 
-            // on a : s = a xor b  ssi ~(s xor a xor b)
-            // ie ssi ~(s+a+b impaire) ie ssi (~s | a | b) & (s | ~a | b) & (a | a | ~b) & (~s | ~a | ~b)
-            addClause(cnf, invert(self), fils1, fils2);
-            addClause(cnf, self, invert(fils1), fils2);
-            addClause(cnf, self, fils1, invert(fils2));
-            addClause(cnf, invert(self), invert(fils1), invert(fils2));
 
-            // remplace fils1 et fils2 par ce litéral dans le xor qu'on est en train de calculer
-            litFils.pop_back();
-            litFils.pop_back();
-            litFils.push_back(self);
-        }
-    }
-    // pour and et or, les expressions sont simple même avec une arité > 2
-    else if(_type == ExprTree::AND)
-    {
-        /*
-        while (litFils.size() >= 2)
-        {
-            // fait correspondre self à fils1 and fils2
-            self = literal(++lastUsedId, true);
-            literal fils1 = litFils[litFils.size()-1];
-            literal fils2 = litFils[litFils.size()-2];
 
-            addClause(cnf, invert(self), fils1);
-            addClause(cnf, invert(self), fils2);
-            addClause(cnf, self, invert(fils1), invert(fils2));
+literal And::addCNF_readLiteral(std::vector<clause>& cnf) const
+{
+    // crée un litéral à ajouter à listLit
+    literal self = literal(++lastUsedId, true);
+    
+    // lie self à la valeur logique du noeud par transformation se Tseitin :
 
-            // remplace fils1 et fils2 par ce litéral dans le and qu'on est en train de calculer
-            litFils.pop_back();
-            litFils.pop_back();
-            litFils.push_back(self);
-        }
-        /*/
-        self = literal(++lastUsedId, true);
+    // récupère tous les litéraux provennant de sous-noeuds And :
+    // on évite ainsi de créer trop de variables et de clauses
+    // (on cherche à appliquer la transformation de Tseitin sur une arité plus grande que 2 pour ce noeud And)
+    std::vector<literal> subLit;
+    c1->addCNF_readAnd(cnf, subLit);
+    c2->addCNF_readAnd(cnf, subLit);
 
-        // ajoute les (non(self), args[i])
-        for(std::vector<literal>::iterator it = litFils.begin(); it != litFils.end(); ++it)
-            addClause(cnf, invert(self), *it);
-        
-        // ajoute (self, non(args[0]), ... non(args[k]))
-        for(std::vector<literal>::iterator it = litFils.begin(); it != litFils.end(); ++it)
-            it->second = ! it->second;
-        litFils.push_back(self);
-        cnf.push_back(litFils);
-    }
-    else if(ExprTree::OR)
-    {
-        /*
-        while (litFils.size() >= 2)
-        {
-            // fait correspondre self à fils1 or fils2
-            self = literal(++lastUsedId, true);
-            literal fils1 = litFils[litFils.size()-1];
-            literal fils2 = litFils[litFils.size()-2];
+    // ajoute les équivalents de (invert(self), left) et (invert(self), right) avec une arité >= 2
+    clause::iterator it;
+    for (it = subLit.begin(); it != subLit.end(); ++it)
+        addClause(cnf, invert(self), *it);
 
-            addClause(cnf, self, invert(fils1));
-            addClause(cnf, self, invert(fils2));
-            addClause(cnf, invert(self), fils1, fils2);
-
-            // remplace fils1 et fils2 par ce litéral dans le or qu'on est en train de calculer
-            litFils.pop_back();
-            litFils.pop_back();
-            litFils.push_back(self);
-        }
-        /*/
-        self = literal(++lastUsedId, true);
-
-        // ajoute les (self, non(args[i]))
-        for(std::vector<literal>::iterator it = litFils.begin(); it != litFils.end(); ++it)
-            addClause(cnf, self, invert(*it));
-        
-        // ajoute (non(self), args[0], ... args[k])
-        litFils.push_back(invert(self));
-        cnf.push_back(litFils);
-    }
+    // ajoute l'équivalent de (self, non(left), non(right)) avec une arité >= 2
+    for (it = subLit.begin(); it != subLit.end(); ++it)
+        it->second = ! it->second; // inverse les litéraux
+    subLit.push_back(self);
+    cnf.push_back(subLit);
+    
     return self;
 }
-literal ValExpr::getLiteral(std::vector<clause>& cnf) const
+
+literal Or::addCNF_readLiteral(std::vector<clause>& cnf) const
+{
+    // crée un litéral à ajouter à listLit
+    literal self = literal(++lastUsedId, true);
+    
+    // lie self à la valeur logique du noeud par transformation se Tseitin :
+
+    // récupère tous les litéraux provennant de sous-noeuds And :
+    // on évite ainsi de créer trop de variables et de clauses
+    // (on cherche à appliquer la transformation de Tseitin sur une arité plus grande que 2 pour ce noeud And)
+    std::vector<literal> subLit;
+    c1->addCNF_readOr(cnf, subLit);
+    c2->addCNF_readOr(cnf, subLit);
+
+    // ajoute les équivalents de (self, invert(left)) et (self, invert(right)) avec une arité >= 2
+    clause::const_iterator it;
+    for (it = subLit.begin(); it != subLit.end(); ++it)
+        addClause(cnf, self, invert(*it));
+
+    // ajoute l'équivalent de (invert(self), left, right) avec une arité >= 2
+    subLit.push_back(invert(self));
+    cnf.push_back(subLit);
+    
+    return self;
+}
+
+literal Val::addCNF_readLiteral(std::vector<clause>& cnf) const
 {
     (void)cnf; // évite de générer un 'warning : unused parameter' à la compilation
     return literal(getVarId(), _val);

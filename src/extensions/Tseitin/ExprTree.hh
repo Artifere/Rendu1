@@ -6,7 +6,6 @@
 #include <istream>
 #include <vector>
 #include <utility>
-#include <cassert>
 
 
 
@@ -27,44 +26,29 @@ class ExprTree
 public:
     static unsigned lastUsedId;
     static std::vector<std::pair<std::string,unsigned> > varNumbers; // association nom de variable/numéro
-
-    // étiquettes possibles des noeuds internes
-    typedef enum {
-        AND, OR, XOR
-    } type;
-
-public:
+   
     virtual inline ~ExprTree() { }
 
-    // inverse l'expression (fait l'opération  expr <- ~ expr)
-    virtual void inversion() = 0;
-
-    // affiche l'expression bien parenthesée
+    virtual ExprTree* inversion() const = 0;
     virtual void print(std::ostream& out) const = 0;
     
-    // transformation de Tseitin
-    virtual void addCNF(std::vector<clause>& cnf) const = 0;
-
-    // fait remonter tous les noeuds de même type au même niveau
-    // (exemple :  a /\ (b /\ c) devient a /\ b /\ c)
-    // son utilisation n'est pas obligatoire, mais elle peut réduire le nombre de variables intermédiaires
-    virtual void simplify() = 0;
-
-
-    // utilisé par addCNF : crée un litéral équivalent à la valeur du noeud
-    // coeur de la transformation de tseitin
-    virtual literal getLiteral(std::vector<clause>& cnf) const = 0;
+    // version de base de la transformation de tseitin
+    virtual unsigned getCNF(std::vector<clause>& cnf) const = 0;
     
-    // utilisé en interne par simplify :
-    // test si le noeud est de type t
-    // si c'est le cas, remonte récursivement tous ses enfants dans dest, et renvoie true
-    // sinon renvoie false
-    virtual bool remonte(std::vector<ExprTree*>& dest, ExprTree::type t) = 0;
+    // version un peu plus intelligente de Tseitin
+    virtual void addCNF(std::vector<clause>& cnf) const = 0;
+    virtual literal addCNF_readLiteral(std::vector<clause>& cnf) const = 0;
+    // ces deux fonctions sont à la base de l'optimisation faie par cette version :
+    // on cherche à augmenter l'arité des noeuds And et OR pour éviter d'avoir à rajouter des variables
+    virtual inline void addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+    {
+        listLit.push_back(addCNF_readLiteral(cnf));
+    }
+    virtual inline void addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+    {
+        listLit.push_back(addCNF_readLiteral(cnf));
+    }
 };
-
-
-
-
 
 // permet d'afficher une ExprTree directment dans un flux
 inline std::ostream& operator<<(std::ostream& out, ExprTree* e)
@@ -75,64 +59,73 @@ inline std::ostream& operator<<(std::ostream& out, ExprTree* e)
 
 
 
-
-
-class NodeExpr : public ExprTree
+class And : public ExprTree
 {
 protected:
-    typedef std::vector<ExprTree*> fils;
-
-    ExprTree::type _type;
-    fils _args; // doit toujours être de taille au moins 2
+    ExprTree * c1;
+    ExprTree * c2;
 
 public:
-    inline NodeExpr(ExprTree::type t, const std::vector<ExprTree*>& args) : _type(t), _args(args)
+    inline And(ExprTree * a1, ExprTree * a2) : c1(a1), c2(a2)
     {
-        assert(args.size() >= 2);
     }
-    inline NodeExpr(ExprTree::type t, ExprTree* arg1, ExprTree* arg2) : _type(t), _args(2, NULL)
+    inline ~And()
     {
-        _args[0] = arg1;
-        _args[1] = arg2;
+        delete c1;
+        delete c2;
     }
-
-    virtual inline ~NodeExpr()
-    {
-        for(fils::const_iterator it = _args.begin(); it != _args.end(); ++it)
-            delete *it;
-    }
-
-    // inverse l'expression (fait l'opération  expr <- ~ expr)
-    void inversion();
-
-    // affiche l'expression bien parenthesée
-    void print(std::ostream& out) const;
     
-    // transformation de Tseitin
+    ExprTree* inversion() const;
+    void print(std::ostream& out) const;    
+
+    unsigned getCNF(std::vector<clause>& cnf) const;
+    
     void addCNF(std::vector<clause>& cnf) const;
-
-    // fait remonter tous les noeuds de même type au même niveau
-    // (exemple :  a /\ (b /\ c) devient a /\ b /\ c)
-    // son utilisation n'est pas obligatoire, mais elle peut réduire le nombre de variables intermédiaires
-    void simplify();
-
-
-    // utilisé par addCNF : crée un litéral équivalent à la valeur du noeud
-    // coeur de la transformation de tseitin
-    literal getLiteral(std::vector<clause>& cnf) const;
-    
-    // utilisé en interne par simplify :
-    // test si le noeud est de type t
-    // si c'est le cas, déplace tous ses enfants dans dest, et renvoie true
-    // sinon renvoie false
-    bool remonte(std::vector<ExprTree*>& dest, ExprTree::type t);
+    literal addCNF_readLiteral(std::vector<clause>& cnf) const;
+    // on ne spécialise que cette fonction : readOR est identique à celle par défaut
+    void addCNF_readAnd(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+    {
+        c1->addCNF_readAnd(cnf,listLit);
+        c2->addCNF_readAnd(cnf,listLit);
+    }
 };
 
 
 
+class Or : public ExprTree
+{
+protected:
+    ExprTree * c1;
+    ExprTree * c2;
+
+public:
+    inline Or(ExprTree * a1, ExprTree * a2) : c1(a1), c2(a2)
+    {
+    }
+    inline ~Or()
+    {
+        delete c1;
+        delete c2;
+    }
+
+    ExprTree* inversion() const;
+    void print(std::ostream& out) const;
+    
+    unsigned getCNF(std::vector<clause>& cnf) const;
+    
+    void addCNF(std::vector<clause>& cnf) const;
+    literal addCNF_readLiteral(std::vector<clause>& cnf) const;
+    // on ne spécialise que cette fonction : readAnd est identique à celle par défaut
+    inline void addCNF_readOr(std::vector<clause>& cnf, std::vector<literal>& listLit) const
+    {
+        c1->addCNF_readOr(cnf,listLit);
+        c2->addCNF_readOr(cnf,listLit);
+    }
+};
 
 
-class ValExpr : public ExprTree
+
+class Val : public ExprTree
 {
 protected:
     std::string _name;
@@ -143,35 +136,21 @@ protected:
     unsigned getVarId() const;
 
 public:
-    inline ValExpr(const std::string& name, bool val) : _name(name), _val(val) { }
+    inline Val(const std::string& name, bool val) : _name(name), _val(val)
+    {
+    }
+    inline ~Val()
+    {
+    }
 
-    inline ~ValExpr() { }
-
-    // inverse l'expression (fait l'opération  expr <- ~ expr)
-    void inversion();
-
-    // affiche l'expression bien parenthesée
+    ExprTree* inversion() const;
     void print(std::ostream& out) const;
+
+    unsigned getCNF(std::vector<clause>& cnf) const;
     
-    // transformation de Tseitin
     void addCNF(std::vector<clause>& cnf) const;
-
-    // fait remonter tous les noeuds de même type au même niveau
-    // (exemple :  a /\ (b /\ c) devient a /\ b /\ c)
-    // son utilisation n'est pas obligatoire, mais elle peut réduire le nombre de variables intermédiaires
-    void simplify();
-
-
-    // utilisé par addCNF : crée un litéral équivalent à la valeur du noeud
-    // coeur de la transformation de tseitin
-    literal getLiteral(std::vector<clause>& cnf) const;
-    
-    // utilisé en interne par simplify :
-    // test si le noeud est de type t
-    // si c'est le cas, déplace tous ses enfants dans dest, et renvoie true
-    // sinon renvoie false
-    bool remonte(std::vector<ExprTree*>& dest, ExprTree::type t);
-    
+    literal addCNF_readLiteral(std::vector<clause>& cnf) const;
+    // on ne spécialise  ni readOr ni readAnd, qui sont identiques à celles par défaut
 };
 
 
