@@ -71,50 +71,163 @@ Les exécutables produits sont 'debug' et 'profile' et non plus 'release'.
 ===== Points négatifs =====
 
 Il manque certains points demandés :
+rendu 3 :
  - pas de preuve par résolution dans le mode interactif
  - pas de fichier de documentation produit à la fin de l'exécution
-Il est certainement possible d'améliorer la fonction resolve pour gagner un peu en efficacité (la fusion de clauses est faite de manière assez naïve en utilisant la bibliothèque standard, sans utiliser les informations que l'on a sur la forme des listes)
+rendu 4 :
+ - pas de carré magique fonctionnel (une ébauche est présente)
+
+Certains aspects du code peuvent être améliorés :
+ - Il est certainement possible d'améliorer la fonction resolve pour gagner un peu en efficacité (la fusion de clauses est faite de manière assez naïve en utilisant la bibliothèque standard, sans utiliser les informations que l'on a sur la forme des listes)
+ - L'implémentation actuelle de MOMS re-calcul entièrement les valeurs associées à chaque variable, ce qui a un coût important. Une implémentation efficace pourraît mettre à jour en temps réel ces valeurs lorsqu'elles sont modifiées par les assignations.
 
 
 
 
 
-===== Résultats des courbes =====
-L'apprentissage des clauses est compétitif : le surcoût (important) engendré par l'apprentissage des clause est compensé par ce que l'apprentissage apporte.
-Cependant, le gain n'est pas assez important pour que cette méthode batte les meilleurs heuristiques dont on disposait sans apprentissage. Cependant, on peut peut-être
-passer devant les autres heuristiques si l'on optimise un peu la façon dont on fait la résolution.
+
+=================================
+===== Extensions du solveur =====
+=================================
+
+Les extensions comprennent :
+	- Carré Latin
+	- Additionneur
+	- Sudoku
+	- Coloration de graphe
+	- Transformation de Tseitin
+	- Satisfaction Modulo Theory
+Les codes des extensions sont tous dans src/extensions
+
+Ces scripts utilisent l'exécutable src/release comme solveur.
+Il est donc nécessaire de copier un binaire à cet endroit pour les faire fonctionner.
+Par exemple, depuis la racine du projet, faire :
+  cp bin/exeSmartMOMS src/release
+
+Le carré latin, l'additionneur, le sudoku et la coloration de graphes sont des utilisations simples du solveur, qui utilisent Tseitin.
+Ces extensions sont formée de deux exécutables indépendants :
+  - un exécutable qui réalise la Transformation proprement dite
+  - un exécutable Print qui lit l'assignation renvoyée par Tseitin et affiche le résultat
+Il y a egalement un script qui s'occupe de faire le lien entre les deux et fourni une interface d'utilisation simplifiée.
+
+
+
+===== Carré Latin =====
+
+Formalisation du problème :
+    Pour chaque case du carré, on a <n> variable, la k-ieme variable indicquant si dans la case en question est associé le nombre k. On rajoute ensuite des conditions nécessaires et suffisantes pour qu'une assignatin soit valide :
+    - pour chaque case, une et une seule variable associée est vraie
+    - chaque nombre est présent au moins une fois sur chaque ligne
+    On rajoute également une autre condition :
+    - il n'y a pas deux fois le même nombre sur une ligne ou colonne
+    Cette dernière condition (qui n'est pas nécessaire) permet au solveur de détecter facilement lorsque une assignation est incorrecte.
+    Elle améliore grandement les temps de résolution du carré (cf les courbes résultat)
+
+Compilation :
+    cd LatinSquare
+    g++ -Wall -Wextra -O2 -o latinSquarePrint latinSquarePrint.cpp
+    g++ -Wall -Wextra -O2 -o latinSquareTransform latinSquareTransform.cpp
+
+Utilisation :
+    ./latinSquare.sh [--no-extra-cond] <n>
+    où <n> est la longueur d'un coté du carré latin qu'on cherche à calculer
+    si  --no-extra-cond est précisé, on n'utilise pas les conditions supplémentaires
+
+Résultats :
+    Voir latin_square.pdf pour les courbes des temps de résolution.
+    On remarque les conditions supplémentaires ont un réel impact sur les temps de résolutions.
+    À partir de <n>=9, la résolution sans --no-extra-cond devient beaucoup plus rapide.
+
+
+
+===== Additionneur =====
+
+Formalisation du problème :
+    L'additionneur réalise l'addition binaire sur 32 bits comme le ferait un circuit éléctrique classique.
+    L'addition de deux bits a_i et b_i, avec un bit de retenue entrante r_i donne un bit de sortie s_i et un bit de retenue sortante r_(i+1)
+    On a les conditions suivantes :
+    - s_i est la somme modulo 2 de a_i, b_i et r_i :
+      Ça s'exprimme facilement avec l'opérateur <=>, équivalent au contraire du ou-exclusif
+    - r_(i+1) est vrai ssi deux au moins des a_i, b_i, r_i est vrai
+    Comme notre implémentation de Tseitin permet l'utilisation de l'opérateur <=>, ces deux conditions s'expriment facilement.
+    On ajoute ensuite l'assignation des a_i et b_i en fonction des nombres donnés en arguments.
+
+Compilation :
+    cd Addition
+    g++ -Wall -Wextra -O2 -o additionPrint additionPrint.cpp
+    g++ -Wall -Wextra -O2 -o additionTransform additionTransform.cpp
+
+Utilisation :
+    ./addition.sh <x> <y>
+    avec <x> et <y> sont des entiers (positifs ou négatifs)
+    Le programme affiche la somme de <x> et <y>.
+Il y a aussi le script 
+    ./addition_bench.sh <n> <x> <y>
+    qui repète <n> fois l'appel à Tseitin qui résoud le problème
+
+Résultats :
+    Une première remarque est que le calcul est correct !
+    Le problème ne dépendant (presque) pas des entiers donnés en paramêtre.
+    Il est donc inutile de comparer les temps de calcul sur différentes entrées.
+    De plus, la propagation est immédiate, et peut normalement être faite sans qu'aucun choix libre n'ai a être fait (le problème sat est simple à résoudre).
+    Il est donc inutile de comparer différentes heuristiques entres-elles.
+
+    Pour récupérer le fichier cnf généré, il suffit de faire :
+    ./additionTransform 0 0 | ../Tseitin/tseitin
+    (ce fichier à 385 variables et 1057 clauses)
+    En le lançant sur minisat avec -verb=2, on remarque que minisat parvient à le résoudre en ne faisant qu'un seul choix libre, ce qui va dans le sens de notre hypothèse sur les choix libres nécessaires pour le résoudre.
+    On peut cependant utiliser addition_bench.sh pour comparer plusieurs heuristiques.
+
+
+
+===== Sudoku =====
+
+Formalisation du problème :
+    Ce problème ressemble fortement au carré latin 9x9 :
+    On rajoute simplement une restriction sur le fait que les sous-carrés 3x3 contiennent une et une fois chaque nombre.
+
+Compilation :
+    cp Sudoku
+    g++ -Wall -Wextra -O2 -o sudokuPrint sudokuPrint.cpp
+    g++ -Wall -Wextra -O2 -o sudokuTransform sudokuTransform.cpp
+
+Utilisation :
+    ./suduku.sh <grille>
+    avec <grille> un fichier décrivant une grille de sudoku
+    (cf les fichiers grille_vide et grille_partielle pour des exemples)
+
+Résultats :
+    On mesure les temps pris pour remplire une grille vide de sudoku :
+    (on ne compte que le temps de résolution, et pas de génération du problème,
+     ni de la transformation de Tseitin) 
+    Minisat      : 0.68s
+    Smart   MOMS : 0.56s
+    Smart   DLIS : >30s
+    Watched MOMS : >30s
+    Watched DLIS : >30s
+    Sur ce problème, c'est Smart MOMS qui semble le mieux marcher, surpassant même minisat. Les autres sont beaucoup plus lents.
+
+
+
+===== Coloration de graphe =====
+
+Formalisation du problème :
+
+Compilation :
+
+Utilisation :
+    ./color.sh 
+
+Résultats :
 
 
 
 
+===== Transformation de Tseitin =====
 
-===== Fonctionnement du programme =====
 
-Changements depuis la dernière version :
 
-	- Pour pouvoir gérer le mode interactif, le programme ne lit plus le problème sur l'entrée standard. Il faut lui passer en paramètre
-le nom du fichier d'entrée : "release test.cnf" au lieu de "release < test.cnf". On a modifié les fichiers de scripts pour prendre cela en compte.
-Cependant, pour comparer courbes avec la version précédente du rendu, nous avons adapté l'entrée du rendu précédent. Les sources ne sont pas fournies, le but étant seulement de nous faciliter un peu la génération des courbes.
-
-	- On a ajouté quelques méthodes relatives à l'apprentissage de clause : on a besoin de savoir si une variable est plus « vieille » qu'une autre (ie si elle a été assignée avant), notamment si une variable est plus vieille que le dernier pari fait. Ces fonctions utilisent toutes leur attribut _posInTable (cf point suivant).
-
-	- On n'utilise plus ni UnassignedBuckets ni toutes les structures de piles pour maintenir les variables et la pile des assignations des variables :
-On utilise pour remplacer tout ça un unique tableau global de Variable* pour représenter la pile courante des variables, la file d'attente des assignations, l'état des variables et pour savoir si elle découlent du dernier pari fait :
-Ce tableau (un attribut statique de la classe Variable) est organisé comme il suit :
-	[variables assignées|variables déduites|variables libres]
-On retrouve donc comme dans les rendus précédents les notions de variables assignées, variables libres, et variables déduites (ie celles dont on connaît la valeur, mais en attente d'être propagées dans les clauses car plusieurs déductions ont lieu en même temps).
-La partie [variables assignées| représente la « pile » d'exécution du programme : les variables s'y trouvent dans l'ordre dans lequel elle on été assignées.
-	Une autre structure, _stackBacktrack, contient des itérateurs sur les variables qui ont été assignées suite à un pari (et non une déduction).
-	De plus, chaque variable possède un itérateur _posInTable qui permet de savoir rapidement ou se trouve cette variable dans le tableau (pour pouvoir déduire une variable libre quelconque en O(1)), mais aussi qui permet de comparer la position de la variable par rapport aux autres, notamment à _stackBacktrack.back() (et donc de savoir si la variable est une conséquence du dernier pari ou non).
-	Les séparations entre ces parties sont indiquées par des itérateurs (eux aussi statiques dans Variable) _endAssigned et _endDeducted.
-Lorsque une variable n'est pas dans la partie libre, sa valeur est donnée par son attribut _varState.
-Cette organisation permet de passer rapidement une variable d'une zone à une autre, simplement en incrémentant/décrémentant _endAssigned et endDeducted (sauf pour passer de libre à déduit, où on doit échanger les positions de deux variables, mais cela reste en temps constant).
-
-	- On a un peu modifié les variables pour qu'elles retiennent de quelle clause leur valeur provient. L'apprentissage des clauses de taille 1 à posé problème (pour les watched literals, mais aussi à cause de détails de fonctionnement du moteur), et un soin particulier a dû être apporté pour le faire marcher sans problème (notamment : on ne crée jamais de clause de taille 1, mais on simule leur existence lorsqu'on en a besoin).
-
-	- on a ajouté deux fonctions resolve et createConflictGraph pour chercher l'origine des conflits. Ces deux fonctions fonctionnent de manière différente :
-resolve à une approche ascendante : elle cherche jusqu'où elle doit remonter dans les clauses en partant d'un conflit pour apprendre une nouvelle variable.
-createConflictGraph à une approche globale : elle parcourt toutes les variables qui sont conséquence du dernier pari, et crée les arêtes du graphe dans le désordre.
+===== SMT =====
 
 
 
