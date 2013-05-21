@@ -282,9 +282,11 @@ Implémentation :
 	Pour le maintient des congruences (à chaque terme d'une classe d'équivalence on associe un unique représentant), on utilise la structure d'union find avec compression de chemins qui a de bonnes performances (en pratique linéaire en le nombre de find/union effectués). Pour parser le fichier (énumérer les égalités et tous les termes et sous-termes), on utilise la structure de pile pour faire correspondre les parenthèses ouvrantes et fermantes. Dans l'absolu cela permet de parser la formule en temps linéaire, mais concrètement ici on reparse plusieurs fois certaines parties, ce qui donne une complexité moins bonne.
 	Pour vérifier une solution, on procède en deux étapes : d'abord on ajoute toutes les égalités, puis ensuite toutes les déségalités. Enfin, dès qu'on a une contradiction on s'arrête, et on peut construire alors une clause d'explication de conflit un petit peu moins naïve que celle consistant en la négation de l'assignation complète : on renvoie la négation de l'assignation des variables qu'on a considérées, sans inclure celle qu'on n'a pas examinées. De plus, si on se rend compte à un moment qu'une égalité n'ajoute pas d'information (les deux termes étaient déjà dans la même classe), on ne met pas non plus cette variable dans la clause d'explication du conflit. Pour ce qui est de la vérification, on commence par faire des unions sur toutes les égalités, ainsi que les égalités qu'elles impliquent s'il s'agit de symboles de fonctions (f(t1, ..., tn) = f(s1, ..., sn) ==> ti = si pour 1 <= i <= n). De plus, si on trouve une incohérence (f(t) = f(t,x) par exemple, ou bien f(bla) = g(blo)), on s'arrête. Ensuite on considère les diségalités : si on trouve u != v alors qu'on avait avant u = v, on s'arrête car c'est une contradiction. On n'oublie pas de plus le cas où l'on a quelque chose de la forme f(t1, ..., tn) != f(s1, ..., sn) alors qu'on avait ti = si pour 1<=i<=n.
 	À chaque fois que l'assignation du solveur est incohérente, on ajoute la clause en modifiant directement le fichier cnf contenant le problème.
+	
+	Il y a néanmoins un problème qui fait que cette implémentation n'est pas complètement correcte : on ne crée pas de nouveaux termes, et si l'on apprend par exemple que h = f(x), on ne le propagera pas dans les termes où f(x) apparaît comme sous-terme. Ce bug est illustré dans le fichier test5.in.
 
 Compilation :
-    cp SMT
+    cd SMT
     make clean ; make
 
 Utilisation :
