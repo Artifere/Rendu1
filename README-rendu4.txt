@@ -119,6 +119,7 @@ Les extensions comprennent :
 	- Transformation de Tseitin
 	- Satisfaction Modulo Theory
 Les codes des extensions sont tous dans src/extensions
+Toutes les extensions utilisent Tseitin : il faut donc compiler cette partie avant de pouvoir utiliser d'autres extensions.
 
 Ces scripts utilisent l'exécutable src/release comme solveur.
 Il est donc nécessaire de copier un binaire à cet endroit pour les faire fonctionner.
