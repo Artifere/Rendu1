@@ -17,8 +17,7 @@ int main()
     SMT problem = SMT(std::cin);
     bool goOn = true;
 
-
-    int returnValue;
+    int returnValue = 0;
 
 
     while (goOn)

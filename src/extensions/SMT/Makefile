@@ -3,7 +3,7 @@ OUT= smt
 OBJ= ${SRC:.cpp=.o}
 CXX	 = g++
 LFLAGS   = -lm
-CXXFLAGS = -Wall -Wextra -g -Wno-sign-compare
+CXXFLAGS = -Wall -Wextra -O2 -s -Wno-sign-compare
 
 all : release
 
