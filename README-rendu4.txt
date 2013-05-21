@@ -85,6 +85,7 @@ Certains aspects du code peuvent être améliorés :
 
 
 
+
 ===== Modifications par rapport au rendu précédents =====
 
 La partie GenTest à été modifiée :
@@ -94,7 +95,13 @@ Exemple d'utilisation :
   ./gen <nbrVar> <nbrClause> <tailleClause> <nbrDeTests>
   ./test-<nbrVar>-<nbrClause>-<tailleClause>-<nbrDeTests>.sh ../bin/exe*
 Ces commandes lancent une série de tests sur des problèmes sat aléatoires, sur tous les exécutables contenus dans bin
+Il est aussi possible de lancer le script bench créé par ./gen pour avoir une idée du temps d'exécution de ces tests.
 
+On a rajouté l'heuristique MOMS qui manquait au rendu précédent.
+Voir les courbes dans Graphes moulinette pour les comparaison entre les différentes heuristiques.
+Sur les tests aléatoires, MOMS est plus lent que DLIS, et surtout est très sensible au pics à la limite entre problèmes satisfiables et unsatisfiables (au ratio nbrClause/nbrVars = 4.5).
+Cependant, sur les extensions, c'est souvent MOMS qui a montré les meilleurs performances. De même, sur le fichier unsat-41-272.cnf (fichier qui nous a servit de référence comme problème "difficile" tout au long du projet, car malgré sa taille, minisat met 5.5s à le résoudre), SmartMOMS réalise de meilleures performances que minisat en résolvant le problème en 2.8s. (les autres heuristiques prennent des temps plus importants : SmartDLIS met 9.1s, et RAND autour de 15s)
+Ces tests ont étés réalisés avant qu'on ne "répare" les watched literals pour les adapter à l'apprentissage de clauses. Ils ne font donc pas apparaître les watched literals.
 
 
 
@@ -151,6 +158,7 @@ Résultats :
     On remarque que les conditions supplémentaires ont un réel impact sur les temps de résolutions :
     À partir de <n>=9, la résolution sans --no-extra-cond devient beaucoup plus rapide.
     (ceci se voit en utilisant n'importe quelle heuristique, aussi bien qu'avec minisat)
+   Pour information, SmartMOMS met environ 7h à résoudre ./latinSquare.sh 12 --no-extra-cond, alors qu'au bout de 14h, minisat n'a toujours pas fini :-)  Dans le cas --no-extra-cond, il y a plus de liberté sur le choix des paris, et donc les heuristiques de choix utilisées prennent plus d'importance.
 
 
 
