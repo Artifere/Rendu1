@@ -85,6 +85,20 @@ Certains aspects du code peuvent être améliorés :
 
 
 
+===== Modifications par rapport au rendu précédents =====
+
+La partie GenTest à été modifiée :
+On peut maintenant lancer une série de tests sur une série d'exécutable, pour tester la validité des programmes.
+Exemple d'utilisation :
+  cd GenTest
+  ./gen <nbrVar> <nbrClause> <tailleClause> <nbrDeTests>
+  ./test-<nbrVar>-<nbrClause>-<tailleClause>-<nbrDeTests>.sh ../bin/exe*
+Ces commandes lancent une série de tests sur des problèmes sat aléatoires, sur tous les exécutables contenus dans bin
+
+
+
+
+
 
 =================================
 ===== Extensions du solveur =====
