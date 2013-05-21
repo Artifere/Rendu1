@@ -122,7 +122,7 @@ Le carré latin, l'additionneur, le sudoku et la coloration de graphes sont des 
 Ces extensions sont formée de deux exécutables indépendants :
   - un exécutable qui réalise la Transformation proprement dite
   - un exécutable Print qui lit l'assignation renvoyée par Tseitin et affiche le résultat
-Il y a egalement un script qui s'occupe de faire le lien entre les deux et fourni une interface d'utilisation simplifiée.
+Il y a également un script qui s'occupe de faire le lien entre les deux et fourni une interface d'utilisation simplifiée.
 
 
 
