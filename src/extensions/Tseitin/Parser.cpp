@@ -219,10 +219,11 @@ ExprTree* ParserExprTree::parseOr(bool invert)
     {
         tok.readNext();
         ExprTree* arg2 = parseAnd(invert);
+        // on place res (le plus gros noeud à priori) à droite de manière à pouvoir plus tard faire un parcours de l'arbre en profondeur en limitant la profondeur de la pile
         if (invert)
-            res = new And(res, arg2);
+            res = new And(arg2, res);
         else
-            res = new Or(res, arg2);
+            res = new Or(arg2, res);
     }
     //std::cout << "fin or : " << res << std::endl;
     return res;
@@ -236,10 +237,11 @@ ExprTree* ParserExprTree::parseAnd(bool invert)
     {
         tok.readNext();
         ExprTree * arg2 = parseNot(invert);
+        // on place res (le plus gros noeud à priori) à droite de manière à pouvoir plus tard faire un parcours de l'arbre en profondeur en limitant la profondeur de la pile
         if (invert)
-            res = new Or(res, arg2);
+            res = new Or(arg2, res);
         else
-            res = new And(res, arg2);
+            res = new And(arg2, res);
     }
     //std::cout << "fin and : " << res << std::endl;
     return res;
