@@ -46,7 +46,8 @@ Term::Term(std::map<std::string, unsigned> &alreadyBuilt, std::vector<Term> &ter
                     pos++;
                 curEnd = pos;
             }
-            
+            /* On met le curseur à la fin du terme lu, pour lire le suivant */
+            pos = curEnd; 
             const std::string subTermStr = term.substr(curBeg, curEnd-curBeg+1);
             unsigned subId;
             std::map<std::string, unsigned>::const_iterator findIt = alreadyBuilt.find(subTermStr);
@@ -66,7 +67,6 @@ Term::Term(std::map<std::string, unsigned> &alreadyBuilt, std::vector<Term> &ter
     }
     _id = termsList.size();
     _str = term;
-    
     termsList.push_back(*this);
     alreadyBuilt[term] = _id;
 }

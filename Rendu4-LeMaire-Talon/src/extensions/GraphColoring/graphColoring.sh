@@ -13,7 +13,7 @@ else
     echo -e "Le graphe n'est pas ${k}-coloriable."
 fi
 
-rm foo.out
+#rm foo.out
 rm fooS.out
 rm colored.dot
 rm result.txt

@@ -4,7 +4,7 @@
 #include <set>
 #include <utility>
 #include "UnionFind.hh"
-
+#include "Parser.hh"
 
 class Solution
 {
@@ -46,20 +46,36 @@ class Solution
 		   de l'assignation totale
 		*/
         std::queue<unsigned> _diseqIdDoneList, _eqIdDoneList, _eqIdLeftList, _diseqIdLeftList;
+        std::stack<std::pair<unsigned, unsigned> > _eqImpliedList; /* Liste d'égalités non présente dans la formule, mais déduites */
 };
 
 
 /* On traite toutes les égalités, en clôturant par congruence en même temps */
 inline bool Solution::addEqualities(void)
 {
-    while (!_eqList.empty())
+    while (!_eqList.empty() || !_eqImpliedList.empty())
     {
-        unsigned idT1 = _eqList.front().first;
-        unsigned idT2 = _eqList.front().second;
+        bool wasImplied = false;
+        unsigned idT1;
+        unsigned idT2;
+
+        if (!_eqImpliedList.empty())
+        {
+            idT1 = _eqImpliedList.top().first;
+            idT2 = _eqImpliedList.top().second;
+            _eqImpliedList.pop();
+            wasImplied = true;
+        }
+
+        else
+        {
+            idT1 = _eqList.front().first;
+            idT2 = _eqList.front().second;
+        }
 
         const unsigned s1 = _eqData.find(idT1);
         const unsigned s2 = _eqData.find(idT2);
-		/* Cette égalité n'apporte rien de plus : inutile de l'inclure dans la clause de conflit */
+        /* Cette égalité n'apporte rien de plus : inutile de l'inclure dans la clause de conflit */
         if (s1 == s2)
         {
             _eqIdLeftList.pop();
@@ -73,8 +89,8 @@ inline bool Solution::addEqualities(void)
         _eqData.unionAfterFind(s1, s2);
         const Term &t1 = _problem.getTerm(idT1), &t2 = _problem.getTerm(idT2);
 
-		/* Si on a deux symboles de fonction, on doit vérifier que ce sont les mêmes, qu'ils ont
-		   la même arité, et que les sous-termes sont congrus. */
+        /* Si on a deux symboles de fonction, on doit vérifier que ce sont les mêmes, qu'ils ont
+           la même arité, et que les sous-termes sont congrus. */
         if (!t1.getSubterms().empty() && !t2.getSubterms().empty())
         {
             std::string t1Name, t2Name;
@@ -97,9 +113,23 @@ inline bool Solution::addEqualities(void)
                     _eqList.push(std::make_pair(sub1[i], sub2[i]));
             }
         }
-        _eqIdDoneList.push(_eqIdLeftList.front());
-        _eqIdLeftList.pop();
-        _eqList.pop();
+
+        /* Peut-être qu'avec les nouvelles informations des termes sont devenus congruents */
+        const unsigned nbrTerms = _problem.getNbrTerms();
+        for (unsigned it1 = 0; it1 < nbrTerms; it1++)
+            for (unsigned it2 = it1+1; it2 < nbrTerms; it2++)
+                if (_eqData.find(it1) != _eqData.find(it2) && _problem.getTerm(it1).isCongruent(_problem.getTerm(it2), _eqData))
+                    _eqImpliedList.push(std::make_pair(it1, it2));
+
+
+
+
+        if (!wasImplied) /* On garde une trace de cette égalité, qui vient de la formule */
+        {
+            _eqIdDoneList.push(_eqIdLeftList.front());
+            _eqIdLeftList.pop();
+            _eqList.pop();
+        }
     }
 
     return true;

@@ -19,7 +19,6 @@ int main()
 
     int returnValue = 0;
 
-
     while (goOn)
     {
         system("../../../release problem.cnf > result.txt");
